@@ -11,6 +11,7 @@
 		914E28BA1FF80ECB00765FCE /* MonotonicCounter.m in Sources */ = {isa = PBXBuildFile; fileRef = 914E28B81FF80ECB00765FCE /* MonotonicCounter.m */; };
 		914E28BC1FF83E3700765FCE /* AccessibilityObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28BB1FF83E3700765FCE /* AccessibilityObserver.swift */; };
 		914E28C21FF8736700765FCE /* CF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28C11FF8736700765FCE /* CF.swift */; };
+		914E28D41FF9DCF000765FCE /* AccessibilityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28D31FF9DCF000765FCE /* AccessibilityController.swift */; };
 		91BF2DE81FF17FE400FB993D /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */; };
 		91BF2DED1FF17FE400FB993D /* AccessibilityElementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BF2DEC1FF17FE400FB993D /* AccessibilityElementTests.swift */; };
 		91BF2DEF1FF17FE400FB993D /* AccessibilityElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -36,6 +37,7 @@
 		914E28B81FF80ECB00765FCE /* MonotonicCounter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MonotonicCounter.m; sourceTree = "<group>"; };
 		914E28BB1FF83E3700765FCE /* AccessibilityObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityObserver.swift; sourceTree = "<group>"; };
 		914E28C11FF8736700765FCE /* CF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CF.swift; sourceTree = "<group>"; };
+		914E28D31FF9DCF000765FCE /* AccessibilityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityController.swift; sourceTree = "<group>"; };
 		91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccessibilityElement.h; sourceTree = "<group>"; };
 		91BF2DE21FF17FE400FB993D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			children = (
 				91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */,
 				91FFFCFE1FF5B6B400BF89A0 /* AccessibilityError.swift */,
+				914E28D31FF9DCF000765FCE /* AccessibilityController.swift */,
 				91BF2DF81FF1800700FB993D /* AccessibilityElement.swift */,
 				914E28BB1FF83E3700765FCE /* AccessibilityObserver.swift */,
 				914E28C11FF8736700765FCE /* CF.swift */,
@@ -234,6 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				91FFFD011FF6F09A00BF89A0 /* AXObserver.swift in Sources */,
+				914E28D41FF9DCF000765FCE /* AccessibilityController.swift in Sources */,
 				914E28BA1FF80ECB00765FCE /* MonotonicCounter.m in Sources */,
 				91BF2DF91FF1800700FB993D /* AccessibilityElement.swift in Sources */,
 				914E28BC1FF83E3700765FCE /* AccessibilityObserver.swift in Sources */,

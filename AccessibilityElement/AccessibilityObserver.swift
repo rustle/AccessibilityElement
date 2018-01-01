@@ -6,47 +6,84 @@
 
 import Foundation
 
-public typealias AccessibilityObserverHandler = (AccessibilityElement, NSAccessibilityNotificationName, Any?) -> Void
+public typealias AccessibilityObserverHandler = (Element, NSAccessibilityNotificationName, Any?) -> Void
 
 public enum AccessibilityObserverError : Error {
     case invalidApplication
+    case invalidToken
 }
 
 public class AccessibilityObserverManager {
     public static let shared = AccessibilityObserverManager()
-    private let queue = DispatchQueue(label: "AccessibilityObserverManager")
     private var map = [Int : AccessibilityApplicationObserver]()
-    public func registerObserver(application: AccessibilityElement) throws -> AccessibilityApplicationObserver {
+    public func registerObserver(application: Element) throws -> AccessibilityApplicationObserver {
         let processIdentifier = application.processIdentifier
         guard processIdentifier > 0 else {
             throw AccessibilityObserverError.invalidApplication
         }
-        // Fast path (just get an existing observer)
-        if let observer = queue.sync(execute: { return map[processIdentifier] }) {
+        if let observer = map[processIdentifier] {
             return observer
         }
-        // Slow path (barrier sync, and create observer if needed)
-        return try queue.sync(flags: [.barrier]) {
-            // Make sure the observer wasn't created while we were aquiring the barrier
-            if let observer = map[processIdentifier] {
-                return observer
-            }
-            let observer = try AccessibilityApplicationObserver(processIdentifier: processIdentifier)
-            map[processIdentifier] = observer
-            return observer
-        }
+        let observer = try AccessibilityApplicationObserver(processIdentifier: processIdentifier)
+        map[processIdentifier] = observer
+        return observer
     }
 }
 
 public class AccessibilityApplicationObserver {
-    private let observer: AXObserver
-    public struct Token {
-        fileprivate let element: AccessibilityElement
+    private var _observer: AXObserver?
+    private func observer() throws -> AXObserver {
+        if let observer = _observer {
+            return observer
+        }
+        let observer = try AXObserver.observer(processIdentifier: processIdentifier)
+        _observer = observer
+        CFRunLoop.main.add(source: observer.runLoopSource, mode: .defaultMode)
+        return observer
+    }
+    private let processIdentifier: Int
+    private var tokens = Set<Token>()
+    public struct Token : Equatable, Hashable {
+        public static func ==(lhs: Token, rhs: Token) -> Bool {
+            return lhs.identifier == rhs.identifier
+        }
+        public var hashValue: Int {
+            return identifier
+        }
+        fileprivate let element: Element
         fileprivate let notification: NSAccessibilityNotificationName
         fileprivate let identifier: Int
     }
-    private static func _repackage(element: AXUIElement) -> AccessibilityElement {
-        return AccessibilityElement(element: element)
+    public init(processIdentifier: Int) throws {
+        self.processIdentifier = processIdentifier
+    }
+    public func startObserving(element: Element, notification: NSAccessibilityNotificationName, handler: @escaping AccessibilityObserverHandler) throws -> Token {
+        let identifier = try observer().add(element: element.element, notification: notification) { element, notification, info in
+            handler(Element(element: element), notification, Helper.repackage(dictionary: info))
+        }
+        let token = Token(element: element, notification: notification, identifier: identifier)
+        tokens.insert(token)
+        return token
+    }
+    public func stopObserving(token: Token) throws {
+        if tokens.contains(token) {
+            try observer().remove(element: token.element.element, notification: token.notification, identifier: token.identifier)
+        } else {
+            throw AccessibilityObserverError.invalidToken
+        }
+        if tokens.count == 0 {
+            guard let observer = _observer else {
+                return
+            }
+            CFRunLoop.main.remove(source: observer.runLoopSource, mode: .defaultMode)
+            _observer = nil
+        }
+    }
+}
+
+fileprivate struct Helper {
+    private static func _repackage(element: AXUIElement) -> Element {
+        return Element(element: element)
     }
     private static func _repackage(array: CFArray) -> [Any] {
         var newArray = [Any]()
@@ -77,13 +114,13 @@ public class AccessibilityApplicationObserver {
     private static func _repackage(axValue: AXValue) throws -> Any {
         switch axValue.type {
         case .cgPoint:
-            return AccessibilityElement.Frame.Point(point: try axValue.pointValue())
+            return Element.Frame.Point(point: try axValue.pointValue())
         case .cgSize:
             let size = try axValue.sizeValue()
-            return AccessibilityElement.Frame.Size(size: size)
+            return Element.Frame.Size(size: size)
         case .cgRect:
             let rect = try axValue.rectValue()
-            return AccessibilityElement.Frame(rect: rect)
+            return Element.Frame(rect: rect)
         case .cfRange:
             let range = try axValue.rangeValue()
             return range.location..<range.location+range.length
@@ -120,22 +157,10 @@ public class AccessibilityApplicationObserver {
             return value
         }
     }
-    private static func repackage(dictionary: CFDictionary?) -> [String : Any]? {
+    fileprivate static func repackage(dictionary: CFDictionary?) -> [String : Any]? {
         guard let dictionary = dictionary else {
             return nil
         }
         return _repackage(dictionary: dictionary)
-    }
-    public init(processIdentifier: Int) throws {
-        observer = try AXObserver.observer(processIdentifier: processIdentifier)
-    }
-    public func startObserving(element: AccessibilityElement, notification: NSAccessibilityNotificationName, handler: @escaping AccessibilityObserverHandler) throws -> Token {
-        let identifier = try observer.add(element: element.element, notification: notification) { element, notification, info in
-            handler(AccessibilityElement(element: element), notification, AccessibilityApplicationObserver.repackage(dictionary: info))
-        }
-        return Token(element: element, notification: notification, identifier: identifier)
-    }
-    public func stopObserving(token: Token) throws {
-        try observer.remove(element: token.element.element, notification: token.notification, identifier: token.identifier)
     }
 }

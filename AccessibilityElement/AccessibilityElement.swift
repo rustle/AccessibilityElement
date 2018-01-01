@@ -7,9 +7,7 @@
 import Cocoa
 import os.log
 
-
-
-public struct AccessibilityElement {
+public struct Element {
     let element: AXUIElement
     public init(element: AXUIElement) {
         self.element = element
@@ -39,20 +37,20 @@ public struct AccessibilityElement {
         }
         return number.boolValue
     }
-    private func element(attribute: NSAccessibilityAttributeName) throws -> AccessibilityElement {
+    private func element(attribute: NSAccessibilityAttributeName) throws -> Element {
         let value = try element.value(attribute: attribute)
         guard CFGetTypeID(value as CFTypeRef) == AXUIElementGetTypeID() else {
             throw AccessibilityError.typeMismatch
         }
-        return AccessibilityElement(element: value as! AXUIElement)
+        return Element(element: value as! AXUIElement)
     }
-    private func elements(attribute: NSAccessibilityAttributeName) throws -> [AccessibilityElement] {
+    private func elements(attribute: NSAccessibilityAttributeName) throws -> [Element] {
         let value = try element.value(attribute: attribute)
         guard let elements = value as? [AXUIElement]  else {
             throw AccessibilityError.typeMismatch
         }
         return elements.map() { element in
-            return AccessibilityElement(element: element)
+            return Element(element: element)
         }
     }
     private func range(attribute: NSAccessibilityAttributeName) throws -> Range<Int> {
@@ -79,10 +77,10 @@ public struct AccessibilityElement {
     public func isKeyboardFocused() throws -> Bool {
         return try bool(attribute: .focused)
     }
-    public func parent() throws -> AccessibilityElement {
+    public func parent() throws -> Element {
         return try element(attribute: .parent)
     }
-    public func children() throws -> [AccessibilityElement] {
+    public func children() throws -> [Element] {
         return try elements(attribute: .children)
     }
 
@@ -135,12 +133,12 @@ public struct AccessibilityElement {
         return (try? self.element.processIdentifier()) ?? 0
     }
 
-    public func walk(_ visitor: (AccessibilityElement) -> Void) {
-        var elements = [AccessibilityElement]()
-        var visited = Set<AccessibilityElement>()
+    public func walk(_ visitor: (Element) -> Void) {
+        var elements = [Element]()
+        var visited = Set<Element>()
         elements.append(self)
         while elements.count > 0 {
-            let element: AccessibilityElement = elements[0]
+            let element: Element = elements[0]
             elements.remove(at: 0)
             if !visited.contains(element) {
                 do {
@@ -155,19 +153,19 @@ public struct AccessibilityElement {
     }
 }
 
-extension AccessibilityElement : Equatable {
-    public static func ==(lhs: AccessibilityElement, rhs: AccessibilityElement) -> Bool {
+extension Element : Equatable {
+    public static func ==(lhs: Element, rhs: Element) -> Bool {
         return CFEqual(lhs.element, rhs.element)
     }
 }
 
-extension AccessibilityElement : Hashable {
+extension Element : Hashable {
     public var hashValue: Int {
         return Int(CFHash(element))
     }
 }
 
-extension AccessibilityElement : CustomDebugStringConvertible {
+extension Element : CustomDebugStringConvertible {
     public var debugDescription: String {
         var components = [String]()
         if let role = try? self.role().rawValue, role.count > 0 {

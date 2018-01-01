@@ -110,6 +110,9 @@ extension CFNumber {
 }
 
 extension CFDictionary {
+    static var typeID: CFTypeID {
+        return CFDictionaryGetTypeID()
+    }
     func apply(_ applier: (CFTypeRef, CFTypeRef) -> Void) {
         let count = Int(CFDictionaryGetCount(self))
         let keys = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: count)
@@ -130,6 +133,9 @@ extension CFDictionary {
 }
 
 extension CFArray {
+    static var typeID: CFTypeID {
+        return CFArrayGetTypeID()
+    }
     func apply(_ applier: (CFTypeRef) -> Void) {
         let count = Int(CFArrayGetCount(self))
         let values = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: count)
@@ -141,5 +147,29 @@ extension CFArray {
             applier(value)
         }
         values.deallocate(capacity: count)
+    }
+}
+
+public extension CFRunLoop {
+    static var typeID: CFTypeID {
+        return CFRunLoopGetTypeID()
+    }
+    static var main: CFRunLoop {
+        return CFRunLoopGetMain()
+    }
+    static var current: CFRunLoop {
+        return CFRunLoopGetCurrent()
+    }
+    static func run() {
+        CFRunLoopRun()
+    }
+    func add(source: CFRunLoopSource, mode: CFRunLoopMode) {
+        CFRunLoopAddSource(self, source, mode)
+    }
+    func remove(source: CFRunLoopSource, mode: CFRunLoopMode) {
+        CFRunLoopRemoveSource(self, source, mode)
+    }
+    func perform(mode: CFRunLoopMode = .defaultMode, block: @escaping () -> Void) {
+        CFRunLoopPerformBlock(self, mode.rawValue, block)
     }
 }
