@@ -186,3 +186,27 @@ extension Element : CustomDebugStringConvertible {
         return components.joined(separator: ", ")
     }
 }
+
+extension Element : CustomDebugDictionaryConvertible {
+    public var debugInfo: [String:CustomDebugStringConvertible] {
+        var info = [NSAccessibilityAttributeName:String]()
+        if let role = try? self.role().rawValue, role.count > 0 {
+            info[.role] = role
+        }
+        if let subrole = try? self.subrole().rawValue, subrole.count > 0 {
+            info[.subrole] = subrole
+        }
+        if let description = try? self.description(), description.count > 0 {
+            info[.description] = description
+        }
+        if let title = try? self.title(), title.count > 0 {
+            info[.title] = title
+        }
+        if hasTextRole(), let value = try? self.value(), let string = value as? String, string.count > 0 {
+            info[.value] = string
+        }
+        return info.map() { key, value in
+            return (key.rawValue, value)
+        }
+    }
+}

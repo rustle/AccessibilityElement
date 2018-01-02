@@ -19,8 +19,12 @@ extension Controller : CustomDebugStringConvertible {
     }
 }
 
-open class Application : Controller {
-    open func connect() {
-        
+extension Controller : CustomDebugDictionaryConvertible {
+    public var debugInfo: [String:CustomDebugStringConvertible] {
+        return ["element" : element.debugInfo]
     }
+}
+
+public protocol Application {
+    func connect()
 }

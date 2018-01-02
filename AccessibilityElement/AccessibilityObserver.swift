@@ -6,31 +6,31 @@
 
 import Foundation
 
-public typealias AccessibilityObserverHandler = (Element, NSAccessibilityNotificationName, Any?) -> Void
+public typealias ObserverHandler = (Element, NSAccessibilityNotificationName, Any?) -> Void
 
-public enum AccessibilityObserverError : Error {
+public enum ObserverError : Error {
     case invalidApplication
     case invalidToken
 }
 
-public class AccessibilityObserverManager {
-    public static let shared = AccessibilityObserverManager()
-    private var map = [Int : AccessibilityApplicationObserver]()
-    public func registerObserver(application: Element) throws -> AccessibilityApplicationObserver {
+public class ObserverManager {
+    public static let shared = ObserverManager()
+    private var map = [Int : ApplicationObserver]()
+    public func registerObserver(application: Element) throws -> ApplicationObserver {
         let processIdentifier = application.processIdentifier
         guard processIdentifier > 0 else {
-            throw AccessibilityObserverError.invalidApplication
+            throw ObserverError.invalidApplication
         }
         if let observer = map[processIdentifier] {
             return observer
         }
-        let observer = try AccessibilityApplicationObserver(processIdentifier: processIdentifier)
+        let observer = try ApplicationObserver(processIdentifier: processIdentifier)
         map[processIdentifier] = observer
         return observer
     }
 }
 
-public class AccessibilityApplicationObserver {
+public class ApplicationObserver {
     private var _observer: AXObserver?
     private func observer() throws -> AXObserver {
         if let observer = _observer {
@@ -57,7 +57,7 @@ public class AccessibilityApplicationObserver {
     public init(processIdentifier: Int) throws {
         self.processIdentifier = processIdentifier
     }
-    public func startObserving(element: Element, notification: NSAccessibilityNotificationName, handler: @escaping AccessibilityObserverHandler) throws -> Token {
+    public func startObserving(element: Element, notification: NSAccessibilityNotificationName, handler: @escaping ObserverHandler) throws -> Token {
         let identifier = try observer().add(element: element.element, notification: notification) { element, notification, info in
             handler(Element(element: element), notification, Helper.repackage(dictionary: info))
         }
@@ -69,7 +69,7 @@ public class AccessibilityApplicationObserver {
         if tokens.contains(token) {
             try observer().remove(element: token.element.element, notification: token.notification, identifier: token.identifier)
         } else {
-            throw AccessibilityObserverError.invalidToken
+            throw ObserverError.invalidToken
         }
         if tokens.count == 0 {
             guard let observer = _observer else {

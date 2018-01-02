@@ -150,7 +150,7 @@ extension CFArray {
     }
 }
 
-public extension CFRunLoop {
+extension CFRunLoop {
     static var typeID: CFTypeID {
         return CFRunLoopGetTypeID()
     }
