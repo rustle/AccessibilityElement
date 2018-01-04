@@ -6,17 +6,17 @@
 
 import Foundation
 
-extension CFString {
-    static var typeID: CFTypeID {
+public extension CFString {
+    public static var typeID: CFTypeID {
         return CFStringGetTypeID()
     }
 }
 
-extension CFNumber {
-    static var typeID: CFTypeID {
+public extension CFNumber {
+    public static var typeID: CFTypeID {
         return CFNumberGetTypeID()
     }
-    var type: CFNumberType {
+    public var type: CFNumberType {
         return CFNumberGetType(self)
     }
     private func get<T>(_ defaultValue: T) throws -> T {
@@ -109,11 +109,11 @@ extension CFNumber {
     }
 }
 
-extension CFDictionary {
-    static var typeID: CFTypeID {
+public extension CFDictionary {
+    public static var typeID: CFTypeID {
         return CFDictionaryGetTypeID()
     }
-    func apply(_ applier: (CFTypeRef, CFTypeRef) -> Void) {
+    public func apply(_ applier: (CFTypeRef, CFTypeRef) -> Void) {
         let count = Int(CFDictionaryGetCount(self))
         let keys = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: count)
         let values = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: count)
@@ -132,11 +132,11 @@ extension CFDictionary {
     }
 }
 
-extension CFArray {
-    static var typeID: CFTypeID {
+public extension CFArray {
+    public static var typeID: CFTypeID {
         return CFArrayGetTypeID()
     }
-    func apply(_ applier: (CFTypeRef) -> Void) {
+    public func apply(_ applier: (CFTypeRef) -> Void) {
         let count = Int(CFArrayGetCount(self))
         let values = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: count)
         CFArrayGetValues(self, CFRangeMake(0, count), values)
@@ -150,26 +150,38 @@ extension CFArray {
     }
 }
 
-extension CFRunLoop {
-    static var typeID: CFTypeID {
+public extension CFRunLoop {
+    public static var typeID: CFTypeID {
         return CFRunLoopGetTypeID()
     }
-    static var main: CFRunLoop {
+    public static var main: CFRunLoop {
         return CFRunLoopGetMain()
     }
-    static var current: CFRunLoop {
+    public static var current: CFRunLoop {
         return CFRunLoopGetCurrent()
     }
-    static func run() {
+    public static func run() {
         CFRunLoopRun()
     }
-    func add(source: CFRunLoopSource, mode: CFRunLoopMode) {
+    public func add(source: CFRunLoopSource, mode: CFRunLoopMode) {
         CFRunLoopAddSource(self, source, mode)
     }
-    func remove(source: CFRunLoopSource, mode: CFRunLoopMode) {
+    public func remove(source: CFRunLoopSource, mode: CFRunLoopMode) {
         CFRunLoopRemoveSource(self, source, mode)
     }
-    func perform(mode: CFRunLoopMode = .defaultMode, block: @escaping () -> Void) {
+    public func perform(mode: CFRunLoopMode = .defaultMode, block: @escaping () -> Void) {
         CFRunLoopPerformBlock(self, mode.rawValue, block)
+    }
+}
+
+public extension CFSet {
+    public static var typeID: CFTypeID {
+        return CFSetGetTypeID()
+    }
+    public func apply(_ applier: (CFTypeRef) -> Void) {
+        // CFSetGetValues is busted, cast to NSSet
+        for value in self as NSSet {
+            applier(value as CFTypeRef)
+        }
     }
 }

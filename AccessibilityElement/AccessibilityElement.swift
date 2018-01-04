@@ -187,6 +187,12 @@ extension Element : CustomDebugStringConvertible {
     }
 }
 
+extension Dictionary {
+    func reduce<T, U>(_ updateAccumulatingResult: (inout [T:U], (key: Key, value: Value)) throws -> ()) rethrows -> [T:U] {
+        return try reduce(into: [T:U](), updateAccumulatingResult)
+    }
+}
+
 extension Element : CustomDebugDictionaryConvertible {
     public var debugInfo: [String:CustomDebugStringConvertible] {
         var info = [NSAccessibilityAttributeName:String]()
@@ -205,8 +211,8 @@ extension Element : CustomDebugDictionaryConvertible {
         if hasTextRole(), let value = try? self.value(), let string = value as? String, string.count > 0 {
             info[.value] = string
         }
-        return info.map() { key, value in
-            return (key.rawValue, value)
+        return info.reduce() { result, pair in
+            result[pair.key.rawValue] = pair.value
         }
     }
 }
