@@ -119,34 +119,59 @@ public extension CFDictionary {
         let values = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: count)
         CFDictionaryGetKeysAndValues(self, keys, values)
         for i in 0..<count {
-            guard let key = keys[i]?.load(as: CFTypeRef.self) else {
+            guard let key = keys[i] else {
                 break
             }
-            guard let value = values[i]?.load(as: CFTypeRef.self) else {
+            guard let value = values[i] else {
                 break
             }
-            applier(key, value)
+            applier(Unmanaged<CFTypeRef>.fromOpaque(key).takeUnretainedValue(), Unmanaged<CFTypeRef>.fromOpaque(value).takeUnretainedValue())
         }
         keys.deallocate(capacity: count)
         values.deallocate(capacity: count)
     }
 }
 
+fileprivate func _apply(collection: CFTypeRef,
+                        getCount: () -> CFIndex,
+                        getValues: (UnsafeMutablePointer<UnsafeRawPointer?>, Int) -> Void,
+                        applier: (CFTypeRef) throws -> Void) rethrows {
+    let count = Int(getCount())
+    let values = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: count)
+    getValues(values, count)
+    for i in 0..<count {
+        guard let pointer = values[i] else {
+            continue
+        }
+        let value = Unmanaged<CFTypeRef>.fromOpaque(pointer).takeUnretainedValue()
+        try applier(value)
+    }
+    values.deallocate(capacity: count)
+}
+
 public extension CFArray {
     public static var typeID: CFTypeID {
         return CFArrayGetTypeID()
     }
-    public func apply(_ applier: (CFTypeRef) -> Void) {
-        let count = Int(CFArrayGetCount(self))
-        let values = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: count)
-        CFArrayGetValues(self, CFRangeMake(0, count), values)
-        for i in 0..<count {
-            guard let value = values[i]?.load(as: CFTypeRef.self) else {
-                break
-            }
-            applier(value)
-        }
-        values.deallocate(capacity: count)
+    public func apply(_ applier: (CFTypeRef) throws -> Void) rethrows {
+        try _apply(collection: self, getCount: {
+            return CFArrayGetCount(self)
+        }, getValues: { values, count in
+            CFArrayGetValues(self, CFRangeMake(0, count), values)
+        }, applier: applier)
+    }
+}
+
+public extension CFSet {
+    public static var typeID: CFTypeID {
+        return CFSetGetTypeID()
+    }
+    public func apply(_ applier: (CFTypeRef) throws -> Void) rethrows {
+        try _apply(collection: self, getCount: {
+            return CFSetGetCount(self)
+        }, getValues: { values, count in
+            CFSetGetValues(self, values)
+        }, applier: applier)
     }
 }
 
@@ -171,17 +196,5 @@ public extension CFRunLoop {
     }
     public func perform(mode: CFRunLoopMode = .defaultMode, block: @escaping () -> Void) {
         CFRunLoopPerformBlock(self, mode.rawValue, block)
-    }
-}
-
-public extension CFSet {
-    public static var typeID: CFTypeID {
-        return CFSetGetTypeID()
-    }
-    public func apply(_ applier: (CFTypeRef) -> Void) {
-        // CFSetGetValues is busted, cast to NSSet
-        for value in self as NSSet {
-            applier(value as CFTypeRef)
-        }
     }
 }
