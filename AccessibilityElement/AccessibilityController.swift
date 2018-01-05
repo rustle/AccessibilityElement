@@ -21,7 +21,10 @@ extension Controller : CustomDebugStringConvertible {
 
 extension Controller : CustomDebugDictionaryConvertible {
     public var debugInfo: [String:CustomDebugStringConvertible] {
-        return ["element" : element.debugInfo]
+        return [
+            "type" : String(describing: type(of: self)),
+            "element" : element.debugInfo,
+        ]
     }
 }
 

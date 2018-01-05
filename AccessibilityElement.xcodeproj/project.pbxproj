@@ -13,6 +13,10 @@
 		914E28C21FF8736700765FCE /* CF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28C11FF8736700765FCE /* CF.swift */; };
 		914E28D41FF9DCF000765FCE /* AccessibilityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28D31FF9DCF000765FCE /* AccessibilityController.swift */; };
 		914E28F71FFB297A00765FCE /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28F61FFB297A00765FCE /* Debug.swift */; };
+		914E29651FFF077E00765FCE /* CFNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E29641FFF077E00765FCE /* CFNumber.swift */; };
+		914E29671FFF0BEE00765FCE /* CFDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E29661FFF0BEE00765FCE /* CFDictionary.swift */; };
+		914E29691FFF0C1900765FCE /* CFRunLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E29681FFF0C1900765FCE /* CFRunLoop.swift */; };
+		914E296B1FFF0C6B00765FCE /* CFString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E296A1FFF0C6B00765FCE /* CFString.swift */; };
 		91BF2DE81FF17FE400FB993D /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */; };
 		91BF2DED1FF17FE400FB993D /* AccessibilityElementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BF2DEC1FF17FE400FB993D /* AccessibilityElementTests.swift */; };
 		91BF2DEF1FF17FE400FB993D /* AccessibilityElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -40,6 +44,10 @@
 		914E28C11FF8736700765FCE /* CF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CF.swift; sourceTree = "<group>"; };
 		914E28D31FF9DCF000765FCE /* AccessibilityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityController.swift; sourceTree = "<group>"; };
 		914E28F61FFB297A00765FCE /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
+		914E29641FFF077E00765FCE /* CFNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFNumber.swift; sourceTree = "<group>"; };
+		914E29661FFF0BEE00765FCE /* CFDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFDictionary.swift; sourceTree = "<group>"; };
+		914E29681FFF0C1900765FCE /* CFRunLoop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFRunLoop.swift; sourceTree = "<group>"; };
+		914E296A1FFF0C6B00765FCE /* CFString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFString.swift; sourceTree = "<group>"; };
 		91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccessibilityElement.h; sourceTree = "<group>"; };
 		91BF2DE21FF17FE400FB993D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -82,6 +90,18 @@
 			path = HIServices;
 			sourceTree = "<group>";
 		};
+		914E296C1FFF0C8B00765FCE /* CF */ = {
+			isa = PBXGroup;
+			children = (
+				914E28C11FF8736700765FCE /* CF.swift */,
+				914E296A1FFF0C6B00765FCE /* CFString.swift */,
+				914E29641FFF077E00765FCE /* CFNumber.swift */,
+				914E29661FFF0BEE00765FCE /* CFDictionary.swift */,
+				914E29681FFF0C1900765FCE /* CFRunLoop.swift */,
+			);
+			path = CF;
+			sourceTree = "<group>";
+		};
 		91BF2DD41FF17FE400FB993D = {
 			isa = PBXGroup;
 			children = (
@@ -109,7 +129,7 @@
 				91BF2DF81FF1800700FB993D /* AccessibilityElement.swift */,
 				914E28BB1FF83E3700765FCE /* AccessibilityObserver.swift */,
 				914E28C01FF85A1400765FCE /* HIServices */,
-				914E28C11FF8736700765FCE /* CF.swift */,
+				914E296C1FFF0C8B00765FCE /* CF */,
 				914E28F61FFB297A00765FCE /* Debug.swift */,
 				914E28B71FF80ECB00765FCE /* MonotonicCounter.h */,
 				914E28B81FF80ECB00765FCE /* MonotonicCounter.m */,
@@ -240,15 +260,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				91FFFD011FF6F09A00BF89A0 /* AXObserver.swift in Sources */,
+				914E29651FFF077E00765FCE /* CFNumber.swift in Sources */,
 				914E28F71FFB297A00765FCE /* Debug.swift in Sources */,
 				914E28D41FF9DCF000765FCE /* AccessibilityController.swift in Sources */,
 				914E28BA1FF80ECB00765FCE /* MonotonicCounter.m in Sources */,
 				91BF2DF91FF1800700FB993D /* AccessibilityElement.swift in Sources */,
 				914E28BC1FF83E3700765FCE /* AccessibilityObserver.swift in Sources */,
 				914E28C21FF8736700765FCE /* CF.swift in Sources */,
+				914E29671FFF0BEE00765FCE /* CFDictionary.swift in Sources */,
 				91FFFCFF1FF5B6B400BF89A0 /* AccessibilityError.swift in Sources */,
 				91BF2DFB1FF1F02200FB993D /* AXUIElement.swift in Sources */,
 				91BF2DFD1FF1F8AE00FB993D /* AXValue.swift in Sources */,
+				914E29691FFF0C1900765FCE /* CFRunLoop.swift in Sources */,
+				914E296B1FFF0C6B00765FCE /* CFString.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
