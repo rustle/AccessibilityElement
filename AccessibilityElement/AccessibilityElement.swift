@@ -7,7 +7,54 @@
 import Cocoa
 import os.log
 
-public struct Element {
+public protocol TreeElement {
+    func up() throws -> Self
+    func down() throws -> [Self]
+}
+
+extension TreeElement where Self : Hashable {
+    public func walk(_ visitor: (Self) -> Void) {
+        var elements = [Self]()
+        var visited = Set<Self>()
+        elements.append(self)
+        while elements.count > 0 {
+            let element: Self = elements[0]
+            elements.remove(at: 0)
+            if !visited.contains(element) {
+                do {
+                    visitor(element)
+                    let children = try element.down()
+                    elements.append(contentsOf: children)
+                } catch let error {
+                    os_log("####---- %@", error.localizedDescription)
+                }
+                visited.insert(element)
+            }
+        }
+    }
+}
+
+public protocol AccessibilityElement : TreeElement {
+    func role() throws -> NSAccessibilityRole
+    func subrole() throws -> NSAccessibilitySubrole
+    func value() throws -> Any
+    func description() throws -> String
+    func title() throws -> String
+    func isKeyboardFocused() throws -> Bool
+    func parent() throws -> Self
+    func children() throws -> [Self]
+}
+
+extension AccessibilityElement {
+    public func up() throws -> Self {
+        return try parent()
+    }
+    public func down() throws -> [Self] {
+        return try children()
+    }
+}
+
+public struct Element : AccessibilityElement {
     let element: AXUIElement
     public init(element: AXUIElement) {
         self.element = element
@@ -85,18 +132,17 @@ public struct Element {
     }
 
     public func hasTextRole() -> Bool {
-        do {
-            switch try self.role() {
-            case .staticText:
-                fallthrough
-            case .textField:
-                fallthrough
-            case .textArea:
-                return true
-            default:
-                return false
-            }
-        } catch {
+        guard let role = try? self.role() else {
+            return false
+        }
+        switch role {
+        case .staticText:
+            fallthrough
+        case .textField:
+            fallthrough
+        case .textArea:
+            return true
+        default:
             return false
         }
     }
@@ -131,25 +177,6 @@ public struct Element {
 
     public var processIdentifier: Int {
         return (try? self.element.processIdentifier()) ?? 0
-    }
-
-    public func walk(_ visitor: (Element) -> Void) {
-        var elements = [Element]()
-        var visited = Set<Element>()
-        elements.append(self)
-        while elements.count > 0 {
-            let element: Element = elements[0]
-            elements.remove(at: 0)
-            if !visited.contains(element) {
-                do {
-                    visitor(element)
-                    elements.append(contentsOf: try element.children())
-                } catch let error {
-                    os_log("####---- %@", error.localizedDescription)
-                }
-                visited.insert(element)
-            }
-        }
     }
 }
 
