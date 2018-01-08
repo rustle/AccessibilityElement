@@ -19,6 +19,11 @@
 		914E296B1FFF0C6B00765FCE /* CFString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E296A1FFF0C6B00765FCE /* CFString.swift */; };
 		914E296E1FFF163D00765FCE /* AccessibilityHierarchy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E296D1FFF163D00765FCE /* AccessibilityHierarchy.swift */; };
 		917E5469200194F400D490A8 /* MockElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E5468200194F400D490A8 /* MockElement.swift */; };
+		917E546B2002E48E00D490A8 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E546A2002E48E00D490A8 /* Application.swift */; };
+		917E546D2002F76400D490A8 /* Specialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E546C2002F76400D490A8 /* Specialization.swift */; };
+		917E54702002F7D800D490A8 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E546F2002F7D800D490A8 /* Window.swift */; };
+		917E54722002FA9B00D490A8 /* Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54712002FA9B00D490A8 /* Default.swift */; };
+		917E54742002FAC200D490A8 /* Registrar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54732002FAC200D490A8 /* Registrar.swift */; };
 		91BF2DE81FF17FE400FB993D /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */; };
 		91BF2DED1FF17FE400FB993D /* AccessibilityElementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BF2DEC1FF17FE400FB993D /* AccessibilityElementTests.swift */; };
 		91BF2DEF1FF17FE400FB993D /* AccessibilityElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -52,6 +57,11 @@
 		914E296A1FFF0C6B00765FCE /* CFString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFString.swift; sourceTree = "<group>"; };
 		914E296D1FFF163D00765FCE /* AccessibilityHierarchy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityHierarchy.swift; sourceTree = "<group>"; };
 		917E5468200194F400D490A8 /* MockElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockElement.swift; sourceTree = "<group>"; };
+		917E546A2002E48E00D490A8 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		917E546C2002F76400D490A8 /* Specialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Specialization.swift; sourceTree = "<group>"; };
+		917E546F2002F7D800D490A8 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
+		917E54712002FA9B00D490A8 /* Default.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Default.swift; sourceTree = "<group>"; };
+		917E54732002FAC200D490A8 /* Registrar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Registrar.swift; sourceTree = "<group>"; };
 		91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccessibilityElement.h; sourceTree = "<group>"; };
 		91BF2DE21FF17FE400FB993D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -106,6 +116,18 @@
 			path = CF;
 			sourceTree = "<group>";
 		};
+		917E546E2002F7AF00D490A8 /* Specialization */ = {
+			isa = PBXGroup;
+			children = (
+				917E546C2002F76400D490A8 /* Specialization.swift */,
+				917E54732002FAC200D490A8 /* Registrar.swift */,
+				917E54712002FA9B00D490A8 /* Default.swift */,
+				917E546A2002E48E00D490A8 /* Application.swift */,
+				917E546F2002F7D800D490A8 /* Window.swift */,
+			);
+			path = Specialization;
+			sourceTree = "<group>";
+		};
 		91BF2DD41FF17FE400FB993D = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +155,7 @@
 				91BF2DF81FF1800700FB993D /* AccessibilityElement.swift */,
 				914E28BB1FF83E3700765FCE /* AccessibilityObserver.swift */,
 				914E296D1FFF163D00765FCE /* AccessibilityHierarchy.swift */,
+				917E546E2002F7AF00D490A8 /* Specialization */,
 				914E28C01FF85A1400765FCE /* HIServices */,
 				914E296C1FFF0C8B00765FCE /* CF */,
 				914E28F61FFB297A00765FCE /* Debug.swift */,
@@ -265,21 +288,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				917E546B2002E48E00D490A8 /* Application.swift in Sources */,
 				91FFFD011FF6F09A00BF89A0 /* AXObserver.swift in Sources */,
 				914E29651FFF077E00765FCE /* CFNumber.swift in Sources */,
 				914E28F71FFB297A00765FCE /* Debug.swift in Sources */,
+				917E546D2002F76400D490A8 /* Specialization.swift in Sources */,
+				917E54742002FAC200D490A8 /* Registrar.swift in Sources */,
 				914E28D41FF9DCF000765FCE /* AccessibilityController.swift in Sources */,
 				914E28BA1FF80ECB00765FCE /* MonotonicCounter.m in Sources */,
 				91BF2DF91FF1800700FB993D /* AccessibilityElement.swift in Sources */,
 				914E28BC1FF83E3700765FCE /* AccessibilityObserver.swift in Sources */,
 				914E28C21FF8736700765FCE /* CF.swift in Sources */,
 				914E29671FFF0BEE00765FCE /* CFDictionary.swift in Sources */,
+				917E54702002F7D800D490A8 /* Window.swift in Sources */,
 				914E296E1FFF163D00765FCE /* AccessibilityHierarchy.swift in Sources */,
 				91FFFCFF1FF5B6B400BF89A0 /* AccessibilityError.swift in Sources */,
 				91BF2DFB1FF1F02200FB993D /* AXUIElement.swift in Sources */,
 				91BF2DFD1FF1F8AE00FB993D /* AXValue.swift in Sources */,
 				914E29691FFF0C1900765FCE /* CFRunLoop.swift in Sources */,
 				914E296B1FFF0C6B00765FCE /* CFString.swift in Sources */,
+				917E54722002FA9B00D490A8 /* Default.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

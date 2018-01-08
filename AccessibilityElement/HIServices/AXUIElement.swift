@@ -129,7 +129,7 @@ public extension AXUIElement {
     //public func AXUIElementCopyAttributeValue(_ element: AXUIElement, _ attribute: CFString, _ value: UnsafeMutablePointer<CoreFoundation.CFTypeRef?>) -> AXError
     public func value(attribute: NSAccessibilityAttributeName) throws -> Any {
         var value: CFTypeRef?
-        let error = AXUIElementCopyAttributeValue(self, attribute as CFString, &value)
+        let error = AXUIElementCopyAttributeValue(self, attribute.rawValue as CFString, &value)
         guard error == .success else {
             throw AXError(error: error)
         }

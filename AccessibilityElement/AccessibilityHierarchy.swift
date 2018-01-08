@@ -16,7 +16,7 @@ public enum HierarchyError : Error {
     case noValue
 }
 
-public final class Node<ElementType> : TreeElement, Hashable where ElementType : AccessibilityElement, ElementType : Hashable {
+public final class Node<ElementType> : TreeElement, Hashable where ElementType : AccessibilityElement {
     public weak var parent: Node<ElementType>?
     public var children = [Node<ElementType>]()
     public func up() throws -> Node<ElementType> {
@@ -59,7 +59,7 @@ extension Node : CustomDebugStringConvertible {
 }
 
 public protocol Hierarchy {
-    associatedtype ElementType : AccessibilityElement, Hashable
+    associatedtype ElementType : AccessibilityElement
     func classify(_ element: ElementType) -> HierarchyRole
     func buildHierarchy(from element: ElementType) -> Node<ElementType>
 }
@@ -82,7 +82,7 @@ public extension Hierarchy {
     }
 }
 
-public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : AccessibilityElement, ElementType : Hashable {
+public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : AccessibilityElement {
     public func classify(_ element: ElementType) -> HierarchyRole {
         guard let role = try? element.role() else {
             return .skip
@@ -95,6 +95,12 @@ public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : Acce
                 return .include
             }
             return .skip
+        case .application:
+            return .container
+        case .window:
+            return .container
+        case .menuBar:
+            return .container
         default:
             return .include
         }
@@ -126,5 +132,8 @@ public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : Acce
         }
         node.children = childNodes
         return node
+    }
+    public init() {
+        
     }
 }

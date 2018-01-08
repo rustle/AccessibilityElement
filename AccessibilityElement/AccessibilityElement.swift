@@ -34,7 +34,7 @@ extension TreeElement where Self : Hashable {
     }
 }
 
-public protocol AccessibilityElement : TreeElement {
+public protocol AccessibilityElement : TreeElement, Hashable {
     func role() throws -> NSAccessibilityRole
     func subrole() throws -> NSAccessibilitySubrole
     func value() throws -> Any
