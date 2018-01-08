@@ -15,14 +15,14 @@ public class Controller<ElementType> where ElementType : AccessibilityElement {
         self.node = node
         specialization = SpecializationRegistrar().specialization(controller: self)
     }
-    public func connect() {
-        specialization?.connect()
+    public func connect() -> String? {
+        return specialization?.connect()
     }
-    public func focusIn() {
-        specialization?.focusIn()
+    public func focusIn() -> String? {
+        return specialization?.focusIn()
     }
-    public func focusOut() {
-        specialization?.focusOut()
+    public func focusOut() -> String? {
+        return specialization?.focusOut()
     }
     public func childControllers(node: Node<ElementType>) -> [Controller<ElementType>] {
         return node.children.map { node in

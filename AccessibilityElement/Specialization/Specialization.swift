@@ -7,9 +7,9 @@
 import Foundation
 
 public protocol AnySpecialization {
-    func connect()
-    func focusIn()
-    func focusOut()
+    mutating func connect() -> String?
+    mutating func focusIn() -> String?
+    mutating func focusOut() -> String?
 }
 
 public protocol Specialization : AnySpecialization {
@@ -18,18 +18,19 @@ public protocol Specialization : AnySpecialization {
 }
 
 public extension Specialization {
-    public func connect() {
-        
+    mutating public func connect() -> String? {
+        return nil
     }
-    public func focusIn() {
+    mutating public func focusIn() -> String? {
         guard let controller = controller else {
-            return
+            return nil
         }
         if controller.childControllers == nil {
             controller.childControllers = controller.childControllers(node: controller.node)
         }
+        return nil
     }
-    public func focusOut() {
-        
+    mutating public func focusOut() -> String? {
+        return nil
     }
 }
