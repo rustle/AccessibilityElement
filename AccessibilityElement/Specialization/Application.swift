@@ -23,9 +23,9 @@ public struct Application<ElementType> : Specialization where ElementType : Acce
         controller.childControllers = controller.childControllers(node: controller.node)
         do {
             let title = try controller.node.element.title()
-            return "focused \(String(describing: title))"
+            return title
         } catch {
-            return "focused"
+            return "unknown application"
         }
     }
     mutating public func focusOut() -> String? {

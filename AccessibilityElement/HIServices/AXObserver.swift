@@ -36,7 +36,7 @@ extension AXObserver {
         guard error == .success else {
             throw AXUIElement.AXError(error: error)
         }
-        let identifier = pointer.load(as: Int.self)
+        let identifier = Int(bitPattern: pointer)
         axObserverState.set(handler: handler, identifier: identifier)
         return identifier
     }

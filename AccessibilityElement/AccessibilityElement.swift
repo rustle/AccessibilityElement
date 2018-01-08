@@ -55,6 +55,9 @@ extension AccessibilityElement {
 }
 
 public struct Element : AccessibilityElement {
+    static var systemWide: Element = {
+        Element(element: AXUIElement.systemWide())
+    }()
     let element: AXUIElement
     public init(element: AXUIElement) {
         self.element = element
