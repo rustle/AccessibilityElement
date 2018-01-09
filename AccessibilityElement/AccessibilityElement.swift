@@ -26,7 +26,7 @@ extension TreeElement where Self : Hashable {
                     let children = try element.down()
                     elements.append(contentsOf: children)
                 } catch let error {
-                    os_log("####---- %@", error.localizedDescription)
+                    os_log("%@", error.localizedDescription)
                 }
                 visited.insert(element)
             }
@@ -36,10 +36,12 @@ extension TreeElement where Self : Hashable {
 
 public protocol AccessibilityElement : TreeElement, Hashable {
     func role() throws -> NSAccessibilityRole
+    func roleDescription() throws -> String
     func subrole() throws -> NSAccessibilitySubrole
     func value() throws -> Any
     func description() throws -> String
     func title() throws -> String
+    func titleElement() throws -> Self
     func isKeyboardFocused() throws -> Bool
     func parent() throws -> Self
     func children() throws -> [Self]
@@ -112,6 +114,9 @@ public struct Element : AccessibilityElement {
     public func role() throws -> NSAccessibilityRole {
         return NSAccessibilityRole(rawValue: try string(attribute: .role))
     }
+    public func roleDescription() throws -> String {
+        return try string(attribute: .roleDescription)
+    }
     public func subrole() throws -> NSAccessibilitySubrole {
         return NSAccessibilitySubrole(rawValue: try string(attribute: .subrole))
     }
@@ -123,6 +128,9 @@ public struct Element : AccessibilityElement {
     }
     public func title() throws -> String {
         return try string(attribute: .title)
+    }
+    public func titleElement() throws -> Element {
+        return try element(attribute: .titleUIElement)
     }
     public func isKeyboardFocused() throws -> Bool {
         return try bool(attribute: .focused)

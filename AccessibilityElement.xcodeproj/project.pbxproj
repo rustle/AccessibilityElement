@@ -24,6 +24,9 @@
 		917E54702002F7D800D490A8 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E546F2002F7D800D490A8 /* Window.swift */; };
 		917E54722002FA9B00D490A8 /* Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54712002FA9B00D490A8 /* Default.swift */; };
 		917E54742002FAC200D490A8 /* Registrar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54732002FAC200D490A8 /* Registrar.swift */; };
+		917E54A1200423F200D490A8 /* StaticText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54A0200423F200D490A8 /* StaticText.swift */; };
+		917E54A3200427E800D490A8 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54A2200427E800D490A8 /* Button.swift */; };
+		917E54A7200477EB00D490A8 /* Toggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54A6200477EB00D490A8 /* Toggle.swift */; };
 		91BF2DE81FF17FE400FB993D /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */; };
 		91BF2DED1FF17FE400FB993D /* AccessibilityElementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BF2DEC1FF17FE400FB993D /* AccessibilityElementTests.swift */; };
 		91BF2DEF1FF17FE400FB993D /* AccessibilityElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -62,6 +65,9 @@
 		917E546F2002F7D800D490A8 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		917E54712002FA9B00D490A8 /* Default.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Default.swift; sourceTree = "<group>"; };
 		917E54732002FAC200D490A8 /* Registrar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Registrar.swift; sourceTree = "<group>"; };
+		917E54A0200423F200D490A8 /* StaticText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticText.swift; sourceTree = "<group>"; };
+		917E54A2200427E800D490A8 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		917E54A6200477EB00D490A8 /* Toggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toggle.swift; sourceTree = "<group>"; };
 		91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccessibilityElement.h; sourceTree = "<group>"; };
 		91BF2DE21FF17FE400FB993D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -124,6 +130,9 @@
 				917E54712002FA9B00D490A8 /* Default.swift */,
 				917E546A2002E48E00D490A8 /* Application.swift */,
 				917E546F2002F7D800D490A8 /* Window.swift */,
+				917E54A0200423F200D490A8 /* StaticText.swift */,
+				917E54A2200427E800D490A8 /* Button.swift */,
+				917E54A6200477EB00D490A8 /* Toggle.swift */,
 			);
 			path = Specialization;
 			sourceTree = "<group>";
@@ -290,12 +299,15 @@
 			files = (
 				917E546B2002E48E00D490A8 /* Application.swift in Sources */,
 				91FFFD011FF6F09A00BF89A0 /* AXObserver.swift in Sources */,
+				917E54A7200477EB00D490A8 /* Toggle.swift in Sources */,
 				914E29651FFF077E00765FCE /* CFNumber.swift in Sources */,
+				917E54A1200423F200D490A8 /* StaticText.swift in Sources */,
 				914E28F71FFB297A00765FCE /* Debug.swift in Sources */,
 				917E546D2002F76400D490A8 /* Specialization.swift in Sources */,
 				917E54742002FAC200D490A8 /* Registrar.swift in Sources */,
 				914E28D41FF9DCF000765FCE /* AccessibilityController.swift in Sources */,
 				914E28BA1FF80ECB00765FCE /* MonotonicCounter.m in Sources */,
+				917E54A3200427E800D490A8 /* Button.swift in Sources */,
 				91BF2DF91FF1800700FB993D /* AccessibilityElement.swift in Sources */,
 				914E28BC1FF83E3700765FCE /* AccessibilityObserver.swift in Sources */,
 				914E28C21FF8736700765FCE /* CF.swift in Sources */,

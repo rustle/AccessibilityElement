@@ -11,10 +11,4 @@ public struct Window<ElementType> : Specialization where ElementType : Accessibi
     public init(controller: Controller<ElementType>) {
         self.controller = controller
     }
-    public func connect() {
-        guard let controller = controller else {
-            return
-        }
-        controller.childControllers = controller.childControllers(node: controller.node)
-    }
 }

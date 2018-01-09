@@ -11,6 +11,7 @@ public class Controller<ElementType> where ElementType : AccessibilityElement {
     public weak var parentController: Controller?
     public var childControllers: [Controller]?
     private var specialization: AnySpecialization?
+    public var output: ((String) -> Void)?
     public required init(node: Node<ElementType>) {
         self.node = node
         specialization = SpecializationRegistrar().specialization(controller: self)
