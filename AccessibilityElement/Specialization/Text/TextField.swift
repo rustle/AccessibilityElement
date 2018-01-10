@@ -1,16 +1,15 @@
 //
-//  Button.swift
+//  TextField.swift
 //
 //  Copyright © 2018 Doug Russell. All rights reserved.
 //
 
 import Foundation
 
-public struct Button<ElementType> : Specialization where ElementType : AccessibilityElement {
+public struct TextField<ElementType> : Specialization where ElementType : AccessibilityElement {
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
-            Describer<ElementType>.Fallthrough(required: true, attributes: [.title, .description, .stringValue, .titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.title, .description, .stringValue]))]),
-            Describer<ElementType>.Single(required: true, attribute: .roleDescription),
+            Describer<ElementType>.Single(required: true, attribute: .attachmentText)
         ]
         return requests
     }
@@ -18,14 +17,15 @@ public struct Button<ElementType> : Specialization where ElementType : Accessibi
     public init(controller: Controller<ElementType>) {
         self.controller = controller
     }
+    private let describer = Describer<ElementType>()
     public mutating func focusIn() -> String? {
         guard let controller = controller else {
             return nil
         }
         let element = controller.node.element
-        guard let results = try? Describer().describe(element: element, requests: describerRequests) else {
+        guard let results: [String?] = try? Describer().describe(element: element, requests: describerRequests) else {
             return nil
         }
-        return results.map { $0! }.joined(separator: ", ")
+        return results.prune().joined(separator: "")
     }
 }

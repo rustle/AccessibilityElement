@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9111CF2B2005BBE9006B56AA /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111CF2A2005BBE9006B56AA /* Checkbox.swift */; };
+		9111CF2E2005DBB4006B56AA /* TextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111CF2D2005DBB4006B56AA /* TextAttachment.swift */; };
 		914E28B91FF80ECB00765FCE /* MonotonicCounter.h in Headers */ = {isa = PBXBuildFile; fileRef = 914E28B71FF80ECB00765FCE /* MonotonicCounter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		914E28BA1FF80ECB00765FCE /* MonotonicCounter.m in Sources */ = {isa = PBXBuildFile; fileRef = 914E28B81FF80ECB00765FCE /* MonotonicCounter.m */; };
 		914E28BC1FF83E3700765FCE /* AccessibilityObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28BB1FF83E3700765FCE /* AccessibilityObserver.swift */; };
@@ -27,6 +29,8 @@
 		917E54A1200423F200D490A8 /* StaticText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54A0200423F200D490A8 /* StaticText.swift */; };
 		917E54A3200427E800D490A8 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54A2200427E800D490A8 /* Button.swift */; };
 		917E54A7200477EB00D490A8 /* Toggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54A6200477EB00D490A8 /* Toggle.swift */; };
+		917E54A92004800C00D490A8 /* Describer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54A82004800C00D490A8 /* Describer.swift */; };
+		917E54AC2005727200D490A8 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54AB2005727200D490A8 /* TextField.swift */; };
 		91BF2DE81FF17FE400FB993D /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */; };
 		91BF2DED1FF17FE400FB993D /* AccessibilityElementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BF2DEC1FF17FE400FB993D /* AccessibilityElementTests.swift */; };
 		91BF2DEF1FF17FE400FB993D /* AccessibilityElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -48,6 +52,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9111CF2A2005BBE9006B56AA /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		9111CF2D2005DBB4006B56AA /* TextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAttachment.swift; sourceTree = "<group>"; };
 		914E28B71FF80ECB00765FCE /* MonotonicCounter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MonotonicCounter.h; sourceTree = "<group>"; };
 		914E28B81FF80ECB00765FCE /* MonotonicCounter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MonotonicCounter.m; sourceTree = "<group>"; };
 		914E28BB1FF83E3700765FCE /* AccessibilityObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityObserver.swift; sourceTree = "<group>"; };
@@ -68,6 +74,8 @@
 		917E54A0200423F200D490A8 /* StaticText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticText.swift; sourceTree = "<group>"; };
 		917E54A2200427E800D490A8 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		917E54A6200477EB00D490A8 /* Toggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toggle.swift; sourceTree = "<group>"; };
+		917E54A82004800C00D490A8 /* Describer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Describer.swift; sourceTree = "<group>"; };
+		917E54AB2005727200D490A8 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccessibilityElement.h; sourceTree = "<group>"; };
 		91BF2DE21FF17FE400FB993D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -100,6 +108,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9111CF2C2005DBA2006B56AA /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				917E54A0200423F200D490A8 /* StaticText.swift */,
+				917E54AB2005727200D490A8 /* TextField.swift */,
+				9111CF2D2005DBB4006B56AA /* TextAttachment.swift */,
+			);
+			path = Text;
+			sourceTree = "<group>";
+		};
 		914E28C01FF85A1400765FCE /* HIServices */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,9 +148,10 @@
 				917E54712002FA9B00D490A8 /* Default.swift */,
 				917E546A2002E48E00D490A8 /* Application.swift */,
 				917E546F2002F7D800D490A8 /* Window.swift */,
-				917E54A0200423F200D490A8 /* StaticText.swift */,
 				917E54A2200427E800D490A8 /* Button.swift */,
 				917E54A6200477EB00D490A8 /* Toggle.swift */,
+				9111CF2A2005BBE9006B56AA /* Checkbox.swift */,
+				9111CF2C2005DBA2006B56AA /* Text */,
 			);
 			path = Specialization;
 			sourceTree = "<group>";
@@ -164,6 +183,7 @@
 				91BF2DF81FF1800700FB993D /* AccessibilityElement.swift */,
 				914E28BB1FF83E3700765FCE /* AccessibilityObserver.swift */,
 				914E296D1FFF163D00765FCE /* AccessibilityHierarchy.swift */,
+				917E54A82004800C00D490A8 /* Describer.swift */,
 				917E546E2002F7AF00D490A8 /* Specialization */,
 				914E28C01FF85A1400765FCE /* HIServices */,
 				914E296C1FFF0C8B00765FCE /* CF */,
@@ -307,6 +327,7 @@
 				917E54742002FAC200D490A8 /* Registrar.swift in Sources */,
 				914E28D41FF9DCF000765FCE /* AccessibilityController.swift in Sources */,
 				914E28BA1FF80ECB00765FCE /* MonotonicCounter.m in Sources */,
+				9111CF2B2005BBE9006B56AA /* Checkbox.swift in Sources */,
 				917E54A3200427E800D490A8 /* Button.swift in Sources */,
 				91BF2DF91FF1800700FB993D /* AccessibilityElement.swift in Sources */,
 				914E28BC1FF83E3700765FCE /* AccessibilityObserver.swift in Sources */,
@@ -315,11 +336,14 @@
 				917E54702002F7D800D490A8 /* Window.swift in Sources */,
 				914E296E1FFF163D00765FCE /* AccessibilityHierarchy.swift in Sources */,
 				91FFFCFF1FF5B6B400BF89A0 /* AccessibilityError.swift in Sources */,
+				917E54AC2005727200D490A8 /* TextField.swift in Sources */,
 				91BF2DFB1FF1F02200FB993D /* AXUIElement.swift in Sources */,
 				91BF2DFD1FF1F8AE00FB993D /* AXValue.swift in Sources */,
 				914E29691FFF0C1900765FCE /* CFRunLoop.swift in Sources */,
+				917E54A92004800C00D490A8 /* Describer.swift in Sources */,
 				914E296B1FFF0C6B00765FCE /* CFString.swift in Sources */,
 				917E54722002FA9B00D490A8 /* Default.swift in Sources */,
+				9111CF2E2005DBB4006B56AA /* TextAttachment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

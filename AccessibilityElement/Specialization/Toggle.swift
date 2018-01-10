@@ -8,29 +8,28 @@ import Foundation
 import os.log
 
 public struct Toggle<ElementType> : Specialization where ElementType : AccessibilityElement {
+    public var describerRequests: [DescriberRequest] {
+        let requests: [DescriberRequest] = [
+            Describer<ElementType>.Fallthrough(required: true, attributes: [.titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.stringValue, .title, .description])), .title, .description, .stringValue]),
+            Describer<ElementType>.Single(required: true, attribute: .toggleValue),
+            Describer<ElementType>.Single(required: true, attribute: .roleDescription),
+        ]
+        return requests
+    }
     public weak var controller: Controller<ElementType>?
     public init(controller: Controller<ElementType>) {
         self.controller = controller
     }
     public mutating func focusIn() -> String? {
         guard let controller = controller else {
-            // TODO: remove this
-            return "no controller"
+            return nil
         }
         let element = controller.node.element
-        if let title = try? element.title(), title.count > 0 {
-            return title
-        } else if let description = try? element.description(), description.count > 0 {
-            return description
-        } else if let titleElement = try? element.titleElement() {
-            if let title = try? titleElement.title(), title.count > 0 {
-                return title
-            } else if let description = try? titleElement.description(), description.count > 0 {
-                return description
-            } else if let value = (try? titleElement.value()) as? String, value.count > 0 {
-                return value
-            }
+        do {
+            let results = try Describer().describe(element: element, requests: describerRequests)
+            return results.map { $0! }.joined(separator: ", ")
+        } catch {
+            return nil
         }
-        return nil
     }
 }

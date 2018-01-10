@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import os.log
 
 public enum HierarchyRole {
     case skip
@@ -101,6 +102,8 @@ public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : Acce
             return .container
         case .menuBar:
             return .container
+        case .toolbar:
+            return .container
         default:
             return .include
         }
@@ -122,15 +125,25 @@ public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : Acce
         }
         return c
     }
-    public func buildHierarchy(from element: ElementType) -> Node<ElementType> {
-        let childNodes = children(element: element).map { child in
-            return buildHierarchy(from: child)
+    private func childNodes(element: ElementType,
+                            targeting target: inout Node<ElementType>?) -> [Node<ElementType>] {
+        var childNodes = [Node<ElementType>]()
+        for child in children(element: element) {
+            childNodes.append(buildHierarchy(from: child, targeting: &target))
         }
+        return childNodes
+    }
+    public func buildHierarchy(from element: ElementType,
+                               targeting target: inout Node<ElementType>?) -> Node<ElementType> {
         let node = Node(element: element, role: classify(element))
+        let childNodes = self.childNodes(element: element, targeting: &target)
         childNodes.forEach { childNode in
             childNode.parent = node
         }
         node.children = childNodes
+        if node.element == target?.element {
+            target = node
+        }
         return node
     }
     public init() {

@@ -7,6 +7,7 @@
 import Foundation
 
 public protocol AnySpecialization {
+    var describerRequests: [DescriberRequest] { get }
     mutating func connect() -> String?
     mutating func focusIn() -> String?
     mutating func focusOut() -> String?

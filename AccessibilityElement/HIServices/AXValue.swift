@@ -48,4 +48,8 @@ public extension AXValue {
             throw AccessibilityError.typeMismatch
         }
     }
+    public static func range(_ range: Range<Int>) -> AXValue {
+        var cfRange = CFRangeMake(range.lowerBound, range.count)
+        return AXValueCreate(.cfRange, &cfRange)!
+    }
 }

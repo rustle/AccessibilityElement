@@ -39,6 +39,8 @@ public protocol AccessibilityElement : TreeElement, Hashable {
     func roleDescription() throws -> String
     func subrole() throws -> NSAccessibilitySubrole
     func value() throws -> Any
+    func attributedString(range: Range<Int>) throws -> NSAttributedString
+    func numberOfCharacters() throws -> Int
     func description() throws -> String
     func title() throws -> String
     func titleElement() throws -> Self
@@ -82,12 +84,18 @@ public struct Element : AccessibilityElement {
     private func frame(attribute: NSAccessibilityAttributeName) throws -> Frame {
         return Frame(rect: try axValue(attribute: attribute).rectValue())
     }
-    private func bool(attribute: NSAccessibilityAttributeName) throws -> Bool {
+    private func number(attribute: NSAccessibilityAttributeName) throws -> NSNumber {
         let value = try element.value(attribute: attribute)
         guard let number = value as? NSNumber else {
             throw AccessibilityError.typeMismatch
         }
-        return number.boolValue
+        return number
+    }
+    private func bool(attribute: NSAccessibilityAttributeName) throws -> Bool {
+        return try number(attribute: attribute).boolValue
+    }
+    private func int(attribute: NSAccessibilityAttributeName) throws -> Int {
+        return try number(attribute: attribute).intValue
     }
     private func element(attribute: NSAccessibilityAttributeName) throws -> Element {
         let value = try element.value(attribute: attribute)
@@ -140,6 +148,16 @@ public struct Element : AccessibilityElement {
     }
     public func children() throws -> [Element] {
         return try elements(attribute: .children)
+    }
+    public func attributedString(range: Range<Int>) throws -> NSAttributedString {
+        let value = try element.parameterizedValue(attribute: .attributedStringForRange, parameter: AXValue.range(range))
+        guard let string = value as? NSAttributedString else {
+            throw AccessibilityError.typeMismatch
+        }
+        return string
+    }
+    public func numberOfCharacters() throws -> Int {
+        return try int(attribute: .numberOfCharacters)
     }
 
     public func hasTextRole() -> Bool {
@@ -206,22 +224,23 @@ extension Element : Hashable {
 extension Element : CustomDebugStringConvertible {
     public var debugDescription: String {
         var components = [String]()
-        if let role = try? self.role().rawValue, role.count > 0 {
-            components.append(role)
+        let describer = Describer<Element>()
+        let requests: [DescriberRequest] = [
+            Describer<Element>.Single(required: true, attribute: .role),
+            Describer<Element>.Single(required: false, attribute: .subrole),
+            Describer<Element>.Fallthrough(required: false, attributes: [.title, .description, .stringValue, .titleElement(Describer<Element>.Fallthrough(required: true, attributes: [.title, .description, .stringValue]))])
+        ]
+        do {
+            let values = try describer.describe(element: self, requests: requests)
+            for value in values {
+                if let value = value {
+                    components.append(value)
+                }
+            }
+            return components.joined(separator: ", ")
+        } catch {
+            return "<Element>"
         }
-        if let subrole = try? self.subrole().rawValue, subrole.count > 0 {
-            components.append(subrole)
-        }
-        if let description = try? self.description(), description.count > 0 {
-            components.append(description)
-        }
-        if let title = try? self.title(), title.count > 0 {
-            components.append(title)
-        }
-        if hasTextRole(), let value = try? self.value(), let string = value as? String, string.count > 0 {
-            components.append(string)
-        }
-        return components.joined(separator: ", ")
     }
 }
 

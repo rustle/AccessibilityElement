@@ -8,6 +8,9 @@ import Foundation
 import os.log
 
 public class Application<ElementType> : Specialization where ElementType : AccessibilityElement {
+    public var describerRequests: [DescriberRequest] {
+        return []
+    }
     public weak var controller: Controller<ElementType>?
     public init(controller: Controller<ElementType>) {
         self.controller = controller
@@ -15,6 +18,7 @@ public class Application<ElementType> : Specialization where ElementType : Acces
     private var observer: ApplicationObserver?
     private enum Error : Swift.Error {
         case invalidElement
+        case containerSearchFailed
     }
     // MARK: Window State
     private var childrenDirty = false
@@ -54,12 +58,36 @@ public class Application<ElementType> : Specialization where ElementType : Acces
     }
     // MARK: Focused UI Element
     private var focusedUIElementToken: ApplicationObserver.Token?
+    private var focusedContainer: Controller<Element>?
     private var focusedController: Controller<Element>?
+    private let hierarchy = DefaultHierarchy<Element>()
+    private func findContainer(element: Element) throws -> Element {
+        var current: Element? = element
+        while current != nil {
+            if hierarchy.classify(current!) == .container {
+                return current!
+            }
+            current = try? current!.parent()
+        }
+        throw Application.Error.containerSearchFailed
+    }
     private func focusChanged(element: Element) {
-        let node = Node(element: element, role: .include)
-        focusedController = Controller(node: node)
-        if let echo = focusedController?.focusIn(), echo.count > 0 {
-            controller?.output?(echo)
+        do {
+            let container = try findContainer(element: element)
+            var focusedNode: Node<Element>? = Node(element: element, role: .include)
+            let node = hierarchy.buildHierarchy(from: container, targeting: &focusedNode)
+            focusedContainer = Controller(node: node)
+            focusedController = Controller(node: focusedNode ?? node)
+            if let echo = focusedController?.focusIn(), echo.count > 0 {
+                controller?.output?(echo)
+            }
+        } catch {
+            focusedContainer = nil
+            let node = Node(element: element, role: .include)
+            focusedController = Controller(node: node)
+            if let echo = focusedController?.focusIn(), echo.count > 0 {
+                controller?.output?(echo)
+            }
         }
     }
     // MARK: Observers

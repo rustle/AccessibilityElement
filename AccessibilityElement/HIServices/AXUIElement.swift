@@ -136,9 +136,9 @@ public extension AXUIElement {
         return try cast(value)
     }
     //public func AXUIElementCopyParameterizedAttributeValue(_ element: AXUIElement, _ parameterizedAttribute: CFString, _ parameter: CoreFoundation.CFTypeRef, _ result: UnsafeMutablePointer<CoreFoundation.CFTypeRef?>) -> AXError
-    public func parameterizedValue(attribute: NSAccessibilityAttributeName, parameter: Any) throws -> Any {
+    public func parameterizedValue(attribute: NSAccessibilityParameterizedAttributeName, parameter: Any) throws -> Any {
         var value: CFTypeRef?
-        let error = AXUIElementCopyParameterizedAttributeValue(self, attribute as CFString, parameter as CFTypeRef, &value)
+        let error = AXUIElementCopyParameterizedAttributeValue(self, attribute.rawValue as CFString, parameter as CFTypeRef, &value)
         guard error == .success else {
             throw AXError(error: error)
         }
