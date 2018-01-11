@@ -7,7 +7,7 @@
 import Foundation
 import os.log
 
-public class Application<ElementType> : Specialization where ElementType : AccessibilityElement {
+public class Application<ElementType> : Specialization where ElementType : _AccessibilityElement {
     public var describerRequests: [DescriberRequest] {
         return []
     }

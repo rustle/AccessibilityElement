@@ -34,7 +34,7 @@ extension TreeElement where Self : Hashable {
     }
 }
 
-public protocol AccessibilityElement : TreeElement, Hashable {
+public protocol _AccessibilityElement : TreeElement, Hashable {
     func role() throws -> NSAccessibilityRole
     func roleDescription() throws -> String
     func subrole() throws -> NSAccessibilitySubrole
@@ -49,7 +49,7 @@ public protocol AccessibilityElement : TreeElement, Hashable {
     func children() throws -> [Self]
 }
 
-extension AccessibilityElement {
+extension _AccessibilityElement {
     public func up() throws -> Self {
         return try parent()
     }
@@ -58,7 +58,7 @@ extension AccessibilityElement {
     }
 }
 
-public struct Element : AccessibilityElement {
+public struct Element : _AccessibilityElement {
     static var systemWide: Element = {
         Element(element: AXUIElement.systemWide())
     }()

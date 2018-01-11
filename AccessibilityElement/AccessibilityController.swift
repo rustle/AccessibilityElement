@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class Controller<ElementType> where ElementType : AccessibilityElement {
+public class Controller<ElementType> where ElementType : _AccessibilityElement {
     public let node: Node<ElementType>
     public weak var parentController: Controller?
     public var childControllers: [Controller]?

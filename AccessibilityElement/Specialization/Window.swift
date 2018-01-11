@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Window<ElementType> : Specialization where ElementType : AccessibilityElement {
+public struct Window<ElementType> : Specialization where ElementType : _AccessibilityElement {
     public var describerRequests: [DescriberRequest] {
         return [
             Describer<ElementType>.Single(required: false, attribute: .title),

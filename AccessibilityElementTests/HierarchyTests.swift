@@ -1,5 +1,5 @@
 //
-//  AccessibilityElementTests.swift
+//  HierarchyTests.swift
 //
 //  Copyright © 2017 Doug Russell. All rights reserved.
 //

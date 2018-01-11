@@ -6,6 +6,12 @@
 
 import Foundation
 
+public extension CFBoolean {
+    public static var typeID: CFTypeID {
+        return CFBooleanGetTypeID()
+    }
+}
+
 public extension CFNumber {
     public static var typeID: CFTypeID {
         return CFNumberGetTypeID()

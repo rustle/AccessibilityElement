@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class SpecializationRegistrar<ElementType> where ElementType : AccessibilityElement {
+public class SpecializationRegistrar<ElementType> where ElementType : _AccessibilityElement {
     public func specialization(controller: Controller<ElementType>) -> AnySpecialization {
         guard let role = try? controller.node.element.role() else {
             return DefaultSpecialization<ElementType>(controller: controller)

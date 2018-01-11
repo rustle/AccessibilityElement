@@ -86,6 +86,18 @@ final class MockElement : AccessibilityElement {
     func children() throws -> [MockElement] {
         return try unwrap(_children)
     }
+    func roleDescription() throws -> String {
+        throw AXUIElement.AXError.noValue
+    }
+    func attributedString(range: Range<Int>) throws -> NSAttributedString {
+        throw AXUIElement.AXError.noValue
+    }
+    func numberOfCharacters() throws -> Int {
+        throw AXUIElement.AXError.noValue
+    }
+    func titleElement() throws -> MockElement {
+        throw AXUIElement.AXError.noValue
+    }
     init(uniqueID: Int,
          role: NSAccessibilityRole? = nil,
          subrole: NSAccessibilitySubrole? = nil,

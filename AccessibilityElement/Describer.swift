@@ -23,7 +23,7 @@ public protocol DescriberRequest {
     
 }
 
-public class Describer<ElementType> where ElementType : AccessibilityElement {
+public class Describer<ElementType> where ElementType : _AccessibilityElement {
     public enum Attribute {
         case role
         case roleDescription
@@ -32,7 +32,7 @@ public class Describer<ElementType> where ElementType : AccessibilityElement {
         case titleElement(DescriberRequest)
         case description
         case stringValue
-        case numberValue
+        case numberValue(NumberFormatter)
         case toggleValue
         case checkboxValue
         case attachmentText
@@ -96,8 +96,11 @@ public class Describer<ElementType> where ElementType : AccessibilityElement {
             return try? element.description()
         case .stringValue:
             return (try? element.value()) as? String
-        case .numberValue:
-            return nil
+        case .numberValue(let formatter):
+            guard let number = (try? element.value()) as? NSNumber else {
+                return nil
+            }
+            return formatter.string(from: number)
         case .toggleValue:
             return twoState(element: element, on: "on", off: "off")
         case .checkboxValue:
@@ -105,8 +108,19 @@ public class Describer<ElementType> where ElementType : AccessibilityElement {
         case .attachmentText:
             do {
                 let count = try element.numberOfCharacters()
-                let attributedText = try element.attributedString(range: 0..<count)
-                os_log("attributed text %@", attributedText.debugDescription)
+                let string = AttributedString(attributedString: try element.attributedString(range: 0..<count))
+                for (range, attributes) in string {
+                    for attribute in attributes {
+                        switch attribute {
+                        case .attachment:
+                            if let attachment = string.attachment(at: range.lowerBound) {
+                                os_log("%@", attachment.debugDescription)
+                            }
+                        default:
+                            break
+                        }
+                    }
+                }
             } catch let error {
                 os_log("attributed text error: %@", error.localizedDescription)
             }

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Button<ElementType> : Specialization where ElementType : AccessibilityElement {
+public struct Button<ElementType> : Specialization where ElementType : _AccessibilityElement {
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Fallthrough(required: true, attributes: [.title, .description, .stringValue, .titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.title, .description, .stringValue]))]),

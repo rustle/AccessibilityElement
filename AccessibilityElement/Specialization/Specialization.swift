@@ -14,7 +14,7 @@ public protocol AnySpecialization {
 }
 
 public protocol Specialization : AnySpecialization {
-    associatedtype ElementType : AccessibilityElement
+    associatedtype ElementType : _AccessibilityElement
     weak var controller: Controller<ElementType>? { get }
 }
 

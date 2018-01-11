@@ -6,13 +6,13 @@
 
 import Foundation
 
-public struct StaticText<ElementType> : Specialization where ElementType : AccessibilityElement {
-    public var describerRequests: [DescriberRequest] {
+public struct StaticText<ElementType> : Specialization where ElementType : _AccessibilityElement {
+    public var describerRequests: [DescriberRequest] = {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Single(required: true, attribute: .stringValue)
         ]
         return requests
-    }
+    }()
     public weak var controller: Controller<ElementType>?
     public init(controller: Controller<ElementType>) {
         self.controller = controller

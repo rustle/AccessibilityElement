@@ -7,7 +7,7 @@
 import Foundation
 import os.log
 
-public struct Checkbox<ElementType> : Specialization where ElementType : AccessibilityElement {
+public struct Checkbox<ElementType> : Specialization where ElementType : _AccessibilityElement {
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Fallthrough(required: true, attributes: [.titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.stringValue, .title, .description])), .title, .description, .stringValue]),
