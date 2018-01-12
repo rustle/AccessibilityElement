@@ -56,6 +56,21 @@ extension _AccessibilityElement {
     public func down() throws -> [Self] {
         return try children()
     }
+    private func `is`(_ r: NSAccessibilityRole) -> Bool {
+        if let role = try? self.role() {
+            return role == r
+        }
+        return false
+    }
+    public var isGroup: Bool {
+        return `is`(.group)
+    }
+    public var isWindow: Bool {
+        return `is`(.window)
+    }
+    public var isToolbar: Bool {
+        return `is`(.toolbar)
+    }
 }
 
 public struct Element : _AccessibilityElement {
@@ -159,7 +174,7 @@ public struct Element : _AccessibilityElement {
     public func numberOfCharacters() throws -> Int {
         return try int(attribute: .numberOfCharacters)
     }
-
+    
     public func hasTextRole() -> Bool {
         guard let role = try? self.role() else {
             return false

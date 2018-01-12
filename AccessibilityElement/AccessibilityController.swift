@@ -6,7 +6,17 @@
 
 import Foundation
 
-public class Controller<ElementType> where ElementType : _AccessibilityElement {
+public protocol AnyController {
+    var specialization: AnySpecialization { get }
+}
+
+public class Controller<ElementType> : AnyController where ElementType : _AccessibilityElement {
+    public var registrar: SpecializationRegistrar<ElementType> {
+        if ElementType.self == Element.self {
+            return SharedSpecializationRegistrar as! SpecializationRegistrar<ElementType>
+        }
+        fatalError()
+    }
     public let node: Node<ElementType>
     public weak var parentController: Controller?
     public var childControllers: [Controller]?
@@ -22,7 +32,7 @@ public class Controller<ElementType> where ElementType : _AccessibilityElement {
     public var output: ((String) -> Void)?
     public required init(node: Node<ElementType>) {
         self.node = node
-        _specialization = SpecializationRegistrar().specialization(controller: self)
+        _specialization = registrar.specialization(controller: self)
     }
     public func connect() -> String? {
         return specialization.connect()
