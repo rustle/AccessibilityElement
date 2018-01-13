@@ -47,6 +47,7 @@ public protocol _AccessibilityElement : TreeElement, Hashable {
     func isKeyboardFocused() throws -> Bool
     func parent() throws -> Self
     func children() throws -> [Self]
+    func topLevelUIElement() throws -> Self
 }
 
 extension _AccessibilityElement {
@@ -71,6 +72,21 @@ extension _AccessibilityElement {
     public var isToolbar: Bool {
         return `is`(.toolbar)
     }
+    public func hasTextRole() -> Bool {
+        guard let role = try? self.role() else {
+            return false
+        }
+        switch role {
+        case .staticText:
+            fallthrough
+        case .textField:
+            fallthrough
+        case .textArea:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 public struct Element : _AccessibilityElement {
@@ -90,7 +106,7 @@ public struct Element : _AccessibilityElement {
         return string
     }
     private func axValue(attribute: NSAccessibilityAttributeName) throws -> AXValue {
-        let value = try element.value(attribute: NSAccessibilityAttributeName.role)
+        let value = try element.value(attribute: attribute)
         guard CFGetTypeID(value as CFTypeRef) == AXValueGetTypeID() else {
             throw AccessibilityError.typeMismatch
         }
@@ -174,21 +190,8 @@ public struct Element : _AccessibilityElement {
     public func numberOfCharacters() throws -> Int {
         return try int(attribute: .numberOfCharacters)
     }
-    
-    public func hasTextRole() -> Bool {
-        guard let role = try? self.role() else {
-            return false
-        }
-        switch role {
-        case .staticText:
-            fallthrough
-        case .textField:
-            fallthrough
-        case .textArea:
-            return true
-        default:
-            return false
-        }
+    public func topLevelUIElement() throws -> Element {
+        return try element(attribute: .topLevelUIElement)
     }
 
     public struct Frame {
@@ -239,6 +242,9 @@ extension Element : Hashable {
 extension Element : CustomDebugStringConvertible {
     public var debugDescription: String {
         var components = [String]()
+//        if let attributes = try? element.attributes() {
+//            components.append(contentsOf: attributes.map({ $0.rawValue }))
+//        }
         let describer = Describer<Element>()
         let requests: [DescriberRequest] = [
             Describer<Element>.Single(required: true, attribute: .role),
