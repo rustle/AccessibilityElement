@@ -18,10 +18,11 @@ public class Controller<ElementType> : AnyController where ElementType : _Access
         fatalError()
     }
     public let node: Node<ElementType>
+    public weak var applicationController: Controller?
     public weak var parentController: Controller?
     public var childControllers: [Controller]?
     private var _specialization: AnySpecialization?
-    public private(set) var specialization: AnySpecialization {
+    public var specialization: AnySpecialization {
         get {
             return _specialization!
         }
@@ -29,19 +30,21 @@ public class Controller<ElementType> : AnyController where ElementType : _Access
             _specialization = newValue
         }
     }
-    public var output: ((String) -> Void)?
     public required init(node: Node<ElementType>) {
         self.node = node
         _specialization = registrar.specialization(controller: self)
     }
-    public func connect() -> String? {
-        return specialization.connect()
+    public func connect() {
+        specialization.connect()
     }
     public func focusIn() -> String? {
         return specialization.focusIn()
     }
     public func focusOut() -> String? {
         return specialization.focusOut()
+    }
+    public func disconnect() {
+        specialization.disconnect()
     }
     public func childControllers(node: Node<ElementType>) -> [Controller<ElementType>] {
         return node.children.map { node in

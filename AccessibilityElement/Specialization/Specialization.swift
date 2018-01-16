@@ -8,9 +8,10 @@ import Foundation
 
 public protocol AnySpecialization {
     var describerRequests: [DescriberRequest] { get }
-    mutating func connect() -> String?
+    mutating func connect()
     mutating func focusIn() -> String?
     mutating func focusOut() -> String?
+    mutating func disconnect()
 }
 
 public protocol Specialization : AnySpecialization {
@@ -19,8 +20,8 @@ public protocol Specialization : AnySpecialization {
 }
 
 public extension Specialization {
-    mutating public func connect() -> String? {
-        return nil
+    mutating public func connect() {
+        
     }
     mutating public func focusIn() -> String? {
         guard let controller = controller else {
@@ -33,5 +34,36 @@ public extension Specialization {
     }
     mutating public func focusOut() -> String? {
         return nil
+    }
+    mutating func disconnect() {
+        
+    }
+}
+
+public struct CoercingLens<FocusedType, ValueType, CoercedType> {
+    public var value: CoercedType? {
+        get {
+            return target[keyPath: keyPath] as? CoercedType
+        }
+        set {
+            if let value = newValue as? ValueType {
+                target[keyPath: keyPath] = value
+            }
+        }
+    }
+    private let target: FocusedType
+    private let keyPath: ReferenceWritableKeyPath<FocusedType, ValueType>
+    public init(target: FocusedType, keyPath: ReferenceWritableKeyPath<FocusedType, ValueType>) {
+        self.target = target
+        self.keyPath = keyPath
+    }
+}
+
+public extension Specialization {
+    public var lens: CoercingLens<Controller<ElementType>, AnySpecialization, Self>? {
+        guard let controller = self.controller else {
+            return nil
+        }
+        return CoercingLens(target: controller, keyPath: \Controller<ElementType>.specialization)
     }
 }

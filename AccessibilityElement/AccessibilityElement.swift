@@ -196,26 +196,32 @@ public struct Element : _AccessibilityElement {
 
     public struct Frame {
         public struct Point {
-            public let x: Double
-            public let y: Double
-            init(point: CGPoint) {
+            public var x: Double
+            public var y: Double
+            public init(point: CGPoint) {
                 self.x = Double(point.x)
                 self.y = Double(point.y)
             }
         }
         public struct Size {
-            public let width: Double
-            public let height: Double
-            init(size: CGSize) {
+            public var width: Double
+            public var height: Double
+            public init(size: CGSize) {
                 self.width = Double(size.width)
                 self.height = Double(size.height)
             }
         }
-        public let origin: Point
-        public let size: Size
-        init(rect: CGRect) {
+        public var origin: Point
+        public var size: Size
+        public init(rect: CGRect) {
             self.origin = Point(point: rect.origin)
             self.size = Size(size: rect.size)
+        }
+        public mutating func inset(x: Double, y: Double) {
+            origin.x += x
+            origin.y += y
+            size.width -= x * 2.0
+            size.height -= y * 2.0
         }
     }
     public func frame() throws -> Frame {

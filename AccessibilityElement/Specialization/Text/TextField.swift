@@ -9,7 +9,7 @@ import Foundation
 public struct TextField<ElementType> : Specialization where ElementType : _AccessibilityElement {
     public var describerRequests: [DescriberRequest] = {
         let requests: [DescriberRequest] = [
-            Describer<ElementType>.Single(required: true, attribute: .attachmentText),
+            Describer<ElementType>.Single(required: true, attribute: .stringValue),
         ]
         return requests
     }()

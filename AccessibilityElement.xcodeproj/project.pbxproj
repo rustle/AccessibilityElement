@@ -11,6 +11,7 @@
 		9111CF2E2005DBB4006B56AA /* TextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111CF2D2005DBB4006B56AA /* TextAttachment.swift */; };
 		9111CF30200703D1006B56AA /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111CF2F200703D1006B56AA /* AttributedString.swift */; };
 		9111CF3220072303006B56AA /* AttributedStringsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111CF3120072303006B56AA /* AttributedStringsTest.swift */; };
+		9114A903200C471D00C294CC /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9114A902200C471D00C294CC /* String.swift */; };
 		914E28B91FF80ECB00765FCE /* MonotonicCounter.h in Headers */ = {isa = PBXBuildFile; fileRef = 914E28B71FF80ECB00765FCE /* MonotonicCounter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		914E28BA1FF80ECB00765FCE /* MonotonicCounter.m in Sources */ = {isa = PBXBuildFile; fileRef = 914E28B81FF80ECB00765FCE /* MonotonicCounter.m */; };
 		914E28BC1FF83E3700765FCE /* AccessibilityObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28BB1FF83E3700765FCE /* AccessibilityObserver.swift */; };
@@ -60,6 +61,7 @@
 		9111CF2D2005DBB4006B56AA /* TextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAttachment.swift; sourceTree = "<group>"; };
 		9111CF2F200703D1006B56AA /* AttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString.swift; sourceTree = "<group>"; };
 		9111CF3120072303006B56AA /* AttributedStringsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringsTest.swift; sourceTree = "<group>"; };
+		9114A902200C471D00C294CC /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		914E28B71FF80ECB00765FCE /* MonotonicCounter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MonotonicCounter.h; sourceTree = "<group>"; };
 		914E28B81FF80ECB00765FCE /* MonotonicCounter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MonotonicCounter.m; sourceTree = "<group>"; };
 		914E28BB1FF83E3700765FCE /* AccessibilityObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityObserver.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				917E54A82004800C00D490A8 /* Describer.swift */,
 				9111CF2F200703D1006B56AA /* AttributedString.swift */,
 				91C5531E200969F9001CF14B /* ScreenGrab.swift */,
+				9114A902200C471D00C294CC /* String.swift */,
 				917E546E2002F7AF00D490A8 /* Specialization */,
 				914E28C01FF85A1400765FCE /* HIServices */,
 				914E296C1FFF0C8B00765FCE /* CF */,
@@ -333,6 +336,7 @@
 				91FFFD011FF6F09A00BF89A0 /* AXObserver.swift in Sources */,
 				917E54A7200477EB00D490A8 /* Toggle.swift in Sources */,
 				914E29651FFF077E00765FCE /* CFNumber.swift in Sources */,
+				9114A903200C471D00C294CC /* String.swift in Sources */,
 				917E54A1200423F200D490A8 /* StaticText.swift in Sources */,
 				914E28F71FFB297A00765FCE /* Debug.swift in Sources */,
 				917E546D2002F76400D490A8 /* Specialization.swift in Sources */,

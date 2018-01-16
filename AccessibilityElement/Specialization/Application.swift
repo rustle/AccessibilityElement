@@ -11,6 +11,7 @@ public class Application<ElementType> : Specialization where ElementType : _Acce
     public var describerRequests: [DescriberRequest] {
         return []
     }
+    public var output: ((String) -> Void)?
     public weak var controller: Controller<ElementType>?
     public init(controller: Controller<ElementType>) {
         self.controller = controller
@@ -58,11 +59,31 @@ public class Application<ElementType> : Specialization where ElementType : _Acce
     }
     // MARK: Focused UI Element
     private var focusedUIElementToken: ApplicationObserver.Token?
-    private var focusedContainer: Controller<Element>?
-    private var focusedController: Controller<Element>?
-    private let hierarchy = DefaultHierarchy<Element>()
-    private func findContainer(element: Element) throws -> Element {
-        var current: Element? = element
+    private struct Focus<ElementType> where ElementType : _AccessibilityElement {
+        var focusedContainer: Controller<ElementType>?
+        var focusedController: Controller<ElementType>?
+        mutating func set(focusedContainerNode: Node<ElementType>?,
+                          focusedControllerNode: Node<ElementType>?) {
+            var focusedContainer: Controller<ElementType>?
+            if let focusedContainerNode = focusedContainerNode {
+                focusedContainer = Controller(node: focusedContainerNode)
+            }
+            var focusedController: Controller<ElementType>?
+            if let focusedControllerNode = focusedControllerNode {
+                focusedController = Controller(node: focusedControllerNode)
+            }
+            // TODO: re-use controllers already in place if possible
+            // TODO: connect/disconection up the chain
+            self.focusedController?.disconnect()
+            self.focusedContainer = focusedContainer
+            self.focusedController = focusedController
+            focusedController?.connect()
+        }
+    }
+    private var focus = Focus<ElementType>()
+    private let hierarchy = DefaultHierarchy<ElementType>()
+    private func findContainer(element: ElementType) throws -> ElementType {
+        var current: ElementType? = element
         while current != nil {
             if hierarchy.classify(current!) == .container {
                 return current!
@@ -71,22 +92,23 @@ public class Application<ElementType> : Specialization where ElementType : _Acce
         }
         throw Application.Error.containerSearchFailed
     }
-    private func focusChanged(element: Element) {
+    private func focusChanged(element: ElementType) {
         do {
             let container = try findContainer(element: element)
-            var focusedNode: Node<Element>? = Node(element: element, role: .include)
-            let node = hierarchy.buildHierarchy(from: container, targeting: &focusedNode)
-            focusedContainer = Controller(node: node)
-            focusedController = Controller(node: focusedNode ?? node)
-            if let echo = focusedController?.focusIn(), echo.count > 0 {
-                controller?.output?(echo)
+            var focusedNode: Node<ElementType>? = Node(element: element, role: .include)
+            let node = hierarchy.buildHierarchy(from: container,
+                                                targeting: &focusedNode)
+            focus.set(focusedContainerNode: node,
+                      focusedControllerNode: focusedNode)
+            if let echo = focus.focusedController?.focusIn(), echo.count > 0 {
+                output?(echo)
             }
         } catch {
-            focusedContainer = nil
             let node = Node(element: element, role: .include)
-            focusedController = Controller(node: node)
-            if let echo = focusedController?.focusIn(), echo.count > 0 {
-                controller?.output?(echo)
+            focus.set(focusedContainerNode: nil,
+                      focusedControllerNode: node)
+            if let echo = focus.focusedController?.focusIn(), echo.count > 0 {
+                output?(echo)
             }
         }
     }
@@ -101,7 +123,9 @@ public class Application<ElementType> : Specialization where ElementType : _Acce
             self?.created(window: window)
         }
         focusedUIElementToken = try observer.startObserving(element: element, notification: .focusedUIElementChanged) { [weak self] element, _, _ in
-            self?.focusChanged(element: element)
+            if let element = element as? ElementType {
+                self?.focusChanged(element: element)
+            }
         }
     }
     // MARK: -

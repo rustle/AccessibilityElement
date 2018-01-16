@@ -40,10 +40,21 @@ public class Describer<ElementType> where ElementType : _AccessibilityElement {
     public struct Single : DescriberRequest {
         public let required: Bool
         public let attribute: Attribute
+        public init(required: Bool, attribute: Attribute) {
+            self.required = required
+            self.attribute = attribute
+        }
     }
     public struct Fallthrough : DescriberRequest {
         public let required: Bool
         public let attributes: [Attribute]
+        public init(required: Bool, attributes: [Attribute]) {
+            self.required = required
+            self.attributes = attributes
+        }
+    }
+    public init() {
+        
     }
     private func twoState(element: ElementType, on: String, off: String) -> String? {
         do {
