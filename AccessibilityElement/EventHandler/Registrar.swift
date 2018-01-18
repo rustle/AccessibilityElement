@@ -96,6 +96,8 @@ public class EventHandlerRegistrar {
             }
         case .textField:
             return TextField(node: node)
+        case NSAccessibilityRole.webArea:
+            return WebArea(node: node)
         default:
             return DefaultEventHandler(node: node)
         }

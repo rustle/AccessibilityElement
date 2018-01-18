@@ -145,26 +145,26 @@ public extension AXUIElement {
         return try cast(value)
     }
     //public func AXUIElementGetAttributeValueCount(_ element: AXUIElement, _ attribute: CFString, _ count: UnsafeMutablePointer<CFIndex>) -> AXError
-    public func count(attribute: String) throws -> Int {
+    public func count(attribute: NSAccessibilityAttributeName) throws -> Int {
         var count: CFIndex = 0
-        let error = AXUIElementGetAttributeValueCount(self, attribute as CFString, &count)
+        let error = AXUIElementGetAttributeValueCount(self, attribute.rawValue as CFString, &count)
         guard error == .success else {
             throw AXError(error: error)
         }
         return count
     }
     //public func AXUIElementIsAttributeSettable(_ element: AXUIElement, _ attribute: CFString, _ settable: UnsafeMutablePointer<DarwinBoolean>) -> AXError
-    public func settable(attribute: String) throws -> Bool {
+    public func settable(attribute: NSAccessibilityAttributeName) throws -> Bool {
         var value: DarwinBoolean = false
-        let error = AXUIElementIsAttributeSettable(self, attribute as CFString, &value)
+        let error = AXUIElementIsAttributeSettable(self, attribute.rawValue as CFString, &value)
         guard error == .success else {
             throw AXError(error: error)
         }
         return value.boolValue
     }
     //public func AXUIElementSetAttributeValue(_ element: AXUIElement, _ attribute: CFString, _ value: CoreFoundation.CFTypeRef) -> AXError
-    public func set(attribute: String, value: Any?) throws {
-        let error = AXUIElementSetAttributeValue(self, attribute as CFString, value as CFTypeRef)
+    public func set(attribute: NSAccessibilityAttributeName, value: Any?) throws {
+        let error = AXUIElementSetAttributeValue(self, attribute.rawValue as CFString, value as CFTypeRef)
         guard error == .success else {
             throw AXError(error: error)
         }

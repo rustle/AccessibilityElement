@@ -12,6 +12,7 @@
 		9111CF30200703D1006B56AA /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111CF2F200703D1006B56AA /* AttributedString.swift */; };
 		9111CF3220072303006B56AA /* AttributedStringsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111CF3120072303006B56AA /* AttributedStringsTest.swift */; };
 		9114A903200C471D00C294CC /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9114A902200C471D00C294CC /* String.swift */; };
+		91187E3E2010592D004DA209 /* WebArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91187E3D2010592D004DA209 /* WebArea.swift */; };
 		9119611F200FE6CE0073A998 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119611E200FE6CE0073A998 /* Node.swift */; };
 		91196121200FE7250073A998 /* TreeElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91196120200FE7250073A998 /* TreeElement.swift */; };
 		91196123200FE79E0073A998 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91196122200FE79E0073A998 /* Dictionary.swift */; };
@@ -66,6 +67,7 @@
 		9111CF2F200703D1006B56AA /* AttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString.swift; sourceTree = "<group>"; };
 		9111CF3120072303006B56AA /* AttributedStringsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringsTest.swift; sourceTree = "<group>"; };
 		9114A902200C471D00C294CC /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		91187E3D2010592D004DA209 /* WebArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebArea.swift; sourceTree = "<group>"; };
 		9119611E200FE6CE0073A998 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		91196120200FE7250073A998 /* TreeElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeElement.swift; sourceTree = "<group>"; };
 		91196122200FE79E0073A998 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				917E54A2200427E800D490A8 /* Button.swift */,
 				917E54A6200477EB00D490A8 /* Toggle.swift */,
 				9111CF2A2005BBE9006B56AA /* Checkbox.swift */,
+				91187E3D2010592D004DA209 /* WebArea.swift */,
 				9111CF2C2005DBA2006B56AA /* Text */,
 			);
 			path = EventHandler;
@@ -371,6 +374,7 @@
 				9111CF2B2005BBE9006B56AA /* Checkbox.swift in Sources */,
 				917E54A3200427E800D490A8 /* Button.swift in Sources */,
 				9111CF30200703D1006B56AA /* AttributedString.swift in Sources */,
+				91187E3E2010592D004DA209 /* WebArea.swift in Sources */,
 				91BF2DF91FF1800700FB993D /* Element.swift in Sources */,
 				914E28BC1FF83E3700765FCE /* Observer.swift in Sources */,
 				914E28C21FF8736700765FCE /* CF.swift in Sources */,

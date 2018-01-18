@@ -7,6 +7,15 @@
 import Cocoa
 import os.log
 
+public extension NSAccessibilityRole {
+    public static let webArea = NSAccessibilityRole(rawValue: "AXWebArea")
+}
+
+public extension NSAccessibilityAttributeName {
+    public static let caretBrowsingEnabled = NSAccessibilityAttributeName(rawValue: "AXCaretBrowsingEnabled")
+    public static let frame = NSAccessibilityAttributeName(rawValue: "AXFrame")
+}
+
 public protocol AnyElement {
     func role() throws -> NSAccessibilityRole
     func roleDescription() throws -> String
@@ -18,6 +27,8 @@ public protocol AnyElement {
     func title() throws -> String
     func isKeyboardFocused() throws -> Bool
     func frame() throws -> Frame
+    func caretBrowsingEnabled() throws -> Bool
+    func set(caretBrowsing: Bool) throws
 }
 
 public protocol _Element : AnyElement, TreeElement, Hashable {
@@ -99,8 +110,14 @@ public struct Element : _Element {
         }
         return number
     }
+    private func set(attribute: NSAccessibilityAttributeName, number: NSNumber) throws {
+        try element.set(attribute: attribute, value: number)
+    }
     private func bool(attribute: NSAccessibilityAttributeName) throws -> Bool {
         return try number(attribute: attribute).boolValue
+    }
+    private func set(attribute: NSAccessibilityAttributeName, bool: Bool) throws {
+        try set(attribute: attribute, number: NSNumber(value: bool))
     }
     private func int(attribute: NSAccessibilityAttributeName) throws -> Int {
         return try number(attribute: attribute).intValue
@@ -170,9 +187,15 @@ public struct Element : _Element {
     public func topLevelUIElement() throws -> Element {
         return try element(attribute: .topLevelUIElement)
     }
+    public func caretBrowsingEnabled() throws -> Bool {
+        return try bool(attribute: NSAccessibilityAttributeName.caretBrowsingEnabled)
+    }
+    public func set(caretBrowsing: Bool) throws {
+        try set(attribute: NSAccessibilityAttributeName.caretBrowsingEnabled, bool: caretBrowsing)
+    }
 
     public func frame() throws -> Frame {
-        return try frame(attribute: NSAccessibilityAttributeName(rawValue: "AXFrame"))
+        return try frame(attribute: NSAccessibilityAttributeName.frame)
     }
 
     public var processIdentifier: Int {

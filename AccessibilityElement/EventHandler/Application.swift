@@ -87,10 +87,12 @@ public final class Application<ElementType> : EventHandler where ElementType : _
             }
             // TODO: re-use controllers already in place if possible
             // TODO: connect/disconection up the chain
+            self.focusedContainer?.eventHandler.disconnect()
             self.focusedController?.eventHandler.disconnect()
             self.focusedContainer = focusedContainer
             self.focusedController = focusedController
-            focusedController?.eventHandler.connect()
+            self.focusedContainer?.eventHandler.connect()
+            self.focusedController?.eventHandler.connect()
         }
     }
     private var focus = Focus<ElementType>()

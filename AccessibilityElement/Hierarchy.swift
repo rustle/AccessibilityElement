@@ -62,6 +62,8 @@ public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : _Ele
             return .container
         case .toolbar:
             return .container
+        case NSAccessibilityRole.webArea:
+            return .container
         default:
             return .include
         }
