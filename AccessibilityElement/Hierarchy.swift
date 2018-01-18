@@ -17,50 +17,8 @@ public enum HierarchyError : Error {
     case noValue
 }
 
-public final class Node<ElementType> : TreeElement, Hashable where ElementType : _AccessibilityElement {
-    public weak var parent: Node<ElementType>?
-    public var children = [Node<ElementType>]()
-    public func up() throws -> Node<ElementType> {
-        guard let parent = parent else {
-            throw HierarchyError.noValue
-        }
-        return parent
-    }
-    public func down() throws -> [Node<ElementType>] {
-        return children
-    }
-    public var hashValue: Int {
-        return element.hashValue
-    }
-    public var element: ElementType
-    public var role: HierarchyRole
-    public init(element: ElementType, role: HierarchyRole) {
-        self.element = element
-        self.role = role
-    }
-    public static func ==(lhs: Node<ElementType>, rhs: Node<ElementType>) -> Bool {
-        return lhs.element == rhs.element
-    }
-}
-
-extension Node : CustomDebugStringConvertible {
-    public func debugDescription(depth: Int) -> String {
-        var description = ""
-        for _ in 0..<depth {
-            description += "\t"
-        }
-        if let debug = element as? CustomDebugStringConvertible {
-            description += debug.debugDescription
-        }
-        return description
-    }
-    public var debugDescription: String {
-        return debugDescription(depth: 0)
-    }
-}
-
 public protocol Hierarchy {
-    associatedtype ElementType : _AccessibilityElement
+    associatedtype ElementType : _Element
     func classify(_ element: ElementType) -> HierarchyRole
     func buildHierarchy(from element: ElementType) -> Node<ElementType>
 }
@@ -83,7 +41,7 @@ public extension Hierarchy {
     }
 }
 
-public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : _AccessibilityElement {
+public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : _Element {
     public func classify(_ element: ElementType) -> HierarchyRole {
         guard let role = try? element.role() else {
             return .skip
@@ -141,7 +99,7 @@ public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : _Acc
             childNode.parent = node
         }
         node.children = childNodes
-        if node.element == target?.element {
+        if node._element == target?._element {
             target = node
         }
         return node

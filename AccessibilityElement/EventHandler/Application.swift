@@ -7,14 +7,16 @@
 import Foundation
 import os.log
 
-public class Application<ElementType> : Specialization where ElementType : _AccessibilityElement {
+// TODO: Convert this to a value type
+public final class Application<ElementType> : EventHandler where ElementType : _Element {
     public var describerRequests: [DescriberRequest] {
         return []
     }
     public var output: ((String) -> Void)?
-    public weak var controller: Controller<ElementType>?
-    public init(controller: Controller<ElementType>) {
-        self.controller = controller
+    public weak var _controller: Controller<ElementType, Application<ElementType>>?
+    public let _node: Node<ElementType>
+    public init(node: Node<ElementType>) {
+        _node = node
     }
     private var observer: ApplicationObserver?
     private enum Error : Swift.Error {
@@ -24,11 +26,11 @@ public class Application<ElementType> : Specialization where ElementType : _Acce
     // MARK: Window State
     private var childrenDirty = false
     private func rebuildChildrenIfNeeded() {
-        guard let controller = controller else {
+        guard let controller = _controller else {
             return
         }
         if childrenDirty {
-            controller.childControllers = controller.childControllers(node: controller.node)
+            controller.childControllers = try? controller.childControllers(node: _node)
             childrenDirty = false
         }
     }
@@ -59,25 +61,36 @@ public class Application<ElementType> : Specialization where ElementType : _Acce
     }
     // MARK: Focused UI Element
     private var focusedUIElementToken: ApplicationObserver.Token?
-    private struct Focus<ElementType> where ElementType : _AccessibilityElement {
-        var focusedContainer: Controller<ElementType>?
-        var focusedController: Controller<ElementType>?
+    private struct Focus<ElementType> where ElementType : _Element {
+        var focusedContainer: _Controller<ElementType>?
+        var focusedController: _Controller<ElementType>?
         mutating func set(focusedContainerNode: Node<ElementType>?,
                           focusedControllerNode: Node<ElementType>?) {
-            var focusedContainer: Controller<ElementType>?
+            os_log("focus")
+            var focusedContainer: _Controller<ElementType>?
             if let focusedContainerNode = focusedContainerNode {
-                focusedContainer = Controller(node: focusedContainerNode)
+                do {
+                    let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedContainerNode)
+                    focusedContainer = (try eventHandler.makeController()) as? _Controller<ElementType>
+                } catch {
+                    fatalError()
+                }
             }
-            var focusedController: Controller<ElementType>?
+            var focusedController: _Controller<ElementType>?
             if let focusedControllerNode = focusedControllerNode {
-                focusedController = Controller(node: focusedControllerNode)
+                do {
+                    let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedControllerNode)
+                    focusedController = (try eventHandler.makeController()) as? _Controller<ElementType>
+                } catch {
+                    fatalError()
+                }
             }
             // TODO: re-use controllers already in place if possible
             // TODO: connect/disconection up the chain
-            self.focusedController?.disconnect()
+            self.focusedController?.eventHandler.disconnect()
             self.focusedContainer = focusedContainer
             self.focusedController = focusedController
-            focusedController?.connect()
+            focusedController?.eventHandler.connect()
         }
     }
     private var focus = Focus<ElementType>()
@@ -100,21 +113,21 @@ public class Application<ElementType> : Specialization where ElementType : _Acce
                                                 targeting: &focusedNode)
             focus.set(focusedContainerNode: node,
                       focusedControllerNode: focusedNode)
-            if let echo = focus.focusedController?.focusIn(), echo.count > 0 {
+            if let echo = focus.focusedController?.eventHandler.focusIn(), echo.count > 0 {
                 output?(echo)
             }
         } catch {
             let node = Node(element: element, role: .include)
             focus.set(focusedContainerNode: nil,
                       focusedControllerNode: node)
-            if let echo = focus.focusedController?.focusIn(), echo.count > 0 {
+            if let echo = focus.focusedController?.eventHandler.focusIn(), echo.count > 0 {
                 output?(echo)
             }
         }
     }
     // MARK: Observers
     private func registerObservers() throws {
-        guard let element = self.controller?.node.element as? Element else {
+        guard let element = _node._element as? Element else {
             throw Application.Error.invalidElement
         }
         let observer = try ObserverManager.shared.registerObserver(application: element)
@@ -130,14 +143,13 @@ public class Application<ElementType> : Specialization where ElementType : _Acce
     }
     // MARK: -
     public var isFocused: Bool = false
-    public func connect() -> String? {
+    public func connect() {
         do {
             try registerObservers()
         } catch let error {
             os_log("%@.%@() observer error %@", String(describing: type(of: self)), #function, error.localizedDescription)
         }
         childrenDirty = true
-        return nil
     }
     public func focusIn() -> String? {
         if isFocused {
@@ -145,7 +157,7 @@ public class Application<ElementType> : Specialization where ElementType : _Acce
         }
         isFocused = true
         rebuildChildrenIfNeeded()
-        guard let title = try? controller?.node.element.title() else {
+        guard let title = try? node.element.title() else {
             return "unknown application"
         }
         return title
@@ -153,5 +165,8 @@ public class Application<ElementType> : Specialization where ElementType : _Acce
     public func focusOut() -> String? {
         isFocused = false
         return nil
+    }
+    public func disconnect() {
+        
     }
 }

@@ -7,34 +7,7 @@
 import Cocoa
 import os.log
 
-public protocol TreeElement {
-    func up() throws -> Self
-    func down() throws -> [Self]
-}
-
-extension TreeElement where Self : Hashable {
-    public func walk(_ visitor: (Self) -> Void) {
-        var elements = [Self]()
-        var visited = Set<Self>()
-        elements.append(self)
-        while elements.count > 0 {
-            let element: Self = elements[0]
-            elements.remove(at: 0)
-            if !visited.contains(element) {
-                do {
-                    visitor(element)
-                    let children = try element.down()
-                    elements.append(contentsOf: children)
-                } catch let error {
-                    os_log("%@", error.localizedDescription)
-                }
-                visited.insert(element)
-            }
-        }
-    }
-}
-
-public protocol _AccessibilityElement : TreeElement, Hashable {
+public protocol AnyElement {
     func role() throws -> NSAccessibilityRole
     func roleDescription() throws -> String
     func subrole() throws -> NSAccessibilitySubrole
@@ -43,14 +16,18 @@ public protocol _AccessibilityElement : TreeElement, Hashable {
     func numberOfCharacters() throws -> Int
     func description() throws -> String
     func title() throws -> String
-    func titleElement() throws -> Self
     func isKeyboardFocused() throws -> Bool
+    func frame() throws -> Frame
+}
+
+public protocol _Element : AnyElement, TreeElement, Hashable {
+    func titleElement() throws -> Self
     func parent() throws -> Self
     func children() throws -> [Self]
     func topLevelUIElement() throws -> Self
 }
 
-extension _AccessibilityElement {
+extension _Element {
     public func up() throws -> Self {
         return try parent()
     }
@@ -89,7 +66,7 @@ extension _AccessibilityElement {
     }
 }
 
-public struct Element : _AccessibilityElement {
+public struct Element : _Element {
     static var systemWide: Element = {
         Element(element: AXUIElement.systemWide())
     }()
@@ -194,36 +171,6 @@ public struct Element : _AccessibilityElement {
         return try element(attribute: .topLevelUIElement)
     }
 
-    public struct Frame {
-        public struct Point {
-            public var x: Double
-            public var y: Double
-            public init(point: CGPoint) {
-                self.x = Double(point.x)
-                self.y = Double(point.y)
-            }
-        }
-        public struct Size {
-            public var width: Double
-            public var height: Double
-            public init(size: CGSize) {
-                self.width = Double(size.width)
-                self.height = Double(size.height)
-            }
-        }
-        public var origin: Point
-        public var size: Size
-        public init(rect: CGRect) {
-            self.origin = Point(point: rect.origin)
-            self.size = Size(size: rect.size)
-        }
-        public mutating func inset(x: Double, y: Double) {
-            origin.x += x
-            origin.y += y
-            size.width -= x * 2.0
-            size.height -= y * 2.0
-        }
-    }
     public func frame() throws -> Frame {
         return try frame(attribute: NSAccessibilityAttributeName(rawValue: "AXFrame"))
     }
@@ -268,12 +215,6 @@ extension Element : CustomDebugStringConvertible {
         } catch {
             return "<Element>"
         }
-    }
-}
-
-extension Dictionary {
-    func reduce<T, U>(_ updateAccumulatingResult: (inout [T:U], (key: Key, value: Value)) throws -> ()) rethrows -> [T:U] {
-        return try reduce(into: [T:U](), updateAccumulatingResult)
     }
 }
 

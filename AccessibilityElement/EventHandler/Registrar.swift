@@ -6,12 +6,11 @@
 
 import Foundation
 
-public typealias SpecializationProviding<ElementType> = (Controller<ElementType>) -> AnySpecialization where ElementType : _AccessibilityElement
+public typealias EventHandlerProviding = (AnyNode) throws -> AnyEventHandler
 
-public let SharedSpecializationRegistrar = SpecializationRegistrar<Element>()
-
-public class SpecializationRegistrar<ElementType> where ElementType : _AccessibilityElement {
-    private var map = [Key:SpecializationProviding<ElementType>]()
+public class EventHandlerRegistrar {
+    public static let shared = EventHandlerRegistrar()
+    private var map = [Key:EventHandlerProviding]()
     private struct Key : Hashable {
         var hashValue: Int {
             var seed = 0
@@ -26,7 +25,7 @@ public class SpecializationRegistrar<ElementType> where ElementType : _Accessibi
             }
             return seed
         }
-        static func ==(lhs: SpecializationRegistrar<ElementType>.Key, rhs: SpecializationRegistrar<ElementType>.Key) -> Bool {
+        static func ==(lhs: EventHandlerRegistrar.Key, rhs: EventHandlerRegistrar.Key) -> Bool {
             return
                 lhs.role == rhs.role &&
                 lhs.subrole == rhs.subrole &&
@@ -54,46 +53,51 @@ public class SpecializationRegistrar<ElementType> where ElementType : _Accessibi
     public func register(role: NSAccessibilityRole?,
                          subrole: NSAccessibilitySubrole?,
                          identifier: String?,
-                         specialization: @escaping SpecializationProviding<ElementType>) {
+                         eventHandler: @escaping EventHandlerProviding) {
         guard let key = key(role: role, subrole: subrole, identifier: identifier) else {
             return
         }
-        map[key] = specialization
-     }
-    public func specialization(controller: Controller<ElementType>) -> AnySpecialization {
-        guard let role = try? controller.node.element.role() else {
-            return DefaultSpecialization<ElementType>(controller: controller)
+        map[key] = eventHandler
+    }
+    public func eventHandler<ElementType>(node: Node<ElementType>) throws -> AnyEventHandler where ElementType : _Element {
+        guard let role = try? node.element.role() else {
+            return DefaultEventHandler(node: node)
         }
-        let subrole = try? controller.node.element.subrole()
+        let subrole = try? node.element.subrole()
         let identifer: String? = nil
         if let key = key(role: role,
                          subrole: subrole,
                          identifier: identifer),
-            let specializationProviding = map[key] {
-            return specializationProviding(controller)
+            let eventHandlerProviding = map[key] {
+            do {
+                return try eventHandlerProviding(node)
+            } catch {
+                
+            }
         }
         switch role {
         case .application:
-            return Application<ElementType>(controller: controller)
+            return Application(node: node)
         case .window:
-            return Window<ElementType>(controller: controller)
+            return Window(node: node)
         case .staticText:
             if let subrole = subrole, subrole == .textAttachment {
-                return TextAttachment<ElementType>(controller: controller)
+                return TextAttachment(node: node)
             } else {
-                return StaticText<ElementType>(controller: controller)
+                return StaticText(node: node)
             }
         case .button:
-            return Button<ElementType>(controller: controller)
+            return Button(node: node)
         case .checkBox:
             if let subrole = subrole, subrole == .toggle {
-                return Toggle<ElementType>(controller: controller)
+                return Toggle(node: node)
+            } else {
+                return Checkbox(node: node)
             }
         case .textField:
-            return TextField<ElementType>(controller: controller)
+            return TextField(node: node)
         default:
-            return DefaultSpecialization<ElementType>(controller: controller)
+            return DefaultEventHandler(node: node)
         }
-        return DefaultSpecialization<ElementType>(controller: controller)
     }
 }

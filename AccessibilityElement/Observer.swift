@@ -114,13 +114,13 @@ fileprivate struct Helper {
     private static func _repackage(axValue: AXValue) throws -> Any {
         switch axValue.type {
         case .cgPoint:
-            return Element.Frame.Point(point: try axValue.pointValue())
+            return Frame.Point(point: try axValue.pointValue())
         case .cgSize:
             let size = try axValue.sizeValue()
-            return Element.Frame.Size(size: size)
+            return Frame.Size(size: size)
         case .cgRect:
             let rect = try axValue.rectValue()
-            return Element.Frame(rect: rect)
+            return Frame(rect: rect)
         case .cfRange:
             let range = try axValue.rangeValue()
             return range.location..<range.location+range.length

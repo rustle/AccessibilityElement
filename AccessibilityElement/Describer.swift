@@ -23,7 +23,7 @@ public protocol DescriberRequest {
     
 }
 
-public class Describer<ElementType> where ElementType : _AccessibilityElement {
+public class Describer<ElementType> where ElementType : _Element {
     public enum Attribute {
         case role
         case roleDescription

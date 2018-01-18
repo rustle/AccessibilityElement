@@ -42,7 +42,7 @@ func tree(_ element: MockElement, childrenProvider: (() -> [MockElement])?) -> M
     return element
 }
 
-final class MockElement : _AccessibilityElement {
+final class MockElement : _Element {
     private let uniqueID: Int
     private var _role: NSAccessibilityRole?
     private var _subrole: NSAccessibilitySubrole?

@@ -56,7 +56,7 @@ public struct ScreenGrab {
     public init(windowID: CGWindowID) {
         self.windowID = windowID
     }
-    public func grab(screenBounds: Element.Frame) -> CGImage? {
+    public func grab(screenBounds: Frame) -> CGImage? {
         let rect = CGRect(x: CGFloat(screenBounds.origin.x),
                           y: CGFloat(screenBounds.origin.y),
                           width: CGFloat(screenBounds.size.width),
