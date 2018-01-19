@@ -152,13 +152,13 @@ public final class Application<ElementType> : EventHandler where ElementType : _
     public func connect() {
         do {
             try _node._element.set(enhancedUserInterface: true)
-        } catch let error {
-            os_log("%{public}@.%{public}@() enhancedUserInterface error %@", String(describing: type(of: self)), #function, error.localizedDescription)
+        } catch {
+            
         }
         do {
             try registerObservers()
-        } catch let error {
-            os_log("%{public}@.%{public}@() observer error %@", String(describing: type(of: self)), #function, error.localizedDescription)
+        } catch {
+            
         }
         childrenDirty = true
     }
