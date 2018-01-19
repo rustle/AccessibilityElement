@@ -13,6 +13,7 @@
 		9111CF3220072303006B56AA /* AttributedStringsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111CF3120072303006B56AA /* AttributedStringsTest.swift */; };
 		9114A903200C471D00C294CC /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9114A902200C471D00C294CC /* String.swift */; };
 		91187E3E2010592D004DA209 /* WebArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91187E3D2010592D004DA209 /* WebArea.swift */; };
+		91187E4220107241004DA209 /* SelectionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91187E4120107241004DA209 /* SelectionChange.swift */; };
 		9119611F200FE6CE0073A998 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119611E200FE6CE0073A998 /* Node.swift */; };
 		91196121200FE7250073A998 /* TreeElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91196120200FE7250073A998 /* TreeElement.swift */; };
 		91196123200FE79E0073A998 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91196122200FE79E0073A998 /* Dictionary.swift */; };
@@ -39,6 +40,9 @@
 		917E54A7200477EB00D490A8 /* Toggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54A6200477EB00D490A8 /* Toggle.swift */; };
 		917E54A92004800C00D490A8 /* Describer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54A82004800C00D490A8 /* Describer.swift */; };
 		917E54AC2005727200D490A8 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54AB2005727200D490A8 /* TextField.swift */; };
+		917FEA45201136270036280E /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917FEA44201136270036280E /* Position.swift */; };
+		917FEA4920113EF90036280E /* TextMarker.h in Headers */ = {isa = PBXBuildFile; fileRef = 917FEA4720113EF90036280E /* TextMarker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		917FEA4A20113EF90036280E /* TextMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 917FEA4820113EF90036280E /* TextMarker.m */; };
 		91BF2DE81FF17FE400FB993D /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */; };
 		91BF2DED1FF17FE400FB993D /* HierarchyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BF2DEC1FF17FE400FB993D /* HierarchyTests.swift */; };
 		91BF2DEF1FF17FE400FB993D /* AccessibilityElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -68,6 +72,7 @@
 		9111CF3120072303006B56AA /* AttributedStringsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringsTest.swift; sourceTree = "<group>"; };
 		9114A902200C471D00C294CC /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		91187E3D2010592D004DA209 /* WebArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebArea.swift; sourceTree = "<group>"; };
+		91187E4120107241004DA209 /* SelectionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionChange.swift; sourceTree = "<group>"; };
 		9119611E200FE6CE0073A998 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		91196120200FE7250073A998 /* TreeElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeElement.swift; sourceTree = "<group>"; };
 		91196122200FE79E0073A998 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
@@ -94,6 +99,9 @@
 		917E54A6200477EB00D490A8 /* Toggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toggle.swift; sourceTree = "<group>"; };
 		917E54A82004800C00D490A8 /* Describer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Describer.swift; sourceTree = "<group>"; };
 		917E54AB2005727200D490A8 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
+		917FEA44201136270036280E /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Position.swift; path = AccessibilityElement/Position.swift; sourceTree = SOURCE_ROOT; };
+		917FEA4720113EF90036280E /* TextMarker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextMarker.h; sourceTree = "<group>"; };
+		917FEA4820113EF90036280E /* TextMarker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextMarker.m; sourceTree = "<group>"; };
 		91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccessibilityElement.h; sourceTree = "<group>"; };
 		91BF2DE21FF17FE400FB993D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -181,6 +189,8 @@
 				917E54A6200477EB00D490A8 /* Toggle.swift */,
 				9111CF2A2005BBE9006B56AA /* Checkbox.swift */,
 				91187E3D2010592D004DA209 /* WebArea.swift */,
+				91187E4120107241004DA209 /* SelectionChange.swift */,
+				917FEA44201136270036280E /* Position.swift */,
 				9111CF2C2005DBA2006B56AA /* Text */,
 			);
 			path = EventHandler;
@@ -227,6 +237,8 @@
 				914E28F61FFB297A00765FCE /* Debug.swift */,
 				914E28B71FF80ECB00765FCE /* MonotonicCounter.h */,
 				914E28B81FF80ECB00765FCE /* MonotonicCounter.m */,
+				917FEA4720113EF90036280E /* TextMarker.h */,
+				917FEA4820113EF90036280E /* TextMarker.m */,
 				91BF2DE21FF17FE400FB993D /* Info.plist */,
 			);
 			path = AccessibilityElement;
@@ -250,6 +262,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				917FEA4920113EF90036280E /* TextMarker.h in Headers */,
 				914E28B91FF80ECB00765FCE /* MonotonicCounter.h in Headers */,
 				91BF2DEF1FF17FE400FB993D /* AccessibilityElement.h in Headers */,
 			);
@@ -377,11 +390,13 @@
 				91187E3E2010592D004DA209 /* WebArea.swift in Sources */,
 				91BF2DF91FF1800700FB993D /* Element.swift in Sources */,
 				914E28BC1FF83E3700765FCE /* Observer.swift in Sources */,
+				91187E4220107241004DA209 /* SelectionChange.swift in Sources */,
 				914E28C21FF8736700765FCE /* CF.swift in Sources */,
 				914E29671FFF0BEE00765FCE /* CFDictionary.swift in Sources */,
 				917E54702002F7D800D490A8 /* Window.swift in Sources */,
 				914E296E1FFF163D00765FCE /* Hierarchy.swift in Sources */,
 				91FFFCFF1FF5B6B400BF89A0 /* AccessibilityError.swift in Sources */,
+				917FEA4A20113EF90036280E /* TextMarker.m in Sources */,
 				917E54AC2005727200D490A8 /* TextField.swift in Sources */,
 				91BF2DFB1FF1F02200FB993D /* AXUIElement.swift in Sources */,
 				91BF2DFD1FF1F8AE00FB993D /* AXValue.swift in Sources */,
@@ -390,6 +405,7 @@
 				914E296B1FFF0C6B00765FCE /* CFString.swift in Sources */,
 				91196123200FE79E0073A998 /* Dictionary.swift in Sources */,
 				917E54722002FA9B00D490A8 /* Default.swift in Sources */,
+				917FEA45201136270036280E /* Position.swift in Sources */,
 				9111CF2E2005DBB4006B56AA /* TextAttachment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

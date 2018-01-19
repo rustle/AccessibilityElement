@@ -14,6 +14,7 @@ public extension NSAccessibilityRole {
 public extension NSAccessibilityAttributeName {
     public static let caretBrowsingEnabled = NSAccessibilityAttributeName(rawValue: "AXCaretBrowsingEnabled")
     public static let frame = NSAccessibilityAttributeName(rawValue: "AXFrame")
+    public static let selectedTextMarkerRange = NSAccessibilityAttributeName(rawValue: "AXSelectedTextMarkerRange")
 }
 
 public protocol AnyElement {
@@ -29,6 +30,8 @@ public protocol AnyElement {
     func frame() throws -> Frame
     func caretBrowsingEnabled() throws -> Bool
     func set(caretBrowsing: Bool) throws
+    func range<IndexType>(unorderedPositions: (first: Position<IndexType>, second: Position<IndexType>)) throws -> Range<Position<IndexType>>
+    func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString
 }
 
 public protocol _Element : AnyElement, TreeElement, Hashable {
@@ -192,6 +195,38 @@ public struct Element : _Element {
     }
     public func set(caretBrowsing: Bool) throws {
         try set(attribute: NSAccessibilityAttributeName.caretBrowsingEnabled, bool: caretBrowsing)
+    }
+    public func range<IndexType>(unorderedPositions: (first: Position<IndexType>, second: Position<IndexType>)) throws -> Range<Position<IndexType>> {
+        if IndexType.self == Int.self {
+            if unorderedPositions.first < unorderedPositions.second {
+                return Range(uncheckedBounds: (unorderedPositions.first, unorderedPositions.second))
+            }
+            if unorderedPositions.second < unorderedPositions.first {
+                return Range(uncheckedBounds: (unorderedPositions.second, unorderedPositions.first))
+            }
+            return Range(uncheckedBounds: (unorderedPositions.first, unorderedPositions.second))
+        }
+        let attribute = NSAccessibilityParameterizedAttributeName(rawValue: "AXTextMarkerRangeForUnorderedTextMarkers")
+        let value = try element.parameterizedValue(attribute: attribute, parameter: [unorderedPositions.first.index, unorderedPositions.second.index])
+        guard CFGetTypeID(value as CFTypeRef) == accessibility_element_get_marker_range_type_id() else {
+            throw AccessibilityError.typeMismatch
+        }
+        let range = value as AXTextMarkerRange
+        return Range(range, element: self)! as! Range<Position<IndexType>>
+    }
+    public func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString {
+        if IndexType.self == Int.self {
+            throw AccessibilityError.typeMismatch
+        }
+        guard let axTextMarkerRange = (range as! Range<Position<AXTextMarker>>).axTextMarkerRange else {
+            throw AccessibilityError.invalidInput
+        }
+        let value = try element.parameterizedValue(attribute: NSAccessibilityParameterizedAttributeName(rawValue: "AXAttributedStringForTextMarkerRange"),
+                                                   parameter: axTextMarkerRange)
+        guard let attributedString = value as? NSAttributedString else {
+            throw AccessibilityError.typeMismatch
+        }
+        return AttributedString(attributedString: attributedString)
     }
 
     public func frame() throws -> Frame {

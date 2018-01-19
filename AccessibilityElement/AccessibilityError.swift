@@ -8,4 +8,5 @@ import Foundation
 
 public enum AccessibilityError : Error {
     case typeMismatch
+    case invalidInput
 }

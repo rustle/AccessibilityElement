@@ -6,7 +6,7 @@
 
 import Foundation
 
-public typealias ObserverHandler = (Element, NSAccessibilityNotificationName, Any?) -> Void
+public typealias ObserverHandler = (Element, NSAccessibilityNotificationName, [String:Any]?) -> Void
 
 public enum ObserverError : Error {
     case invalidApplication
@@ -131,15 +131,16 @@ fileprivate struct Helper {
         }
     }
     private static func _repackage(value: CFTypeRef) throws -> Any {
-        switch value {
-        case let element as AXUIElement:
-            return _repackage(element: element)
-        case let axValue as AXValue:
-            return try _repackage(axValue: axValue)
-        case let number as CFNumber:
-            return try number.value()
-        case let boolean as CFBoolean:
-            switch boolean {
+        let typeID = CFGetTypeID(value)
+        switch typeID {
+        case AXUIElement.typeID:
+            return _repackage(element: (value as! AXUIElement))
+        case AXValue.typeID:
+            return try _repackage(axValue: (value as! AXValue))
+        case CFNumber.typeID:
+            return (value as! NSNumber).intValue
+        case CFBoolean.typeID:
+            switch value as! CFBoolean {
             case kCFBooleanTrue:
                 return true
             case kCFBooleanFalse:
@@ -147,12 +148,10 @@ fileprivate struct Helper {
             default:
                 throw AccessibilityError.typeMismatch
             }
-        case let array as CFArray:
-            return _repackage(array: array)
-        case let dictionary as CFDictionary:
-            return _repackage(dictionary: dictionary)
-//        case let string as String:
-//            return string
+        case CFArray.typeID:
+            return _repackage(array: value as! CFArray)
+        case CFDictionary.typeID:
+            return _repackage(dictionary: (value as! CFDictionary))
         default:
             return value
         }

@@ -6,5 +6,4 @@
 
 #import <Foundation/Foundation.h>
 
-__attribute__((visibility("hidden")))
-NSInteger monotonic_counter(void);
+NSInteger accessibility_element_monotonic_counter(void);

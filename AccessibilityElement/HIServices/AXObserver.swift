@@ -54,7 +54,7 @@ fileprivate class AXObserverState {
     private var handlers = [Int : AXObserverHandler]()
     private let queue = DispatchQueue(label: "AXObserverState")
     fileprivate func next() -> UnsafeMutableRawPointer {
-        let identifier = monotonic_counter()
+        let identifier = accessibility_element_monotonic_counter()
         guard let pointer = UnsafeMutableRawPointer(bitPattern: identifier) else {
             fatalError()
         }

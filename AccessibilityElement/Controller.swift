@@ -13,6 +13,7 @@ public protocol AnyController : class {
 }
 
 public class _Controller<ElementType> : AnyController where ElementType : _Element {
+    public weak var applicationController: _Controller<ElementType>?
     public weak var parentController: AnyController? {
         get {
             return _parentController
@@ -39,13 +40,23 @@ public class _Controller<ElementType> : AnyController where ElementType : _Eleme
             fatalError()
         }
     }
+    public var node: Node<ElementType> {
+        get {
+            fatalError()
+        }
+    }
+}
+
+extension _Controller : Equatable {
+    public static func ==(lhs: _Controller<ElementType>, rhs: _Controller<ElementType>) -> Bool {
+        return lhs.node == rhs.node
+    }
 }
 
 public class Controller<ElementType, EventHandlerType> : _Controller<ElementType> where
     ElementType : _Element,
     EventHandlerType : EventHandler
 {
-    public weak var applicationController: AnyController?
     public var _eventHandler: EventHandlerType
     public override var eventHandler: AnyEventHandler {
         get {
@@ -65,6 +76,11 @@ public class Controller<ElementType, EventHandlerType> : _Controller<ElementType
             let controller = try EventHandlerRegistrar.shared.eventHandler(node: node).makeController() as! _Controller<ElementType>
             controller.parentController = self
             return controller
+        }
+    }
+    public override var node: Node<ElementType> {
+        get {
+            return _eventHandler._node as! Node<ElementType>
         }
     }
 }

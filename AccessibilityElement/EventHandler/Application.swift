@@ -65,13 +65,14 @@ public final class Application<ElementType> : EventHandler where ElementType : _
         var focusedContainer: _Controller<ElementType>?
         var focusedController: _Controller<ElementType>?
         mutating func set(focusedContainerNode: Node<ElementType>?,
-                          focusedControllerNode: Node<ElementType>?) {
-            os_log("focus")
+                          focusedControllerNode: Node<ElementType>?,
+                          applicationController: _Controller<ElementType>?) {
             var focusedContainer: _Controller<ElementType>?
             if let focusedContainerNode = focusedContainerNode {
                 do {
                     let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedContainerNode)
                     focusedContainer = (try eventHandler.makeController()) as? _Controller<ElementType>
+                    focusedContainer?.applicationController = applicationController
                 } catch {
                     fatalError()
                 }
@@ -81,6 +82,7 @@ public final class Application<ElementType> : EventHandler where ElementType : _
                 do {
                     let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedControllerNode)
                     focusedController = (try eventHandler.makeController()) as? _Controller<ElementType>
+                    focusedController?.applicationController = applicationController
                 } catch {
                     fatalError()
                 }
@@ -88,8 +90,8 @@ public final class Application<ElementType> : EventHandler where ElementType : _
             // TODO: re-use controllers already in place if possible
             // TODO: connect/disconection up the chain
             self.focusedContainer?.eventHandler.disconnect()
-            self.focusedController?.eventHandler.disconnect()
             self.focusedContainer = focusedContainer
+            self.focusedController?.eventHandler.disconnect()
             self.focusedController = focusedController
             self.focusedContainer?.eventHandler.connect()
             self.focusedController?.eventHandler.connect()
@@ -114,14 +116,16 @@ public final class Application<ElementType> : EventHandler where ElementType : _
             let node = hierarchy.buildHierarchy(from: container,
                                                 targeting: &focusedNode)
             focus.set(focusedContainerNode: node,
-                      focusedControllerNode: focusedNode)
+                      focusedControllerNode: focusedNode,
+                      applicationController: _controller)
             if let echo = focus.focusedController?.eventHandler.focusIn(), echo.count > 0 {
                 output?(echo)
             }
         } catch {
             let node = Node(element: element, role: .include)
             focus.set(focusedContainerNode: nil,
-                      focusedControllerNode: node)
+                      focusedControllerNode: node,
+                      applicationController: _controller)
             if let echo = focus.focusedController?.eventHandler.focusIn(), echo.count > 0 {
                 output?(echo)
             }
