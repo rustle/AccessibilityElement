@@ -65,6 +65,11 @@ public class ApplicationObserver {
         tokens.insert(token)
         return token
     }
+    public func startObserving<Root, Value>(element: Element, notification: NSAccessibilityNotificationName, root: Root, keyPath: ReferenceWritableKeyPath<Root, Value>, handler: @escaping (Element, inout Value, [String:Any]?) -> Void) throws -> Token {
+        return try startObserving(element: element, notification: notification) { element, name, info in
+            handler(element, &root[keyPath: keyPath], info)
+        }
+    }
     public func stopObserving(token: Token) throws {
         if tokens.contains(token) {
             try observer().remove(element: token.element.element, notification: token.notification, identifier: token.identifier)

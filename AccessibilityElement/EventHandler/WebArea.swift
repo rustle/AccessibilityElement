@@ -53,17 +53,20 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
             return
         }
         do {
-            valueChangeToken = try observer.startObserving(element: element, notification: .valueChanged) { element, name, info in
-                guard let value = controller.eventHandler.valueChanged() else {
-                    return
-                }
-                print(value)
+            valueChangeToken = try observer.startObserving(element: element,
+                                                           notification: .valueChanged,
+                                                           root: controller,
+                                                           keyPath: \Controller._eventHandler) { element, eventHandler, info in
+                _ = eventHandler.valueChanged()
             }
         } catch {
             
         }
         do {
-            selectionChangeToken = try observer.startObserving(element: element, notification: .selectedTextChanged) { element, name, info in
+            selectionChangeToken = try observer.startObserving(element: element,
+                                                               notification: .selectedTextChanged,
+                                                               root: controller,
+                                                               keyPath: \Controller._eventHandler) { element, eventHandler, info in
                 guard let info = info else {
                     return
                 }
@@ -71,7 +74,7 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
                 guard let selectionChange = SelectionChange(info: info, element: element) else {
                     return
                 }
-                controller._eventHandler.handle(selectionChange: selectionChange)
+                eventHandler.handle(selectionChange: selectionChange)
             }
         } catch {
             

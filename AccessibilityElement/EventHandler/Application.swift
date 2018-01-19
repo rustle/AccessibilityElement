@@ -7,8 +7,16 @@
 import Foundation
 import os.log
 
-// TODO: Convert this to a value type
-public final class Application<ElementType> : EventHandler where ElementType : _Element {
+public extension Array {
+    mutating func appendOptional(_ newElement: Element?) {
+        guard let newElement = newElement else {
+            return
+        }
+        append(newElement)
+    }
+}
+
+public struct Application<ElementType> : EventHandler where ElementType : _Element {
     public var describerRequests: [DescriberRequest] {
         return []
     }
@@ -18,14 +26,15 @@ public final class Application<ElementType> : EventHandler where ElementType : _
     public init(node: Node<ElementType>) {
         _node = node
     }
-    private var observer: ApplicationObserver?
     private enum Error : Swift.Error {
         case invalidElement
         case containerSearchFailed
+        case nilController
     }
     // MARK: Window State
+    private var windowTokenMap = [Element:ApplicationObserver.Token]()
     private var childrenDirty = false
-    private func rebuildChildrenIfNeeded() {
+    private mutating func rebuildChildrenIfNeeded() {
         guard let controller = _controller else {
             return
         }
@@ -34,9 +43,7 @@ public final class Application<ElementType> : EventHandler where ElementType : _
             childrenDirty = false
         }
     }
-    private var windowCreatedToken: ApplicationObserver.Token?
-    private var windowTokenMap = [Element:ApplicationObserver.Token]()
-    private func destroyed(window: Element) {
+    private mutating func destroyed(window: Element) {
         guard let observer = observer else {
             return
         }
@@ -48,19 +55,27 @@ public final class Application<ElementType> : EventHandler where ElementType : _
         } catch {}
         childrenDirty = true
     }
-    private func created(window: Element) {
+    private mutating func created(window: Element) {
         childrenDirty = true
         guard let observer = self.observer else {
             return
         }
+        guard let controller = _controller else {
+            return
+        }
         do {
-            windowTokenMap[window] = try observer.startObserving(element: window, notification: .uiElementDestroyed) { [weak self] window, _, _ in
-                self?.destroyed(window: window)
+            windowTokenMap[window] = try observer.startObserving(element: window, notification: .uiElementDestroyed) { window, _, _ in
+                controller._eventHandler.destroyed(window: window)
             }
         } catch {}
     }
+    private mutating func focusChanged(window: Element) {
+        guard let focusedElement = try? _node._element.applicationFocusedElement() else {
+            return
+        }
+        focusChanged(element: focusedElement)
+    }
     // MARK: Focused UI Element
-    private var focusedUIElementToken: ApplicationObserver.Token?
     private struct Focus<ElementType> where ElementType : _Element {
         var focusedContainer: _Controller<ElementType>?
         var focusedController: _Controller<ElementType>?
@@ -89,12 +104,35 @@ public final class Application<ElementType> : EventHandler where ElementType : _
             }
             // TODO: re-use controllers already in place if possible
             // TODO: connect/disconection up the chain
-            self.focusedContainer?.eventHandler.disconnect()
+            var disconnect = [_Controller<ElementType>]()
+            disconnect.appendOptional(self.focusedContainer)
+            disconnect.appendOptional(self.focusedController)
             self.focusedContainer = focusedContainer
-            self.focusedController?.eventHandler.disconnect()
             self.focusedController = focusedController
-            self.focusedContainer?.eventHandler.connect()
-            self.focusedController?.eventHandler.connect()
+            var connect = [_Controller<ElementType>]()
+            connect.appendOptional(self.focusedContainer)
+            connect.appendOptional(self.focusedController)
+            // Unfortunate workaround for:
+            // Simultaneous accesses to 0x102034798, but modification requires exclusive access.
+            // Previous access (a modification) started at AccessibilityElement`closure #3 in Application.registerObservers() + 306 (0x1000d7742).
+            // Current access (a read) started at:
+            // 0    libswiftCore.dylib                 0x000000010058b070 swift_beginAccess + 605
+            // 1    AccessibilityElement               0x00000001000f3060 Controller._eventHandler.getter + 101
+            // 2    AccessibilityElement               0x00000001000f32b0 Controller.eventHandler.getter + 89
+            // 3    AccessibilityElement               0x000000010010c730 WebArea.registerObservers() + 992
+            // 4    AccessibilityElement               0x000000010010bf40 WebArea.connect() + 1638
+            // 5    AccessibilityElement               0x00000001001161d0 protocol witness for AnyEventHandler.connect() in conformance <A> WebArea<A> + 9
+            // 6    AccessibilityElement               0x00000001000d4b80 Application.Focus.set(focusedContainerNode:focusedControllerNode:applicationController:) + 2823
+            // 7    AccessibilityElement               0x00000001000d3280 Application.focusChanged(element:) + 3417
+            // 8    AccessibilityElement               0x00000001000d7610 closure #3 in Application.registerObservers() + 356
+            DispatchQueue.main.async {
+                for controller in disconnect {
+                    controller.eventHandler.disconnect()
+                }
+                for controller in connect {
+                    controller.eventHandler.connect()
+                }
+            }
         }
     }
     private var focus = Focus<ElementType>()
@@ -109,7 +147,7 @@ public final class Application<ElementType> : EventHandler where ElementType : _
         }
         throw Application.Error.containerSearchFailed
     }
-    private func focusChanged(element: ElementType) {
+    private mutating func focusChanged(element: ElementType) {
         do {
             let container = try findContainer(element: element)
             var focusedNode: Node<ElementType>? = Node(element: element, role: .include)
@@ -132,37 +170,43 @@ public final class Application<ElementType> : EventHandler where ElementType : _
         }
     }
     // MARK: Observers
-    private func registerObservers() throws {
-        guard let element = _node._element as? Element else {
+    private var observer: ApplicationObserver?
+    private var windowCreatedToken: ApplicationObserver.Token?
+    private var focusedWindowChangedToken: ApplicationObserver.Token?
+    private var focusedUIElementToken: ApplicationObserver.Token?
+    private mutating func registerObservers() throws {
+        guard ElementType.self == Element.self else {
             throw Application.Error.invalidElement
         }
-        let observer = try ObserverManager.shared.registerObserver(application: element)
-        self.observer = observer
-        windowCreatedToken = try observer.startObserving(element: element, notification: .windowCreated) { [weak self] window, _, _ in
-            self?.created(window: window)
+        guard let controller = _controller else {
+            throw Application.Error.nilController
         }
-        focusedUIElementToken = try observer.startObserving(element: element, notification: .focusedUIElementChanged) { [weak self] element, _, _ in
-            if let element = element as? ElementType {
-                self?.focusChanged(element: element)
-            }
+        let element = _node._element as! Element
+        self.observer = try ObserverManager.shared.registerObserver(application: element)
+        windowCreatedToken = try self.observer?.startObserving(element: element, notification: .windowCreated, root: controller, keyPath: \Controller._eventHandler) { window, eventHandler, info in
+            eventHandler.created(window: window)
+        }
+        focusedWindowChangedToken = try self.observer?.startObserving(element: element, notification: .focusedWindowChanged, root: controller, keyPath: \Controller._eventHandler) { window, eventHandler, info in
+            eventHandler.focusChanged(window: window)
+        }
+        focusedUIElementToken = try self.observer?.startObserving(element: element, notification: .focusedUIElementChanged, root: controller, keyPath: \Controller._eventHandler) { focusedElement, eventHandler, _ in
+            eventHandler.focusChanged(element: focusedElement as! ElementType)
         }
     }
     // MARK: -
     public var isFocused: Bool = false
-    public func connect() {
+    public mutating func connect() {
         do {
             try _node._element.set(enhancedUserInterface: true)
         } catch {
-            
         }
         do {
             try registerObservers()
         } catch {
-            
         }
         childrenDirty = true
     }
-    public func focusIn() -> String? {
+    public mutating func focusIn() -> String? {
         if isFocused {
             return nil
         }
@@ -173,11 +217,11 @@ public final class Application<ElementType> : EventHandler where ElementType : _
         }
         return title
     }
-    public func focusOut() -> String? {
+    public mutating func focusOut() -> String? {
         isFocused = false
         return nil
     }
-    public func disconnect() {
+    public mutating func disconnect() {
         
     }
 }

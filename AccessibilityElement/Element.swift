@@ -41,7 +41,8 @@ public protocol _Element : AnyElement, TreeElement, Hashable {
     func titleElement() throws -> Self
     func parent() throws -> Self
     func children() throws -> [Self]
-    func topLevelUIElement() throws -> Self
+    func topLevelElement() throws -> Self
+    func applicationFocusedElement() throws -> Self
 }
 
 extension _Element {
@@ -190,8 +191,11 @@ public struct Element : _Element {
     public func numberOfCharacters() throws -> Int {
         return try int(attribute: .numberOfCharacters)
     }
-    public func topLevelUIElement() throws -> Element {
+    public func topLevelElement() throws -> Element {
         return try element(attribute: .topLevelUIElement)
+    }
+    public func applicationFocusedElement() throws -> Element {
+        return try element(attribute: .focusedUIElement)
     }
     public func caretBrowsingEnabled() throws -> Bool {
         return try bool(attribute: NSAccessibilityAttributeName.caretBrowsingEnabled)

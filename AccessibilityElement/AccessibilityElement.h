@@ -12,5 +12,4 @@ FOUNDATION_EXPORT double AccessibilityElementVersionNumber;
 //! Project version string for AccessibilityElement.
 FOUNDATION_EXPORT const unsigned char AccessibilityElementVersionString[];
 
-#import <AccessibilityElement/MonotonicCounter.h>
 #import <AccessibilityElement/TextMarker.h>

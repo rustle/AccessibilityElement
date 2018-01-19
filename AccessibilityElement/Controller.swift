@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import os.log
 
 public protocol AnyController : class {
     var eventHandler: AnyEventHandler { get set }

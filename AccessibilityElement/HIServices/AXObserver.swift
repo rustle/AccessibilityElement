@@ -31,12 +31,11 @@ extension AXObserver {
     }
     //public func AXObserverAddNotification(_ observer: AXObserver, _ element: AXUIElement, _ notification: CFString, _ refcon: UnsafeMutableRawPointer?) -> AXError
     public func add(element: AXUIElement, notification: NSAccessibilityNotificationName, handler: @escaping AXObserverHandler) throws -> Int {
-        let pointer = axObserverState.next()
-        let error = AXObserverAddNotification(self, element, notification as CFString, pointer)
+        let identifier = axObserverState.next()
+        let error = AXObserverAddNotification(self, element, notification as CFString, UnsafeMutableRawPointer(bitPattern: identifier))
         guard error == .success else {
             throw AXUIElement.AXError(error: error)
         }
-        let identifier = Int(bitPattern: pointer)
         axObserverState.set(handler: handler, identifier: identifier)
         return identifier
     }
@@ -53,12 +52,10 @@ extension AXObserver {
 fileprivate class AXObserverState {
     private var handlers = [Int : AXObserverHandler]()
     private let queue = DispatchQueue(label: "AXObserverState")
-    fileprivate func next() -> UnsafeMutableRawPointer {
-        let identifier = accessibility_element_monotonic_counter()
-        guard let pointer = UnsafeMutableRawPointer(bitPattern: identifier) else {
-            fatalError()
-        }
-        return pointer
+    private var counter = 1234
+    fileprivate func next() -> Int {
+        counter += 1
+        return counter
     }
     fileprivate func set(handler: @escaping AXObserverHandler, identifier: Int) {
         queue.sync(flags: [.barrier]) {

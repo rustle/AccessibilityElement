@@ -23,7 +23,7 @@ public struct ScreenGrab {
         return frame
     }
     public static func windowID(element: Element) -> CGWindowID? {
-        guard let window = try? element.topLevelUIElement(), window.isWindow else {
+        guard let window = try? element.topLevelElement(), window.isWindow else {
             return nil
         }
         guard let list = CGWindowListCopyWindowInfo([.optionAll], kCGNullWindowID) as? [[String:Any]] else {
