@@ -151,9 +151,14 @@ public final class Application<ElementType> : EventHandler where ElementType : _
     public var isFocused: Bool = false
     public func connect() {
         do {
+            try _node._element.set(enhancedUserInterface: true)
+        } catch let error {
+            os_log("%{public}@.%{public}@() enhancedUserInterface error %@", String(describing: type(of: self)), #function, error.localizedDescription)
+        }
+        do {
             try registerObservers()
         } catch let error {
-            os_log("%@.%@() observer error %@", String(describing: type(of: self)), #function, error.localizedDescription)
+            os_log("%{public}@.%{public}@() observer error %@", String(describing: type(of: self)), #function, error.localizedDescription)
         }
         childrenDirty = true
     }

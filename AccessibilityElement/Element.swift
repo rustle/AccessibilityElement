@@ -15,6 +15,7 @@ public extension NSAccessibilityAttributeName {
     public static let caretBrowsingEnabled = NSAccessibilityAttributeName(rawValue: "AXCaretBrowsingEnabled")
     public static let frame = NSAccessibilityAttributeName(rawValue: "AXFrame")
     public static let selectedTextMarkerRange = NSAccessibilityAttributeName(rawValue: "AXSelectedTextMarkerRange")
+    public static let enhancedUserInterface = NSAccessibilityAttributeName(rawValue: "AXEnhancedUserInterface")
 }
 
 public protocol AnyElement {
@@ -32,6 +33,8 @@ public protocol AnyElement {
     func set(caretBrowsing: Bool) throws
     func range<IndexType>(unorderedPositions: (first: Position<IndexType>, second: Position<IndexType>)) throws -> Range<Position<IndexType>>
     func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString
+    func enhancedUserInterface() throws -> Bool
+    func set(enhancedUserInterface: Bool) throws
 }
 
 public protocol _Element : AnyElement, TreeElement, Hashable {
@@ -227,6 +230,12 @@ public struct Element : _Element {
             throw AccessibilityError.typeMismatch
         }
         return AttributedString(attributedString: attributedString)
+    }
+    public func enhancedUserInterface() throws -> Bool {
+        return try bool(attribute: NSAccessibilityAttributeName.enhancedUserInterface)
+    }
+    public func set(enhancedUserInterface: Bool) throws {
+        try set(attribute: NSAccessibilityAttributeName.enhancedUserInterface, bool: enhancedUserInterface)
     }
 
     public func frame() throws -> Frame {
