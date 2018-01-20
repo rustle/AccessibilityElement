@@ -219,7 +219,7 @@ public struct Element : _Element {
             throw AccessibilityError.typeMismatch
         }
         let range = value as AXTextMarkerRange
-        return Range(range, element: self)! as! Range<Position<IndexType>>
+        return Range(range, element: self) as! Range<Position<IndexType>>
     }
     public func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString {
         if IndexType.self == Int.self {

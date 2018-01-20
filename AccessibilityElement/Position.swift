@@ -72,22 +72,15 @@ public extension Position where IndexType == Int {
 }
 
 public extension Range where Bound == Position<AXTextMarker> {
-    init?(_ axTextMarkerRange: AXTextMarkerRange, element: AnyElement) {
+    public init(_ axTextMarkerRange: AXTextMarkerRange, element: AnyElement) {
         guard CFGetTypeID(axTextMarkerRange as CFTypeRef) == accessibility_element_get_marker_range_type_id() else {
-            return nil
+            fatalError()
         }
-        var lowerBound: Position<AXTextMarker>?
-        var upperBound: Position<AXTextMarker>?
-        if let start = accessibility_element_copy_start_marker(axTextMarkerRange as CFTypeRef) {
-            lowerBound = Position(index: start.takeRetainedValue() as AXTextMarker, element: element)
-        }
-        if let end = accessibility_element_copy_end_marker(axTextMarkerRange as CFTypeRef) {
-            upperBound = Position(index: end.takeRetainedValue() as AXTextMarker, element: element)
-        }
-        guard let l = lowerBound, let u = upperBound else {
-            return nil
-        }
-        self = Range(uncheckedBounds: (l, u))
+        let start = accessibility_element_copy_start_marker(axTextMarkerRange as CFTypeRef)
+        let lowerBound = Position(index: start?.takeRetainedValue() as AXTextMarker, element: element)
+        let end = accessibility_element_copy_end_marker(axTextMarkerRange as CFTypeRef)
+        let upperBound = Position(index: end?.takeRetainedValue() as AXTextMarker, element: element)
+        self = Range(uncheckedBounds: (lowerBound, upperBound))
     }
     public var axTextMarkerRange: AXTextMarkerRange? {
         return accessibility_element_create_marker_range(lowerBound.index, upperBound.index)?.takeRetainedValue()

@@ -59,7 +59,8 @@ public class ApplicationObserver {
     }
     public func startObserving(element: Element, notification: NSAccessibilityNotificationName, handler: @escaping ObserverHandler) throws -> Token {
         let identifier = try observer().add(element: element.element, notification: notification) { element, notification, info in
-            handler(Element(element: element), notification, Helper.repackage(dictionary: info))
+            let element = Element(element: element)
+            handler(element, notification, Helper.repackage(dictionary: info, element: element))
         }
         let token = Token(element: element, notification: notification, identifier: identifier)
         tokens.insert(token)
@@ -90,31 +91,23 @@ fileprivate struct Helper {
     private static func _repackage(element: AXUIElement) -> Element {
         return Element(element: element)
     }
-    private static func _repackage(array: CFArray) -> [Any] {
-        var newArray = [Any]()
-        array.apply { value in
-            do {
-                newArray.append(try _repackage(value: value))
-            } catch {
-                
+    private static func _repackage(array: [Any], element: Element) -> [Any] {
+        do {
+            return try array.map { value in
+                return try _repackage(value: value, element: element)
             }
+        } catch {
+            return []
         }
-        return newArray
     }
-    private static func _repackage(dictionary: CFDictionary) -> [String : Any] {
-        var newDictionary = [String:Any]()
-        dictionary.apply { key, value in
-            guard CFGetTypeID(key) == CFString.typeID else {
-                return
+    private static func _repackage(dictionary: [String:Any], element: Element) -> [String:Any] {
+        do {
+            return try dictionary.reduce() { result, pair in
+                result[pair.key] = try _repackage(value: pair.value as CFTypeRef, element: element)
             }
-            let cf = key as! CFString
-            do {
-                newDictionary[cf as String] = try _repackage(value: value)
-            } catch {
-                
-            }
+        } catch {
+            return [:]
         }
-        return newDictionary
     }
     private static func _repackage(axValue: AXValue) throws -> Any {
         switch axValue.type {
@@ -135,8 +128,8 @@ fileprivate struct Helper {
             throw AccessibilityError.typeMismatch
         }
     }
-    private static func _repackage(value: CFTypeRef) throws -> Any {
-        let typeID = CFGetTypeID(value)
+    private static func _repackage(value: Any, element: Element) throws -> Any {
+        let typeID = CFGetTypeID(value as CFTypeRef)
         switch typeID {
         case AXUIElement.typeID:
             return _repackage(element: (value as! AXUIElement))
@@ -145,26 +138,32 @@ fileprivate struct Helper {
         case CFNumber.typeID:
             return (value as! NSNumber).intValue
         case CFBoolean.typeID:
-            switch value as! CFBoolean {
-            case kCFBooleanTrue:
-                return true
-            case kCFBooleanFalse:
-                return false
-            default:
-                throw AccessibilityError.typeMismatch
-            }
-        case CFArray.typeID:
-            return _repackage(array: value as! CFArray)
-        case CFDictionary.typeID:
-            return _repackage(dictionary: (value as! CFDictionary))
+            return (value as! NSNumber).boolValue
+        case accessibility_element_get_marker_type_id():
+            return Position(index: value as AXTextMarker, element: element)
+        case accessibility_element_get_marker_range_type_id():
+            return Range(value as AXTextMarkerRange, element: element)
         default:
-            return value
+            break
+        }
+        switch value {
+        case let array as [String]:
+            return _repackage(array: array, element: element)
+        case let dictionary as [String:Any]:
+            return _repackage(dictionary: dictionary, element: element)
+        case let string as String:
+            return string
+        case let attributeString as NSAttributedString:
+            return attributeString
+        default:
+            print(value)
+            throw AccessibilityError.typeMismatch
         }
     }
-    fileprivate static func repackage(dictionary: CFDictionary?) -> [String : Any]? {
-        guard let dictionary = dictionary else {
+    fileprivate static func repackage(dictionary: CFDictionary?, element: Element) -> [String : Any]? {
+        guard let dictionary = dictionary as? [String:Any] else {
             return nil
         }
-        return _repackage(dictionary: dictionary)
+        return _repackage(dictionary: dictionary, element: element)
     }
 }

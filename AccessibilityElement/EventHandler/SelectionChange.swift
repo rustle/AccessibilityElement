@@ -200,6 +200,6 @@ public struct Navigation {
             self.granulatiry = .all
         }
         self.element = info["AXTextChangeElement"] as? Element
-        selection = Range(info["AXSelectedTextMarkerRange"] as AXTextMarkerRange, element: element)
+        selection = info["AXSelectedTextMarkerRange"] as? Range<Position<AXTextMarkerRange>>
     }
 }
