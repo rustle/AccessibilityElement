@@ -29,27 +29,25 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
     public mutating func disconnect() {
         unregisterObservers()
     }
-    var observer: ApplicationObserver?
-    var valueChangeToken: ApplicationObserver.Token?
-    var selectionChangeToken: ApplicationObserver.Token?
+    private var _observer: ApplicationObserver?
+    private mutating func observer() -> ApplicationObserver? {
+        if let observer = _observer {
+            return observer
+        }
+        guard let applicationElement = _controller?.applicationController?.eventHandler.node.element as? Element else {
+            return nil
+        }
+        _observer = try? ObserverManager.shared.registerObserver(application: applicationElement)
+        return _observer
+    }
+    private var valueChangeToken: ApplicationObserver.Token?
+    private var selectionChangeToken: ApplicationObserver.Token?
     private mutating func registerObservers() {
-        guard let controller = _controller else {
-            return
-        }
-        guard let element = controller.eventHandler.node.element as? Element else {
-            return
-        }
-        guard let applicationElement = controller.applicationController?.eventHandler.node.element as? Element else {
-            return
-        }
-        if observer == nil {
-            do {
-                observer = try ObserverManager.shared.registerObserver(application: applicationElement)
-            } catch {
-                return
-            }
-        }
-        guard let observer = observer else {
+        guard
+            let controller = _controller,
+            let element = controller.eventHandler.node.element as? Element,
+            let observer = observer()
+        else {
             return
         }
         func registerValueChange() throws {
@@ -82,8 +80,8 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
         try? registerSelectionChange()
     }
     private mutating func unregisterObservers() {
-        observer?.stop()
-        observer = nil
+        _observer?.stop()
+        _observer = nil
         valueChangeToken = nil
         selectionChangeToken = nil
     }
