@@ -52,14 +52,18 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
         guard let observer = observer else {
             return
         }
-        do {
+        func registerValueChange() throws {
+            guard valueChangeToken == nil else {
+                return
+            }
             valueChangeToken = try observer.startObserving(element: element, notification: .valueChanged) { [weak controller] element, info in
                 _ = controller?._eventHandler.valueChanged()
             }
-        } catch {
-            
         }
-        do {
+        func registerSelectionChange() throws {
+            guard selectionChangeToken == nil else {
+                return
+            }
             selectionChangeToken = try observer.startObserving(element: element, notification: .selectedTextChanged) { [weak controller] element, info in
                 guard let info = info else {
                     return
@@ -73,22 +77,15 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
                 }
                 controller._eventHandler.handle(selectionChange: selectionChange)
             }
-        } catch {
-            
         }
+        try? registerValueChange()
+        try? registerSelectionChange()
     }
     private mutating func unregisterObservers() {
-        guard let observer = observer else {
-            return
-        }
-        if let token = valueChangeToken {
-            do {
-                try observer.stopObserving(token: token)
-                valueChangeToken = nil
-            } catch {
-                return
-            }
-        }
+        observer?.stop()
+        observer = nil
+        valueChangeToken = nil
+        selectionChangeToken = nil
     }
     private var previousSelection: Range<Position<AXTextMarker>>?
     private func echo<IndexType>(range: Range<Position<IndexType>>) {

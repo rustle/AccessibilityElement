@@ -193,6 +193,13 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
             controller?._eventHandler.focusChanged(element: focusedElement as! ElementType)
         }
     }
+    private mutating func unregisterObservers() {
+        observer?.stop()
+        observer = nil
+        windowCreatedToken = nil
+        focusedWindowChangedToken = nil
+        focusedUIElementToken = nil
+    }
     // MARK: -
     public var isFocused: Bool = false
     public mutating func connect() {
@@ -222,6 +229,6 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
         return nil
     }
     public mutating func disconnect() {
-        
+        unregisterObservers()
     }
 }

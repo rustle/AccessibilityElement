@@ -57,6 +57,9 @@ public class ApplicationObserver {
     public init(processIdentifier: Int) throws {
         self.processIdentifier = processIdentifier
     }
+    deinit {
+        stop()
+    }
     public func startObserving(element: Element, notification: NSAccessibilityNotificationName, handler: @escaping ObserverHandler) throws -> Token {
         let identifier = try observer().add(element: element.element, notification: notification) { element, notification, info in
             let element = Element(element: element)
@@ -78,6 +81,11 @@ public class ApplicationObserver {
             }
             CFRunLoop.main.remove(source: observer.runLoopSource, mode: .defaultMode)
             _observer = nil
+        }
+    }
+    public func stop() {
+        for token in tokens {
+            try? stopObserving(token: token)
         }
     }
 }
