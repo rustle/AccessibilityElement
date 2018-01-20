@@ -42,9 +42,21 @@ public extension Hierarchy {
 }
 
 public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : _Element {
+    let containerRoles = Set([
+        .application,
+        .window,
+        .menuBar,
+        .toolbar,
+        .scrollArea,
+        .table,
+        NSAccessibilityRole.webArea,
+    ])
     public func classify(_ element: ElementType) -> HierarchyRole {
         guard let role = try? element.role() else {
             return .skip
+        }
+        if containerRoles.contains(role) {
+            return .container
         }
         switch role {
         case .group:
@@ -54,16 +66,6 @@ public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : _Ele
                 return .include
             }
             return .skip
-        case .application:
-            return .container
-        case .window:
-            return .container
-        case .menuBar:
-            return .container
-        case .toolbar:
-            return .container
-        case NSAccessibilityRole.webArea:
-            return .container
         default:
             return .include
         }
