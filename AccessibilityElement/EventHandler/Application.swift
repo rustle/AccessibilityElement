@@ -64,7 +64,7 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
             return
         }
         do {
-            windowTokenMap[window] = try observer.startObserving(element: window, notification: .uiElementDestroyed) { window, _, _ in
+            windowTokenMap[window] = try observer.startObserving(element: window, notification: .uiElementDestroyed) { window, _ in
                 controller._eventHandler.destroyed(window: window)
             }
         } catch {}
@@ -183,14 +183,14 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
         }
         let element = _node._element as! Element
         self.observer = try ObserverManager.shared.registerObserver(application: element)
-        windowCreatedToken = try self.observer?.startObserving(element: element, notification: .windowCreated, root: controller, keyPath: \Controller._eventHandler) { window, eventHandler, info in
-            eventHandler.created(window: window)
+        windowCreatedToken = try self.observer?.startObserving(element: element, notification: .windowCreated) { [weak controller] window, info in
+            controller?._eventHandler.created(window: window)
         }
-        focusedWindowChangedToken = try self.observer?.startObserving(element: element, notification: .focusedWindowChanged, root: controller, keyPath: \Controller._eventHandler) { window, eventHandler, info in
-            eventHandler.focusChanged(window: window)
+        focusedWindowChangedToken = try self.observer?.startObserving(element: element, notification: .focusedWindowChanged) { [weak controller] window, info in
+            controller?._eventHandler.focusChanged(window: window)
         }
-        focusedUIElementToken = try self.observer?.startObserving(element: element, notification: .focusedUIElementChanged, root: controller, keyPath: \Controller._eventHandler) { focusedElement, eventHandler, _ in
-            eventHandler.focusChanged(element: focusedElement as! ElementType)
+        focusedUIElementToken = try self.observer?.startObserving(element: element, notification: .focusedUIElementChanged) { [weak controller] focusedElement, _ in
+            controller?._eventHandler.focusChanged(element: focusedElement as! ElementType)
         }
     }
     // MARK: -

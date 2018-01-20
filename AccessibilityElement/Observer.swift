@@ -6,7 +6,7 @@
 
 import Foundation
 
-public typealias ObserverHandler = (Element, NSAccessibilityNotificationName, [String:Any]?) -> Void
+public typealias ObserverHandler = (Element, [String:Any]?) -> Void
 
 public enum ObserverError : Error {
     case invalidApplication
@@ -60,16 +60,11 @@ public class ApplicationObserver {
     public func startObserving(element: Element, notification: NSAccessibilityNotificationName, handler: @escaping ObserverHandler) throws -> Token {
         let identifier = try observer().add(element: element.element, notification: notification) { element, notification, info in
             let element = Element(element: element)
-            handler(element, notification, Helper.repackage(dictionary: info, element: element))
+            handler(element, Helper.repackage(dictionary: info, element: element))
         }
         let token = Token(element: element, notification: notification, identifier: identifier)
         tokens.insert(token)
         return token
-    }
-    public func startObserving<Root, Value>(element: Element, notification: NSAccessibilityNotificationName, root: Root, keyPath: ReferenceWritableKeyPath<Root, Value>, handler: @escaping (Element, inout Value, [String:Any]?) -> Void) throws -> Token {
-        return try startObserving(element: element, notification: notification) { element, name, info in
-            handler(element, &root[keyPath: keyPath], info)
-        }
     }
     public func stopObserving(token: Token) throws {
         if tokens.contains(token) {

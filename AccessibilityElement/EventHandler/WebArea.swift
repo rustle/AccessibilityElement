@@ -53,28 +53,25 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
             return
         }
         do {
-            valueChangeToken = try observer.startObserving(element: element,
-                                                           notification: .valueChanged,
-                                                           root: controller,
-                                                           keyPath: \Controller._eventHandler) { element, eventHandler, info in
-                _ = eventHandler.valueChanged()
+            valueChangeToken = try observer.startObserving(element: element, notification: .valueChanged) { [weak controller] element, info in
+                _ = controller?._eventHandler.valueChanged()
             }
         } catch {
             
         }
         do {
-            selectionChangeToken = try observer.startObserving(element: element,
-                                                               notification: .selectedTextChanged,
-                                                               root: controller,
-                                                               keyPath: \Controller._eventHandler) { element, eventHandler, info in
+            selectionChangeToken = try observer.startObserving(element: element, notification: .selectedTextChanged) { [weak controller] element, info in
                 guard let info = info else {
                     return
                 }
-                let element = controller.eventHandler.node.element
+                guard let controller = controller else {
+                    return
+                }
+                let element = controller._eventHandler._node.element
                 guard let selectionChange = SelectionChange(info: info, element: element) else {
                     return
                 }
-                eventHandler.handle(selectionChange: selectionChange)
+                controller._eventHandler.handle(selectionChange: selectionChange)
             }
         } catch {
             
