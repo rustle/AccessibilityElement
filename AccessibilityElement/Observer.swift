@@ -5,8 +5,42 @@
 //
 
 import Foundation
+import os.log
 
-public typealias ObserverHandler = (Element, [String:Any]?) -> Void
+public typealias ObserverSignalData = (Element, ObserverInfo?)
+public typealias ObserverInfo = [String:Any]
+public typealias ObserverHandler = (Element, ObserverInfo?) -> Void
+
+public final class ObserverSignal : SignalSubscriptionProviding {
+    public typealias SignalData = ObserverSignalData
+    private weak var observer: ApplicationObserver?
+    private let signal: Signal<ObserverSignalData>
+    private let token: ApplicationObserver.Token
+    fileprivate init(observer: ApplicationObserver, signal: Signal<ObserverSignalData>, token: ApplicationObserver.Token) {
+        self.observer = observer
+        self.signal = signal
+        self.token = token
+    }
+    @discardableResult
+    public func subscribe(callback: @escaping (ObserverSignalData) -> Void) -> SignalSubscription<ObserverSignalData> {
+        return signal.subscribe(callback: callback)
+    }
+    @discardableResult
+    public func subscribe(with observer: AnyObject, callback: @escaping (ObserverSignalData) -> Void) -> SignalSubscription<ObserverSignalData> {
+        return signal.subscribe(with: observer, callback: callback)
+    }
+    @discardableResult
+    public func subscribeOnce(with observer: AnyObject, callback: @escaping (ObserverSignalData) -> Void) -> SignalSubscription<ObserverSignalData> {
+        return signal.subscribeOnce(with: observer, callback: callback)
+    }
+    public func cancelSubscription(for observer: AnyObject) {
+        signal.cancelSubscription(for: observer)
+    }
+    public func cancelAllSubscriptions() {
+        signal.cancelAllSubscriptions()
+        try? observer?.stopObserving(token: token)
+    }
+}
 
 public enum ObserverError : Error {
     case invalidApplication
@@ -59,6 +93,22 @@ public class ApplicationObserver {
     }
     deinit {
         stop()
+    }
+    private lazy var signalMap = [Element:[NSAccessibilityNotificationName:ObserverSignal]]()
+    public func signal(element: Element, notification: NSAccessibilityNotificationName) throws -> ObserverSignal {
+        if let signal = signalMap[element]?[notification] {
+            return signal
+        }
+        let signal = Signal<ObserverSignalData>()
+        let token = try startObserving(element: element, notification: notification) { element, info in
+            signal=>(element, info)
+        }
+        if signalMap[element] == nil {
+            signalMap[element] = [NSAccessibilityNotificationName:ObserverSignal]()
+        }
+        let observerSignal = ObserverSignal(observer: self, signal: signal, token: token)
+        signalMap[element]?[notification] = observerSignal
+        return observerSignal
     }
     public func startObserving(element: Element, notification: NSAccessibilityNotificationName, handler: @escaping ObserverHandler) throws -> Token {
         let identifier = try observer().add(element: element.element, notification: notification) { element, notification, info in

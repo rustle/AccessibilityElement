@@ -29,18 +29,15 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
     public mutating func disconnect() {
         unregisterObservers()
     }
-    private var _observer: ApplicationObserver?
     private mutating func observer() -> ApplicationObserver? {
-        if let observer = _observer {
-            return observer
+        if let applicationController = _controller?.applicationController as? Controller<ElementType, Application<ElementType>> {
+            return applicationController._eventHandler.observer
         }
-        guard let applicationElement = _controller?.applicationController?.eventHandler.node.element as? Element else {
-            return nil
+        if let element = _controller?.applicationController?.node._element as? Element {
+            return try? ObserverManager.shared.registerObserver(application: element)
         }
-        _observer = try? ObserverManager.shared.registerObserver(application: applicationElement)
-        return _observer
+        return nil
     }
-    private var valueChangeToken: ApplicationObserver.Token?
     private var selectionChangeToken: ApplicationObserver.Token?
     private mutating func registerObservers() {
         guard
@@ -50,23 +47,12 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
         else {
             return
         }
-        func registerValueChange() throws {
-            guard valueChangeToken == nil else {
-                return
-            }
-            valueChangeToken = try observer.startObserving(element: element, notification: .valueChanged) { [weak controller] element, info in
-                _ = controller?._eventHandler.valueChanged()
-            }
-        }
         func registerSelectionChange() throws {
             guard selectionChangeToken == nil else {
                 return
             }
             selectionChangeToken = try observer.startObserving(element: element, notification: .selectedTextChanged) { [weak controller] element, info in
-                guard let info = info else {
-                    return
-                }
-                guard let controller = controller else {
+                guard let info = info, let controller = controller else {
                     return
                 }
                 let element = controller._eventHandler._node.element
@@ -76,14 +62,13 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
                 controller._eventHandler.handle(selectionChange: selectionChange)
             }
         }
-        try? registerValueChange()
         try? registerSelectionChange()
     }
     private mutating func unregisterObservers() {
-        _observer?.stop()
-        _observer = nil
-        valueChangeToken = nil
-        selectionChangeToken = nil
+        if let selectionChangeToken = selectionChangeToken {
+            try? observer()?.stopObserving(token: selectionChangeToken)
+            self.selectionChangeToken = nil
+        }
     }
     private var previousSelection: Range<Position<AXTextMarker>>?
     private func echo<IndexType>(range: Range<Position<IndexType>>) {

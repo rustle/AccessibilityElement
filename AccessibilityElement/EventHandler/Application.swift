@@ -170,7 +170,7 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
         }
     }
     // MARK: Observers
-    private var observer: ApplicationObserver?
+    public var observer: ApplicationObserver?
     private var windowCreatedToken: ApplicationObserver.Token?
     private var focusedWindowChangedToken: ApplicationObserver.Token?
     private var focusedUIElementToken: ApplicationObserver.Token?
@@ -182,23 +182,36 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
             throw Application.Error.nilController
         }
         let element = _node._element as! Element
-        self.observer = try ObserverManager.shared.registerObserver(application: element)
-        windowCreatedToken = try self.observer?.startObserving(element: element, notification: .windowCreated) { [weak controller] window, info in
+        let observer = try ObserverManager.shared.registerObserver(application: element)
+        self.observer = observer
+        func register(notification: NSAccessibilityNotificationName, handler: @escaping ObserverHandler) throws -> ApplicationObserver.Token {
+            return try observer.startObserving(element: element, notification: .windowCreated, handler: handler)
+        }
+        windowCreatedToken = try register(notification: .windowCreated) { [weak controller] window, info in
             controller?._eventHandler.created(window: window)
         }
-        focusedWindowChangedToken = try self.observer?.startObserving(element: element, notification: .focusedWindowChanged) { [weak controller] window, info in
+        focusedWindowChangedToken = try register(notification: .focusedWindowChanged) { [weak controller] window, _ in
             controller?._eventHandler.focusChanged(window: window)
         }
-        focusedUIElementToken = try self.observer?.startObserving(element: element, notification: .focusedUIElementChanged) { [weak controller] focusedElement, _ in
+        focusedUIElementToken = try register(notification: .focusedUIElementChanged) { [weak controller] element, _ in
+            controller?._eventHandler.focusChanged(element: element as! ElementType)
+        }
+        
+        focusedWindowChangedToken = try observer.startObserving(element: element, notification: .focusedUIElementChanged) { [weak controller] focusedElement, _ in
             controller?._eventHandler.focusChanged(element: focusedElement as! ElementType)
         }
     }
     private mutating func unregisterObservers() {
-        observer?.stop()
+        func cleanup(keyPath: WritableKeyPath<Application, ApplicationObserver.Token?>) {
+            if let token = self[keyPath: keyPath] {
+                try? observer?.stopObserving(token: token)
+                self[keyPath: keyPath] = nil
+            }
+        }
+        cleanup(keyPath: \Application.windowCreatedToken)
+        cleanup(keyPath: \Application.focusedWindowChangedToken)
+        cleanup(keyPath: \Application.focusedWindowChangedToken)
         observer = nil
-        windowCreatedToken = nil
-        focusedWindowChangedToken = nil
-        focusedUIElementToken = nil
     }
     // MARK: -
     public var isFocused: Bool = false
