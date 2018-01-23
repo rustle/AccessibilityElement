@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import os.log
+import Signals
 
 public extension Array {
     mutating func appendOptional(_ newElement: Element?) {

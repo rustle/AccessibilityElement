@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import os.log
+import Signals
 
 public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
     public var describerRequests: [DescriberRequest] {
