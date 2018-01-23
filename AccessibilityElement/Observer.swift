@@ -7,38 +7,62 @@
 import Foundation
 import os.log
 
-public typealias ObserverSignalData = (Element, ObserverInfo?)
+public typealias ObserverSignalData = (element: Element, info: ObserverInfo?)
 public typealias ObserverInfo = [String:Any]
 public typealias ObserverHandler = (Element, ObserverInfo?) -> Void
 
 public final class ObserverSignal : SignalSubscriptionProviding {
     public typealias SignalData = ObserverSignalData
     private weak var observer: ApplicationObserver?
-    private let signal: Signal<ObserverSignalData>
-    private let token: ApplicationObserver.Token
-    fileprivate init(observer: ApplicationObserver, signal: Signal<ObserverSignalData>, token: ApplicationObserver.Token) {
+    private let element: Element
+    private let notification: NSAccessibilityNotificationName
+    private let signal = Signal<ObserverSignalData>()
+    private var token: ApplicationObserver.Token?
+    private var count = 0
+    fileprivate func increment() throws {
+        count += 1
+        if count == 1 {
+            token = try observer?.startObserving(element: element, notification: notification) { element, info in
+                self.signal=>(element, info)
+            }
+        }
+    }
+    fileprivate func decrement() throws {
+        count -= 1
+        if count == 0 {
+            if let token = token {
+                try observer?.stopObserving(token: token)
+                self.token = nil
+            }
+        }
+    }
+    fileprivate init(element: Element,
+                     notification: NSAccessibilityNotificationName,
+                     observer: ApplicationObserver) {
+        self.element = element
+        self.notification = notification
         self.observer = observer
-        self.signal = signal
-        self.token = token
     }
     @discardableResult
     public func subscribe(callback: @escaping (ObserverSignalData) -> Void) -> SignalSubscription<ObserverSignalData> {
+        try? increment()
         return signal.subscribe(callback: callback)
     }
     @discardableResult
     public func subscribe(with observer: AnyObject, callback: @escaping (ObserverSignalData) -> Void) -> SignalSubscription<ObserverSignalData> {
+        try? increment()
         return signal.subscribe(with: observer, callback: callback)
     }
     @discardableResult
     public func subscribeOnce(with observer: AnyObject, callback: @escaping (ObserverSignalData) -> Void) -> SignalSubscription<ObserverSignalData> {
+        try? increment()
         return signal.subscribeOnce(with: observer, callback: callback)
     }
     public func cancelSubscription(for observer: AnyObject) {
-        signal.cancelSubscription(for: observer)
+        
     }
     public func cancelAllSubscriptions() {
-        signal.cancelAllSubscriptions()
-        try? observer?.stopObserving(token: token)
+        
     }
 }
 
@@ -99,14 +123,10 @@ public class ApplicationObserver {
         if let signal = signalMap[element]?[notification] {
             return signal
         }
-        let signal = Signal<ObserverSignalData>()
-        let token = try startObserving(element: element, notification: notification) { element, info in
-            signal=>(element, info)
-        }
         if signalMap[element] == nil {
             signalMap[element] = [NSAccessibilityNotificationName:ObserverSignal]()
         }
-        let observerSignal = ObserverSignal(observer: self, signal: signal, token: token)
+        let observerSignal = ObserverSignal(element: element, notification: notification, observer: self)
         signalMap[element]?[notification] = observerSignal
         return observerSignal
     }

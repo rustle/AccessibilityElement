@@ -30,15 +30,12 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
         unregisterObservers()
     }
     private mutating func observer() -> ApplicationObserver? {
-        if let applicationController = _controller?.applicationController as? Controller<ElementType, Application<ElementType>> {
-            return applicationController._eventHandler.observer
-        }
         if let element = _controller?.applicationController?.node._element as? Element {
             return try? ObserverManager.shared.registerObserver(application: element)
         }
         return nil
     }
-    private var selectionChangeToken: ApplicationObserver.Token?
+    private var selectionChangeSignal: SignalSubscription<ObserverSignalData>?
     private mutating func registerObservers() {
         guard
             let controller = _controller,
@@ -48,10 +45,10 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
             return
         }
         func registerSelectionChange() throws {
-            guard selectionChangeToken == nil else {
+            guard selectionChangeSignal == nil else {
                 return
             }
-            selectionChangeToken = try observer.startObserving(element: element, notification: .selectedTextChanged) { [weak controller] element, info in
+            selectionChangeSignal = try observer.signal(element: element, notification: .selectedTextChanged).subscribe { [weak controller] element, info in
                 guard let info = info, let controller = controller else {
                     return
                 }
@@ -65,10 +62,8 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
         try? registerSelectionChange()
     }
     private mutating func unregisterObservers() {
-        if let selectionChangeToken = selectionChangeToken {
-            try? observer()?.stopObserving(token: selectionChangeToken)
-            self.selectionChangeToken = nil
-        }
+        selectionChangeSignal?.cancel()
+        selectionChangeSignal = nil
     }
     private var previousSelection: Range<Position<AXTextMarker>>?
     private func echo<IndexType>(range: Range<Position<IndexType>>) {
