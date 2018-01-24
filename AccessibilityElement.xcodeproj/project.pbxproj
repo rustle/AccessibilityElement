@@ -18,7 +18,6 @@
 		91196121200FE7250073A998 /* TreeElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91196120200FE7250073A998 /* TreeElement.swift */; };
 		91196123200FE79E0073A998 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91196122200FE79E0073A998 /* Dictionary.swift */; };
 		91196125200FE7D80073A998 /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91196124200FE7D80073A998 /* Frame.swift */; };
-		911EF54520139C6900CA3E0E /* Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911EF54420139C6900CA3E0E /* Signal.swift */; };
 		914E28BC1FF83E3700765FCE /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28BB1FF83E3700765FCE /* Observer.swift */; };
 		914E28C21FF8736700765FCE /* CF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28C11FF8736700765FCE /* CF.swift */; };
 		914E28D41FF9DCF000765FCE /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28D31FF9DCF000765FCE /* Controller.swift */; };
@@ -42,6 +41,7 @@
 		917FEA45201136270036280E /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917FEA44201136270036280E /* Position.swift */; };
 		917FEA4920113EF90036280E /* TextMarker.h in Headers */ = {isa = PBXBuildFile; fileRef = 917FEA4720113EF90036280E /* TextMarker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		917FEA4A20113EF90036280E /* TextMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 917FEA4820113EF90036280E /* TextMarker.m */; };
+		91924AB92019255100F431FF /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91924ABA2019255100F431FF /* Signals.framework */; };
 		91BF2DE81FF17FE400FB993D /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */; };
 		91BF2DED1FF17FE400FB993D /* HierarchyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BF2DEC1FF17FE400FB993D /* HierarchyTests.swift */; };
 		91BF2DEF1FF17FE400FB993D /* AccessibilityElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -76,7 +76,6 @@
 		91196120200FE7250073A998 /* TreeElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeElement.swift; sourceTree = "<group>"; };
 		91196122200FE79E0073A998 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		91196124200FE7D80073A998 /* Frame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Frame.swift; sourceTree = "<group>"; };
-		911EF54420139C6900CA3E0E /* Signal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Signal.swift; path = ../../Signals/Signals/Signal.swift; sourceTree = "<group>"; };
 		914E28BB1FF83E3700765FCE /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		914E28C11FF8736700765FCE /* CF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CF.swift; sourceTree = "<group>"; };
 		914E28D31FF9DCF000765FCE /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
@@ -100,6 +99,7 @@
 		917FEA44201136270036280E /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Position.swift; path = AccessibilityElement/Position.swift; sourceTree = SOURCE_ROOT; };
 		917FEA4720113EF90036280E /* TextMarker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextMarker.h; sourceTree = "<group>"; };
 		917FEA4820113EF90036280E /* TextMarker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextMarker.m; sourceTree = "<group>"; };
+		91924ABA2019255100F431FF /* Signals.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Signals.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91BF2DDE1FF17FE400FB993D /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91BF2DE11FF17FE400FB993D /* AccessibilityElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccessibilityElement.h; sourceTree = "<group>"; };
 		91BF2DE21FF17FE400FB993D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -120,6 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91924AB92019255100F431FF /* Signals.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,12 +195,21 @@
 			path = EventHandler;
 			sourceTree = "<group>";
 		};
+		91924AB82019255100F431FF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				91924ABA2019255100F431FF /* Signals.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		91BF2DD41FF17FE400FB993D = {
 			isa = PBXGroup;
 			children = (
 				91BF2DE01FF17FE400FB993D /* AccessibilityElement */,
 				91BF2DEB1FF17FE400FB993D /* AccessibilityElementTests */,
 				91BF2DDF1FF17FE400FB993D /* Products */,
+				91924AB82019255100F431FF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -235,7 +245,6 @@
 				914E28F61FFB297A00765FCE /* Debug.swift */,
 				917FEA4720113EF90036280E /* TextMarker.h */,
 				917FEA4820113EF90036280E /* TextMarker.m */,
-				911EF54420139C6900CA3E0E /* Signal.swift */,
 				91BF2DE21FF17FE400FB993D /* Info.plist */,
 			);
 			path = AccessibilityElement;
@@ -383,7 +392,6 @@
 				917E54A3200427E800D490A8 /* Button.swift in Sources */,
 				9111CF30200703D1006B56AA /* AttributedString.swift in Sources */,
 				91187E3E2010592D004DA209 /* WebArea.swift in Sources */,
-				911EF54520139C6900CA3E0E /* Signal.swift in Sources */,
 				91BF2DF91FF1800700FB993D /* Element.swift in Sources */,
 				914E28BC1FF83E3700765FCE /* Observer.swift in Sources */,
 				91187E4220107241004DA209 /* SelectionChange.swift in Sources */,
