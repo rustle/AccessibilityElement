@@ -229,6 +229,9 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
         guard let title = try? node.element.title() else {
             return "unknown application"
         }
+        if let focusedElement = try? _node._element.applicationFocusedElement() {
+            focusChanged(element: focusedElement)
+        }
         return title
     }
     public mutating func focusOut() -> String? {
