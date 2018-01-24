@@ -13,7 +13,6 @@ public protocol AnyEventHandler {
     func makeController() throws -> AnyController
     mutating func connect()
     mutating func focusIn() -> String?
-    mutating func valueChanged() -> String?
     mutating func focusOut() -> String?
     mutating func disconnect()
 }
@@ -39,8 +38,5 @@ public extension EventHandler {
     }
     public func makeController() throws -> AnyController {
         return try Controller<ElementType, Self>(eventHandler: self)
-    }
-    public mutating func valueChanged() -> String? {
-        return nil
     }
 }
