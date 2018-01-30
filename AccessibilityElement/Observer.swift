@@ -6,6 +6,7 @@
 
 import Foundation
 import Signals
+import CoreFoundationOverlay
 
 public typealias ObserverSignalData = (element: Element, info: ObserverInfo?)
 public typealias ObserverInfo = [String:Any]

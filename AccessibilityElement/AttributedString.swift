@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import os.log
+import CoreFoundationOverlay
 
 extension NSRange {
     func range() -> Range<Int> {

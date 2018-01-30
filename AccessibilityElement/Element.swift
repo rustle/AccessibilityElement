@@ -37,6 +37,10 @@ public protocol AnyElement {
     func set(enhancedUserInterface: Bool) throws
 }
 
+public enum _ElementError : Swift.Error {
+    case unimplemented
+}
+
 public protocol _Element : AnyElement, TreeElement, Hashable {
     func titleElement() throws -> Self
     func parent() throws -> Self
@@ -81,6 +85,70 @@ extension _Element {
         default:
             return false
         }
+    }
+    
+    public func titleElement() throws -> Self {
+        throw _ElementError.unimplemented
+    }
+    public func parent() throws -> Self {
+        throw _ElementError.unimplemented
+    }
+    public func children() throws -> [Self] {
+        throw _ElementError.unimplemented
+    }
+    public func topLevelElement() throws -> Self {
+        throw _ElementError.unimplemented
+    }
+    public func applicationFocusedElement() throws -> Self {
+        throw _ElementError.unimplemented
+    }
+    public func role() throws -> NSAccessibilityRole {
+        throw _ElementError.unimplemented
+    }
+    public func roleDescription() throws -> String {
+        throw _ElementError.unimplemented
+    }
+    public func subrole() throws -> NSAccessibilitySubrole {
+        throw _ElementError.unimplemented
+    }
+    public func value() throws -> Any {
+        throw _ElementError.unimplemented
+    }
+    public func attributedString(range: Range<Int>) throws -> NSAttributedString {
+        throw _ElementError.unimplemented
+    }
+    public func numberOfCharacters() throws -> Int {
+        throw _ElementError.unimplemented
+    }
+    public func description() throws -> String {
+        throw _ElementError.unimplemented
+    }
+    public func title() throws -> String {
+        throw _ElementError.unimplemented
+    }
+    public func isKeyboardFocused() throws -> Bool {
+        throw _ElementError.unimplemented
+    }
+    public func frame() throws -> Frame {
+        throw _ElementError.unimplemented
+    }
+    public func caretBrowsingEnabled() throws -> Bool {
+        throw _ElementError.unimplemented
+    }
+    public func set(caretBrowsing: Bool) throws {
+        throw _ElementError.unimplemented
+    }
+    public func range<IndexType>(unorderedPositions: (first: Position<IndexType>, second: Position<IndexType>)) throws -> Range<Position<IndexType>> {
+        throw _ElementError.unimplemented
+    }
+    public func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString {
+        throw _ElementError.unimplemented
+    }
+    public func enhancedUserInterface() throws -> Bool {
+        throw _ElementError.unimplemented
+    }
+    public func set(enhancedUserInterface: Bool) throws {
+        throw _ElementError.unimplemented
     }
 }
 
