@@ -47,6 +47,7 @@ public protocol _Element : AnyElement, TreeElement, Hashable {
     func children() throws -> [Self]
     func topLevelElement() throws -> Self
     func applicationFocusedElement() throws -> Self
+    func windows() throws -> [Self]
 }
 
 extension _Element {
@@ -148,6 +149,9 @@ extension _Element {
         throw _ElementError.unimplemented
     }
     public func set(enhancedUserInterface: Bool) throws {
+        throw _ElementError.unimplemented
+    }
+    public func windows() throws -> [Self] {
         throw _ElementError.unimplemented
     }
 }
@@ -308,6 +312,9 @@ public struct Element : _Element {
     }
     public func set(enhancedUserInterface: Bool) throws {
         try set(attribute: NSAccessibilityAttributeName.enhancedUserInterface, bool: enhancedUserInterface)
+    }
+    public func windows() throws -> [Element] {
+        throw _ElementError.unimplemented
     }
 
     public func frame() throws -> Frame {
