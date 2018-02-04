@@ -36,6 +36,7 @@ public protocol AnyElement {
     func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString
     func enhancedUserInterface() throws -> Bool
     func set(enhancedUserInterface: Bool) throws
+    func selectedTextRanges() throws -> [Range<Position<Int>>]
 }
 
 public enum _ElementError : Swift.Error {
@@ -156,6 +157,9 @@ extension _Element {
         throw _ElementError.unimplemented
     }
     public func url() throws -> URL {
+        throw _ElementError.unimplemented
+    }
+    public func selectedTextRanges() throws -> [Range<Position<Int>>] {
         throw _ElementError.unimplemented
     }
 }
