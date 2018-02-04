@@ -21,53 +21,56 @@ public struct Position<IndexType> : AnyPosition {
         self.element = element
     }
     public static func <(lhs: Position<IndexType>, rhs: Position<IndexType>) -> Bool {
+        if IndexType.self == Int.self {
+            return (lhs as! Position<Int>).index < (rhs as! Position<Int>).index
+        } else if IndexType.self == AXTextMarker.self {
+            if CFGetTypeID(lhs.index as CFTypeRef) != accessibility_element_get_marker_type_id() {
+                fatalError()
+            }
+            do {
+                let range = try lhs.element.range(unorderedPositions: (lhs, rhs))
+                if range.lowerBound == range.upperBound {
+                    return false
+                }
+                return range.lowerBound == lhs
+            } catch {
+                return false
+            }
+        }
         fatalError()
     }
     public static func >(lhs: Position<IndexType>, rhs: Position<IndexType>) -> Bool {
+        if IndexType.self == Int.self {
+            return (lhs as! Position<Int>).index > (rhs as! Position<Int>).index
+        } else if IndexType.self == AXTextMarker.self {
+            if CFGetTypeID(lhs.index as CFTypeRef) != accessibility_element_get_marker_type_id() {
+                fatalError()
+            }
+            do {
+                let range = try lhs.element.range(unorderedPositions: (lhs, rhs))
+                if range.lowerBound == range.upperBound {
+                    return false
+                }
+                return range.upperBound == lhs
+            } catch {
+                return false
+            }
+        }
         fatalError()
     }
     public static func ==(lhs: Position<IndexType>, rhs: Position<IndexType>) -> Bool {
+        if IndexType.self == Int.self {
+            return (lhs as! Position<Int>).index == (rhs as! Position<Int>).index
+        } else if IndexType.self == AXTextMarker.self {
+            return CFEqual(lhs.index as CFTypeRef, rhs.index as CFTypeRef)
+        }
         fatalError()
     }
 }
 
-public extension Position where IndexType == AXTextMarker {
-    public static func <(lhs: Position<AXTextMarker>, rhs: Position<AXTextMarker>) -> Bool {
-        do {
-            let range = try lhs.element.range(unorderedPositions: (lhs, rhs))
-            if range.lowerBound == range.upperBound {
-                return false
-            }
-            return range.lowerBound == lhs
-        } catch {
-            return false
-        }
-    }
-    public static func >(lhs: Position<AXTextMarker>, rhs: Position<AXTextMarker>) -> Bool {
-        do {
-            let range = try lhs.element.range(unorderedPositions: (lhs, rhs))
-            if range.lowerBound == range.upperBound {
-                return false
-            }
-            return range.upperBound == lhs
-        } catch {
-            return false
-        }
-    }
-    public static func ==(lhs: Position<AXTextMarker>, rhs: Position<AXTextMarker>) -> Bool {
-        return CFEqual(lhs.index, rhs.index)
-    }
-}
-
-public extension Position where IndexType == Int {
-    public static func <(lhs: Position<Int>, rhs: Position<Int>) -> Bool {
-        return lhs < rhs
-    }
-    public static func >(lhs: Position<Int>, rhs: Position<Int>) -> Bool {
-        return lhs > rhs
-    }
-    public static func ==(lhs: Position<Int>, rhs: Position<Int>) -> Bool {
-        return lhs == rhs
+extension Position : CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "\(index)"
     }
 }
 
