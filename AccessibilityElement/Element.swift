@@ -27,6 +27,7 @@ public protocol AnyElement {
     func numberOfCharacters() throws -> Int
     func description() throws -> String
     func title() throws -> String
+    func url() throws -> URL
     func isKeyboardFocused() throws -> Bool
     func frame() throws -> Frame
     func caretBrowsingEnabled() throws -> Bool
@@ -152,6 +153,9 @@ extension _Element {
         throw _ElementError.unimplemented
     }
     public func windows() throws -> [Self] {
+        throw _ElementError.unimplemented
+    }
+    public func url() throws -> URL {
         throw _ElementError.unimplemented
     }
 }
@@ -312,9 +316,6 @@ public struct Element : _Element {
     }
     public func set(enhancedUserInterface: Bool) throws {
         try set(attribute: NSAccessibilityAttributeName.enhancedUserInterface, bool: enhancedUserInterface)
-    }
-    public func windows() throws -> [Element] {
-        throw _ElementError.unimplemented
     }
 
     public func frame() throws -> Frame {

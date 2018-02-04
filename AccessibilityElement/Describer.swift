@@ -36,6 +36,7 @@ public class Describer<ElementType> where ElementType : _Element {
         case toggleValue
         case checkboxValue
         case attachmentText
+        case fileName
     }
     public struct Single : DescriberRequest {
         public let required: Bool
@@ -136,6 +137,8 @@ public class Describer<ElementType> where ElementType : _Element {
                 os_log("attributed text error: %@", error.localizedDescription)
             }
             return nil
+        case .fileName:
+            return try? element.url().lastPathComponent
         }
     }
     public enum Error : Swift.Error {
@@ -155,6 +158,9 @@ public class Describer<ElementType> where ElementType : _Element {
                 var value: String?
                 for attribute in fall.attributes {
                     value = self.value(attribute: attribute, element: element)
+                    if let temp = value, temp.count == 0 {
+                        value = nil
+                    }
                     if value != nil {
                         break
                     }
