@@ -23,7 +23,8 @@ public protocol AnyElement {
     func roleDescription() throws -> String
     func subrole() throws -> NSAccessibilitySubrole
     func value() throws -> Any
-    func attributedString(range: Range<Int>) throws -> NSAttributedString
+    func string<IndexType>(range: Range<Position<IndexType>>) throws -> String
+    func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString
     func numberOfCharacters() throws -> Int
     func description() throws -> String
     func title() throws -> String
@@ -33,7 +34,6 @@ public protocol AnyElement {
     func caretBrowsingEnabled() throws -> Bool
     func set(caretBrowsing: Bool) throws
     func range<IndexType>(unorderedPositions: (first: Position<IndexType>, second: Position<IndexType>)) throws -> Range<Position<IndexType>>
-    func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString
     func enhancedUserInterface() throws -> Bool
     func set(enhancedUserInterface: Bool) throws
     func selectedTextRanges() throws -> [Range<Position<Int>>]
@@ -117,7 +117,10 @@ extension _Element {
     public func value() throws -> Any {
         throw _ElementError.unimplemented
     }
-    public func attributedString(range: Range<Int>) throws -> NSAttributedString {
+    public func string<IndexType>(range: Range<Position<IndexType>>) throws -> String {
+        throw _ElementError.unimplemented
+    }
+    public func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString {
         throw _ElementError.unimplemented
     }
     public func numberOfCharacters() throws -> Int {
@@ -142,9 +145,6 @@ extension _Element {
         throw _ElementError.unimplemented
     }
     public func range<IndexType>(unorderedPositions: (first: Position<IndexType>, second: Position<IndexType>)) throws -> Range<Position<IndexType>> {
-        throw _ElementError.unimplemented
-    }
-    public func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString {
         throw _ElementError.unimplemented
     }
     public func enhancedUserInterface() throws -> Bool {
@@ -243,6 +243,44 @@ public struct Element : _Element {
     public func value() throws -> Any {
         return try element.value(attribute: .value)
     }
+    public func string<IndexType>(range: Range<Position<IndexType>>) throws -> String {
+        if let range = range as? Range<Position<Int>> {
+            let value = try element.parameterizedValue(attribute: .stringForRange,
+                                                       parameter: AXValue.range(range.lowerBound.index..<range.upperBound.index))
+            guard let string = value as? String else {
+                throw AccessibilityError.typeMismatch
+            }
+            return string
+        }
+        guard let axTextMarkerRange = (range as! Range<Position<AXTextMarker>>).axTextMarkerRange else {
+            throw AccessibilityError.invalidInput
+        }
+        let value = try element.parameterizedValue(attribute: NSAccessibilityParameterizedAttributeName(rawValue: "AXStringForTextMarkerRange"),
+                                                   parameter: axTextMarkerRange)
+        guard let string = value as? String else {
+            throw AccessibilityError.typeMismatch
+        }
+        return string
+    }
+    public func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString {
+        if let range = range as? Range<Position<Int>> {
+            let value = try element.parameterizedValue(attribute: .attributedStringForRange,
+                                                       parameter: AXValue.range(range.lowerBound.index..<range.upperBound.index))
+            guard let string = value as? NSAttributedString else {
+                throw AccessibilityError.typeMismatch
+            }
+            return AttributedString(attributedString: string)
+        }
+        guard let axTextMarkerRange = (range as! Range<Position<AXTextMarker>>).axTextMarkerRange else {
+            throw AccessibilityError.invalidInput
+        }
+        let value = try element.parameterizedValue(attribute: NSAccessibilityParameterizedAttributeName(rawValue: "AXAttributedStringForTextMarkerRange"),
+                                                   parameter: axTextMarkerRange)
+        guard let string = value as? NSAttributedString else {
+            throw AccessibilityError.typeMismatch
+        }
+        return AttributedString(attributedString: string)
+    }
     public func description() throws -> String {
         return try string(attribute: .description)
     }
@@ -260,13 +298,6 @@ public struct Element : _Element {
     }
     public func children() throws -> [Element] {
         return try elements(attribute: .children)
-    }
-    public func attributedString(range: Range<Int>) throws -> NSAttributedString {
-        let value = try element.parameterizedValue(attribute: .attributedStringForRange, parameter: AXValue.range(range))
-        guard let string = value as? NSAttributedString else {
-            throw AccessibilityError.typeMismatch
-        }
-        return string
     }
     public func numberOfCharacters() throws -> Int {
         return try int(attribute: .numberOfCharacters)
@@ -300,20 +331,6 @@ public struct Element : _Element {
         }
         let range = value as AXTextMarkerRange
         return Range(range, element: self) as! Range<Position<IndexType>>
-    }
-    public func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString {
-        if IndexType.self == Int.self {
-            throw AccessibilityError.typeMismatch
-        }
-        guard let axTextMarkerRange = (range as! Range<Position<AXTextMarker>>).axTextMarkerRange else {
-            throw AccessibilityError.invalidInput
-        }
-        let value = try element.parameterizedValue(attribute: NSAccessibilityParameterizedAttributeName(rawValue: "AXAttributedStringForTextMarkerRange"),
-                                                   parameter: axTextMarkerRange)
-        guard let attributedString = value as? NSAttributedString else {
-            throw AccessibilityError.typeMismatch
-        }
-        return AttributedString(attributedString: attributedString)
     }
     public func enhancedUserInterface() throws -> Bool {
         return try bool(attribute: NSAccessibilityAttributeName.enhancedUserInterface)

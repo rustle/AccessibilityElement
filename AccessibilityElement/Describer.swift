@@ -120,7 +120,7 @@ public class Describer<ElementType> where ElementType : _Element {
         case .attachmentText:
             do {
                 let count = try element.numberOfCharacters()
-                let string = AttributedString(attributedString: try element.attributedString(range: 0..<count))
+                let string = try element.attributedString(range: Position(index: 0, element: element)..<Position(index: count, element: element))
                 for (range, attributes) in string {
                     for attribute in attributes {
                         switch attribute {
