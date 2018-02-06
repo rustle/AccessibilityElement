@@ -28,6 +28,7 @@
 		9173AAF120290EF400B41819 /* ObserverError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173AAF020290EF400B41819 /* ObserverError.swift */; };
 		9173AAF320290F9200B41819 /* SystemObserverProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173AAF220290F9200B41819 /* SystemObserverProviding.swift */; };
 		9173AAF52029159300B41819 /* ObserverProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173AAF42029159300B41819 /* ObserverProviding.swift */; };
+		9173AAFA202A5E6C00B41819 /* ObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173AAF9202A5E6C00B41819 /* ObserverTests.swift */; };
 		917E5469200194F400D490A8 /* MockElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E5468200194F400D490A8 /* MockElement.swift */; };
 		917E546B2002E48E00D490A8 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E546A2002E48E00D490A8 /* Application.swift */; };
 		917E546D2002F76400D490A8 /* EventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E546C2002F76400D490A8 /* EventHandler.swift */; };
@@ -86,6 +87,7 @@
 		9173AAF020290EF400B41819 /* ObserverError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverError.swift; sourceTree = "<group>"; };
 		9173AAF220290F9200B41819 /* SystemObserverProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemObserverProviding.swift; sourceTree = "<group>"; };
 		9173AAF42029159300B41819 /* ObserverProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverProviding.swift; sourceTree = "<group>"; };
+		9173AAF9202A5E6C00B41819 /* ObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverTests.swift; sourceTree = "<group>"; };
 		917E5468200194F400D490A8 /* MockElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockElement.swift; sourceTree = "<group>"; };
 		917E546A2002E48E00D490A8 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		917E546C2002F76400D490A8 /* EventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHandler.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				91BF2DEC1FF17FE400FB993D /* HierarchyTests.swift */,
 				917E5468200194F400D490A8 /* MockElement.swift */,
 				9111CF3120072303006B56AA /* AttributedStringsTest.swift */,
+				9173AAF9202A5E6C00B41819 /* ObserverTests.swift */,
 				91BF2DEE1FF17FE400FB993D /* Info.plist */,
 			);
 			path = AccessibilityElementTests;
@@ -419,6 +422,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9111CF3220072303006B56AA /* AttributedStringsTest.swift in Sources */,
+				9173AAFA202A5E6C00B41819 /* ObserverTests.swift in Sources */,
 				917E5469200194F400D490A8 /* MockElement.swift in Sources */,
 				91BF2DED1FF17FE400FB993D /* HierarchyTests.swift in Sources */,
 			);

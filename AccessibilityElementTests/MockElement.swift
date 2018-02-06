@@ -52,8 +52,14 @@ final class MockElement : _Element {
     static var systemWide: MockElement {
         fatalError()
     }
-    static func application(processIdentifier: Int) -> Self {
-        fatalError()
+    static func application(processIdentifier: Int) -> MockElement {
+        return MockElement(uniqueID: 1,
+                           role: .application,
+                           subrole: nil,
+                           value: nil,
+                           description: nil,
+                           title: nil,
+                           isKeyboardFocused: nil)
     }
     private let uniqueID: Int
     private var _role: NSAccessibilityRole?
@@ -97,6 +103,9 @@ final class MockElement : _Element {
     }
     func children() throws -> [MockElement] {
         return try unwrap(_children)
+    }
+    var processIdentifier: Int {
+        return uniqueID
     }
     init(uniqueID: Int,
          role: NSAccessibilityRole? = nil,
