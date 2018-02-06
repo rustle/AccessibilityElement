@@ -6,7 +6,8 @@
 
 import Foundation
 
-public struct DefaultEventHandler<ElementType> : EventHandler where ElementType : _Element {
+public struct DefaultEventHandler<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+    public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Fallthrough(required: true, attributes: [.title, .description, .stringValue, .titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.title, .description, .stringValue]))]),
@@ -14,10 +15,12 @@ public struct DefaultEventHandler<ElementType> : EventHandler where ElementType 
         ]
         return requests
     }
-    public weak var _controller: Controller<ElementType, DefaultEventHandler<ElementType>>?
+    public weak var _controller: Controller<ElementType, DefaultEventHandler<ObserverProvidingType>>?
     public let _node: Node<ElementType>
-    public init(node: Node<ElementType>) {
+    public let observerManager: ObserverManager<ObserverProvidingType>
+    public init(node: Node<ElementType>, observerManager: ObserverManager<ObserverProvidingType>) {
         _node = node
+        self.observerManager = observerManager
     }
     public mutating func connect() {
         

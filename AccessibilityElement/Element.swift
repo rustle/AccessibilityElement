@@ -37,6 +37,7 @@ public protocol AnyElement {
     func enhancedUserInterface() throws -> Bool
     func set(enhancedUserInterface: Bool) throws
     func selectedTextRanges() throws -> [Range<Position<Int>>]
+    var processIdentifier: Int { get }
 }
 
 public enum _ElementError : Swift.Error {
@@ -44,6 +45,8 @@ public enum _ElementError : Swift.Error {
 }
 
 public protocol _Element : AnyElement, TreeElement, Hashable {
+    static var systemWide: Self { get }
+    static func application(processIdentifier: Int) -> Self
     func titleElement() throws -> Self
     func parent() throws -> Self
     func children() throws -> [Self]
@@ -162,12 +165,18 @@ extension _Element {
     public func selectedTextRanges() throws -> [Range<Position<Int>>] {
         throw _ElementError.unimplemented
     }
+    public var processIdentifier: Int {
+        return 0
+    }
 }
 
 public struct Element : _Element {
-    static var systemWide: Element = {
+    public static var systemWide: Element = {
         Element(element: AXUIElement.systemWide())
     }()
+    public static func application(processIdentifier: Int) -> Element {
+        return Element(element: AXUIElement.application(processIdentifier: processIdentifier))
+    }
     let element: AXUIElement
     public init(element: AXUIElement) {
         self.element = element

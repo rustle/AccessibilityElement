@@ -16,15 +16,18 @@ public extension Array {
     }
 }
 
-public struct Application<ElementType> : EventHandler where ElementType : _Element {
+public struct Application<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+    public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         return []
     }
     public var output: ((String) -> Void)?
-    public weak var _controller: Controller<ElementType, Application<ElementType>>?
+    public weak var _controller: Controller<ElementType, Application<ObserverProvidingType>>?
     public let _node: Node<ElementType>
-    public init(node: Node<ElementType>) {
+    public init(node: Node<ElementType>, observerManager: ObserverManager<ObserverProvidingType>) {
         _node = node
+        self.observerManager = observerManager
+        focus = Focus(observerManager: observerManager)
     }
     private enum Error : Swift.Error {
         case invalidElement
@@ -32,7 +35,7 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
         case nilController
     }
     // MARK: Window State
-    private var windowTokenMap = [Element:ApplicationObserver.Token]()
+    private var windowTokenMap = [ObserverProvidingType.ElementType:ApplicationObserver<ObserverProvidingType>.Token]()
     private var childrenDirty = false
     private mutating func rebuildChildrenIfNeeded() {
         guard let controller = _controller else {
@@ -43,7 +46,7 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
             childrenDirty = false
         }
     }
-    private mutating func destroyed(window: Element) {
+    private mutating func destroyed(window: ElementType) {
         guard let (_, _, observer) = try? observerContext() else {
             return
         }
@@ -57,7 +60,7 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
         }
         childrenDirty = true
     }
-    private mutating func created(window: Element) {
+    private mutating func created(window: ElementType) {
         childrenDirty = true
         guard let (controller, _, observer) = try? observerContext() else {
             return
@@ -75,7 +78,12 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
         focusChanged(element: focusedElement)
     }
     // MARK: Focused UI Element
-    private struct Focus<ElementType> where ElementType : _Element {
+    private struct Focus<ObserverProvidingType> where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+        typealias ElementType = ObserverProvidingType.ElementType
+        let observerManager: ObserverManager<ObserverProvidingType>
+        init(observerManager: ObserverManager<ObserverProvidingType>) {
+            self.observerManager = observerManager
+        }
         var focusedContainer: _Controller<ElementType>?
         var focusedController: _Controller<ElementType>?
         mutating func set(focusedContainerNode: Node<ElementType>?,
@@ -84,7 +92,8 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
             var focusedContainer: _Controller<ElementType>?
             if let focusedContainerNode = focusedContainerNode {
                 do {
-                    let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedContainerNode)
+                    let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedContainerNode,
+                                                                                     observerManager:observerManager)
                     focusedContainer = (try eventHandler.makeController()) as? _Controller<ElementType>
                     focusedContainer?.applicationController = applicationController
                 } catch {
@@ -94,7 +103,8 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
             var focusedController: _Controller<ElementType>?
             if let focusedControllerNode = focusedControllerNode {
                 do {
-                    let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedControllerNode)
+                    let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedControllerNode,
+                                                                                     observerManager:observerManager)
                     focusedController = (try eventHandler.makeController()) as? _Controller<ElementType>
                     focusedController?.applicationController = applicationController
                 } catch {
@@ -134,7 +144,7 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
             }
         }
     }
-    private var focus = Focus<ElementType>()
+    private var focus: Focus<ObserverProvidingType>
     private let hierarchy = DefaultHierarchy<ElementType>()
     private func findContainer(element: ElementType) throws -> ElementType {
         var current: ElementType? = element
@@ -169,19 +179,18 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
         }
     }
     // MARK: Observers
-    public func observerContext() throws -> (Controller<Element, Application>, Element, ApplicationObserver) {
-        guard let controller = _controller as? Controller<Element, Application> else {
-            throw Application.Error.invalidElement
+    public let observerManager: ObserverManager<ObserverProvidingType>
+    public func observerContext() throws -> (Controller<ElementType, Application>, ElementType, ApplicationObserver<ObserverProvidingType>) {
+        guard let controller = _controller else {
+            throw Application.Error.nilController
         }
-        guard let element = _node._element as? Element else {
-            throw Application.Error.invalidElement
-        }
-        let observer = try ObserverManager.shared.registerObserver(application: element)
+        let element = _node._element
+        let observer = try observerManager.registerObserver(application: element)
         return (controller, element, observer)
     }
-    private var onFocusedUIElementChanged: SignalSubscription<ObserverSignalData>?
-    private var onWindowCreated: SignalSubscription<ObserverSignalData>?
-    private var onFocusedWindowChanged: SignalSubscription<ObserverSignalData>?
+    private var onFocusedUIElementChanged: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
+    private var onWindowCreated: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
+    private var onFocusedWindowChanged: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
     private mutating func registerObservers() throws {
         let (controller, element, observer) = try observerContext()
         onWindowCreated = try observer.signal(element: element,
@@ -190,13 +199,12 @@ public struct Application<ElementType> : EventHandler where ElementType : _Eleme
         }
         onFocusedUIElementChanged = try observer.signal(element: element,
                                                         notification: .focusedUIElementChanged).subscribe { [weak controller] in
-            controller?._eventHandler.focusChanged(element: $0.element as! ElementType)
+            controller?._eventHandler.focusChanged(element: $0.element)
         }
-        onFocusedWindowChanged = try observer.signal(element: element,
-                                                     notification: .focusedWindowChanged).subscribe { [weak controller] in
-                                                        controller?._eventHandler.focusChanged(window: $0.element)
-        }
-
+//        onFocusedWindowChanged = try observer.signal(element: element,
+//                                                     notification: .focusedWindowChanged).subscribe { [weak controller] in
+//            controller?._eventHandler.focusChanged(window: $0.element)
+//        }
     }
     private mutating func unregisterObservers() {
         onWindowCreated?.cancel()

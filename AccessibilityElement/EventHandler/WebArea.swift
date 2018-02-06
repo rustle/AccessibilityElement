@@ -7,14 +7,17 @@
 import Foundation
 import Signals
 
-public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
+public struct WebArea<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+    public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         return []
     }
-    public weak var _controller: Controller<ElementType, WebArea<ElementType>>?
+    public weak var _controller: Controller<ElementType, WebArea<ObserverProvidingType>>?
     public let _node: Node<ElementType>
-    public init(node: Node<ElementType>) {
+    public let observerManager: ObserverManager<ObserverProvidingType>
+    public init(node: Node<ElementType>, observerManager: ObserverManager<ObserverProvidingType>) {
         _node = node
+        self.observerManager = observerManager
     }
     public mutating func connect() {
         _ = try? _node._element.set(caretBrowsing: true)
@@ -29,35 +32,28 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
     public mutating func disconnect() {
         unregisterObservers()
     }
-    private mutating func observer() -> ApplicationObserver? {
-        if let element = _controller?.applicationController?.node._element as? Element {
-            return try? ObserverManager.shared.registerObserver(application: element)
-        }
-        return nil
-    }
-    private var selectionChangeSignal: SignalSubscription<ObserverSignalData>?
+    private var selectionChangeSignal: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
     private mutating func registerObservers() {
-        guard
-            let controller = _controller,
-            let element = controller.eventHandler.node.element as? Element,
-            let observer = observer()
-        else {
+        guard let applicationController = (_controller?.applicationController) as? Controller<Element, Application<ObserverProvidingType>> else {
+            return
+        }
+        guard let (controller, _, observer) = try? applicationController._eventHandler.observerContext() else {
             return
         }
         func registerSelectionChange() throws {
             guard selectionChangeSignal == nil else {
                 return
             }
-            selectionChangeSignal = try observer.signal(element: element, notification: .selectedTextChanged).subscribe { [weak controller] element, info in
-                guard let info = info, let controller = controller else {
-                    return
-                }
-                let element = controller._eventHandler._node.element
-                guard let selectionChange = SelectionChange(info: info, element: element) else {
-                    return
-                }
-                controller._eventHandler.handle(selectionChange: selectionChange)
-            }
+//            selectionChangeSignal = try observer.signal(element: element, notification: .selectedTextChanged).subscribe { [weak controller] element, info in
+//                guard let info = info, let controller = controller else {
+//                    return
+//                }
+//                let element = controller._eventHandler._node.element
+//                guard let selectionChange = SelectionChange(info: info, element: element) else {
+//                    return
+//                }
+//                controller._eventHandler.handle(selectionChange: selectionChange)
+//            }
         }
         try? registerSelectionChange()
     }
@@ -69,7 +65,7 @@ public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
     private func echo<IndexType>(range: Range<Position<IndexType>>) {
         do {
             let value = try _node._element.attributedString(range: range)
-            guard let applicationController = (_controller?.applicationController) as? Controller<Element, Application<Element>> else {
+            guard let applicationController = (_controller?.applicationController) as? Controller<ElementType, Application<ObserverProvidingType>> else {
                 return
             }
             applicationController._eventHandler.output?(value.string)

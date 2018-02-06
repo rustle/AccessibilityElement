@@ -18,10 +18,12 @@ public protocol AnyEventHandler {
 }
 
 public protocol EventHandler : AnyEventHandler {
-    associatedtype ElementType : _Element
+    associatedtype ObserverProvidingType : ObserverProviding where ObserverProvidingType.ElementType : _Element
+    typealias ElementType = ObserverProvidingType.ElementType
     var _node: Node<ElementType> { get }
     weak var _controller: Controller<ElementType, Self>? { get set }
-    init(node: Node<ElementType>)
+    var observerManager: ObserverManager<ObserverProvidingType> { get }
+    init(node: Node<ElementType>, observerManager: ObserverManager<ObserverProvidingType>)
 }
 
 public extension EventHandler {

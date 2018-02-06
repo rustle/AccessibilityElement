@@ -7,7 +7,8 @@
 import Foundation
 import os.log
 
-public struct Checkbox<ElementType> : EventHandler where ElementType : _Element {
+public struct Checkbox<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+    public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Fallthrough(required: true, attributes: [.titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.stringValue, .title, .description])), .title, .description, .stringValue]),
@@ -16,10 +17,12 @@ public struct Checkbox<ElementType> : EventHandler where ElementType : _Element 
             ]
         return requests
     }
-    public weak var _controller: Controller<ElementType, Checkbox<ElementType>>?
+    public weak var _controller: Controller<ElementType, Checkbox<ObserverProvidingType>>?
     public let _node: Node<ElementType>
-    public init(node: Node<ElementType>) {
+    public let observerManager: ObserverManager<ObserverProvidingType>
+    public init(node: Node<ElementType>, observerManager: ObserverManager<ObserverProvidingType>) {
         _node = node
+        self.observerManager = observerManager
     }
     public mutating func connect() {
         

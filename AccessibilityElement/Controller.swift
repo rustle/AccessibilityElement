@@ -73,11 +73,12 @@ public class Controller<ElementType, EventHandlerType> : _Controller<ElementType
         _eventHandler.controller = self
     }
     public func childControllers(node: Node<ElementType>) throws -> [_Controller<ElementType>] {
-        return try node.children.map { node in
-            let controller = try EventHandlerRegistrar.shared.eventHandler(node: node).makeController() as! _Controller<ElementType>
-            controller.parentController = self
-            return controller
-        }
+        return []
+//        return try node.children.map { node in
+//            let controller = try EventHandlerRegistrar.shared.eventHandler(node: node, observerManager: nil).makeController() as! _Controller<ElementType>
+//            controller.parentController = self
+//            return controller
+//        }
     }
     public override var node: Node<ElementType> {
         get {

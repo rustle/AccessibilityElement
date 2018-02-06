@@ -6,17 +6,20 @@
 
 import Foundation
 
-public struct StaticText<ElementType> : EventHandler where ElementType : _Element {
+public struct StaticText<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+    public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] = {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Single(required: true, attribute: .stringValue)
         ]
         return requests
     }()
-    public weak var _controller: Controller<ElementType, StaticText<ElementType>>?
+    public weak var _controller: Controller<ElementType, StaticText<ObserverProvidingType>>?
     public let _node: Node<ElementType>
-    public init(node: Node<ElementType>) {
+    public let observerManager: ObserverManager<ObserverProvidingType>
+    public init(node: Node<ElementType>, observerManager: ObserverManager<ObserverProvidingType>) {
         _node = node
+        self.observerManager = observerManager
     }
     public func connect() {
         

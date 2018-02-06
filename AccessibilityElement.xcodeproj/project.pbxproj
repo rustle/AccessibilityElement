@@ -24,6 +24,10 @@
 		914E28D41FF9DCF000765FCE /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28D31FF9DCF000765FCE /* Controller.swift */; };
 		914E28F71FFB297A00765FCE /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28F61FFB297A00765FCE /* Debug.swift */; };
 		914E296E1FFF163D00765FCE /* Hierarchy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E296D1FFF163D00765FCE /* Hierarchy.swift */; };
+		9173AAEF20290CF200B41819 /* ObserverSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173AAEE20290CF200B41819 /* ObserverSignal.swift */; };
+		9173AAF120290EF400B41819 /* ObserverError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173AAF020290EF400B41819 /* ObserverError.swift */; };
+		9173AAF320290F9200B41819 /* SystemObserverProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173AAF220290F9200B41819 /* SystemObserverProviding.swift */; };
+		9173AAF52029159300B41819 /* ObserverProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173AAF42029159300B41819 /* ObserverProviding.swift */; };
 		917E5469200194F400D490A8 /* MockElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E5468200194F400D490A8 /* MockElement.swift */; };
 		917E546B2002E48E00D490A8 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E546A2002E48E00D490A8 /* Application.swift */; };
 		917E546D2002F76400D490A8 /* EventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E546C2002F76400D490A8 /* EventHandler.swift */; };
@@ -78,6 +82,10 @@
 		914E28D31FF9DCF000765FCE /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
 		914E28F61FFB297A00765FCE /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		914E296D1FFF163D00765FCE /* Hierarchy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hierarchy.swift; sourceTree = "<group>"; };
+		9173AAEE20290CF200B41819 /* ObserverSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverSignal.swift; sourceTree = "<group>"; };
+		9173AAF020290EF400B41819 /* ObserverError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverError.swift; sourceTree = "<group>"; };
+		9173AAF220290F9200B41819 /* SystemObserverProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemObserverProviding.swift; sourceTree = "<group>"; };
+		9173AAF42029159300B41819 /* ObserverProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverProviding.swift; sourceTree = "<group>"; };
 		917E5468200194F400D490A8 /* MockElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockElement.swift; sourceTree = "<group>"; };
 		917E546A2002E48E00D490A8 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		917E546C2002F76400D490A8 /* EventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHandler.swift; sourceTree = "<group>"; };
@@ -213,6 +221,10 @@
 				91196120200FE7250073A998 /* TreeElement.swift */,
 				91BF2DF81FF1800700FB993D /* Element.swift */,
 				914E28BB1FF83E3700765FCE /* Observer.swift */,
+				9173AAEE20290CF200B41819 /* ObserverSignal.swift */,
+				9173AAF020290EF400B41819 /* ObserverError.swift */,
+				9173AAF42029159300B41819 /* ObserverProviding.swift */,
+				9173AAF220290F9200B41819 /* SystemObserverProviding.swift */,
 				9119611E200FE6CE0073A998 /* Node.swift */,
 				914E296D1FFF163D00765FCE /* Hierarchy.swift */,
 				91C5531920080228001CF14B /* Bundle.swift */,
@@ -360,6 +372,7 @@
 				91196125200FE7D80073A998 /* Frame.swift in Sources */,
 				9114A903200C471D00C294CC /* String.swift in Sources */,
 				917E54A1200423F200D490A8 /* StaticText.swift in Sources */,
+				9173AAF52029159300B41819 /* ObserverProviding.swift in Sources */,
 				914E28F71FFB297A00765FCE /* Debug.swift in Sources */,
 				917E546D2002F76400D490A8 /* EventHandler.swift in Sources */,
 				91C5531F200969F9001CF14B /* ScreenGrab.swift in Sources */,
@@ -373,7 +386,9 @@
 				9111CF30200703D1006B56AA /* AttributedString.swift in Sources */,
 				91187E3E2010592D004DA209 /* WebArea.swift in Sources */,
 				91BF2DF91FF1800700FB993D /* Element.swift in Sources */,
+				9173AAF320290F9200B41819 /* SystemObserverProviding.swift in Sources */,
 				914E28BC1FF83E3700765FCE /* Observer.swift in Sources */,
+				9173AAF120290EF400B41819 /* ObserverError.swift in Sources */,
 				91187E4220107241004DA209 /* SelectionChange.swift in Sources */,
 				917E54702002F7D800D490A8 /* Window.swift in Sources */,
 				914E296E1FFF163D00765FCE /* Hierarchy.swift in Sources */,
@@ -383,6 +398,7 @@
 				91BF2DFB1FF1F02200FB993D /* AXUIElement.swift in Sources */,
 				91BF2DFD1FF1F8AE00FB993D /* AXValue.swift in Sources */,
 				917E54A92004800C00D490A8 /* Describer.swift in Sources */,
+				9173AAEF20290CF200B41819 /* ObserverSignal.swift in Sources */,
 				91196123200FE79E0073A998 /* Dictionary.swift in Sources */,
 				917E54722002FA9B00D490A8 /* Default.swift in Sources */,
 				917FEA45201136270036280E /* Position.swift in Sources */,
