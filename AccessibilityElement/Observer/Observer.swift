@@ -69,7 +69,8 @@ public class ApplicationObserver<ObserverProvidingType> where ObserverProvidingT
         stop()
     }
     private lazy var signalMap = [ElementType:[NSAccessibilityNotificationName:ObserverSignal<ObserverProvidingType>]]()
-    public func signal(element: ObserverProvidingType.ElementType, notification: NSAccessibilityNotificationName) throws -> ObserverSignal<ObserverProvidingType> {
+    public func signal(element: ObserverProvidingType.ElementType,
+                       notification: NSAccessibilityNotificationName) throws -> ObserverSignal<ObserverProvidingType> {
         if let signal = signalMap[element]?[notification] {
             return signal
         }

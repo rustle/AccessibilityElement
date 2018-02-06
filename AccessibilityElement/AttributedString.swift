@@ -115,7 +115,7 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
         static let listItemLevel = NSAttributedStringKey(rawValue: kAXListItemLevelTextAttribute.takeUnretainedValue() as String) // CFNumber
     }
     public struct Font : Equatable, CustomDebugStringConvertible {
-        fileprivate struct Key {
+        struct Key {
             static let name = kAXFontNameKey.takeUnretainedValue() as String // String
             static let family = kAXFontFamilyKey.takeUnretainedValue() as String // String
             static let visibleName = kAXVisibleNameKey.takeUnretainedValue() as String // String
@@ -125,7 +125,7 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
         public var size: Int
         public var family: String?
         public var visibleName: String?
-        fileprivate init?(_ values: [String:Any]) {
+        init?(_ values: [String:Any]) {
             var n: String?
             var s: Int?
             for (key, value) in values {
@@ -137,6 +137,10 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
                 case Key.size:
                     if let int = value as? Int {
                         s = int
+                    } else if let double = value as? Double {
+                        s = Int(double)
+                    } else if let float = value as? Float {
+                        s = Int(float)
                     }
                 case Key.family:
                     family = value as? String

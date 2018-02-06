@@ -24,6 +24,16 @@ public final class Node<ElementType> : AnyNode where ElementType : AnyElement {
     }
 }
 
+#if swift(>=4.1)
+extension Node : Hashable where ElementType : Hashable {
+    public var hashValue: Int {
+        return _element.hashValue
+    }
+    public static func ==(lhs: Node<ElementType>, rhs: Node<ElementType>) -> Bool {
+        return lhs._element == rhs._element
+    }
+}
+#else
 extension Node where ElementType : Hashable {
     public var hashValue: Int {
         return _element.hashValue
@@ -32,6 +42,27 @@ extension Node where ElementType : Hashable {
         return lhs._element == rhs._element
     }
 }
+public struct HashableNode<ElementType> : Hashable, TreeElement where ElementType : _Element {
+    public let node: Node<ElementType>
+    public init(node: Node<ElementType>) {
+        self.node = node
+    }
+    public var hashValue: Int {
+        return node._element.hashValue
+    }
+    public static func ==(lhs: HashableNode<ElementType>, rhs: HashableNode<ElementType>) -> Bool {
+        return lhs.node._element == rhs.node._element
+    }
+    public func up() throws -> HashableNode<ElementType> {
+        return HashableNode(node: try node.up())
+    }
+    public func down() throws -> [HashableNode<ElementType>] {
+        return try node.down().map {
+            HashableNode(node: $0)
+        }
+    }
+}
+#endif
 
 extension Node : TreeElement {
     public func up() throws -> Node<ElementType> {

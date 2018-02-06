@@ -7,15 +7,21 @@
 import Foundation
 @testable import AccessibilityElement
 
-func compare<T>(lhs: T, rhs: Node<T>) -> Bool {
+func compare<T>(lhs: T, rhs: Node<T>) -> Bool where T : _Element {
     var flattenedLHS = [T]()
     lhs.walk { element in
         flattenedLHS.append(element)
     }
     var flattenedRHS = [T]()
+#if swift(>=4.1)
     rhs.walk { node in
-        flattenedRHS.append(node.element)
+        flattenedRHS.append(node._element)
     }
+#else
+    HashableNode(node: rhs).walk { node in
+        flattenedRHS.append(node.node._element)
+    }
+#endif
     return flattenedLHS == flattenedRHS
 }
 
@@ -43,6 +49,12 @@ func tree(_ element: MockElement, childrenProvider: (() -> [MockElement])?) -> M
 }
 
 final class MockElement : _Element {
+    static var systemWide: MockElement {
+        fatalError()
+    }
+    static func application(processIdentifier: Int) -> Self {
+        fatalError()
+    }
     private let uniqueID: Int
     private var _role: NSAccessibilityRole?
     private var _subrole: NSAccessibilitySubrole?
@@ -85,18 +97,6 @@ final class MockElement : _Element {
     }
     func children() throws -> [MockElement] {
         return try unwrap(_children)
-    }
-    func roleDescription() throws -> String {
-        throw AXUIElement.AXError.noValue
-    }
-    func attributedString(range: Range<Int>) throws -> NSAttributedString {
-        throw AXUIElement.AXError.noValue
-    }
-    func numberOfCharacters() throws -> Int {
-        throw AXUIElement.AXError.noValue
-    }
-    func titleElement() throws -> MockElement {
-        throw AXUIElement.AXError.noValue
     }
     init(uniqueID: Int,
          role: NSAccessibilityRole? = nil,
