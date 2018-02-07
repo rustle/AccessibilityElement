@@ -37,6 +37,8 @@ public protocol AnyElement {
     func enhancedUserInterface() throws -> Bool
     func set(enhancedUserInterface: Bool) throws
     func selectedTextRanges() throws -> [Range<Position<Int>>]
+    func line<IndexType>(position: Position<IndexType>) throws -> Int
+    func range<IndexType>(line: Int) throws -> Range<Position<IndexType>>
     var processIdentifier: Int { get }
 }
 
@@ -167,6 +169,12 @@ extension _Element {
         throw _ElementError.unimplemented
     }
     public func selectedTextRanges() throws -> [Range<Position<Int>>] {
+        throw _ElementError.unimplemented
+    }
+    public func line<IndexType>(position: Position<IndexType>) throws -> Int {
+        throw _ElementError.unimplemented
+    }
+    public func range<IndexType>(line: Int) throws -> Range<Position<IndexType>> {
         throw _ElementError.unimplemented
     }
     public var processIdentifier: Int {

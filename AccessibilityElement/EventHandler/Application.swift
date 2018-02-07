@@ -222,6 +222,16 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
         } catch {
         }
         do {
+            if let children = try? _node._element.focusedWindow().children() {
+                if children.count > 0 {
+                    let view = children[0]
+                    do {
+                        print(try view.string(range: Position(index: 0, element: view)..<Position(index: 10, element: view)))
+                    } catch {
+                        
+                    }
+                }
+            }
             try registerObservers()
         } catch let error {
             print(error)
