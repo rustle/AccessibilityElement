@@ -34,26 +34,29 @@ public struct WebArea<ObserverProvidingType> : EventHandler where ObserverProvid
     }
     private var selectionChangeSignal: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
     private mutating func registerObservers() {
-        guard let applicationController = (_controller?.applicationController) as? Controller<Element, Application<ObserverProvidingType>> else {
+        guard let controller = _controller else {
             return
         }
-        guard let (controller, _, observer) = try? applicationController._eventHandler.observerContext() else {
+        guard let applicationController = controller.applicationController as? Controller<Element, Application<ObserverProvidingType>> else {
+            return
+        }
+        guard let (_, _, observer) = try? applicationController._eventHandler.observerContext() else {
             return
         }
         func registerSelectionChange() throws {
             guard selectionChangeSignal == nil else {
                 return
             }
-//            selectionChangeSignal = try observer.signal(element: element, notification: .selectedTextChanged).subscribe { [weak controller] element, info in
-//                guard let info = info, let controller = controller else {
-//                    return
-//                }
-//                let element = controller._eventHandler._node.element
-//                guard let selectionChange = SelectionChange(info: info, element: element) else {
-//                    return
-//                }
-//                controller._eventHandler.handle(selectionChange: selectionChange)
-//            }
+            selectionChangeSignal = try observer.signal(element: _node._element, notification: .selectedTextChanged).subscribe { [weak controller] element, info in
+                guard let info = info, let controller = controller else {
+                    return
+                }
+                let element = controller._eventHandler._node.element
+                guard let selectionChange = SelectionChange(info: info, element: element) else {
+                    return
+                }
+                controller._eventHandler.handle(selectionChange: selectionChange)
+            }
         }
         try? registerSelectionChange()
     }
