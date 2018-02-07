@@ -53,6 +53,7 @@ public protocol _Element : AnyElement, TreeElement, Hashable {
     func topLevelElement() throws -> Self
     func applicationFocusedElement() throws -> Self
     func windows() throws -> [Self]
+    func focusedWindow() throws -> Self
 }
 
 extension _Element {
@@ -157,6 +158,9 @@ extension _Element {
         throw _ElementError.unimplemented
     }
     public func windows() throws -> [Self] {
+        throw _ElementError.unimplemented
+    }
+    public func focusedWindow() throws ->  Self {
         throw _ElementError.unimplemented
     }
     public func url() throws -> URL {
