@@ -22,8 +22,8 @@ public protocol EventHandler : AnyEventHandler {
     typealias ElementType = ObserverProvidingType.ElementType
     var _node: Node<ElementType> { get }
     weak var _controller: Controller<ElementType, Self>? { get set }
-    var observerManager: ObserverManager<ObserverProvidingType> { get }
-    init(node: Node<ElementType>, observerManager: ObserverManager<ObserverProvidingType>)
+    var applicationObserver: ApplicationObserver<ObserverProvidingType> { get }
+    init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>)
 }
 
 public extension EventHandler {

@@ -24,10 +24,10 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
     public var output: ((String) -> Void)?
     public weak var _controller: Controller<ElementType, Application<ObserverProvidingType>>?
     public let _node: Node<ElementType>
-    public init(node: Node<ElementType>, observerManager: ObserverManager<ObserverProvidingType>) {
+    public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
         _node = node
-        self.observerManager = observerManager
-        focus = Focus(observerManager: observerManager)
+        self.applicationObserver = applicationObserver
+        focus = Focus(applicationObserver: applicationObserver)
     }
     private enum Error : Swift.Error {
         case invalidElement
@@ -80,9 +80,9 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
     // MARK: Focused UI Element
     private struct Focus<ObserverProvidingType> where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
         typealias ElementType = ObserverProvidingType.ElementType
-        let observerManager: ObserverManager<ObserverProvidingType>
-        init(observerManager: ObserverManager<ObserverProvidingType>) {
-            self.observerManager = observerManager
+        let applicationObserver: ApplicationObserver<ObserverProvidingType>
+        init(applicationObserver: ApplicationObserver<ObserverProvidingType>) {
+            self.applicationObserver = applicationObserver
         }
         var focusedContainer: _Controller<ElementType>?
         var focusedController: _Controller<ElementType>?
@@ -93,7 +93,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
             if let focusedContainerNode = focusedContainerNode {
                 do {
                     let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedContainerNode,
-                                                                                     observerManager:observerManager)
+                                                                                     applicationObserver: applicationObserver)
                     focusedContainer = (try eventHandler.makeController()) as? _Controller<ElementType>
                     focusedContainer?.applicationController = applicationController
                 } catch {
@@ -104,7 +104,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
             if let focusedControllerNode = focusedControllerNode {
                 do {
                     let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedControllerNode,
-                                                                                     observerManager:observerManager)
+                                                                                     applicationObserver: applicationObserver)
                     focusedController = (try eventHandler.makeController()) as? _Controller<ElementType>
                     focusedController?.applicationController = applicationController
                 } catch {
@@ -179,14 +179,13 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
         }
     }
     // MARK: Observers
-    public let observerManager: ObserverManager<ObserverProvidingType>
+    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
     public func observerContext() throws -> (Controller<ElementType, Application>, ElementType, ApplicationObserver<ObserverProvidingType>) {
         guard let controller = _controller else {
             throw Application.Error.nilController
         }
         let element = _node._element
-        let observer = try observerManager.registerObserver(application: element)
-        return (controller, element, observer)
+        return (controller, element, applicationObserver)
     }
     private var onFocusedUIElementChanged: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
     private var onWindowCreated: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?

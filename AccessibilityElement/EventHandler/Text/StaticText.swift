@@ -16,10 +16,10 @@ public struct StaticText<ObserverProvidingType> : EventHandler where ObserverPro
     }()
     public weak var _controller: Controller<ElementType, StaticText<ObserverProvidingType>>?
     public let _node: Node<ElementType>
-    public let observerManager: ObserverManager<ObserverProvidingType>
-    public init(node: Node<ElementType>, observerManager: ObserverManager<ObserverProvidingType>) {
+    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
+    public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
         _node = node
-        self.observerManager = observerManager
+        self.applicationObserver = applicationObserver
     }
     public func connect() {
         

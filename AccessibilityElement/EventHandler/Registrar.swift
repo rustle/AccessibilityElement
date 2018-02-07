@@ -6,7 +6,7 @@
 
 import Foundation
 
-public typealias EventHandlerProviding = (AnyNode, AnyObserverManager) throws -> AnyEventHandler
+public typealias EventHandlerProviding = (AnyNode, AnyApplicationObserver) throws -> AnyEventHandler
 
 public class EventHandlerRegistrar {
     public static let shared = EventHandlerRegistrar()
@@ -59,9 +59,10 @@ public class EventHandlerRegistrar {
         }
         map[key] = eventHandler
     }
-    public func eventHandler<ObserverProvidingType>(node: Node<ObserverProvidingType.ElementType>, observerManager: ObserverManager<ObserverProvidingType>) throws -> AnyEventHandler {
+    public func eventHandler<ObserverProvidingType>(node: Node<ObserverProvidingType.ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) throws -> AnyEventHandler {
         guard let role = try? node.element.role() else {
-            return DefaultEventHandler(node: node, observerManager: observerManager)
+            return DefaultEventHandler(node: node,
+                                       applicationObserver: applicationObserver)
         }
         let subrole = try? node.element.subrole()
         let identifer: String? = nil
@@ -70,7 +71,7 @@ public class EventHandlerRegistrar {
                          identifier: identifer),
             let eventHandlerProviding = map[key] {
             do {
-                return try eventHandlerProviding(node, observerManager)
+                return try eventHandlerProviding(node, applicationObserver)
             } catch {
                 
             }
@@ -78,38 +79,38 @@ public class EventHandlerRegistrar {
         switch role {
         case .application:
             return Application(node: node,
-                               observerManager: observerManager)
+                               applicationObserver: applicationObserver)
         case .window:
             return Window(node: node,
-                          observerManager: observerManager)
+                          applicationObserver: applicationObserver)
         case .staticText:
             if let subrole = subrole, subrole == .textAttachment {
                 return TextAttachment(node: node,
-                                      observerManager: observerManager)
+                                      applicationObserver: applicationObserver)
             } else {
                 return StaticText(node: node,
-                                  observerManager: observerManager)
+                                  applicationObserver: applicationObserver)
             }
         case .button:
             return Button(node: node,
-                          observerManager: observerManager)
+                          applicationObserver: applicationObserver)
         case .checkBox:
             if let subrole = subrole, subrole == .toggle {
                 return Toggle(node: node,
-                              observerManager: observerManager)
+                              applicationObserver: applicationObserver)
             } else {
                 return Checkbox(node: node,
-                                observerManager: observerManager)
+                                applicationObserver: applicationObserver)
             }
         case .textField:
             return TextField(node: node,
-                             observerManager: observerManager)
+                             applicationObserver: applicationObserver)
         case NSAccessibilityRole.webArea:
             return WebArea(node: node,
-                           observerManager: observerManager)
+                           applicationObserver: applicationObserver)
         default:
             return DefaultEventHandler(node: node,
-                                       observerManager: observerManager)
+                                       applicationObserver: applicationObserver)
         }
     }
 }

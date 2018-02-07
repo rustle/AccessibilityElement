@@ -14,10 +14,10 @@ public struct WebArea<ObserverProvidingType> : EventHandler where ObserverProvid
     }
     public weak var _controller: Controller<ElementType, WebArea<ObserverProvidingType>>?
     public let _node: Node<ElementType>
-    public let observerManager: ObserverManager<ObserverProvidingType>
-    public init(node: Node<ElementType>, observerManager: ObserverManager<ObserverProvidingType>) {
+    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
+    public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
         _node = node
-        self.observerManager = observerManager
+        self.applicationObserver = applicationObserver
     }
     public mutating func connect() {
         _ = try? _node._element.set(caretBrowsing: true)
