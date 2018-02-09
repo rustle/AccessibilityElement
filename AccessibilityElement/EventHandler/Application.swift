@@ -71,7 +71,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
             }
         } catch {}
     }
-    private mutating func focusChanged(window: Element) {
+    private mutating func focusChanged(window: ElementType) {
         guard let focusedElement = try? _node._element.applicationFocusedElement() else {
             return
         }
