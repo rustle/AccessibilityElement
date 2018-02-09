@@ -151,6 +151,15 @@ extension _Element {
         throw _ElementError.unimplemented
     }
     public func range<IndexType>(unorderedPositions: (first: Position<IndexType>, second: Position<IndexType>)) throws -> Range<Position<IndexType>> {
+        if IndexType.self == Int.self {
+            if unorderedPositions.first < unorderedPositions.second {
+                return Range(uncheckedBounds: (unorderedPositions.first, unorderedPositions.second))
+            }
+            if unorderedPositions.second < unorderedPositions.first {
+                return Range(uncheckedBounds: (unorderedPositions.second, unorderedPositions.first))
+            }
+            return Range(uncheckedBounds: (unorderedPositions.first, unorderedPositions.second))
+        }
         throw _ElementError.unimplemented
     }
     public func enhancedUserInterface() throws -> Bool {
