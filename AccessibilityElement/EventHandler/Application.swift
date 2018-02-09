@@ -246,8 +246,12 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
         }
         isFocused = true
         rebuildChildrenIfNeeded()
-        guard let title = try? node.element.title() else {
-            return "unknown application"
+        let title: String
+        do {
+            title = try node.element.title()
+        } catch {
+            // TODO: Localize
+            title = "unknown application"
         }
         if let focusedElement = try? _node._element.applicationFocusedElement() {
             focusChanged(element: focusedElement)
