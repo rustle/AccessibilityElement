@@ -74,7 +74,11 @@ public class Controller<ElementType, EventHandlerType> : _Controller<ElementType
     }
     public func childControllers(node: Node<ElementType>) throws -> [_Controller<ElementType>] {
         return try node.children.map { node in
-            let controller = try EventHandlerRegistrar.shared.eventHandler(node: _eventHandler._node, applicationObserver: _eventHandler.applicationObserver).makeController() as! _Controller<ElementType>
+            // TODO: This casting sucks
+            let applicationObserver = _eventHandler.applicationObserver
+            let node: Node<EventHandlerType.ObserverProvidingType.ElementType> = node as! Node<EventHandlerType.ObserverProvidingType.ElementType>
+            let controller = try EventHandlerRegistrar.shared.eventHandler(node: node, applicationObserver: applicationObserver).makeController() as! _Controller<ElementType>
+            controller.applicationController = applicationController
             controller.parentController = self
             return controller
         }
