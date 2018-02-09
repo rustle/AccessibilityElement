@@ -200,10 +200,10 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
                                                         notification: .focusedUIElementChanged).subscribe { [weak controller] in
             controller?._eventHandler.focusChanged(element: $0.element)
         }
-//        onFocusedWindowChanged = try observer.signal(element: element,
-//                                                     notification: .focusedWindowChanged).subscribe { [weak controller] in
-//            controller?._eventHandler.focusChanged(window: $0.element)
-//        }
+        onFocusedWindowChanged = try observer.signal(element: element,
+                                                     notification: .focusedWindowChanged).subscribe { [weak controller] in
+            controller?._eventHandler.focusChanged(window: $0.element)
+        }
     }
     private mutating func unregisterObservers() {
         onWindowCreated?.cancel()
