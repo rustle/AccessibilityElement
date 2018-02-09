@@ -75,10 +75,11 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
         } catch {}
     }
     private mutating func focusChanged(window: ElementType) {
-        guard let focusedElement = try? _node._element.applicationFocusedElement() else {
-            return
+        if let focusedElement = try? _node._element.applicationFocusedElement() {
+            focusChanged(element: focusedElement)
+        } else {
+            focusChanged(element: window)
         }
-        focusChanged(element: focusedElement)
     }
     // MARK: Focused UI Element
     private struct Focus<ObserverProvidingType> where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
@@ -245,6 +246,8 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
         }
         if let focusedElement = try? _node._element.applicationFocusedElement() {
             focusChanged(element: focusedElement)
+        } else if let focusedElement = try? _node._element.focusedWindow() {
+            focusChanged(window: focusedElement)
         }
         return title
     }
