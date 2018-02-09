@@ -75,7 +75,12 @@ fileprivate class AXObserverState {
 }
 fileprivate let axObserverState = AXObserverState()
 
-fileprivate func observer_callback(_ observer: AXObserver, _ uiElement: AXUIElement, _ name: CFString, _ info: CFDictionary?, _ refCon: UnsafeMutableRawPointer?) {
+fileprivate func observer_callback(_ observer: AXObserver,
+                                   _ uiElement: AXUIElement,
+                                   _ name: CFString,
+                                   _ info: CFDictionary?,
+                                   _ refCon: UnsafeMutableRawPointer?) {
+    print("callback \(name)")
     let identifier = unsafeBitCast(refCon, to: Int.self)
     guard let handler = axObserverState.handler(identifier: identifier) else {
         return

@@ -81,7 +81,9 @@ public class ApplicationObserver<ObserverProvidingType> : AnyApplicationObserver
         if signalMap[element] == nil {
             signalMap[element] = [NSAccessibilityNotificationName:ObserverSignal]()
         }
-        let observerSignal = ObserverSignal(element: element, notification: notification, observer: self)
+        let observerSignal = ObserverSignal(element: element,
+                                            notification: notification,
+                                            observer: self)
         signalMap[element]?[notification] = observerSignal
         return observerSignal
     }
