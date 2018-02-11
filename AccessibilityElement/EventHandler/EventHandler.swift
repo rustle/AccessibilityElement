@@ -6,6 +6,11 @@
 
 import Foundation
 
+public enum EventType {
+    case keyUp
+    case keyDown
+}
+
 public protocol AnyEventHandler {
     var node: AnyNode { get }
     weak var controller: AnyController? { get set }
@@ -16,6 +21,7 @@ public protocol AnyEventHandler {
     mutating func focusIn() -> String?
     mutating func focusOut() -> String?
     mutating func disconnect()
+    mutating func handleEvent(identifier: String, eventType: EventType)
 }
 
 public protocol EventHandler : AnyEventHandler {
@@ -43,6 +49,9 @@ public extension EventHandler {
         return try Controller<ElementType, Self>(eventHandler: self)
     }
     public func configure(output: ((String) -> Void)?) {
+        
+    }
+    mutating func handleEvent(identifier: String, eventType: EventType) {
         
     }
 }
