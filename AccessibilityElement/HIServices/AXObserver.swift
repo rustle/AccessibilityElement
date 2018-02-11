@@ -36,7 +36,7 @@ extension AXObserver {
         guard error == .success else {
             throw AXUIElement.AXError(error: error)
         }
-        axObserverState.set(handler: handler, identifier: identifier)
+        axObserverState.set(state: handler, identifier: identifier)
         return identifier
     }
     //public func AXObserverRemoveNotification(_ observer: AXObserver, _ element: AXUIElement, _ notification: CFString) -> AXError
@@ -49,31 +49,7 @@ extension AXObserver {
     }
 }
 
-fileprivate class AXObserverState {
-    private var handlers = [Int : AXObserverHandler]()
-    private let queue = DispatchQueue(label: "AXObserverState")
-    private var counter = 1234
-    fileprivate func next() -> Int {
-        counter += 1
-        return counter
-    }
-    fileprivate func set(handler: @escaping AXObserverHandler, identifier: Int) {
-        queue.sync(flags: [.barrier]) {
-            handlers[identifier] = handler
-        }
-    }
-    fileprivate func remove(identifier: Int) {
-        queue.sync(flags: [.barrier]) { () -> Void in
-            handlers.removeValue(forKey: identifier)
-        }
-    }
-    fileprivate func handler(identifier: Int) -> AXObserverHandler? {
-        return queue.sync {
-            return handlers[identifier]
-        }
-    }
-}
-fileprivate let axObserverState = AXObserverState()
+fileprivate let axObserverState = SimpleState<AXObserverHandler>()
 
 fileprivate func observer_callback(_ observer: AXObserver,
                                    _ uiElement: AXUIElement,
@@ -81,7 +57,7 @@ fileprivate func observer_callback(_ observer: AXObserver,
                                    _ info: CFDictionary?,
                                    _ refCon: UnsafeMutableRawPointer?) {
     let identifier = unsafeBitCast(refCon, to: Int.self)
-    guard let handler = axObserverState.handler(identifier: identifier) else {
+    guard let handler = axObserverState.state(identifier: identifier) else {
         return
     }
     handler(uiElement, name as NSAccessibilityNotificationName, info)
