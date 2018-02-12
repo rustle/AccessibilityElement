@@ -258,4 +258,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
     public mutating func disconnect() {
         unregisterObservers()
     }
+    public mutating func handleEvent(identifier: String, type: EventType) throws {
+        try self.focus.focusedController?.eventHandler.handleEvent(identifier: identifier, type: type)
+    }
 }

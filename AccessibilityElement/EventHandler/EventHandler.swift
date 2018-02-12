@@ -21,7 +21,7 @@ public protocol AnyEventHandler {
     mutating func focusIn() -> String?
     mutating func focusOut() -> String?
     mutating func disconnect()
-    mutating func handleEvent(identifier: String, eventType: EventType)
+    mutating func handleEvent(identifier: String, type: EventType) throws
 }
 
 public protocol EventHandler : AnyEventHandler {
@@ -51,7 +51,7 @@ public extension EventHandler {
     public func configure(output: ((String) -> Void)?) {
         
     }
-    mutating func handleEvent(identifier: String, eventType: EventType) {
+    mutating func handleEvent(identifier: String, type: EventType) throws {
         
     }
 }
