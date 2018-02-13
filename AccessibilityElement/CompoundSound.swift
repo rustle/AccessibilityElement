@@ -6,6 +6,12 @@
 
 import Foundation
 
+extension DispatchWorkItem : Equatable {
+    public static func ==(lhs: DispatchWorkItem, rhs: DispatchWorkItem) -> Bool {
+        return lhs === rhs
+    }
+}
+
 public class CompoundSound {
     private class Delegate : NSObject, NSSoundDelegate {
         var didFinish: ((NSSound, Bool) -> Void)?
@@ -27,6 +33,7 @@ public class CompoundSound {
     }
     private var inUse = [NSSound]()
     private var available = [NSSound]()
+    private var workItems = [DispatchWorkItem]()
     private let queue = DispatchQueue(label: "CompoundSound",
                                       qos: .userInitiated,
                                       attributes: [.concurrent],
@@ -73,39 +80,73 @@ public class CompoundSound {
             self?.callback(sound: sound, didFinishPlaying: didFinish)
         }
     }
+    public enum Error : Swift.Error {
+        case invalidSound
+        case invalidCount(Int)
+        case invalidCadence(TimeInterval)
+    }
     public func play(count: Int = 1,
                      cadence: TimeInterval) throws {
         guard let sound = sound else {
-            return
+            throw CompoundSound.Error.invalidSound
         }
         guard count > 0 else {
-            return
+            throw CompoundSound.Error.invalidCount(count)
         }
         guard cadence > 0.0 else {
-            return
+            throw CompoundSound.Error.invalidCadence(cadence)
         }
-        // TODO: break critical sections up into: 1. get sounds from available, 2. make new sounds as needed, 3. add sounds to in use
-        let sounds: [NSSound] = queue.sync(flags: [.barrier]) {
+        var sounds: [NSSound] = queue.sync(flags: [.barrier]) {
             if available.count < count {
-                for _ in available.count..<count {
-                    let copy = sound.copy() as! NSSound
-                    copy.delegate = delegate
-                    available.append(copy)
-                }
+                let sounds = available
+                available = []
+                return sounds
+            } else {
+                let sounds = Array(available[0..<count])
+                available.removeSubrange(0..<count)
+                return sounds
             }
-            var sounds = [NSSound]()
-            for _ in 0..<count {
-                let last = available.removeLast()
-                inUse.append(last)
-                sounds.append(last)
-            }
-            return sounds
         }
-        queue.async {
+        if sounds.count < count {
+            for _ in sounds.count..<count {
+                let copy = sound.copy() as! NSSound
+                copy.delegate = delegate
+                sounds.append(copy)
+            }
+        }
+        queue.sync(flags: [.barrier]) {
+            inUse.append(contentsOf: sounds)
+        }
+        weak var cancelToken: DispatchWorkItem? = nil
+        let workItem = DispatchWorkItem {
             for sound in sounds {
+                if let cancelToken = cancelToken, cancelToken.isCancelled {
+                    break
+                }
                 sound.play()
                 usleep(useconds_t(cadence * TimeInterval(USEC_PER_SEC)))
             }
         }
+        workItem.notify(qos: .userInitiated, flags: [.barrier], queue: queue) {
+            // Following self. uses are a retain cycle but they'll self resolve
+            // when the block finishes
+            self.queue.async(flags: [.barrier]) {
+                guard let cancelToken = cancelToken else {
+                    return
+                }
+                guard let index = self.workItems.index(of: cancelToken) else {
+                    return
+                }
+                self.workItems.remove(at: index)
+            }
+        }
+        cancelToken = workItem
+        queue.sync(flags: [.barrier]) {
+            workItems.append(workItem)
+        }
+        queue.async(execute: workItem)
+    }
+    public func stop() {
+        
     }
 }
