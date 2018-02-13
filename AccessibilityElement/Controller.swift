@@ -74,7 +74,10 @@ public class Controller<ElementType, EventHandlerType> : _Controller<ElementType
     }
     public func childControllers(node: Node<ElementType>) throws -> [_Controller<ElementType>] {
         return try node.children.map { node in
-            // TODO: This casting sucks
+            /*
+             * @todo: switch _Controller from <ElementType> to ObserverProvidingType to ease casting in child controllers
+             * @bug: https://github.com/rustle/speakup/issues/8
+             */
             let applicationObserver = _eventHandler.applicationObserver
             let node: Node<EventHandlerType.ObserverProvidingType.ElementType> = node as! Node<EventHandlerType.ObserverProvidingType.ElementType>
             let controller = try EventHandlerRegistrar.shared.eventHandler(node: node, applicationObserver: applicationObserver).makeController() as! _Controller<ElementType>
