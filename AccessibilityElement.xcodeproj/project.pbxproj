@@ -21,6 +21,8 @@
 		91196123200FE79E0073A998 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91196122200FE79E0073A998 /* Dictionary.swift */; };
 		91196125200FE7D80073A998 /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91196124200FE7D80073A998 /* Frame.swift */; };
 		911DEA3320326C5900F956C1 /* Atomics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 911DEA3420326C5900F956C1 /* Atomics.framework */; };
+		911DEA3620326FB600F956C1 /* WhitespaceClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911DEA3520326FB600F956C1 /* WhitespaceClassifier.swift */; };
+		911DEA3C20328C7400F956C1 /* CompoundSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911DEA3B20328C7400F956C1 /* CompoundSound.swift */; };
 		914E28BC1FF83E3700765FCE /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28BB1FF83E3700765FCE /* Observer.swift */; };
 		914E28D41FF9DCF000765FCE /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28D31FF9DCF000765FCE /* Controller.swift */; };
 		914E28F71FFB297A00765FCE /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28F61FFB297A00765FCE /* Debug.swift */; };
@@ -84,6 +86,8 @@
 		91196122200FE79E0073A998 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		91196124200FE7D80073A998 /* Frame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Frame.swift; sourceTree = "<group>"; };
 		911DEA3420326C5900F956C1 /* Atomics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Atomics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		911DEA3520326FB600F956C1 /* WhitespaceClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhitespaceClassifier.swift; sourceTree = "<group>"; };
+		911DEA3B20328C7400F956C1 /* CompoundSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompoundSound.swift; sourceTree = "<group>"; };
 		914E28BB1FF83E3700765FCE /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		914E28D31FF9DCF000765FCE /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
 		914E28F61FFB297A00765FCE /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
@@ -243,6 +247,7 @@
 				91FFFCFE1FF5B6B400BF89A0 /* AccessibilityError.swift */,
 				9111CF2F200703D1006B56AA /* AttributedString.swift */,
 				91C5531920080228001CF14B /* Bundle.swift */,
+				911DEA3B20328C7400F956C1 /* CompoundSound.swift */,
 				914E28D31FF9DCF000765FCE /* Controller.swift */,
 				914E28F61FFB297A00765FCE /* Debug.swift */,
 				917E54A82004800C00D490A8 /* Describer.swift */,
@@ -257,6 +262,7 @@
 				917FEA4720113EF90036280E /* TextMarker.h */,
 				917FEA4820113EF90036280E /* TextMarker.m */,
 				91196120200FE7250073A998 /* TreeElement.swift */,
+				911DEA3520326FB600F956C1 /* WhitespaceClassifier.swift */,
 				917E546E2002F7AF00D490A8 /* EventHandler */,
 				914E28C01FF85A1400765FCE /* HIServices */,
 				9173AAF8202A3CA500B41819 /* Observer */,
@@ -397,6 +403,7 @@
 				91196125200FE7D80073A998 /* Frame.swift in Sources */,
 				9114A903200C471D00C294CC /* String.swift in Sources */,
 				917E54A1200423F200D490A8 /* StaticText.swift in Sources */,
+				911DEA3620326FB600F956C1 /* WhitespaceClassifier.swift in Sources */,
 				9173AAF52029159300B41819 /* ObserverProviding.swift in Sources */,
 				914E28F71FFB297A00765FCE /* Debug.swift in Sources */,
 				917E546D2002F76400D490A8 /* EventHandler.swift in Sources */,
@@ -419,6 +426,7 @@
 				91187E4220107241004DA209 /* SelectionChange.swift in Sources */,
 				917E54702002F7D800D490A8 /* Window.swift in Sources */,
 				914E296E1FFF163D00765FCE /* Hierarchy.swift in Sources */,
+				911DEA3C20328C7400F956C1 /* CompoundSound.swift in Sources */,
 				91FFFCFF1FF5B6B400BF89A0 /* AccessibilityError.swift in Sources */,
 				917FEA4A20113EF90036280E /* TextMarker.m in Sources */,
 				917E54AC2005727200D490A8 /* TextField.swift in Sources */,

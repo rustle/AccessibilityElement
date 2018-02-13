@@ -22,8 +22,10 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
         return []
     }
     public var output: ((String) -> Void)?
-    public mutating func configure(output: ((String) -> Void)?) {
+    public var sound: ((String, Int, TimeInterval) -> Void)?
+    public mutating func configure(output: ((String) -> Void)?, sound: ((String, Int, TimeInterval) -> Void)?) {
         self.output = output
+        self.sound = sound
     }
     public weak var _controller: Controller<ElementType, Application<ObserverProvidingType>>?
     public let _node: Node<ElementType>
