@@ -16,7 +16,7 @@ public protocol AnyEventHandler {
     weak var controller: AnyController? { get set }
     var describerRequests: [DescriberRequest] { get }
     func makeController() throws -> AnyController
-    mutating func configure(output: ((String) -> Void)?, sound: ((String, Int, TimeInterval) -> Void)?)
+    mutating func configure(output: ((String) -> Void)?, sound: (([String], [Int], [TimeInterval]) -> Void)?)
     mutating func connect()
     mutating func focusIn() -> String?
     mutating func focusOut() -> String?
@@ -48,7 +48,7 @@ public extension EventHandler {
     public func makeController() throws -> AnyController {
         return try Controller<ElementType, Self>(eventHandler: self)
     }
-    public func configure(output: ((String) -> Void)?, sound: ((String, Int, TimeInterval) -> Void)?) {
+    public func configure(output: ((String) -> Void)?, sound: (([String], [Int], [TimeInterval]) -> Void)?) {
         
     }
     mutating func handleEvent(identifier: String, type: EventType) throws {
