@@ -5,20 +5,17 @@
 //
 
 import Foundation
+import Atomics
 
 public class SimpleState<StateType> {
     private var state = [Int : StateType]()
     private let queue = DispatchQueue(label: "SimpleState.sync")
-    private var counter = 1234
+    private var counter = AtomicInt64()
     public init() {
-        
+        counter.initialize(1234)
     }
     public func next() -> Int {
-        // TODO: this should use stdatomic, but it sucks in swift right now
-        return queue.sync {
-            counter += 1
-            return counter
-        }
+        return Int(counter.increment())
     }
     public func set(state: StateType, identifier: Int) {
         queue.sync(flags: [.barrier]) {
