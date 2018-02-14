@@ -75,12 +75,9 @@ public class Controller<EventHandlerType> : _Controller<EventHandlerType.Observe
         let applicationObserver = _eventHandler.applicationObserver
         let shared = try EventHandlerRegistrar<ObserverProvidingType>.shared()
         return try node.children.map { node in
-            /*
-             * @todo: switch _Controller from <ElementType> to ObserverProvidingType to ease casting in child controllers
-             * @bug: https://github.com/rustle/speakup/issues/8
-             */
-            let node: Node<ElementType> = node
-            let controller = try shared.eventHandler(node: node, applicationObserver: applicationObserver).makeController() as! _Controller<ElementType>
+            guard let controller = try shared.eventHandler(node: node, applicationObserver: applicationObserver).makeController() as? _Controller<ElementType> else {
+                throw AccessibilityError.typeMismatch
+            }
             controller.applicationController = applicationController
             controller.parentController = self
             return controller
