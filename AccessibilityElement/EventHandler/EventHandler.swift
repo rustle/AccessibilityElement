@@ -12,6 +12,7 @@ public enum EventType {
 }
 
 public protocol AnyEventHandler {
+    static func makeEventHandler(node: Any, applicationObserver: Any) -> AnyEventHandler
     var node: AnyNode { get }
     weak var controller: AnyController? { get set }
     var describerRequests: [DescriberRequest] { get }
@@ -25,15 +26,19 @@ public protocol AnyEventHandler {
 }
 
 public protocol EventHandler : AnyEventHandler {
-    associatedtype ObserverProvidingType : ObserverProviding where ObserverProvidingType.ElementType : _Element
+    associatedtype ObserverProvidingType : ObserverProviding
     typealias ElementType = ObserverProvidingType.ElementType
     var _node: Node<ElementType> { get }
-    weak var _controller: Controller<ElementType, Self>? { get set }
+    weak var _controller: Controller<Self>? { get set }
     var applicationObserver: ApplicationObserver<ObserverProvidingType> { get }
     init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>)
 }
 
 public extension EventHandler {
+    static func makeEventHandler(node: Any, applicationObserver: Any) -> AnyEventHandler {
+        return Self.init(node: node as! Node<ElementType>,
+                         applicationObserver: applicationObserver as! ApplicationObserver<ObserverProvidingType>)
+    }
     public var node: AnyNode {
         return _node
     }
@@ -42,11 +47,11 @@ public extension EventHandler {
             return _controller
         }
         set {
-            _controller = newValue as? Controller<ElementType, Self>
+            _controller = newValue as? Controller<Self>
         }
     }
     public func makeController() throws -> AnyController {
-        return try Controller<ElementType, Self>(eventHandler: self)
+        return try Controller<Self>(eventHandler: self)
     }
     public func configure(output: ((String) -> Void)?, sound: (([String], [Int], [TimeInterval]) -> Void)?) {
         

@@ -54,10 +54,9 @@ extension _Controller : Equatable {
     }
 }
 
-public class Controller<ElementType, EventHandlerType> : _Controller<ElementType> where
-    ElementType : _Element,
-    EventHandlerType : EventHandler
-{
+public class Controller<EventHandlerType> : _Controller<EventHandlerType.ObserverProvidingType.ElementType> where EventHandlerType : EventHandler {
+    public typealias ObserverProvidingType = EventHandlerType.ObserverProvidingType
+    public typealias ElementType = ObserverProvidingType.ElementType
     public var _eventHandler: EventHandlerType
     public override var eventHandler: AnyEventHandler {
         get {
@@ -73,14 +72,15 @@ public class Controller<ElementType, EventHandlerType> : _Controller<ElementType
         _eventHandler.controller = self
     }
     public func childControllers(node: Node<ElementType>) throws -> [_Controller<ElementType>] {
+        let applicationObserver = _eventHandler.applicationObserver
+        let shared = try EventHandlerRegistrar<ObserverProvidingType>.shared()
         return try node.children.map { node in
             /*
              * @todo: switch _Controller from <ElementType> to ObserverProvidingType to ease casting in child controllers
              * @bug: https://github.com/rustle/speakup/issues/8
              */
-            let applicationObserver = _eventHandler.applicationObserver
-            let node: Node<EventHandlerType.ObserverProvidingType.ElementType> = node as! Node<EventHandlerType.ObserverProvidingType.ElementType>
-            let controller = try EventHandlerRegistrar.shared.eventHandler(node: node, applicationObserver: applicationObserver).makeController() as! _Controller<ElementType>
+            let node: Node<ElementType> = node
+            let controller = try shared.eventHandler(node: node, applicationObserver: applicationObserver).makeController() as! _Controller<ElementType>
             controller.applicationController = applicationController
             controller.parentController = self
             return controller
@@ -88,7 +88,7 @@ public class Controller<ElementType, EventHandlerType> : _Controller<ElementType
     }
     public override var node: Node<ElementType> {
         get {
-            return _eventHandler._node as! Node<ElementType>
+            return _eventHandler._node
         }
     }
 }

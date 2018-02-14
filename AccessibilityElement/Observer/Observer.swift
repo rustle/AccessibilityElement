@@ -16,7 +16,7 @@ public protocol AnyApplicationObserver {
     
 }
 
-public class ObserverManager<ObserverProvidingType> : AnyObserverManager where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+public class ObserverManager<ObserverProvidingType> : AnyObserverManager where ObserverProvidingType : ObserverProviding {
     public typealias ElementType = ObserverProvidingType.ElementType
     private var map = [Int : ApplicationObserver<ObserverProvidingType>]()
     private let provider: (Int) throws -> ObserverProvidingType
@@ -37,7 +37,7 @@ public class ObserverManager<ObserverProvidingType> : AnyObserverManager where O
     }
 }
 
-public class ApplicationObserver<ObserverProvidingType> : AnyApplicationObserver where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+public class ApplicationObserver<ObserverProvidingType> : AnyApplicationObserver where ObserverProvidingType : ObserverProviding {
     public typealias ElementType = ObserverProvidingType.ElementType
     private var _observer: ObserverProvidingType?
     private var observer: ObserverProvidingType {

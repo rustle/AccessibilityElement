@@ -13,8 +13,8 @@ public func makeSystemApplicationController(processIdentifier: Int) throws -> An
     let eventHandler: AnyEventHandler?
     let observerManager = ObserverManager(provider: SystemObserverProviding.provider())
     let applicationObserver = try observerManager.registerObserver(application: element)
-    eventHandler = try? EventHandlerRegistrar.shared
-        .eventHandler(node: node, applicationObserver: applicationObserver)
+    let shared = try EventHandlerRegistrar<SystemObserverProviding>.shared()
+    eventHandler = try? shared.eventHandler(node: node, applicationObserver: applicationObserver)
     return try eventHandler?.makeController() as! _Controller<Element>
 }
 

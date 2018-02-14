@@ -7,7 +7,7 @@
 import Foundation
 import os.log
 
-public struct Checkbox<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+public struct Checkbox<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
     public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
@@ -17,7 +17,7 @@ public struct Checkbox<ObserverProvidingType> : EventHandler where ObserverProvi
             ]
         return requests
     }
-    public weak var _controller: Controller<ElementType, Checkbox<ObserverProvidingType>>?
+    public weak var _controller: Controller<Checkbox<ObserverProvidingType>>?
     public let _node: Node<ElementType>
     public let applicationObserver: ApplicationObserver<ObserverProvidingType>
     public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {

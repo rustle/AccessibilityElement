@@ -7,12 +7,12 @@
 import Foundation
 import Signals
 
-public struct WebArea<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+public struct WebArea<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
     public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         return []
     }
-    public weak var _controller: Controller<ElementType, WebArea<ObserverProvidingType>>?
+    public weak var _controller: Controller<WebArea<ObserverProvidingType>>?
     public let _node: Node<ElementType>
     public let applicationObserver: ApplicationObserver<ObserverProvidingType>
     public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
@@ -37,7 +37,7 @@ public struct WebArea<ObserverProvidingType> : EventHandler where ObserverProvid
         guard let controller = _controller else {
             return
         }
-        guard let applicationController = controller.applicationController as? Controller<Element, Application<ObserverProvidingType>> else {
+        guard let applicationController = controller.applicationController as? Controller<Application<ObserverProvidingType>> else {
             return
         }
         guard let (_, _, observer) = try? applicationController._eventHandler.observerContext() else {
@@ -68,7 +68,7 @@ public struct WebArea<ObserverProvidingType> : EventHandler where ObserverProvid
     private func echo<IndexType>(range: Range<Position<IndexType>>) {
         do {
             let value = try _node._element.attributedString(range: range)
-            guard let applicationController = (_controller?.applicationController) as? Controller<ElementType, Application<ObserverProvidingType>> else {
+            guard let applicationController = (_controller?.applicationController) as? Controller<Application<ObserverProvidingType>> else {
                 return
             }
             applicationController._eventHandler.output?(value.string)

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct StaticText<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+public struct StaticText<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
     public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] = {
         let requests: [DescriberRequest] = [
@@ -14,7 +14,7 @@ public struct StaticText<ObserverProvidingType> : EventHandler where ObserverPro
         ]
         return requests
     }()
-    public weak var _controller: Controller<ElementType, StaticText<ObserverProvidingType>>?
+    public weak var _controller: Controller<StaticText<ObserverProvidingType>>?
     public let _node: Node<ElementType>
     public let applicationObserver: ApplicationObserver<ObserverProvidingType>
     public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {

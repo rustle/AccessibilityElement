@@ -16,7 +16,7 @@ public extension Array {
     }
 }
 
-public struct Application<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+public struct Application<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
     public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         return []
@@ -27,7 +27,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
         self.output = output
         self.sound = sound
     }
-    public weak var _controller: Controller<ElementType, Application<ObserverProvidingType>>?
+    public weak var _controller: Controller<Application<ObserverProvidingType>>?
     public let _node: Node<ElementType>
     public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
         _node = node
@@ -84,7 +84,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
         }
     }
     // MARK: Focused UI Element
-    private struct Focus<ObserverProvidingType> where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+    private struct Focus {
         typealias ElementType = ObserverProvidingType.ElementType
         let applicationObserver: ApplicationObserver<ObserverProvidingType>
         init(applicationObserver: ApplicationObserver<ObserverProvidingType>) {
@@ -98,8 +98,9 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
             var focusedContainer: _Controller<ElementType>?
             if let focusedContainerNode = focusedContainerNode {
                 do {
-                    let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedContainerNode,
-                                                                                     applicationObserver: applicationObserver)
+                    let shared = try EventHandlerRegistrar<ObserverProvidingType>.shared()
+                    let eventHandler = try shared.eventHandler(node: focusedContainerNode,
+                                                               applicationObserver: applicationObserver)
                     focusedContainer = (try eventHandler.makeController()) as? _Controller<ElementType>
                     focusedContainer?.applicationController = applicationController
                 } catch {
@@ -109,8 +110,9 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
             var focusedController: _Controller<ElementType>?
             if let focusedControllerNode = focusedControllerNode {
                 do {
-                    let eventHandler = try EventHandlerRegistrar.shared.eventHandler(node: focusedControllerNode,
-                                                                                     applicationObserver: applicationObserver)
+                    let shared = try EventHandlerRegistrar<ObserverProvidingType>.shared()
+                    let eventHandler = try shared.eventHandler(node: focusedControllerNode,
+                                                               applicationObserver: applicationObserver)
                     focusedController = (try eventHandler.makeController()) as? _Controller<ElementType>
                     focusedController?.applicationController = applicationController
                 } catch {
@@ -150,7 +152,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
             }
         }
     }
-    private var focus: Focus<ObserverProvidingType>
+    private var focus: Focus
     private let hierarchy = DefaultHierarchy<ElementType>()
     private func findContainer(element: ElementType) throws -> ElementType {
         var current: ElementType? = element
@@ -186,7 +188,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
     }
     // MARK: Observers
     public let applicationObserver: ApplicationObserver<ObserverProvidingType>
-    public func observerContext() throws -> (Controller<ElementType, Application>, ElementType, ApplicationObserver<ObserverProvidingType>) {
+    public func observerContext() throws -> (Controller<Application>, ElementType, ApplicationObserver<ObserverProvidingType>) {
         guard let controller = _controller else {
             throw Application.Error.nilController
         }

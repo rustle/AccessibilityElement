@@ -7,7 +7,7 @@
 import Foundation
 import os.log
 
-public struct Toggle<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding, ObserverProvidingType.ElementType : _Element {
+public struct Toggle<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
     public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
@@ -17,7 +17,7 @@ public struct Toggle<ObserverProvidingType> : EventHandler where ObserverProvidi
         ]
         return requests
     }
-    public weak var _controller: Controller<ElementType, Toggle<ObserverProvidingType>>?
+    public weak var _controller: Controller<Toggle<ObserverProvidingType>>?
     public let _node: Node<ElementType>
     public let applicationObserver: ApplicationObserver<ObserverProvidingType>
     public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {

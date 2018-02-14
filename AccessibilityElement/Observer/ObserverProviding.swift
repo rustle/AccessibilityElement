@@ -14,7 +14,7 @@ func provider<ObserverProvidingType>(type: ObserverProvidingType.Type) -> ((Int)
 }
 
 public protocol ObserverProviding {
-    associatedtype ElementType
+    associatedtype ElementType : _Element
     mutating func add(element: ElementType,
                       notification: NSAccessibilityNotificationName,
                       handler: @escaping (ElementType, NSAccessibilityNotificationName, [String:Any]?) -> Void) throws -> Int
