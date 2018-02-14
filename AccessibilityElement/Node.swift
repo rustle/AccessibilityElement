@@ -25,7 +25,7 @@ public final class Node<ElementType> : AnyNode where ElementType : AnyElement {
 }
 
 #if swift(>=4.1)
-extension Node : Hashable where ElementType : Hashable {
+extension Node : Hashable, Equatable where ElementType : Hashable, ElementType : Equatable {
     public var hashValue: Int {
         return _element.hashValue
     }
