@@ -87,7 +87,10 @@ public class EventHandlerRegistrar<ObserverProvidingType> where ObserverProvidin
                          subrole: subrole,
                          identifier: identifer) {
             if let EventHandlerType = map[key] as? AnyEventHandler.Type {
-                return EventHandlerType.makeEventHandler(node: node, applicationObserver: applicationObserver)
+                do {
+                    return try EventHandlerType.eventHandler(node: node,
+                                                             applicationObserver: applicationObserver)
+                } catch { }
             }
         }
         switch role {

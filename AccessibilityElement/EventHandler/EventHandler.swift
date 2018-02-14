@@ -12,7 +12,8 @@ public enum EventType {
 }
 
 public protocol AnyEventHandler {
-    static func makeEventHandler(node: Any, applicationObserver: Any) -> AnyEventHandler
+    static func eventHandler(node: AnyNode,
+                             applicationObserver: AnyApplicationObserver) throws -> AnyEventHandler
     var node: AnyNode { get }
     weak var controller: AnyController? { get set }
     var describerRequests: [DescriberRequest] { get }
@@ -35,9 +36,16 @@ public protocol EventHandler : AnyEventHandler {
 }
 
 public extension EventHandler {
-    static func makeEventHandler(node: Any, applicationObserver: Any) -> AnyEventHandler {
-        return Self.init(node: node as! Node<ElementType>,
-                         applicationObserver: applicationObserver as! ApplicationObserver<ObserverProvidingType>)
+    static func eventHandler(node: AnyNode,
+                             applicationObserver: AnyApplicationObserver) throws -> AnyEventHandler {
+        guard let node = node as? Node<ElementType> else {
+            throw AccessibilityError.typeMismatch
+        }
+        guard let applicationObserver = applicationObserver as? ApplicationObserver<ObserverProvidingType> else {
+            throw AccessibilityError.typeMismatch
+        }
+        return Self.init(node: node,
+                         applicationObserver: applicationObserver)
     }
     public var node: AnyNode {
         return _node
