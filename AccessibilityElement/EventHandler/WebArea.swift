@@ -71,7 +71,7 @@ public struct WebArea<ObserverProvidingType> : EventHandler where ObserverProvid
             guard let applicationController = (_controller?.applicationController) as? Controller<Application<ObserverProvidingType>> else {
                 return
             }
-            applicationController._eventHandler.output?(value.string)
+            applicationController._eventHandler.output?([.speech(value.string)])
         } catch {
             return
         }

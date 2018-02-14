@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		910D6B4E2034DB4200A816F3 /* Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910D6B4D2034DB4200A816F3 /* Output.swift */; };
 		9111CF2B2005BBE9006B56AA /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111CF2A2005BBE9006B56AA /* Checkbox.swift */; };
 		9111CF2E2005DBB4006B56AA /* TextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111CF2D2005DBB4006B56AA /* TextAttachment.swift */; };
 		9111CF30200703D1006B56AA /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9111CF2F200703D1006B56AA /* AttributedString.swift */; };
@@ -72,6 +73,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		910D6B4D2034DB4200A816F3 /* Output.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Output.swift; sourceTree = "<group>"; };
 		9111CF2A2005BBE9006B56AA /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
 		9111CF2D2005DBB4006B56AA /* TextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAttachment.swift; sourceTree = "<group>"; };
 		9111CF2F200703D1006B56AA /* AttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				91196124200FE7D80073A998 /* Frame.swift */,
 				9119611E200FE6CE0073A998 /* Node.swift */,
 				914E296D1FFF163D00765FCE /* Hierarchy.swift */,
+				910D6B4D2034DB4200A816F3 /* Output.swift */,
 				91C5531E200969F9001CF14B /* ScreenGrab.swift */,
 				91BA29B2202FFBEB00A978A6 /* SimpleState.swift */,
 				91BA29B42030D5B300A978A6 /* Tap.swift */,
@@ -418,6 +421,7 @@
 				9111CF30200703D1006B56AA /* AttributedString.swift in Sources */,
 				91187E3E2010592D004DA209 /* WebArea.swift in Sources */,
 				91BF2DF91FF1800700FB993D /* Element.swift in Sources */,
+				910D6B4E2034DB4200A816F3 /* Output.swift in Sources */,
 				91BA29B3202FFBEB00A978A6 /* SimpleState.swift in Sources */,
 				91BA29B52030D5B300A978A6 /* Tap.swift in Sources */,
 				9173AAF320290F9200B41819 /* SystemObserverProviding.swift in Sources */,

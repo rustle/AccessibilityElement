@@ -21,11 +21,9 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
     public var describerRequests: [DescriberRequest] {
         return []
     }
-    public var output: ((String) -> Void)?
-    public var sound: (([String], [Int], [TimeInterval]) -> Void)?
-    public mutating func configure(output: ((String) -> Void)?, sound: (([String], [Int], [TimeInterval]) -> Void)?) {
+    public var output: (([Output.Job.Payload]) -> Void)?
+    public mutating func configure(output: (([Output.Job.Payload]) -> Void)?) {
         self.output = output
-        self.sound = sound
     }
     public weak var _controller: Controller<Application<ObserverProvidingType>>?
     public let _node: Node<ElementType>
@@ -174,7 +172,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
                       focusedControllerNode: focusedNode,
                       applicationController: _controller)
             if let echo = focus.focusedController?.eventHandler.focusIn(), echo.count > 0 {
-                output?(echo)
+                output?([.speech(echo)])
             }
         } catch {
             let node = Node(element: element, role: .include)
@@ -182,7 +180,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
                       focusedControllerNode: node,
                       applicationController: _controller)
             if let echo = focus.focusedController?.eventHandler.focusIn(), echo.count > 0 {
-                output?(echo)
+                output?([.speech(echo)])
             }
         }
     }
