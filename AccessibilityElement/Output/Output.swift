@@ -92,6 +92,36 @@ public class Output {
                                      autoreleaseFrequency: .workItem,
                                      target: .global())
     private class NamedOutputQueue : NSObject, NSSpeechSynthesizerDelegate {
+        #if false
+        // Doesn't seaem to have any effect
+        static let speechDictionary: [NSSpeechSynthesizer.DictionaryKey:Any] = {
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [
+                .withYear,
+                .withMonth,
+                .withDay,
+                .withDashSeparatorInDate,
+                .withSpaceBetweenDateAndTime,
+                .withTime,
+                .withColonSeparatorInTime,
+            ]
+            let date = formatter.string(from: Date()) + " +0000"
+            let synthesizer = NSSpeechSynthesizer()
+            var phonemes = [[NSSpeechSynthesizer.DictionaryKey:String]]()
+            let em = synthesizer.phonemes(from: "em")
+            for i in 0..<1000 {
+                phonemes.append([
+                    .entrySpelling : "\(i)m",
+                    .entryPhonemes : "\(synthesizer.phonemes(from: "\(i)")) \(em)"
+                ])
+            }
+            return [
+                .modificationDate : date,
+                .pronunciations : phonemes,
+                .abbreviations : phonemes,
+            ]
+        }()
+        #endif
         private let synthesizer = NSSpeechSynthesizer()
         private let identifier: String
         private let queue: DispatchQueue
@@ -104,6 +134,8 @@ public class Output {
                                   autoreleaseFrequency: .workItem,
                                   target: .global())
             synthesizer.rate = 300.0
+            super.init()
+            synthesizer.delegate = self
         }
         func submit(job: Job) {
             queue.async {
@@ -156,8 +188,46 @@ public class Output {
             if options.contains(.interrupt) {
                 synthesizer.stopSpeaking()
             }
-            synthesizer.startSpeaking(value)
+            synthesizer.startSpeaking(performSubstitutions(value: value))
         }
+        private static let substitutions: [Substitutions] = {
+            return [
+                EmSubstitutions()
+            ]
+        }()
+        private func performSubstitutions(value: String) -> String {
+            var value = value
+            for substitution in NamedOutputQueue.substitutions {
+                value = substitution.perform(value)
+            }
+            print(value)
+            return value
+        }
+        #if false
+        public func speechSynthesizer(_ sender: NSSpeechSynthesizer,
+                                      didFinishSpeaking finishedSpeaking: Bool) {
+            
+        }
+        public func speechSynthesizer(_ sender: NSSpeechSynthesizer,
+                                      willSpeakWord characterRange: NSRange,
+                                      of string: String) {
+            
+        }
+        public func speechSynthesizer(_ sender: NSSpeechSynthesizer,
+                                      willSpeakPhoneme phonemeOpcode: Int16) {
+            
+        }
+        public func speechSynthesizer(_ sender: NSSpeechSynthesizer,
+                                      didEncounterErrorAt characterIndex: Int,
+                                      of string: String,
+                                      message: String) {
+            
+        }
+        public func speechSynthesizer(_ sender: NSSpeechSynthesizer,
+                                      didEncounterSyncMessage message: String) {
+            
+        }
+        #endif
     }
     private var queues = [String:NamedOutputQueue]()
     public func submit(job: Job) {
