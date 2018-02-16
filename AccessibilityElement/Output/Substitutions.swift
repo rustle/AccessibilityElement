@@ -69,12 +69,16 @@ extension Character {
 }
 
 public struct EmSubstitutions : Substitutions {
-    static let em: String = {
-        let synthesizer = NSSpeechSynthesizer()
-        synthesizer.rate = 300
-        return "[[inpt phon]]\(synthesizer.phonemes(from: "[[char ltrl]]m[[char norm]]"))[[inpt text]]"
-    }()
+    private static let synthesizer = NSSpeechSynthesizer()
+    private static func phonemeSynthesizerMarkup(for value: Any, rate: Float) -> String {
+        return "[[inpt phon]]\(synthesizer.phonemes(from: "[[rate \(rate)]][[char ltrl]]\(value)[[char norm]]"))[[inpt text]]"
+    }
+    static let ehm: String = phonemeSynthesizerMarkup(for: Character("m"), rate: 300.0)
+    static let ehs: String = phonemeSynthesizerMarkup(for: Character("s"), rate: 300.0)
+    static let ehmEhs: String = phonemeSynthesizerMarkup(for: "ms", rate: 300.0)
+    static let ehmEhm: String = phonemeSynthesizerMarkup(for: "mm", rate: 300.0)
     public static let m = Character("m")
+    public static let s = Character("s")
     public static let space = Character(" ")
     public func perform(_ value: String) -> String {
         var buffer = String()
@@ -105,12 +109,12 @@ public struct EmSubstitutions : Substitutions {
                     if plusOne == EmSubstitutions.m {
                         cursor = value.index(after: cursor)
                         if cursor == value.endIndex { // At the last character
-                            buffer.append(contentsOf: EmSubstitutions.em)
+                            buffer.append(contentsOf: EmSubstitutions.ehm)
                             try scanner.skip(length:1)
                         } else if cursor < value.endIndex { // Not at the last character
                             let plusTwo = value[cursor]
                             if plusTwo.isWhitespaceOrNewline() {
-                                buffer.append(contentsOf: EmSubstitutions.em)
+                                buffer.append(contentsOf: EmSubstitutions.ehm)
                                 try scanner.skip(length:1)
                             }
                         }
@@ -125,16 +129,24 @@ public struct EmSubstitutions : Substitutions {
                                 cursor = value.index(after: cursor)
                                 buffer.append(plusOne)
                                 if cursor == value.endIndex { // At the last character
-                                    buffer.append(contentsOf: EmSubstitutions.em)
+                                    buffer.append(contentsOf: EmSubstitutions.ehm)
                                     try scanner.skip(length: value.distance(from: start, to: cursor))
                                 } else if cursor < value.endIndex { // Not at the last character
                                     let plusThree = value[cursor]
                                     if plusThree.isWhitespaceOrNewline() {
-                                        buffer.append(contentsOf: EmSubstitutions.em)
+                                        buffer.append(contentsOf: EmSubstitutions.ehm)
+                                        buffer.append(plusThree)
                                     } else {
-                                        buffer.append(plusTwo)
+                                        switch plusThree {
+                                        case EmSubstitutions.m:
+                                            buffer.append(contentsOf: EmSubstitutions.ehmEhm)
+                                        case EmSubstitutions.s:
+                                            buffer.append(contentsOf: EmSubstitutions.ehmEhs)
+                                        default:
+                                            buffer.append(plusTwo)
+                                            buffer.append(plusThree)
+                                        }
                                     }
-                                    buffer.append(plusThree)
                                     cursor = value.index(after: cursor)
                                     try scanner.skip(length:value.distance(from: start, to: cursor))
                                 }
