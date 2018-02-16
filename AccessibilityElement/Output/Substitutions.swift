@@ -69,14 +69,13 @@ extension Character {
 }
 
 public struct EmSubstitutions : Substitutions {
-    private static let synthesizer = NSSpeechSynthesizer()
-    private static func phonemeSynthesizerMarkup(for value: Any, rate: Float) -> String {
-        return "[[inpt phon]]\(synthesizer.phonemes(from: "[[rate \(rate)]][[char ltrl]]\(value)[[char norm]]"))[[inpt text]]"
+    private static func literalMarkup(for value: Any) -> String {
+        return "[[char ltrl]]\(value)[[char norm]]"
     }
-    static let ehm: String = phonemeSynthesizerMarkup(for: Character("m"), rate: 300.0)
-    static let ehs: String = phonemeSynthesizerMarkup(for: Character("s"), rate: 300.0)
-    static let ehmEhs: String = phonemeSynthesizerMarkup(for: "ms", rate: 300.0)
-    static let ehmEhm: String = phonemeSynthesizerMarkup(for: "mm", rate: 300.0)
+    static let ehm: String = literalMarkup(for: Character("m"))
+    static let ehs: String = literalMarkup(for: Character("s"))
+    static let ehmEhs: String = literalMarkup(for: "ms")
+    static let ehmEhm: String = literalMarkup(for: "mm")
     public static let m = Character("m")
     public static let s = Character("s")
     public static let space = Character(" ")
@@ -104,33 +103,46 @@ public struct EmSubstitutions : Substitutions {
                 buffer.append(scanned)
                 let start = scanner.position
                 var cursor = start
+                func bump() {
+                    cursor = value.index(after: cursor)
+                }
+                func skip() throws {
+                    try scanner.skip(length:value.distance(from: start, to: cursor))
+                }
                 if cursor < value.endIndex {
                     let plusOne = value[cursor]
-                    if plusOne == EmSubstitutions.m {
-                        cursor = value.index(after: cursor)
+                    switch plusOne {
+                    case EmSubstitutions.m:
+                        bump()
                         if cursor == value.endIndex { // At the last character
                             buffer.append(contentsOf: EmSubstitutions.ehm)
-                            try scanner.skip(length:1)
+                            try scanner.skip(length:value.distance(from: start, to: cursor))
                         } else if cursor < value.endIndex { // Not at the last character
                             let plusTwo = value[cursor]
                             if plusTwo.isWhitespaceOrNewline() {
                                 buffer.append(contentsOf: EmSubstitutions.ehm)
-                                try scanner.skip(length:1)
+                                buffer.append(plusTwo)
+                            } else {
+                                buffer.append(plusOne)
+                                buffer.append(plusTwo)
                             }
+                            bump()
+                            try skip()
                         }
-                    } else if plusOne == EmSubstitutions.space {
-                        cursor = value.index(after: cursor)
+                    case EmSubstitutions.space:
+                        bump()
                         if cursor == value.endIndex { // At the last character
                             buffer.append(plusOne)
-                            try scanner.skip(length:1)
+                            try scanner.skip(length:value.distance(from: start, to: cursor))
                         } else if cursor < value.endIndex { // Not at the last character
                             let plusTwo = value[cursor]
-                            if plusTwo == EmSubstitutions.m {
-                                cursor = value.index(after: cursor)
+                            switch plusTwo {
+                            case EmSubstitutions.m:
+                                bump()
                                 buffer.append(plusOne)
                                 if cursor == value.endIndex { // At the last character
                                     buffer.append(contentsOf: EmSubstitutions.ehm)
-                                    try scanner.skip(length: value.distance(from: start, to: cursor))
+                                    try skip()
                                 } else if cursor < value.endIndex { // Not at the last character
                                     let plusThree = value[cursor]
                                     if plusThree.isWhitespaceOrNewline() {
@@ -147,11 +159,33 @@ public struct EmSubstitutions : Substitutions {
                                             buffer.append(plusThree)
                                         }
                                     }
-                                    cursor = value.index(after: cursor)
-                                    try scanner.skip(length:value.distance(from: start, to: cursor))
+                                    bump()
+                                    try skip()
                                 }
+                            case EmSubstitutions.s:
+                                bump()
+                                buffer.append(plusOne)
+                                if cursor == value.endIndex { // At the last character
+                                    buffer.append(contentsOf: EmSubstitutions.ehs)
+                                    try skip()
+                                } else if cursor < value.endIndex { // Not at the last character
+                                    let plusThree = value[cursor]
+                                    if plusThree.isWhitespaceOrNewline() {
+                                        buffer.append(contentsOf: EmSubstitutions.ehs)
+                                        buffer.append(plusThree)
+                                    } else {
+                                        buffer.append(plusTwo)
+                                        buffer.append(plusThree)
+                                    }
+                                    bump()
+                                    try skip()
+                                }
+                            default:
+                                break
                             }
                         }
+                    default:
+                        break
                     }
                 }
             } catch StringScannerError.eof {
