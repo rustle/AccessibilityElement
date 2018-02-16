@@ -56,7 +56,7 @@ public struct SimpleSubstitutions : Substitutions, Codable {
 }
 
 extension Character {
-    func isWhitespaceOrNewline(offset: Int) -> Bool {
+    func isWhitespaceOrNewline() -> Bool {
         let unicodeScalars = self.unicodeScalars
         if unicodeScalars.count == 1 {
             let unicode = unicodeScalars[unicodeScalars.startIndex]
@@ -86,7 +86,7 @@ public struct EmSubstitutions : Substitutions {
         let inverted = decimals.inverted
         func scanToDecimal() {
             do {
-                let scanned = try scanner.scan(upTo: decimals) ?? ""
+                let scanned = try scanner.scan(upTo: decimals)
                 buffer.append(scanned)
             } catch StringScannerError.eof {
                 return
@@ -96,46 +96,47 @@ public struct EmSubstitutions : Substitutions {
         }
         func scanToNonDecimal() {
             do {
-                let scanned = try scanner.scan(upTo: inverted) ?? ""
+                let scanned = try scanner.scan(upTo: inverted)
                 buffer.append(scanned)
-                let start = scanner.consumed
+                let start = scanner.position
                 var cursor = start
-                if cursor < value.count {
-                    let plusOne = value[value.index(value.startIndex, offsetBy: cursor)]
+                if cursor < value.endIndex {
+                    let plusOne = value[cursor]
                     if plusOne == EmSubstitutions.m {
-                        cursor += 1
-                        if cursor == value.count { // At the last character
+                        cursor = value.index(after: cursor)
+                        if cursor == value.endIndex { // At the last character
                             buffer.append(contentsOf: EmSubstitutions.em)
                             try scanner.skip(length:1)
-                        } else if cursor < value.count { // Not at the last character
-                            let plusTwo = value[value.index(value.startIndex, offsetBy: cursor)]
-                            if plusTwo.isWhitespaceOrNewline(offset: cursor) {
+                        } else if cursor < value.endIndex { // Not at the last character
+                            let plusTwo = value[cursor]
+                            if plusTwo.isWhitespaceOrNewline() {
                                 buffer.append(contentsOf: EmSubstitutions.em)
                                 try scanner.skip(length:1)
                             }
                         }
                     } else if plusOne == EmSubstitutions.space {
-                        cursor += 1
-                        if cursor == value.count { // At the last character
+                        cursor = value.index(after: cursor)
+                        if cursor == value.endIndex { // At the last character
                             buffer.append(plusOne)
                             try scanner.skip(length:1)
-                        } else if cursor < value.count { // Not at the last character
-                            let plusTwo = value[value.index(value.startIndex, offsetBy: cursor)]
+                        } else if cursor < value.endIndex { // Not at the last character
+                            let plusTwo = value[cursor]
                             if plusTwo == EmSubstitutions.m {
-                                cursor += 1
+                                cursor = value.index(after: cursor)
                                 buffer.append(plusOne)
-                                if cursor == value.count { // At the last character
+                                if cursor == value.endIndex { // At the last character
                                     buffer.append(contentsOf: EmSubstitutions.em)
-                                    try scanner.skip(length:2)
-                                } else if cursor < value.count { // Not at the last character
-                                    let plusThree = value[value.index(value.startIndex, offsetBy: cursor)]
-                                    if plusThree.isWhitespaceOrNewline(offset: cursor) {
+                                    try scanner.skip(length: value.distance(from: start, to: cursor))
+                                } else if cursor < value.endIndex { // Not at the last character
+                                    let plusThree = value[cursor]
+                                    if plusThree.isWhitespaceOrNewline() {
                                         buffer.append(contentsOf: EmSubstitutions.em)
                                     } else {
                                         buffer.append(plusTwo)
                                     }
                                     buffer.append(plusThree)
-                                    try scanner.skip(length:3)
+                                    cursor = value.index(after: cursor)
+                                    try scanner.skip(length:value.distance(from: start, to: cursor))
                                 }
                             }
                         }

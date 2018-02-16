@@ -24,6 +24,10 @@ class SubstitutionsTests : XCTestCase {
                        "1 ")
         XCTAssertEqual(subs.perform("1 mx"),
                        "1 mx")
+        XCTAssertEqual(subs.perform("1🍔"),
+                       "1🍔")
+        XCTAssertEqual(subs.perform("🍔1🍔"),
+                       "🍔1🍔")
         // TODO: These are both worth substituting (milliseconds, millimeters0
         XCTAssertEqual(subs.perform("1 ms"),
                        "1 ms")
