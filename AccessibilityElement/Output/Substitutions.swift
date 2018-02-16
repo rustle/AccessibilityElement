@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import SwiftScanner
 
 public protocol Substitutions {
     func perform(_ value: String) -> String
@@ -77,67 +78,73 @@ public struct EmSubstitutions : Substitutions {
     public static let space = Character(" ")
     public func perform(_ value: String) -> String {
         var buffer = String()
-        let scanner = Scanner(string: value)
-        scanner.charactersToBeSkipped = nil
+        buffer.reserveCapacity(value.utf8.count)
+        // TODO: test scanning with move and accumulate false and manually appending substrings instead
+        // of making temp Strings
+        let scanner = StringScanner(value)
         let decimals = CharacterSet.decimalDigits
         let inverted = decimals.inverted
-        let whitespace = CharacterSet.whitespacesAndNewlines
         func scanToDecimal() {
-            let before = scanner.scanLocation
-            _ = scanner.scanUpToCharacters(from: decimals, into: nil)
-            let after = scanner.scanLocation
-            if after > before {
-                buffer.append(contentsOf: value[before..<after])
+            do {
+                let scanned = try scanner.scan(upTo: decimals) ?? ""
+                buffer.append(scanned)
+            } catch StringScannerError.eof {
+                return
+            } catch {
+                return
             }
         }
         func scanToNonDecimal() {
-            let before = scanner.scanLocation
-            _ = scanner.scanUpToCharacters(from: inverted, into: nil)
-            let after = scanner.scanLocation
-            if after > before {
-                buffer.append(contentsOf: value[before..<after])
-            }
-            var cursor = after
-            if cursor < value.count {
-                let plusOne = value[value.index(value.startIndex, offsetBy: cursor)]
-                if plusOne == EmSubstitutions.m {
-                    cursor += 1
-                    if cursor == value.count { // At the last character
-                        buffer.append(contentsOf: EmSubstitutions.em)
-                        scanner.scanLocation = cursor
-                    } else if cursor < value.count { // Not at the last character
-                        let plusTwo = value[value.index(value.startIndex, offsetBy: cursor)]
-                        if plusTwo.isWhitespaceOrNewline(offset: after+1) {
+            do {
+                let scanned = try scanner.scan(upTo: inverted) ?? ""
+                buffer.append(scanned)
+                let start = scanner.consumed
+                var cursor = start
+                if cursor < value.count {
+                    let plusOne = value[value.index(value.startIndex, offsetBy: cursor)]
+                    if plusOne == EmSubstitutions.m {
+                        cursor += 1
+                        if cursor == value.count { // At the last character
                             buffer.append(contentsOf: EmSubstitutions.em)
-                            scanner.scanLocation = cursor
-                        }
-                    }
-                } else if plusOne == EmSubstitutions.space {
-                    cursor += 1
-                    if cursor == value.count { // At the last character
-                        buffer.append(plusOne)
-                        scanner.scanLocation = cursor
-                    } else if cursor < value.count { // Not at the last character
-                        let plusTwo = value[value.index(value.startIndex, offsetBy: cursor)]
-                        if plusTwo == EmSubstitutions.m {
-                            cursor += 1
-                            buffer.append(plusOne)
-                            if cursor == value.count { // At the last character
+                            try scanner.skip(length:1)
+                        } else if cursor < value.count { // Not at the last character
+                            let plusTwo = value[value.index(value.startIndex, offsetBy: cursor)]
+                            if plusTwo.isWhitespaceOrNewline(offset: cursor) {
                                 buffer.append(contentsOf: EmSubstitutions.em)
-                            } else if cursor < value.count { // Not at the last character
-                                let plusThree = value[value.index(value.startIndex, offsetBy: cursor)]
-                                if plusThree.isWhitespaceOrNewline(offset: cursor) {
-                                    buffer.append(contentsOf: EmSubstitutions.em)
-                                } else {
-                                    buffer.append(plusTwo)
-                                }
-                                buffer.append(plusThree)
-                                cursor += 1
+                                try scanner.skip(length:1)
                             }
-                            scanner.scanLocation = cursor
+                        }
+                    } else if plusOne == EmSubstitutions.space {
+                        cursor += 1
+                        if cursor == value.count { // At the last character
+                            buffer.append(plusOne)
+                            try scanner.skip(length:1)
+                        } else if cursor < value.count { // Not at the last character
+                            let plusTwo = value[value.index(value.startIndex, offsetBy: cursor)]
+                            if plusTwo == EmSubstitutions.m {
+                                cursor += 1
+                                buffer.append(plusOne)
+                                if cursor == value.count { // At the last character
+                                    buffer.append(contentsOf: EmSubstitutions.em)
+                                    try scanner.skip(length:2)
+                                } else if cursor < value.count { // Not at the last character
+                                    let plusThree = value[value.index(value.startIndex, offsetBy: cursor)]
+                                    if plusThree.isWhitespaceOrNewline(offset: cursor) {
+                                        buffer.append(contentsOf: EmSubstitutions.em)
+                                    } else {
+                                        buffer.append(plusTwo)
+                                    }
+                                    buffer.append(plusThree)
+                                    try scanner.skip(length:3)
+                                }
+                            }
                         }
                     }
                 }
+            } catch StringScannerError.eof {
+                return
+            } catch {
+                return
             }
         }
         while !scanner.isAtEnd {
