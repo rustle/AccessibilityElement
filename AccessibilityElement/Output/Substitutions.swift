@@ -106,6 +106,9 @@ public struct EmSubstitutions : Substitutions {
                 func bump() {
                     cursor = value.index(after: cursor)
                 }
+                func backup() {
+                    cursor = value.index(before: cursor)
+                }
                 func skip() throws {
                     try scanner.skip(length:value.distance(from: start, to: cursor))
                 }
@@ -116,24 +119,55 @@ public struct EmSubstitutions : Substitutions {
                         bump()
                         if cursor == value.endIndex { // At the last character
                             buffer.append(contentsOf: EmSubstitutions.ehm)
-                            try scanner.skip(length:value.distance(from: start, to: cursor))
                         } else if cursor < value.endIndex { // Not at the last character
                             let plusTwo = value[cursor]
                             if plusTwo.isWhitespaceOrNewline() {
                                 buffer.append(contentsOf: EmSubstitutions.ehm)
                                 buffer.append(plusTwo)
+                                bump()
                             } else {
-                                buffer.append(plusOne)
-                                buffer.append(plusTwo)
+                                switch plusTwo {
+                                case EmSubstitutions.m:
+                                    bump()
+                                    if cursor == value.endIndex { // At the last character
+                                        buffer.append(contentsOf: EmSubstitutions.ehmEhm)
+                                    } else if cursor < value.endIndex { // Not at the last character
+                                        let plusThree = value[cursor]
+                                        if plusThree.isWhitespaceOrNewline() {
+                                            buffer.append(contentsOf: EmSubstitutions.ehmEhm)
+                                            buffer.append(plusThree)
+                                        } else {
+                                            buffer.append(plusOne)
+                                            buffer.append(plusTwo)
+                                            buffer.append(plusThree)
+                                        }
+                                        bump()
+                                    }
+                                case EmSubstitutions.s:
+                                    bump()
+                                    if cursor == value.endIndex { // At the last character
+                                        buffer.append(contentsOf: EmSubstitutions.ehmEhs)
+                                    } else if cursor < value.endIndex { // Not at the last character
+                                        let plusThree = value[cursor]
+                                        bump()
+                                        if plusThree.isWhitespaceOrNewline() {
+                                            buffer.append(contentsOf: EmSubstitutions.ehmEhs)
+                                            buffer.append(plusThree)
+                                        } else {
+                                            buffer.append(plusOne)
+                                            buffer.append(plusTwo)
+                                            buffer.append(plusThree)
+                                        }
+                                    }
+                                default:
+                                    buffer.append(plusOne)
+                                }
                             }
-                            bump()
-                            try skip()
                         }
                     case EmSubstitutions.space:
                         bump()
                         if cursor == value.endIndex { // At the last character
                             buffer.append(plusOne)
-                            try scanner.skip(length:value.distance(from: start, to: cursor))
                         } else if cursor < value.endIndex { // Not at the last character
                             let plusTwo = value[cursor]
                             switch plusTwo {
@@ -142,32 +176,48 @@ public struct EmSubstitutions : Substitutions {
                                 buffer.append(plusOne)
                                 if cursor == value.endIndex { // At the last character
                                     buffer.append(contentsOf: EmSubstitutions.ehm)
-                                    try skip()
                                 } else if cursor < value.endIndex { // Not at the last character
                                     let plusThree = value[cursor]
                                     if plusThree.isWhitespaceOrNewline() {
                                         buffer.append(contentsOf: EmSubstitutions.ehm)
                                         buffer.append(plusThree)
+                                        bump()
                                     } else {
                                         switch plusThree {
                                         case EmSubstitutions.m:
-                                            buffer.append(contentsOf: EmSubstitutions.ehmEhm)
+                                            bump()
+                                            if cursor == value.endIndex {
+                                                buffer.append(contentsOf: EmSubstitutions.ehmEhm)
+                                            } else if cursor < value.endIndex { // Not at the last character
+                                                let plusFour = value[cursor]
+                                                if plusFour.isWhitespaceOrNewline() {
+                                                    buffer.append(contentsOf: EmSubstitutions.ehmEhm)
+                                                } else {
+                                                    buffer.append(plusTwo)
+                                                    buffer.append(plusThree)
+                                                }
+                                                buffer.append(plusFour)
+                                                bump()
+                                            }
                                         case EmSubstitutions.s:
-                                            buffer.append(contentsOf: EmSubstitutions.ehmEhs)
+                                            bump()
+                                            if cursor == value.endIndex {
+                                                buffer.append(contentsOf: EmSubstitutions.ehmEhs)
+                                            } else if cursor < value.endIndex { // Not at the last character
+                                                fatalError()
+                                            }
                                         default:
                                             buffer.append(plusTwo)
                                             buffer.append(plusThree)
+                                            bump()
                                         }
                                     }
-                                    bump()
-                                    try skip()
                                 }
                             case EmSubstitutions.s:
                                 bump()
                                 buffer.append(plusOne)
                                 if cursor == value.endIndex { // At the last character
                                     buffer.append(contentsOf: EmSubstitutions.ehs)
-                                    try skip()
                                 } else if cursor < value.endIndex { // Not at the last character
                                     let plusThree = value[cursor]
                                     if plusThree.isWhitespaceOrNewline() {
@@ -178,16 +228,16 @@ public struct EmSubstitutions : Substitutions {
                                         buffer.append(plusThree)
                                     }
                                     bump()
-                                    try skip()
                                 }
                             default:
-                                break
+                                backup()
                             }
                         }
                     default:
                         break
                     }
                 }
+                try skip()
             } catch StringScannerError.eof {
                 return
             } catch {
