@@ -92,36 +92,6 @@ public class Output {
                                      autoreleaseFrequency: .workItem,
                                      target: .global())
     private class NamedOutputQueue : NSObject, NSSpeechSynthesizerDelegate {
-        #if false
-        // Doesn't seaem to have any effect
-        static let speechDictionary: [NSSpeechSynthesizer.DictionaryKey:Any] = {
-            let formatter = ISO8601DateFormatter()
-            formatter.formatOptions = [
-                .withYear,
-                .withMonth,
-                .withDay,
-                .withDashSeparatorInDate,
-                .withSpaceBetweenDateAndTime,
-                .withTime,
-                .withColonSeparatorInTime,
-            ]
-            let date = formatter.string(from: Date()) + " +0000"
-            let synthesizer = NSSpeechSynthesizer()
-            var phonemes = [[NSSpeechSynthesizer.DictionaryKey:String]]()
-            let em = synthesizer.phonemes(from: "em")
-            for i in 0..<1000 {
-                phonemes.append([
-                    .entrySpelling : "\(i)m",
-                    .entryPhonemes : "\(synthesizer.phonemes(from: "\(i)")) \(em)"
-                ])
-            }
-            return [
-                .modificationDate : date,
-                .pronunciations : phonemes,
-                .abbreviations : phonemes,
-            ]
-        }()
-        #endif
         private let synthesizer = NSSpeechSynthesizer()
         private let identifier: String
         private let queue: DispatchQueue
