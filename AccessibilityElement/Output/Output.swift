@@ -10,6 +10,8 @@ public class Output {
     public struct Options : OptionSet, Codable {
         public let rawValue: Int
         public static let interrupt = Options(rawValue: 1 << 0)
+        public static let punctuation = Options(rawValue: 1 << 1)
+        public static let abbreviations = Options(rawValue: 1 << 2)
         public init(rawValue: Int) {
             self.rawValue = rawValue
         }
@@ -28,14 +30,15 @@ public class Output {
             private enum PayloadCodingKeys : String, CodingKey {
                 case type = "a"
                 case speech = "b"
-                case names = "c"
-                case counts = "d"
-                case cadences = "e"
+                case options = "c"
+                case names = "d"
+                case counts = "e"
+                case cadences = "f"
             }
             case pauseSpeech
             case continueSpeech
             case cancelSpeech
-            case speech(String)
+            case speech(String, Options?)
             case sound([String], [Int], [TimeInterval])
             public func encode(to encoder: Encoder) throws {
                 var container = encoder.container(keyedBy: PayloadCodingKeys.self)
@@ -51,9 +54,10 @@ public class Output {
                     try container.encode(names, forKey: .names)
                     try container.encode(counts, forKey: .counts)
                     try container.encode(cadences, forKey: .cadences)
-                case .speech(let value):
+                case .speech(let value, let options):
                     try container.encode(PayloadType.speech, forKey: .type)
                     try container.encode(value, forKey: .speech)
+                    try container.encodeIfPresent(options?.rawValue, forKey: .options)
                 }
             }
             public init(from decoder: Decoder) throws {
@@ -70,7 +74,13 @@ public class Output {
                                   try values.decode([Int].self, forKey: .counts),
                                   try values.decode([TimeInterval].self, forKey: .cadences))
                 case .speech:
-                    self = .speech(try values.decode(String.self, forKey: .speech))
+                    let options: Options?
+                    if let rawValue = try values.decodeIfPresent(Int.self, forKey: .options) {
+                        options = Options(rawValue: rawValue)
+                    } else {
+                        options = nil
+                    }
+                    self = .speech(try values.decode(String.self, forKey: .speech), options)
                 }
             }
         }
@@ -122,9 +132,9 @@ public class Output {
                                    counts: counts,
                                    cadences: cadences,
                                    options: job.options)
-                    case .speech(let value):
+                    case .speech(let value, let options):
                         self.speech(value: value,
-                                    options: job.options)
+                                    options: options ?? job.options)
                     }
                 }
             }
@@ -158,17 +168,21 @@ public class Output {
             if options.contains(.interrupt) {
                 synthesizer.stopSpeaking()
             }
-            synthesizer.startSpeaking(performSubstitutions(value: value))
+            synthesizer.startSpeaking(performSubstitutions(value: value, options: options))
         }
-        private static let substitutions: [Substitutions] = {
-            return [
-                AbbreviationExpansion(),
-                PunctuationExpansion(),
-            ]
-        }()
-        private func performSubstitutions(value: String) -> String {
+        private func substitutions(options: Options) -> [Substitutions] {
+            var substitutions = [Substitutions]()
+            if options.contains(.abbreviations) {
+                substitutions.append(AbbreviationExpansion())
+            }
+            if options.contains(.punctuation) {
+                substitutions.append(PunctuationExpansion())
+            }
+            return substitutions
+        }
+        private func performSubstitutions(value: String, options: Options) -> String {
             var value = value
-            for substitution in NamedOutputQueue.substitutions {
+            for substitution in substitutions(options: options) {
                 value = substitution.perform(value)
             }
             return value

@@ -172,7 +172,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
                       focusedControllerNode: focusedNode,
                       applicationController: _controller)
             if let echo = focus.focusedController?.eventHandler.focusIn(), echo.count > 0 {
-                output?([.speech(echo)])
+                output?([.speech(echo, nil)])
             }
         } catch {
             let node = Node(element: element, role: .include)
@@ -180,7 +180,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
                       focusedControllerNode: node,
                       applicationController: _controller)
             if let echo = focus.focusedController?.eventHandler.focusIn(), echo.count > 0 {
-                output?([.speech(echo)])
+                output?([.speech(echo, nil)])
             }
         }
     }
