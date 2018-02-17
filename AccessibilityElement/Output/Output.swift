@@ -192,7 +192,8 @@ public class Output {
         }
         private static let substitutions: [Substitutions] = {
             return [
-                EmSubstitutions()
+                AbbreviationExpansion(),
+                PunctuationExpansion(),
             ]
         }()
         private func performSubstitutions(value: String) -> String {
@@ -200,7 +201,6 @@ public class Output {
             for substitution in NamedOutputQueue.substitutions {
                 value = substitution.perform(value)
             }
-            print(value)
             return value
         }
         #if false

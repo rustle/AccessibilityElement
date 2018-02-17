@@ -10,8 +10,8 @@ import XCTest
 @testable import AccessibilityElement
 
 class SubstitutionsTests : XCTestCase {
-    func testEm() {
-        let subs = EmSubstitutions()
+    func testAbbreviation() {
+        let subs = AbbreviationExpansion()
         XCTAssertEqual(subs.perform("1m"),              "1[[char ltrl]]m[[char norm]]")
         XCTAssertEqual(subs.perform("123 456m 789"),    "123 456[[char ltrl]]m[[char norm]] 789")
         XCTAssertEqual(subs.perform("123 456m 789m"),   "123 456[[char ltrl]]m[[char norm]] 789[[char ltrl]]m[[char norm]]")
@@ -40,5 +40,9 @@ class SubstitutionsTests : XCTestCase {
 //        XCTAssertEqual(subs.perform("1'"),               "1 [[char ltrl]]'[[char norm]]")
 //        XCTAssertEqual(subs.perform("1\""),              "1 [[char ltrl]]\"[[char norm]]")
 //        XCTAssertEqual(subs.perform("1''"),              "1 [[char ltrl]]''[[char norm]]")
+    }
+    func testPunctuation() {
+        let subs = PunctuationExpansion()
+        XCTAssertEqual(subs.perform("func hello() { }"), "func hello[[char ltrl]]()[[char norm]] [[char ltrl]]{[[char norm]] [[char ltrl]]}[[char norm]]")
     }
 }

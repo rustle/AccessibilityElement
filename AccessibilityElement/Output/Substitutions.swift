@@ -68,7 +68,7 @@ extension Character {
     }
 }
 
-public struct EmSubstitutions : Substitutions {
+public struct AbbreviationExpansion : Substitutions {
     private static func literalMarkup(for value: Any) -> String {
         return "[[char ltrl]]\(value)[[char norm]]"
     }
@@ -81,7 +81,7 @@ public struct EmSubstitutions : Substitutions {
     public static let space = Character(" ")
     public func perform(_ value: String) -> String {
         var buffer = String()
-        buffer.reserveCapacity(value.utf8.count)
+        buffer.reserveCapacity(value.utf16.count)
         // TODO: test scanning with move and accumulate false and manually appending substrings instead
         // of making temp Strings
         let scanner = StringScanner(value)
@@ -115,26 +115,26 @@ public struct EmSubstitutions : Substitutions {
                 if cursor < value.endIndex {
                     let plusOne = value[cursor]
                     switch plusOne {
-                    case EmSubstitutions.m:
+                    case AbbreviationExpansion.m:
                         bump()
                         if cursor == value.endIndex { // At the last character
-                            buffer.append(contentsOf: EmSubstitutions.ehm)
+                            buffer.append(contentsOf: AbbreviationExpansion.ehm)
                         } else if cursor < value.endIndex { // Not at the last character
                             let plusTwo = value[cursor]
                             if plusTwo.isWhitespaceOrNewline() {
-                                buffer.append(contentsOf: EmSubstitutions.ehm)
+                                buffer.append(contentsOf: AbbreviationExpansion.ehm)
                                 buffer.append(plusTwo)
                                 bump()
                             } else {
                                 switch plusTwo {
-                                case EmSubstitutions.m:
+                                case AbbreviationExpansion.m:
                                     bump()
                                     if cursor == value.endIndex { // At the last character
-                                        buffer.append(contentsOf: EmSubstitutions.ehmEhm)
+                                        buffer.append(contentsOf: AbbreviationExpansion.ehmEhm)
                                     } else if cursor < value.endIndex { // Not at the last character
                                         let plusThree = value[cursor]
                                         if plusThree.isWhitespaceOrNewline() {
-                                            buffer.append(contentsOf: EmSubstitutions.ehmEhm)
+                                            buffer.append(contentsOf: AbbreviationExpansion.ehmEhm)
                                             buffer.append(plusThree)
                                         } else {
                                             buffer.append(plusOne)
@@ -143,15 +143,15 @@ public struct EmSubstitutions : Substitutions {
                                         }
                                         bump()
                                     }
-                                case EmSubstitutions.s:
+                                case AbbreviationExpansion.s:
                                     bump()
                                     if cursor == value.endIndex { // At the last character
-                                        buffer.append(contentsOf: EmSubstitutions.ehmEhs)
+                                        buffer.append(contentsOf: AbbreviationExpansion.ehmEhs)
                                     } else if cursor < value.endIndex { // Not at the last character
                                         let plusThree = value[cursor]
                                         bump()
                                         if plusThree.isWhitespaceOrNewline() {
-                                            buffer.append(contentsOf: EmSubstitutions.ehmEhs)
+                                            buffer.append(contentsOf: AbbreviationExpansion.ehmEhs)
                                             buffer.append(plusThree)
                                         } else {
                                             buffer.append(plusOne)
@@ -164,34 +164,34 @@ public struct EmSubstitutions : Substitutions {
                                 }
                             }
                         }
-                    case EmSubstitutions.space:
+                    case AbbreviationExpansion.space:
                         bump()
                         if cursor == value.endIndex { // At the last character
                             buffer.append(plusOne)
                         } else if cursor < value.endIndex { // Not at the last character
                             let plusTwo = value[cursor]
                             switch plusTwo {
-                            case EmSubstitutions.m:
+                            case AbbreviationExpansion.m:
                                 bump()
                                 buffer.append(plusOne)
                                 if cursor == value.endIndex { // At the last character
-                                    buffer.append(contentsOf: EmSubstitutions.ehm)
+                                    buffer.append(contentsOf: AbbreviationExpansion.ehm)
                                 } else if cursor < value.endIndex { // Not at the last character
                                     let plusThree = value[cursor]
                                     if plusThree.isWhitespaceOrNewline() {
-                                        buffer.append(contentsOf: EmSubstitutions.ehm)
+                                        buffer.append(contentsOf: AbbreviationExpansion.ehm)
                                         buffer.append(plusThree)
                                         bump()
                                     } else {
                                         switch plusThree {
-                                        case EmSubstitutions.m:
+                                        case AbbreviationExpansion.m:
                                             bump()
                                             if cursor == value.endIndex {
-                                                buffer.append(contentsOf: EmSubstitutions.ehmEhm)
+                                                buffer.append(contentsOf: AbbreviationExpansion.ehmEhm)
                                             } else if cursor < value.endIndex { // Not at the last character
                                                 let plusFour = value[cursor]
                                                 if plusFour.isWhitespaceOrNewline() {
-                                                    buffer.append(contentsOf: EmSubstitutions.ehmEhm)
+                                                    buffer.append(contentsOf: AbbreviationExpansion.ehmEhm)
                                                 } else {
                                                     buffer.append(plusTwo)
                                                     buffer.append(plusThree)
@@ -199,10 +199,10 @@ public struct EmSubstitutions : Substitutions {
                                                 buffer.append(plusFour)
                                                 bump()
                                             }
-                                        case EmSubstitutions.s:
+                                        case AbbreviationExpansion.s:
                                             bump()
                                             if cursor == value.endIndex {
-                                                buffer.append(contentsOf: EmSubstitutions.ehmEhs)
+                                                buffer.append(contentsOf: AbbreviationExpansion.ehmEhs)
                                             } else if cursor < value.endIndex { // Not at the last character
                                                 fatalError()
                                             }
@@ -213,15 +213,15 @@ public struct EmSubstitutions : Substitutions {
                                         }
                                     }
                                 }
-                            case EmSubstitutions.s:
+                            case AbbreviationExpansion.s:
                                 bump()
                                 buffer.append(plusOne)
                                 if cursor == value.endIndex { // At the last character
-                                    buffer.append(contentsOf: EmSubstitutions.ehs)
+                                    buffer.append(contentsOf: AbbreviationExpansion.ehs)
                                 } else if cursor < value.endIndex { // Not at the last character
                                     let plusThree = value[cursor]
                                     if plusThree.isWhitespaceOrNewline() {
-                                        buffer.append(contentsOf: EmSubstitutions.ehs)
+                                        buffer.append(contentsOf: AbbreviationExpansion.ehs)
                                         buffer.append(plusThree)
                                     } else {
                                         buffer.append(plusTwo)
@@ -248,6 +248,47 @@ public struct EmSubstitutions : Substitutions {
             scanToDecimal()
             scanToNonDecimal()
         }
+        return buffer
+    }
+}
+
+public struct PunctuationExpansion : Substitutions {
+    private enum Mode {
+        case punctuation
+        case other
+    }
+    public func perform(_ value: String) -> String {
+        var buffer = String()
+        var mode = Mode.other
+        func setMode(_ newMode: Mode) {
+            if mode != newMode {
+                switch newMode {
+                case .punctuation:
+                    buffer.append("[[char ltrl]]")
+                case .other:
+                    buffer.append("[[char norm]]")
+                }
+                mode = newMode
+            }
+        }
+        let punctuation = CharacterSet.punctuationCharacters
+        buffer.reserveCapacity(value.utf16.count)
+        for character in value {
+            let unicodeScalars = character.unicodeScalars
+            guard unicodeScalars.count == 1 else {
+                setMode(.other)
+                buffer.append(character)
+                continue
+            }
+            let unicodeScalar = unicodeScalars[unicodeScalars.startIndex]
+            if punctuation.contains(unicodeScalar) {
+                setMode(.punctuation)
+            } else {
+                setMode(.other)
+            }
+            buffer.append(character)
+        }
+        setMode(.other)
         return buffer
     }
 }
