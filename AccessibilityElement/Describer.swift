@@ -31,7 +31,7 @@ public class Describer<ElementType> where ElementType : _Element {
         case title
         case titleElement(DescriberRequest)
         case description
-        case stringValue
+        case stringValue(Int?)
         case numberValue(NumberFormatter)
         case toggleValue
         case checkboxValue
@@ -106,8 +106,19 @@ public class Describer<ElementType> where ElementType : _Element {
             }
         case .description:
             return try? element.description()
-        case .stringValue:
-            return (try? element.value()) as? String
+        case .stringValue(let count):
+            // TODO: try to use stringForRange+numberOfCharacters first
+            if let count = count {
+                guard let value = (try? element.value()) as? String else {
+                    return nil
+                }
+                if value.count <= count {
+                    return value
+                }
+                return String(value[..<value.index(value.startIndex, offsetBy: count)])
+            } else {
+                return (try? element.value()) as? String
+            }
         case .numberValue(let formatter):
             guard let number = (try? element.value()) as? NSNumber else {
                 return nil

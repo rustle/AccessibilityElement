@@ -10,7 +10,7 @@ public struct StaticText<ObserverProvidingType> : EventHandler where ObserverPro
     public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] = {
         let requests: [DescriberRequest] = [
-            Describer<ElementType>.Single(required: true, attribute: .stringValue)
+            Describer<ElementType>.Single(required: true, attribute: .stringValue(nil))
         ]
         return requests
     }()

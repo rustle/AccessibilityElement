@@ -11,7 +11,7 @@ public struct Checkbox<ObserverProvidingType> : EventHandler where ObserverProvi
     public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
-            Describer<ElementType>.Fallthrough(required: true, attributes: [.titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.stringValue, .title, .description])), .title, .description, .stringValue]),
+            Describer<ElementType>.Fallthrough(required: true, attributes: [.titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.stringValue(nil), .title, .description])), .title, .description, .stringValue(nil)]),
             Describer<ElementType>.Single(required: true, attribute: .toggleValue),
             Describer<ElementType>.Single(required: true, attribute: .roleDescription),
             ]

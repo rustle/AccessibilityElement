@@ -400,7 +400,7 @@ extension Element : CustomDebugStringConvertible {
         let requests: [DescriberRequest] = [
             Describer<Element>.Single(required: true, attribute: .role),
             Describer<Element>.Single(required: false, attribute: .subrole),
-            Describer<Element>.Fallthrough(required: false, attributes: [.title, .description, .stringValue, .titleElement(Describer<Element>.Fallthrough(required: true, attributes: [.title, .description, .stringValue]))])
+            Describer<Element>.Fallthrough(required: false, attributes: [.title, .description, .stringValue(30), .titleElement(Describer<Element>.Fallthrough(required: true, attributes: [.title, .description, .stringValue(30)]))])
         ]
         do {
             let values = try describer.describe(element: self, requests: requests)

@@ -10,7 +10,7 @@ public struct Button<ObserverProvidingType> : EventHandler where ObserverProvidi
     public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
-            Describer<ElementType>.Fallthrough(required: true, attributes: [.title, .description, .stringValue, .titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.title, .description, .stringValue]))]),
+            Describer<ElementType>.Fallthrough(required: true, attributes: [.title, .description, .stringValue(nil), .titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.title, .description, .stringValue(nil)]))]),
             Describer<ElementType>.Single(required: true, attribute: .roleDescription),
         ]
         return requests
