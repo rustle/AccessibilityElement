@@ -38,7 +38,12 @@ extension Node where ElementType : Hashable {
     public var hashValue: Int {
         return _element.hashValue
     }
+}
+extension Node where ElementType : Equatable {
     public static func ==(lhs: Node<ElementType>, rhs: Node<ElementType>) -> Bool {
+        return lhs._element == rhs._element
+    }
+    public static func !=(lhs: Node<ElementType>, rhs: Node<ElementType>) -> Bool {
         return lhs._element == rhs._element
     }
 }
