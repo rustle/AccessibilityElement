@@ -22,10 +22,10 @@ public struct WhitespaceClassifier {
         self.tabSize = tabSize
         self.indentation = indentation
         self.value = value
-        var lowerBound = value.startIndex
+        var lowerBound: String.Index
         if let range = value.rangeOfCharacter(from: CharacterSet.whitespaces.inverted,
                                               options: [],
-                                              range: lowerBound..<value.endIndex) {
+                                              range: value.startIndex..<value.endIndex) {
             lowerBound = range.lowerBound
             if range.lowerBound == value.startIndex {
                 leadingWhitespace = nil
@@ -33,7 +33,8 @@ public struct WhitespaceClassifier {
                 leadingWhitespace = value.startIndex..<range.lowerBound
             }
         } else {
-            leadingWhitespace = nil
+            leadingWhitespace = value.startIndex..<value.endIndex
+            lowerBound = value.endIndex
         }
         remainder = lowerBound..<value.endIndex
     }
