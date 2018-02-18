@@ -13,7 +13,7 @@ public protocol TreeElement {
 }
 
 extension TreeElement where Self : Hashable {
-    public func walk(_ visitor: (Self) -> Void) {
+    public func walk<T>(_ visitor: (Self) throws -> T?) rethrows -> T? {
         var elements = [Self]()
         var visited = Set<Self>()
         elements.append(self)
@@ -21,8 +21,10 @@ extension TreeElement where Self : Hashable {
             let element: Self = elements[0]
             elements.remove(at: 0)
             if !visited.contains(element) {
+                if let visitResult = try visitor(element) {
+                    return visitResult
+                }
                 do {
-                    visitor(element)
                     let children = try element.down()
                     elements.append(contentsOf: children)
                 } catch let error {
@@ -31,5 +33,6 @@ extension TreeElement where Self : Hashable {
                 visited.insert(element)
             }
         }
+        return nil
     }
 }
