@@ -7,27 +7,18 @@
 import Foundation
 import Signals
 
-public extension Array {
-    mutating func appendOptional(_ newElement: Element?) {
-        guard let newElement = newElement else {
-            return
-        }
-        append(newElement)
-    }
-}
-
-public struct Application<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
+open class Application<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
     public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         return []
     }
     public var output: (([Output.Job.Payload]) -> Void)?
-    public mutating func configure(output: (([Output.Job.Payload]) -> Void)?) {
+    public func configure(output: (([Output.Job.Payload]) -> Void)?) {
         self.output = output
     }
     public weak var _controller: Controller<Application<ObserverProvidingType>>?
     public let _node: Node<ElementType>
-    public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
+    public required init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
         _node = node
         self.applicationObserver = applicationObserver
         focus = Focus(applicationObserver: applicationObserver)
@@ -40,16 +31,20 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
     // MARK: Window State
     private var windowTokenMap = [ObserverProvidingType.ElementType:ApplicationObserver<ObserverProvidingType>.Token]()
     private var childrenDirty = false
-    private mutating func rebuildChildrenIfNeeded() {
+    private func rebuildChildrenIfNeeded() {
         guard let controller = _controller else {
             return
         }
         if childrenDirty {
-            controller.childControllers = try? controller.childControllers(node: _node)
+            do {
+                controller.childControllers = try controller.childControllers(node: _node)
+            } catch {
+                controller.childControllers = []
+            }
             childrenDirty = false
         }
     }
-    private mutating func destroyed(window: ElementType) {
+    private func destroyed(window: ElementType) {
         guard let (_, _, observer) = try? observerContext() else {
             return
         }
@@ -63,7 +58,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
         }
         childrenDirty = true
     }
-    private mutating func created(window: ElementType) {
+    private func created(window: ElementType) {
         childrenDirty = true
         guard let (controller, _, observer) = try? observerContext() else {
             return
@@ -74,80 +69,135 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
             }
         } catch {}
     }
-    private mutating func focusChanged(window: ElementType) {
+    private func focusChanged(window: ElementType) {
         if let focusedElement = try? _node._element.applicationFocusedElement() {
             focusChanged(element: focusedElement)
         } else {
+            do {
+                let focused = try window.walk { subElement -> ElementType? in
+                    if try subElement.isKeyboardFocused() {
+                        return subElement
+                    }
+                    return nil
+                }
+                if let focused = focused {
+                    focusChanged(element: focused)
+                    return
+                }
+            } catch { }
             focusChanged(element: window)
         }
     }
     // MARK: Focused UI Element
     private struct Focus {
+        enum Error : Swift.Error {
+            case focusFailed(Swift.Error)
+            case typeMismatch
+            case focusedElementNotInHierarchy
+        }
         typealias ElementType = ObserverProvidingType.ElementType
         let applicationObserver: ApplicationObserver<ObserverProvidingType>
         init(applicationObserver: ApplicationObserver<ObserverProvidingType>) {
             self.applicationObserver = applicationObserver
         }
-        var focusedContainer: _Controller<ElementType>?
+        var focusedContainerController: _Controller<ElementType>?
         var focusedController: _Controller<ElementType>?
+        enum Clear {
+            case full
+            case container
+        }
+        private mutating func reset(_ type: Clear) {
+            //print("reset \(type)")
+        }
+        private mutating func build(from focusedContainerController: _Controller<ElementType>,
+                                    to focusedControllerNode: Node<ElementType>,
+                                    applicationController: _Controller<ElementType>?) throws {
+            if let currentFocusedController = focusedController, currentFocusedController.node == focusedControllerNode {
+                return
+            }
+            do {
+                if let previouslyFocusedController = self.focusedController {
+                    _ = previouslyFocusedController.eventHandler.focusOut()
+                }
+                let ancestor = focusedContainerController.node
+                var nodes = [Node<ElementType>]()
+                var current: Node<ElementType>? = focusedControllerNode
+                while current != nil, current! != ancestor {
+                    do {
+                        nodes.append(current!)
+                        current = try current!.up()
+                    } catch {
+                        current = nil
+                    }
+                }
+                nodes.reverse()
+                var controller = focusedContainerController
+                for node in nodes {
+                    // need to add dirty flag for children to _Controller
+                    if controller.childControllers.count == 0 {
+                        controller.childControllers = try controller.childControllers(node: node)
+                    }
+                    guard let index = controller._childControllers.index(where: { controller in
+                        return controller.node == node
+                    }) else {
+                        throw Focus.Error.focusedElementNotInHierarchy
+                    }
+                    controller = controller._childControllers[index]
+                }
+                self.focusedController = controller
+                _ = controller.eventHandler.focusIn()
+            } catch let error {
+                throw Focus.Error.focusFailed(error)
+            }
+        }
+        private mutating func fullRebuild(focusedContainerNode: Node<ElementType>,
+                                          focusedControllerNode: Node<ElementType>?,
+                                          applicationController: _Controller<ElementType>?) throws {
+            var focusedContainerController: _Controller<ElementType>
+            do {
+                let shared = try EventHandlerRegistrar<ObserverProvidingType>.shared()
+                let eventHandler = try shared.eventHandler(node: focusedContainerNode,
+                                                           applicationObserver: applicationObserver)
+                focusedContainerController = (try eventHandler.makeController()) as! _Controller<ElementType>
+                focusedContainerController.applicationController = applicationController
+                focusedContainerController.eventHandler.connect()
+            } catch let error {
+                throw Focus.Error.focusFailed(error)
+            }
+            try sameContainerRebuild(focusedContainerController: focusedContainerController,
+                                     focusedControllerNode: focusedControllerNode,
+                                     applicationController: applicationController)
+        }
+        private mutating func sameContainerRebuild(focusedContainerController: _Controller<ElementType>,
+                                                   focusedControllerNode: Node<ElementType>?,
+                                                   applicationController: _Controller<ElementType>?) throws {
+            if let updatedFocusedControllerNode = focusedControllerNode {
+                try build(from: focusedContainerController,
+                          to: updatedFocusedControllerNode,
+                          applicationController: applicationController)
+            } else {
+                self.focusedContainerController = focusedContainerController
+                reset(.container)
+            }
+        }
         mutating func set(focusedContainerNode: Node<ElementType>?,
                           focusedControllerNode: Node<ElementType>?,
-                          applicationController: _Controller<ElementType>?) {
-            var focusedContainer: _Controller<ElementType>?
-            if let focusedContainerNode = focusedContainerNode {
+                          applicationController: _Controller<ElementType>?) throws {
+            guard let updatedFocusedContainerNode = focusedContainerNode else {
+                reset(.full)
+                return
+            }
+            if let currentFocusedContainerController = self.focusedContainerController,
+                currentFocusedContainerController.node == updatedFocusedContainerNode {
                 do {
-                    let shared = try EventHandlerRegistrar<ObserverProvidingType>.shared()
-                    let eventHandler = try shared.eventHandler(node: focusedContainerNode,
-                                                               applicationObserver: applicationObserver)
-                    focusedContainer = (try eventHandler.makeController()) as? _Controller<ElementType>
-                    focusedContainer?.applicationController = applicationController
-                } catch {
-                    fatalError()
-                }
+                    try sameContainerRebuild(focusedContainerController: currentFocusedContainerController,
+                                             focusedControllerNode: focusedControllerNode,
+                                             applicationController: applicationController)
+                } catch { }
             }
-            var focusedController: _Controller<ElementType>?
-            if let focusedControllerNode = focusedControllerNode {
-                do {
-                    let shared = try EventHandlerRegistrar<ObserverProvidingType>.shared()
-                    let eventHandler = try shared.eventHandler(node: focusedControllerNode,
-                                                               applicationObserver: applicationObserver)
-                    focusedController = (try eventHandler.makeController()) as? _Controller<ElementType>
-                    focusedController?.applicationController = applicationController
-                } catch {
-                    fatalError()
-                }
-            }
-            // TODO: re-use controllers already in place if possible
-            // TODO: connect/disconection up the chain
-            var disconnect = [_Controller<ElementType>]()
-            disconnect.appendOptional(self.focusedContainer)
-            disconnect.appendOptional(self.focusedController)
-            self.focusedContainer = focusedContainer
-            self.focusedController = focusedController
-            var connect = [_Controller<ElementType>]()
-            connect.appendOptional(self.focusedContainer)
-            connect.appendOptional(self.focusedController)
-            // Unfortunate workaround for:
-            // Simultaneous accesses to 0x102034798, but modification requires exclusive access.
-            // Previous access (a modification) started at AccessibilityElement`closure #3 in Application.registerObservers() + 306 (0x1000d7742).
-            // Current access (a read) started at:
-            // 0    libswiftCore.dylib                 0x000000010058b070 swift_beginAccess + 605
-            // 1    AccessibilityElement               0x00000001000f3060 Controller._eventHandler.getter + 101
-            // 2    AccessibilityElement               0x00000001000f32b0 Controller.eventHandler.getter + 89
-            // 3    AccessibilityElement               0x000000010010c730 WebArea.registerObservers() + 992
-            // 4    AccessibilityElement               0x000000010010bf40 WebArea.connect() + 1638
-            // 5    AccessibilityElement               0x00000001001161d0 protocol witness for AnyEventHandler.connect() in conformance <A> WebArea<A> + 9
-            // 6    AccessibilityElement               0x00000001000d4b80 Application.Focus.set(focusedContainerNode:focusedControllerNode:applicationController:) + 2823
-            // 7    AccessibilityElement               0x00000001000d3280 Application.focusChanged(element:) + 3417
-            // 8    AccessibilityElement               0x00000001000d7610 closure #3 in Application.registerObservers() + 356
-            DispatchQueue.main.async {
-                for controller in disconnect {
-                    controller.eventHandler.disconnect()
-                }
-                for controller in connect {
-                    controller.eventHandler.connect()
-                }
-            }
+            try fullRebuild(focusedContainerNode: updatedFocusedContainerNode,
+                            focusedControllerNode: focusedControllerNode,
+                            applicationController: applicationController)
         }
     }
     private var focus: Focus
@@ -158,30 +208,37 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
             if hierarchy.classify(current!) == .container {
                 return current!
             }
-            current = try? current!.parent()
+            do {
+                current = try current!.parent()
+            } catch let error {
+                print(error)
+                throw error
+            }
         }
         throw Application.Error.containerSearchFailed
     }
-    private mutating func focusChanged(element: ElementType) {
+    private func focusChanged(element: ElementType) {
         do {
             let container = try findContainer(element: element)
             var focusedNode: Node<ElementType>? = Node(element: element, role: .include)
             let node = hierarchy.buildHierarchy(from: container,
                                                 targeting: &focusedNode)
-            focus.set(focusedContainerNode: node,
-                      focusedControllerNode: focusedNode,
-                      applicationController: _controller)
+            try focus.set(focusedContainerNode: node,
+                          focusedControllerNode: focusedNode,
+                          applicationController: _controller)
             if let echo = focus.focusedController?.eventHandler.focusIn(), echo.count > 0 {
                 output?([.speech(echo, nil)])
             }
         } catch {
-            let node = Node(element: element, role: .include)
-            focus.set(focusedContainerNode: nil,
-                      focusedControllerNode: node,
-                      applicationController: _controller)
-            if let echo = focus.focusedController?.eventHandler.focusIn(), echo.count > 0 {
-                output?([.speech(echo, nil)])
-            }
+            do {
+                let node = Node(element: element, role: .include)
+                try focus.set(focusedContainerNode: nil,
+                              focusedControllerNode: node,
+                              applicationController: _controller)
+                if let echo = focus.focusedController?.eventHandler.focusIn(), echo.count > 0 {
+                    output?([.speech(echo, nil)])
+                }
+            } catch { }
         }
     }
     // MARK: Observers
@@ -196,7 +253,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
     private var onFocusedUIElementChanged: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
     private var onWindowCreated: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
     private var onFocusedWindowChanged: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
-    private mutating func registerObservers() throws {
+    private func registerObservers() throws {
         let (controller, element, observer) = try observerContext()
         onWindowCreated = try observer.signal(element: element,
                                               notification: .windowCreated).subscribe { [weak controller] in
@@ -211,7 +268,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
             controller?._eventHandler.focusChanged(window: $0.element)
         }
     }
-    private mutating func unregisterObservers() {
+    private func unregisterObservers() {
         onWindowCreated?.cancel()
         onWindowCreated = nil
         onFocusedUIElementChanged?.cancel()
@@ -221,7 +278,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
     }
     // MARK: -
     public var isFocused: Bool = false
-    public mutating func connect() {
+    public func connect() {
         do {
             try _node._element.set(enhancedUserInterface: true)
         } catch {
@@ -233,7 +290,7 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
         }
         childrenDirty = true
     }
-    public mutating func focusIn() -> String? {
+    public func focusIn() -> String? {
         if isFocused {
             return nil
         }
@@ -248,19 +305,33 @@ public struct Application<ObserverProvidingType> : EventHandler where ObserverPr
         }
         if let focusedElement = try? _node._element.applicationFocusedElement() {
             focusChanged(element: focusedElement)
-        } else if let focusedElement = try? _node._element.focusedWindow() {
-            focusChanged(window: focusedElement)
+        } else {
+            do {
+                let focusedElement = try _node._element.walk { subElement -> ElementType? in
+                    if try subElement.isKeyboardFocused() {
+                        return subElement
+                    }
+                    return nil
+                }
+                if let focusedElement = focusedElement {
+                    focusChanged(element: focusedElement)
+                    return title
+                }
+            } catch { }
+            if let focusedElement = try? _node._element.focusedWindow() {
+                focusChanged(window: focusedElement)
+            }
         }
         return title
     }
-    public mutating func focusOut() -> String? {
+    public func focusOut() -> String? {
         isFocused = false
         return nil
     }
-    public mutating func disconnect() {
+    public func disconnect() {
         unregisterObservers()
     }
-    public mutating func handleEvent(identifier: String, type: EventType) throws {
+    public func handleEvent(identifier: String, type: EventType) throws {
         try self.focus.focusedController?.eventHandler.handleEvent(identifier: identifier, type: type)
     }
 }

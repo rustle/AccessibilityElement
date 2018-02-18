@@ -10,7 +10,7 @@ import os.log
 public protocol AnyController : class {
     var eventHandler: AnyEventHandler { get set }
     weak var parentController: AnyController? { get set }
-    var childControllers: [AnyController]? { get set }
+    var childControllers: [AnyController] { get set }
 }
 
 public class _Controller<ElementType> : AnyController where ElementType : _Element {
@@ -24,15 +24,15 @@ public class _Controller<ElementType> : AnyController where ElementType : _Eleme
         }
     }
     public weak var _parentController: _Controller<ElementType>?
-    public var childControllers: [AnyController]? {
+    public var childControllers: [AnyController] {
         get {
             return _childControllers
         }
         set {
-            _childControllers = newValue as? [_Controller<ElementType>]
+            _childControllers = (newValue as? [_Controller<ElementType>]) ?? []
         }
     }
-    public var _childControllers: [_Controller<ElementType>]?
+    public var _childControllers: [_Controller<ElementType>] = []
     public var eventHandler: AnyEventHandler {
         get {
             fatalError()
@@ -45,6 +45,9 @@ public class _Controller<ElementType> : AnyController where ElementType : _Eleme
         get {
             fatalError()
         }
+    }
+    public func childControllers(node: Node<ElementType>, reuse: Bool = true) throws -> [_Controller<ElementType>] {
+        return []
     }
 }
 
@@ -66,15 +69,46 @@ public class Controller<EventHandlerType> : _Controller<EventHandlerType.Observe
             _eventHandler = newValue as! EventHandlerType
         }
     }
+    public var applicationObserver: ApplicationObserver<ObserverProvidingType> {
+        return _eventHandler.applicationObserver
+    }
     public required init(eventHandler: EventHandlerType) throws {
         _eventHandler = eventHandler
         super.init()
         _eventHandler.controller = self
     }
-    public func childControllers(node: Node<ElementType>) throws -> [_Controller<ElementType>] {
+    public override func childControllers(node: Node<ElementType>, reuse: Bool = true) throws -> [_Controller<ElementType>] {
+#if swift(>=4.1)
+        let currentChildrenReuseMap: [Node<ElementType>:_Controller<ElementType>]
+        if reuse {
+            currentChildrenReuseMap = _childControllers.reduce(into: [Node<ElementType>:_Controller<ElementType>]()) { reuseMap, controller in
+                reuseMap[controller.node] = controller
+            }
+        } else {
+            currentChildrenReuseMap = [:]
+        }
+#else
+        let currentChildrenReuseMap: [HashableNode<ElementType>:_Controller<ElementType>]
+        if reuse {
+            currentChildrenReuseMap = _childControllers.reduce(into: [HashableNode<ElementType>:_Controller<ElementType>]()) { reuseMap, controller in
+                reuseMap[HashableNode(node: controller.node)] = controller
+            }
+        } else {
+            currentChildrenReuseMap = [:]
+        }
+#endif
         let applicationObserver = _eventHandler.applicationObserver
         let shared = try EventHandlerRegistrar<ObserverProvidingType>.shared()
         return try node.children.map { node in
+#if swift(>=4.1)
+            if let controller = currentChildrenReuseMap[node] {
+                return controller
+            }
+#else
+            if let controller = currentChildrenReuseMap[HashableNode(node: node)] {
+                return controller
+            }
+#endif
             guard let controller = try shared.eventHandler(node: node, applicationObserver: applicationObserver).makeController() as? _Controller<ElementType> else {
                 throw AccessibilityError.typeMismatch
             }
