@@ -6,8 +6,18 @@
 
 import Foundation
 
-fileprivate protocol WorkImpl {
-    func async(execute workItem: DispatchWorkItem)
+public extension Array where Element : AnyObject {
+    public func index(identity: Element) -> Index? {
+        return self.index { reference in
+            return reference === identity
+        }
+    }
+}
+
+fileprivate protocol WorkImplementation {
+    func async(qos: DispatchQoS,
+               flags: DispatchWorkItemFlags,
+               execute workItem: DispatchWorkItem)
 }
 
 public class CancellableQueue {
@@ -24,16 +34,20 @@ public class CancellableQueue {
         itemsQueue.sync {
             items.append(item)
         }
-        item.notify(qos: .`default`, flags: [], queue: itemsQueue) { [weak item] in
+        item.notify(qos: .`default`,
+                    flags: [],
+                    queue: itemsQueue) { [weak item] in
             guard let item = item else {
                 return
             }
-            guard let index = self.items.index(of: item) else {
+            guard let index = self.items.index(identity: item) else {
                 return
             }
             self.items.remove(at: index)
         }
-        self.work.async(execute: item)
+        self.work.async(qos: qos,
+                        flags: flags,
+                        execute: item)
     }
     public enum Options {
         case serial
@@ -44,9 +58,12 @@ public class CancellableQueue {
          options: Options = .serial) {
         switch options {
         case .serial:
-            work = SerialWorkImpl(label: label, qos: qos)
+            work = SerialWorkImplementation(label: label,
+                                            qos: qos)
         case .concurrent(let count):
-            work = ConcurrentWorkImpl(label: label, qos: qos, count: count)
+            work = ConcurrentWorkImplementation(label: label,
+                                                qos: qos,
+                                                count: count)
         }
     }
     public func cancelAll() {
@@ -55,10 +72,10 @@ public class CancellableQueue {
             items.removeAll()
         }
     }
-    private let work: WorkImpl
+    private let work: WorkImplementation
     private let itemsQueue = DispatchQueue(label: "Work.Items")
     private var items = [DispatchWorkItem]()
-    private class ConcurrentWorkImpl : WorkImpl {
+    private struct ConcurrentWorkImplementation : WorkImplementation {
         private let queue: BoundedQueue
         init(label: String, qos: DispatchQoS, count: Int) {
             queue = BoundedQueue(label: label,
@@ -66,11 +83,18 @@ public class CancellableQueue {
                                  count: count,
                                  autoreleaseFrequency: .workItem)
         }
-        func async(execute workItem: DispatchWorkItem) {
-            queue.async(execute: workItem)
+        func async(qos: DispatchQoS,
+                   flags: DispatchWorkItemFlags,
+                   execute workItem: DispatchWorkItem) {
+            queue.async(qos: qos,
+                        flags: flags) {
+                if !workItem.isCancelled {
+                    workItem.perform()
+                }
+            }
         }
     }
-    private class SerialWorkImpl : WorkImpl {
+    private struct SerialWorkImplementation : WorkImplementation {
         private let queue: DispatchQueue
         init(label: String, qos: DispatchQoS) {
             queue = DispatchQueue(label: label,
@@ -79,8 +103,16 @@ public class CancellableQueue {
                                   autoreleaseFrequency: .workItem,
                                   target: .global())
         }
-        func async(execute workItem: DispatchWorkItem) {
-            queue.async(execute: workItem)
+        func async(qos: DispatchQoS,
+                   flags: DispatchWorkItemFlags,
+                   execute workItem: DispatchWorkItem) {
+            queue.async(group: nil,
+                        qos: qos,
+                        flags: flags) {
+                if !workItem.isCancelled {
+                    workItem.perform()
+                }
+            }
         }
     }
 }
@@ -114,24 +146,19 @@ public class BoundedQueue {
         semaphore = DispatchSemaphore(value: count)
     }
     public func async(execute work: @escaping () -> Void) {
-        group.enter()
-        waiting.async {
-            self.semaphore.wait()
-            self.work.async {
-                work()
-                self.semaphore.signal()
-                self.group.leave()
-            }
-        }
+        async(qos: .`default`,
+              flags: [],
+              execute: work)
     }
-    public func async(execute workItem: DispatchWorkItem) {
+    public func async(qos: DispatchQoS,
+                      flags: DispatchWorkItemFlags,
+                      execute work: @escaping () -> Void) {
         group.enter()
         waiting.async {
             self.semaphore.wait()
-            self.work.async {
-                if !workItem.isCancelled {
-                    workItem.perform()
-                }
+            self.work.async(qos: qos,
+                            flags: flags) {
+                work()
                 self.semaphore.signal()
                 self.group.leave()
             }

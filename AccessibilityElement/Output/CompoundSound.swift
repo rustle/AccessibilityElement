@@ -6,12 +6,6 @@
 
 import Foundation
 
-extension DispatchWorkItem : Equatable {
-    public static func ==(lhs: DispatchWorkItem, rhs: DispatchWorkItem) -> Bool {
-        return lhs === rhs
-    }
-}
-
 public class CompoundSound {
     private class Delegate : NSObject, NSSoundDelegate {
         var didFinish: ((NSSound, Bool) -> Void)?
