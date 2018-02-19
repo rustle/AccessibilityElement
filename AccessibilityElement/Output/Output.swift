@@ -104,22 +104,29 @@ public class Output {
     private class NamedOutputQueue : NSObject, NSSpeechSynthesizerDelegate {
         private let synthesizer = NSSpeechSynthesizer()
         private let identifier: String
-        private let queue: DispatchQueue
+        private let queue: CancellableQueue
         private var soundCache = [String:CompoundSound]()
         init(identifier: String) {
             self.identifier = identifier
-            queue = DispatchQueue(label: "Output.\(identifier)",
-                                  qos: .userInitiated,
-                                  attributes: [],
-                                  autoreleaseFrequency: .workItem,
-                                  target: .global())
+            queue = CancellableQueue(label: "Output.\(identifier)")
             synthesizer.rate = 300.0
             super.init()
             synthesizer.delegate = self
         }
+        func cancelSpeech() {
+            queue.cancelAll()
+            synthesizer.stopSpeaking()
+        }
         func submit(job: Job) {
-            queue.async {
+            if job.options.contains(.interrupt) {
+                queue.cancelAll()
+                synthesizer.stopSpeaking()
+            }
+            queue.async { workItem in
                 for payload in job.payloads {
+                    if workItem.isCancelled {
+                        break
+                    }
                     switch payload {
                     case .cancelSpeech:
                         self.synthesizer.stopSpeaking()
@@ -156,7 +163,7 @@ public class Output {
                     guard let newSound = CompoundSound(resourceName: name, extension: "wav") else {
                         return
                     }
-                    newSound.volume = 0.7
+                    newSound.volume = 0.4
                     sound = newSound
                     soundCache[name] = newSound
                 }
@@ -215,7 +222,13 @@ public class Output {
     }
     private var queues = [String:NamedOutputQueue]()
     public func submit(job: Job) {
+        let cancel = job.options.contains(.interrupt)
         let queue = sync.sync { () -> NamedOutputQueue in
+            if cancel {
+                for queue in queues.values {
+                    queue.cancelSpeech()
+                }
+            }
             if let queue = queues[job.identifier] {
                 return queue
             }

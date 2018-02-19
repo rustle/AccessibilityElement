@@ -31,6 +31,7 @@
 		914E28D41FF9DCF000765FCE /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28D31FF9DCF000765FCE /* Controller.swift */; };
 		914E28F71FFB297A00765FCE /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28F61FFB297A00765FCE /* Debug.swift */; };
 		914E296E1FFF163D00765FCE /* Hierarchy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E296D1FFF163D00765FCE /* Hierarchy.swift */; };
+		915B29932039FAEC0040BA66 /* Queues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915B29922039FAEC0040BA66 /* Queues.swift */; };
 		9173AAEF20290CF200B41819 /* ObserverSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173AAEE20290CF200B41819 /* ObserverSignal.swift */; };
 		9173AAF120290EF400B41819 /* ObserverError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173AAF020290EF400B41819 /* ObserverError.swift */; };
 		9173AAF320290F9200B41819 /* SystemObserverProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173AAF220290F9200B41819 /* SystemObserverProviding.swift */; };
@@ -100,6 +101,7 @@
 		914E28D31FF9DCF000765FCE /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
 		914E28F61FFB297A00765FCE /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		914E296D1FFF163D00765FCE /* Hierarchy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hierarchy.swift; sourceTree = "<group>"; };
+		915B29922039FAEC0040BA66 /* Queues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queues.swift; sourceTree = "<group>"; };
 		9173AAEE20290CF200B41819 /* ObserverSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverSignal.swift; sourceTree = "<group>"; };
 		9173AAF020290EF400B41819 /* ObserverError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverError.swift; sourceTree = "<group>"; };
 		9173AAF220290F9200B41819 /* SystemObserverProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemObserverProviding.swift; sourceTree = "<group>"; };
@@ -163,7 +165,9 @@
 		910D6B51203525BF00A816F3 /* Output */ = {
 			isa = PBXGroup;
 			children = (
+				911DEA3B20328C7400F956C1 /* CompoundSound.swift */,
 				910D6B4D2034DB4200A816F3 /* Output.swift */,
+				915B29922039FAEC0040BA66 /* Queues.swift */,
 				910D6B4F203525B200A816F3 /* Substitutions.swift */,
 			);
 			path = Output;
@@ -266,7 +270,6 @@
 				91FFFCFE1FF5B6B400BF89A0 /* AccessibilityError.swift */,
 				9111CF2F200703D1006B56AA /* AttributedString.swift */,
 				91C5531920080228001CF14B /* Bundle.swift */,
-				911DEA3B20328C7400F956C1 /* CompoundSound.swift */,
 				914E28D31FF9DCF000765FCE /* Controller.swift */,
 				914E28F61FFB297A00765FCE /* Debug.swift */,
 				917E54A82004800C00D490A8 /* Describer.swift */,
@@ -419,6 +422,7 @@
 			files = (
 				917E546B2002E48E00D490A8 /* Application.swift in Sources */,
 				91BA29B72030D67600A978A6 /* GestureRecognizer.swift in Sources */,
+				915B29932039FAEC0040BA66 /* Queues.swift in Sources */,
 				91FFFD011FF6F09A00BF89A0 /* AXObserver.swift in Sources */,
 				917E54A7200477EB00D490A8 /* Toggle.swift in Sources */,
 				91196125200FE7D80073A998 /* Frame.swift in Sources */,

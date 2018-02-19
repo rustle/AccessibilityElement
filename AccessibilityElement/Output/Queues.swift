@@ -1,0 +1,152 @@
+//
+//  Queues.swift
+//
+//  Copyright © 2018 Doug Russell. All rights reserved.
+//
+
+import Foundation
+
+fileprivate protocol WorkImpl {
+    func async(execute workItem: DispatchWorkItem)
+}
+
+public class CancellableQueue {
+    public func async(qos: DispatchQoS = .`default`,
+                      flags: DispatchWorkItemFlags = [],
+                      execute work: @escaping (DispatchWorkItem) -> Void) {
+        var itemForClosure: DispatchWorkItem? = nil
+        let item = DispatchWorkItem(qos: qos,
+                                flags: flags) {
+            work(itemForClosure!)
+            itemForClosure = nil
+        }
+        itemForClosure = item
+        itemsQueue.sync {
+            items.append(item)
+        }
+        item.notify(qos: .`default`, flags: [], queue: itemsQueue) { [weak item] in
+            guard let item = item else {
+                return
+            }
+            guard let index = self.items.index(of: item) else {
+                return
+            }
+            self.items.remove(at: index)
+        }
+        self.work.async(execute: item)
+    }
+    public enum Options {
+        case serial
+        case concurrent(Int)
+    }
+    init(label: String,
+         qos: DispatchQoS = .`default`,
+         options: Options = .serial) {
+        switch options {
+        case .serial:
+            work = SerialWorkImpl(label: label, qos: qos)
+        case .concurrent(let count):
+            work = ConcurrentWorkImpl(label: label, qos: qos, count: count)
+        }
+    }
+    public func cancelAll() {
+        itemsQueue.sync {
+            items.forEach { $0.cancel() }
+            items.removeAll()
+        }
+    }
+    private let work: WorkImpl
+    private let itemsQueue = DispatchQueue(label: "Work.Items")
+    private var items = [DispatchWorkItem]()
+    private class ConcurrentWorkImpl : WorkImpl {
+        private let queue: BoundedQueue
+        init(label: String, qos: DispatchQoS, count: Int) {
+            queue = BoundedQueue(label: label,
+                                 qos: qos,
+                                 count: count,
+                                 autoreleaseFrequency: .workItem)
+        }
+        func async(execute workItem: DispatchWorkItem) {
+            queue.async(execute: workItem)
+        }
+    }
+    private class SerialWorkImpl : WorkImpl {
+        private let queue: DispatchQueue
+        init(label: String, qos: DispatchQoS) {
+            queue = DispatchQueue(label: label,
+                                  qos: qos,
+                                  attributes: [],
+                                  autoreleaseFrequency: .workItem,
+                                  target: .global())
+        }
+        func async(execute workItem: DispatchWorkItem) {
+            queue.async(execute: workItem)
+        }
+    }
+}
+
+public class BoundedQueue {
+    private let group = DispatchGroup()
+    private let semaphore: DispatchSemaphore
+    private let work: DispatchQueue
+    private let waiting: DispatchQueue
+    public convenience init(label: String,
+                            count: Int) {
+        self.init(label: label,
+                  qos: .`default`,
+                  count: count,
+                  autoreleaseFrequency: .workItem)
+    }
+    public init(label: String,
+                qos: DispatchQoS,
+                count: Int,
+                autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency) {
+        work = DispatchQueue(label: label,
+                             qos: qos,
+                             attributes: [.concurrent],
+                             autoreleaseFrequency: autoreleaseFrequency,
+                             target: nil)
+        waiting = DispatchQueue(label: "\(label).waiting",
+            qos: qos,
+            attributes: [],
+            autoreleaseFrequency: .workItem,
+            target: work)
+        semaphore = DispatchSemaphore(value: count)
+    }
+    public func async(execute work: @escaping () -> Void) {
+        group.enter()
+        waiting.async {
+            self.semaphore.wait()
+            self.work.async {
+                work()
+                self.semaphore.signal()
+                self.group.leave()
+            }
+        }
+    }
+    public func async(execute workItem: DispatchWorkItem) {
+        group.enter()
+        waiting.async {
+            self.semaphore.wait()
+            self.work.async {
+                if !workItem.isCancelled {
+                    workItem.perform()
+                }
+                self.semaphore.signal()
+                self.group.leave()
+            }
+        }
+    }
+    public func sync<T>(execute work: () throws -> T) rethrows -> T {
+        group.enter()
+        return try waiting.sync {
+            semaphore.wait()
+            return try self.work.sync {
+                let result = try work()
+                semaphore.signal()
+                group.leave()
+                return result
+            }
+        }
+    }
+}
