@@ -14,7 +14,7 @@ class MockObserverProviding : ObserverProviding {
         }
     }
     typealias ElementType = MockElement
-    private var handler: ((MockElement, NSAccessibilityNotificationName, [String : Any]?) -> Void)?
+    var handler: ((MockElement, NSAccessibilityNotificationName, [String : Any]?) -> Void)?
     init() {
         
     }
@@ -66,6 +66,29 @@ class ObserverTests: XCTestCase {
             provider?.fire(element: element, notification: .focusedUIElementChanged, info: nil)
             XCTAssertTrue(fired)
         } catch let error {
+            XCTFail("\(error)")
+        }
+    }
+    func testDisposeSignal() {
+        do {
+            let element = MockElement.application(processIdentifier: 1)
+            let observer = try observerManager!.registerObserver(application: element)
+            let signal = try observer.signal(element: element, notification: .focusedUIElementChanged)
+            let subscription = signal.subscribe { element, info in
+                
+            }
+            XCTAssertNotNil(provider!.handler)
+            subscription.cancel()
+            var disposed = false
+            for _ in 1..<3 {
+                RunLoop.main.run(until: Date(timeInterval: 1.0, since: Date()))
+                if provider!.handler == nil {
+                    disposed = true
+                    break
+                }
+            }
+            XCTAssertTrue(disposed)
+        } catch {
             XCTFail("\(error)")
         }
     }

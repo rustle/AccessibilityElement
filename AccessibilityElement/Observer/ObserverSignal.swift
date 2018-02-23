@@ -17,7 +17,7 @@ public final class ObserverSignal<ObserverProvidingType> where ObserverProviding
     private let signal = Signal<(element: ObserverProvidingType.ElementType, info: ObserverInfo?)>()
     private var token: ApplicationObserver<ObserverProvidingType>.Token?
     private var count = 0
-    func increment() throws {
+    private func increment() throws {
         count += 1
         if count == 1 {
             token = try observer?.startObserving(element: element, notification: notification) { element, info -> Void in
@@ -25,7 +25,7 @@ public final class ObserverSignal<ObserverProvidingType> where ObserverProviding
             }
         }
     }
-    func decrement() throws {
+    private func decrement() throws {
         count -= 1
         if count == 0 {
             if let token = token {
@@ -44,11 +44,10 @@ public final class ObserverSignal<ObserverProvidingType> where ObserverProviding
     @discardableResult
     public func subscribe(callback: @escaping ((element: ObserverProvidingType.ElementType, info: ObserverInfo?)) -> Void) -> SignalSubscription<(element: ObserverProvidingType.ElementType, info: ObserverInfo?)> {
         try? increment()
-        return signal.subscribe(with: self, callback: callback)
-    }
-    @discardableResult
-    public func subscribe(with observer: AnyObject, callback: @escaping ((element: ObserverProvidingType.ElementType, info: ObserverInfo?)) -> Void) -> SignalSubscription<(element: ObserverProvidingType.ElementType, info: ObserverInfo?)> {
-        try? increment()
-        return signal.subscribe(with: observer, callback: callback)
+        return signal.subscribe(with: self, dispose: { [weak self] in
+            DispatchQueue.main.async {
+                try? self?.decrement()
+            }
+        }, callback: callback)
     }
 }
