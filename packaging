@@ -1,0 +1,77 @@
+#!/usr/local/bin/python3
+
+import sys
+if sys.version_info < (3,4):
+    sys.exit('Python < 3.4 is not supported')
+
+import os
+from subprocess import call
+from optparse import OptionParser
+from enum import Enum
+
+parser = OptionParser()
+parser.add_option("-c", "--checkout", 
+                  action="store_true", 
+                  dest="checkout", 
+                  default=True, 
+                  help="checkout supporting repositories")
+parser.add_option("-u", "--update", 
+                  action="store_true", 
+                  dest="update", 
+                  default=True, 
+                  help="update repositories as needed")
+(options, args) = parser.parse_args()
+
+def setup_dependency(name, url):
+  if not os.path.exists("../" + name):
+    call(["git", "clone", url, "../" + name])
+
+class Head(Enum):
+  BRANCH = 1
+  COMMIT = 2
+  TAG = 3
+
+class UnstagedChanges(Exception):
+  pass
+
+class UncommittedChanges(Exception):
+  pass
+
+def check_for_dirty_tree():
+  call(["git", "update-index", "-q", "--ignore-submodules", "--refresh"])
+  if call(["git", "diff-files", "--quiet", "--ignore-submodules"]) != 0:
+    raise UnstagedChanges()
+  if call(["git", "diff-index", "--cached", "--quiet", "HEAD", "--ignore-submodules"]) != 0:
+    raise UncommittedChanges()
+
+def update(name, type, head):
+  os.chdir("../" + name)
+  check_for_dirty_tree()
+  print(name)
+  if type == Head.BRANCH:
+    call(["git", "checkout", head])
+    call(["git", "pull"])
+  elif type == Head.COMMIT:
+    call(["git", "checkout", head])
+  elif type == Head.TAG:
+    print("tag not implemented")
+
+repos = [
+  { "name" : "CoreFoundationOverlay", "url" : "git@github.com:rustle/CoreFoundationOverlay.git",  "type" : Head.BRANCH, "head" : "master" },
+  { "name" : "Signals", "url" : "git@github.com:rustle/Signals.git", "type" : Head.BRANCH, "head" : "master" },
+  { "name" : "SwiftAtomics", "url" : "https://github.com/glessard/swift-atomics", "type" : Head.BRANCH, "head" : "master" },
+  { "name" : "SwiftScanner", "url" : "https://github.com/rustle/SwiftScanner.git", "type" : Head.BRANCH, "head" : "master" }
+  ]
+
+if options.checkout:
+  for repo in repos:
+    setup_dependency(repo["name"], repo["url"])
+if options.update:
+  for repo in repos:
+    name = repo["name"]
+    try:
+      update(name, repo["type"], repo["head"])
+    except UnstagedChanges:
+      print(name + " has unstaged changes")
+    except UncommittedChanges:
+      print(name + " has unstaged changes")
