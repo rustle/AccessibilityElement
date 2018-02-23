@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:AccessibilityElement.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../Signals/Signals.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../CoreFoundationOverlay/CoreFoundationOverlay.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../SwiftAtomics/Xcode/Atomics.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../SwiftScanner/SwiftScanner/SwiftScanner.xcodeproj">
+   </FileRef>
+</Workspace>
