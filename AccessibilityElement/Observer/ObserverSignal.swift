@@ -9,7 +9,7 @@ import Signals
 
 public typealias ObserverInfo = [String:Any]
 
-public final class ObserverSignal<ObserverProvidingType> : SignalSubscriptionProviding where ObserverProvidingType : ObserverProviding {
+public final class ObserverSignal<ObserverProvidingType> where ObserverProvidingType : ObserverProviding {
     public typealias SignalData = (element: ObserverProvidingType.ElementType, info: ObserverInfo?)
     private weak var observer: ApplicationObserver<ObserverProvidingType>?
     private let element: ObserverProvidingType.ElementType
@@ -44,22 +44,11 @@ public final class ObserverSignal<ObserverProvidingType> : SignalSubscriptionPro
     @discardableResult
     public func subscribe(callback: @escaping ((element: ObserverProvidingType.ElementType, info: ObserverInfo?)) -> Void) -> SignalSubscription<(element: ObserverProvidingType.ElementType, info: ObserverInfo?)> {
         try? increment()
-        return signal.subscribe(callback: callback)
+        return signal.subscribe(with: self, callback: callback)
     }
     @discardableResult
     public func subscribe(with observer: AnyObject, callback: @escaping ((element: ObserverProvidingType.ElementType, info: ObserverInfo?)) -> Void) -> SignalSubscription<(element: ObserverProvidingType.ElementType, info: ObserverInfo?)> {
         try? increment()
         return signal.subscribe(with: observer, callback: callback)
-    }
-    @discardableResult
-    public func subscribeOnce(with observer: AnyObject, callback: @escaping ((element: ObserverProvidingType.ElementType, info: ObserverInfo?)) -> Void) -> SignalSubscription<(element: ObserverProvidingType.ElementType, info: ObserverInfo?)> {
-        try? increment()
-        return signal.subscribeOnce(with: observer, callback: callback)
-    }
-    public func cancelSubscription(for observer: AnyObject) {
-        
-    }
-    public func cancelAllSubscriptions() {
-        
     }
 }
