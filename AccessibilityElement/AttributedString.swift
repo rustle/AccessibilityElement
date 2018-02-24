@@ -176,7 +176,7 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
                 lhs.visibleName == rhs.visibleName
         }
     }
-    fileprivate class Impl {
+    fileprivate class Implementation {
         fileprivate var readOnly: NSMutableAttributedString
         var writeOnly: NSMutableAttributedString {
             if !isKnownUniquelyReferenced(&readOnly) {
@@ -188,12 +188,12 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
             readOnly = value.mutableCopy() as! NSMutableAttributedString
         }
     }
-    fileprivate var impl: Impl
+    fileprivate var implementation: Implementation
     public var count: Int {
-        return impl.readOnly.length
+        return implementation.readOnly.length
     }
     public var string: String {
-        return impl.readOnly.string
+        return implementation.readOnly.string
     }
     // TODO: These are just guesses
     public enum TextAlignment : Int {
@@ -204,7 +204,7 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
     }
     public typealias UnderlineStyle = AXUnderlineStyle
     public func textAlignment(at: Int) -> TextAlignment? {
-        guard let value = impl.writeOnly.attribute(Key.textAlignment, at: at, effectiveRange: nil) else {
+        guard let value = implementation.writeOnly.attribute(Key.textAlignment, at: at, effectiveRange: nil) else {
             return nil
         }
         guard let int = value as? Int else {
@@ -213,10 +213,10 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
         return TextAlignment(rawValue: int)
     }
     public mutating func set(textAlignment: TextAlignment, range: Range<Int>) {
-        impl.writeOnly.setAttributes([Key.textAlignment:NSNumber(value: textAlignment.rawValue)], range: range.nsRange())
+        implementation.writeOnly.setAttributes([Key.textAlignment:NSNumber(value: textAlignment.rawValue)], range: range.nsRange())
     }
     public func font(at: Int) -> Font? {
-        guard let value = impl.readOnly.attribute(Key.font, at: at, effectiveRange: nil) else {
+        guard let value = implementation.readOnly.attribute(Key.font, at: at, effectiveRange: nil) else {
             return nil
         }
         guard let fontDictionary = value as? [String:Any] else {
@@ -234,7 +234,7 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
         if let visibleName = font.visibleName {
             dictionary[Font.Key.visibleName] = visibleName
         }
-        impl.writeOnly.setAttributes([Key.font:dictionary], range: range.nsRange())
+        implementation.writeOnly.setAttributes([Key.font:dictionary], range: range.nsRange())
     }
     public func foregroundColor(at: Int) -> CGColor? {
         return color(Key.font, at: at)
@@ -329,7 +329,12 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
     public mutating func set(autocorrected: Bool?, range: Range<Int>) {
         set(key: Key.autocorrected, range: range, bool: autocorrected)
     }
-//    static let listItemPrefix = NSAttributedStringKey(rawValue: kAXListItemPrefixTextAttribute.takeUnretainedValue() as String) // CFAttributedString
+    public func listItemPrefix(at: Int) -> AttributedString? {
+        return attributedString(Key.listItemPrefix, at: at)
+    }
+    public mutating func set(listItemPrefix: AttributedString?, range: Range<Int>) {
+        
+    }
     public func listItemIndex(at: Int) -> Int? {
         return int(Key.listItemIndex, at: at)
     }
@@ -344,43 +349,59 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
     }
     // MARK: -
     public init(attributedString: NSAttributedString) {
-        impl = Impl(attributedString)
+        implementation = Implementation(attributedString)
     }
     public static func ==(lhs: AttributedString, rhs: AttributedString) -> Bool {
         return false
     }
     public var debugDescription: String {
-        return "\(impl.readOnly)"
+        return "\(implementation.readOnly)"
     }
     // MARK: Helpers
     private func string(_ key: NSAttributedStringKey, at: Int) -> String? {
-        guard let value = impl.readOnly.attribute(key, at: at, effectiveRange: nil) else {
+        guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
         return value as? String
     }
     private mutating func set(key: NSAttributedStringKey, range: Range<Int>, string: String?) {
         if let string = string {
-            impl.writeOnly.setAttributes([key:string], range: range.nsRange())
+            implementation.writeOnly.setAttributes([key:string], range: range.nsRange())
         } else {
-            impl.writeOnly.removeAttribute(key, range: range.nsRange())
+            implementation.writeOnly.removeAttribute(key, range: range.nsRange())
+        }
+    }
+    private func attributedString(_ key: NSAttributedStringKey, at: Int) -> AttributedString? {
+        guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
+            return nil
+        }
+        guard let attributedString = value as? NSAttributedString else {
+            return nil
+        }
+        return AttributedString(attributedString: attributedString)
+    }
+    private mutating func set(key: NSAttributedStringKey, range: Range<Int>, attributedString: AttributedString?) {
+        if let attributedString = attributedString {
+            implementation.writeOnly.setAttributes([key:attributedString.implementation.readOnly], range: range.nsRange())
+        } else {
+            implementation.writeOnly.removeAttribute(key, range: range.nsRange())
         }
     }
     private func int(_ key: NSAttributedStringKey, at: Int) -> Int? {
-        guard let value = impl.readOnly.attribute(key, at: at, effectiveRange: nil) else {
+        guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
         return (value as? NSNumber)?.intValue
     }
     private mutating func set(key: NSAttributedStringKey, range: Range<Int>, int: Int?) {
         if let int = int {
-            impl.writeOnly.setAttributes([key:NSNumber(value: int)], range: range.nsRange())
+            implementation.writeOnly.setAttributes([key:NSNumber(value: int)], range: range.nsRange())
         } else {
-            impl.writeOnly.removeAttribute(key, range: range.nsRange())
+            implementation.writeOnly.removeAttribute(key, range: range.nsRange())
         }
     }
     private func color(_ key: NSAttributedStringKey, at: Int) -> CGColor? {
-        guard let value = impl.readOnly.attribute(key, at: at, effectiveRange: nil) else {
+        guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
         guard CFGetTypeID(value as CFTypeRef) == CGColor.typeID else {
@@ -390,13 +411,13 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
     }
     private mutating func set(key: NSAttributedStringKey, range: Range<Int>, color: CGColor?) {
         if let color = color {
-            impl.writeOnly.setAttributes([key:color], range: range.nsRange())
+            implementation.writeOnly.setAttributes([key:color], range: range.nsRange())
         } else {
-            impl.writeOnly.removeAttribute(key, range: range.nsRange())
+            implementation.writeOnly.removeAttribute(key, range: range.nsRange())
         }
     }
     private func element(_ key: NSAttributedStringKey, at: Int) -> Element? {
-        guard let value = impl.readOnly.attribute(key, at: at, effectiveRange: nil) else {
+        guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
         guard CFGetTypeID(value as CFTypeRef) == AXUIElement.typeID else {
@@ -406,13 +427,13 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
     }
     private mutating func set(key: NSAttributedStringKey, range: Range<Int>, element: Element?) {
         if let element = element {
-            impl.writeOnly.setAttributes([key:element.element], range: range.nsRange())
+            implementation.writeOnly.setAttributes([key:element.element], range: range.nsRange())
         } else {
-            impl.writeOnly.removeAttribute(key, range: range.nsRange())
+            implementation.writeOnly.removeAttribute(key, range: range.nsRange())
         }
     }
     private func bool(_ key: NSAttributedStringKey, at: Int) -> Bool? {
-        guard let value = impl.readOnly.attribute(key, at: at, effectiveRange: nil) else {
+        guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
         guard CFGetTypeID(value as CFTypeRef) == CFBoolean.typeID else {
@@ -423,9 +444,9 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
     private mutating func set(key: NSAttributedStringKey, range: Range<Int>, bool: Bool?) {
         if let bool = bool {
             let value = (bool ? kCFBooleanTrue : kCFBooleanFalse) as Any
-            impl.writeOnly.setAttributes([key:value], range: range.nsRange())
+            implementation.writeOnly.setAttributes([key:value], range: range.nsRange())
         } else {
-            impl.writeOnly.removeAttribute(key, range: range.nsRange())
+            implementation.writeOnly.removeAttribute(key, range: range.nsRange())
         }
     }
 }
@@ -443,7 +464,7 @@ public struct AttributedStringIterator : IteratorProtocol {
         }
         var attributes = [AttributedString.Attribute]()
         var next: NSRange?
-        string.impl.readOnly.enumerateAttributes(in: current, options: []) { attributesDictionary, range, stop in
+        string.implementation.readOnly.enumerateAttributes(in: current, options: []) { attributesDictionary, range, stop in
             next = range
             attributes = AttributedString.attributes(keys: Array<NSAttributedStringKey>(attributesDictionary.keys))
             stop.initialize(to: true)
