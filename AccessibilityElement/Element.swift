@@ -16,6 +16,10 @@ public extension NSAccessibilityAttributeName {
     public static let frame = NSAccessibilityAttributeName(rawValue: "AXFrame")
     public static let selectedTextMarkerRange = NSAccessibilityAttributeName(rawValue: "AXSelectedTextMarkerRange")
     public static let enhancedUserInterface = NSAccessibilityAttributeName(rawValue: "AXEnhancedUserInterface")
+    /// Attribute representing first position in web area (or containing web area). Appropriate for use with a web area element or it's descendants.
+    public static let startTextMarker = NSAccessibilityAttributeName(rawValue: "AXStartTextMarker")
+    /// Attribute representing last position in web area (or containing web area). Appropriate for use with a web area element or it's descendants.
+    public static let endTextMarker = NSAccessibilityAttributeName(rawValue: "AXEndTextMarker")
 }
 
 public protocol AnyElement {
@@ -39,6 +43,8 @@ public protocol AnyElement {
     func selectedTextRanges() throws -> [Range<Position<Int>>]
     func line<IndexType>(position: Position<IndexType>) throws -> Int
     func range<IndexType>(line: Int) throws -> Range<Position<IndexType>>
+    func first<IndexType>() throws -> Position<IndexType>
+    func last<IndexType>() throws -> Position<IndexType>
     var processIdentifier: Int { get }
 }
 
@@ -186,6 +192,12 @@ extension _Element {
     public func range<IndexType>(line: Int) throws -> Range<Position<IndexType>> {
         throw _ElementError.unimplemented
     }
+    public func first<IndexType>() throws -> Position<IndexType> {
+        throw _ElementError.unimplemented
+    }
+    public func last<IndexType>() throws -> Position<IndexType> {
+        throw _ElementError.unimplemented
+    }
     public var processIdentifier: Int {
         return 0
     }
@@ -259,6 +271,13 @@ public struct Element : _Element {
         let value = try axValue(attribute: attribute)
         let cfRange = try value.rangeValue()
         return cfRange.location..<cfRange.location+cfRange.length
+    }
+    private func position(attribute: NSAccessibilityAttributeName) throws -> Position<AXTextMarker> {
+        let value = try element.value(attribute: attribute)
+        guard CFGetTypeID(value as CFTypeRef) == accessibility_element_get_marker_type_id() else {
+            throw AccessibilityError.typeMismatch
+        }
+        return Position(index: value as AXTextMarker, element: self)
     }
 
     public func role() throws -> NSAccessibilityRole {
@@ -361,6 +380,22 @@ public struct Element : _Element {
         }
         let range = value as AXTextMarkerRange
         return Range(range, element: self) as! Range<Position<IndexType>>
+    }
+    public func first<IndexType>() throws -> Position<IndexType> {
+        if IndexType.self == Int.self {
+            throw _ElementError.unimplemented
+        } else if IndexType.self == AXTextMarker.self {
+            return try position(attribute: .startTextMarker) as! Position<IndexType>
+        }
+        throw _ElementError.unimplemented
+    }
+    public func last<IndexType>() throws -> Position<IndexType> {
+        if IndexType.self == Int.self {
+            throw _ElementError.unimplemented
+        } else if IndexType.self == AXTextMarker.self {
+            return try position(attribute: .endTextMarker) as! Position<IndexType>
+        }
+        throw _ElementError.unimplemented
     }
     public func enhancedUserInterface() throws -> Bool {
         return try bool(attribute: NSAccessibilityAttributeName.enhancedUserInterface)
