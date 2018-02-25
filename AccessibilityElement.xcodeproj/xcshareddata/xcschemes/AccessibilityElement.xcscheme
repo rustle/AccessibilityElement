@@ -125,6 +125,16 @@
                ReferencedContainer = "container:../SwiftAtomics/Xcode/Atomics.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9152BAB4204129D000DEA85D"
+               BuildableName = "CoreFoundationOverlayTests.xctest"
+               BlueprintName = "CoreFoundationOverlayTests"
+               ReferencedContainer = "container:../CoreFoundationOverlay/CoreFoundationOverlay.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
