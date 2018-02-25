@@ -425,12 +425,22 @@ extension Element : Hashable {
     }
 }
 
+fileprivate let IncludeAttributesInDebug = false
+fileprivate let IncludeParameterizedAttributesInDebug = false
+
 extension Element : CustomDebugStringConvertible {
     public var debugDescription: String {
         var components = [String]()
-//        if let attributes = try? element.attributes() {
-//            components.append(contentsOf: attributes.map({ $0.rawValue }))
-//        }
+        #if IncludeAttributesInDebug
+        if let attributes = try? element.attributes() {
+            components.append(contentsOf: attributes.map({ $0.rawValue }))
+        }
+        #endif
+        #if IncludeParameterizedAttributesInDebug
+        if let parameterizedAttributes = try? element.parameterizedAttributes() {
+            components.append(contentsOf: parameterizedAttributes.map({ $0.rawValue }))
+        }
+        #endif
         let describer = Describer<Element>()
         let requests: [DescriberRequest] = [
             Describer<Element>.Single(required: true, attribute: .role),
@@ -453,24 +463,32 @@ extension Element : CustomDebugStringConvertible {
 
 extension Element : CustomDebugDictionaryConvertible {
     public var debugInfo: [String:CustomDebugStringConvertible] {
-        var info = [NSAccessibilityAttributeName:String]()
+        var info = [String:CustomDebugStringConvertible]()
+        #if IncludeAttributesInDebug
+        if let attributes = try? element.attributes() {
+            info["attributes"] = attributes
+        }
+        #endif
+        #if IncludeParameterizedAttributesInDebug
+        if let parameterizedAttributes = try? element.parameterizedAttributes() {
+            info["parameterizedAttributes"] = parameterizedAttributes
+        }
+        #endif
         if let role = try? self.role().rawValue, role.count > 0 {
-            info[.role] = role
+            info[NSAccessibilityAttributeName.role.rawValue] = role
         }
         if let subrole = try? self.subrole().rawValue, subrole.count > 0 {
-            info[.subrole] = subrole
+            info[NSAccessibilityAttributeName.subrole.rawValue] = subrole
         }
         if let description = try? self.description(), description.count > 0 {
-            info[.description] = description
+            info[NSAccessibilityAttributeName.description.rawValue] = description
         }
         if let title = try? self.title(), title.count > 0 {
-            info[.title] = title
+            info[NSAccessibilityAttributeName.title.rawValue] = title
         }
         if hasTextRole(), let value = try? self.value(), let string = value as? String, string.count > 0 {
-            info[.value] = string
+            info[NSAccessibilityAttributeName.value.rawValue] = string
         }
-        return info.reduce() { result, pair in
-            result[pair.key.rawValue] = pair.value
-        }
+        return info
     }
 }
