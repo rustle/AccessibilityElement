@@ -21,7 +21,7 @@ extension TreeElement where Self : Hashable {
             let element: Self = elements[0]
             elements.remove(at: 0)
             if !visited.contains(element) {
-                if let visitResult = try visitor(element) {
+                if let visitResult = try visitor(element), T.self != Void.self {
                     return visitResult
                 }
                 do {
