@@ -57,8 +57,8 @@ def update(name, type, head):
     print("tag not implemented")
 
 repos = [
-  { "name" : "CoreFoundationOverlay", "url" : "git@github.com:rustle/CoreFoundationOverlay.git",  "type" : Head.BRANCH, "head" : "master" },
-  { "name" : "Signals", "url" : "git@github.com:rustle/Signals.git", "type" : Head.BRANCH, "head" : "master" },
+  { "name" : "CoreFoundationOverlay", "url" : "https://github.com/rustle/CoreFoundationOverlay.git",  "type" : Head.BRANCH, "head" : "master" },
+  { "name" : "Signals", "url" : "https://github.com/rustle/Signals.git", "type" : Head.BRANCH, "head" : "master" },
   { "name" : "SwiftAtomics", "url" : "https://github.com/glessard/swift-atomics", "type" : Head.BRANCH, "head" : "master" },
   { "name" : "SwiftScanner", "url" : "https://github.com/rustle/SwiftScanner.git", "type" : Head.BRANCH, "head" : "master" }
   ]
