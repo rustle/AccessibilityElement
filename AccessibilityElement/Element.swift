@@ -8,13 +8,18 @@ import Cocoa
 import os.log
 
 public extension NSAccessibilityRole {
+    /// Role value representing container for web content.
     public static let webArea = NSAccessibilityRole(rawValue: "AXWebArea")
 }
 
 public extension NSAccessibilityAttributeName {
+    /// Attribute representing caret browsing preference. Appropriate for use with a WebKit web area element.
     public static let caretBrowsingEnabled = NSAccessibilityAttributeName(rawValue: "AXCaretBrowsingEnabled")
+    /// Rectangle representing element, in screen coordinates.
     public static let frame = NSAccessibilityAttributeName(rawValue: "AXFrame")
+    /// Attribute representing selected positions range. Appropriate for use with a web area element or it's descendants.
     public static let selectedTextMarkerRange = NSAccessibilityAttributeName(rawValue: "AXSelectedTextMarkerRange")
+    /// Appropropriate for use with an appllication element.
     public static let enhancedUserInterface = NSAccessibilityAttributeName(rawValue: "AXEnhancedUserInterface")
     /// Attribute representing first position in web area (or containing web area). Appropriate for use with a web area element or it's descendants.
     public static let startTextMarker = NSAccessibilityAttributeName(rawValue: "AXStartTextMarker")
@@ -22,8 +27,11 @@ public extension NSAccessibilityAttributeName {
     public static let endTextMarker = NSAccessibilityAttributeName(rawValue: "AXEndTextMarker")
 }
 
+/// Protocol all elements must conform to, without any methods or properties that contain a self constraint. Useful for tasks like forming heterogeneous collections and inclusion in other type erased containers.
 public protocol AnyElement {
+    /// Nonlocalized string that defines the element’s role in the app.
     func role() throws -> NSAccessibilityRole
+    /// Localized string that describes the element’s role in the app.
     func roleDescription() throws -> String
     func subrole() throws -> NSAccessibilitySubrole
     func value() throws -> Any
@@ -35,7 +43,19 @@ public protocol AnyElement {
     func url() throws -> URL
     func isKeyboardFocused() throws -> Bool
     func frame() throws -> Frame
+    /// Value of caret browsing preference in a web area.
+    ///
+    /// When enabled, web area will use document like cursor navigation in response
+    /// to arrow navigation
+    ///
+    /// Appropriate for use with a WebKit web area element.
     func caretBrowsingEnabled() throws -> Bool
+    /// Set value of caret browsing preference in a web area.
+    ///
+    /// When enabled, web area will use document like cursor navigation in response
+    /// to arrow navigation
+    ///
+    /// Appropriate for use with a WebKit web area element.
     func set(caretBrowsing: Bool) throws
     func range<IndexType>(unorderedPositions: (first: Position<IndexType>, second: Position<IndexType>)) throws -> Range<Position<IndexType>>
     func enhancedUserInterface() throws -> Bool
