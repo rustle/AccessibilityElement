@@ -7,60 +7,6 @@
 import Cocoa
 
 public extension AXUIElement {
-    public enum AXError : Error {
-        case actionUnsupported
-        case apiDisabled
-        case attributeUnsupported
-        case cannotComplete
-        case failure
-        case illegalArgument
-        case invalidUIElement
-        case invalidUIElementObserver
-        case notEnoughPrecision
-        case notificationAlreadyRegistered
-        case success
-        case notificationUnsupported
-        case notImplemented
-        case notificationNotRegistered
-        case noValue
-        case parameterizedAttributeUnsupported
-        init(error: ApplicationServices.AXError) {
-            switch error {
-            case .actionUnsupported:
-                self = .actionUnsupported
-            case .apiDisabled:
-                self = .apiDisabled
-            case .attributeUnsupported:
-                self = .attributeUnsupported
-            case .cannotComplete:
-                self = .cannotComplete
-            case .failure:
-                self = .failure
-            case .illegalArgument:
-                self = .illegalArgument
-            case .invalidUIElement:
-                self = .invalidUIElement
-            case .invalidUIElementObserver:
-                self = .invalidUIElementObserver
-            case .notEnoughPrecision:
-                self = .notEnoughPrecision
-            case .notificationAlreadyRegistered:
-                self = .notificationAlreadyRegistered
-            case .success:
-                self = .success
-            case .notificationUnsupported:
-                self = .notificationUnsupported
-            case .notImplemented:
-                self = .notImplemented
-            case .notificationNotRegistered:
-                self = .notificationNotRegistered
-            case .noValue:
-                self = .noValue
-            case .parameterizedAttributeUnsupported:
-                self = .parameterizedAttributeUnsupported
-            }
-        }
-    }
     //public func AXUIElementGetTypeID() -> CFTypeID
     public static var typeID: CFTypeID {
         return AXUIElementGetTypeID()
@@ -85,19 +31,17 @@ public extension AXUIElement {
     }
 
     //public func AXUIElementCopyAttributeValues(_ element: AXUIElement, _ attribute: CFString, _ index: CFIndex, _ maxValues: CFIndex, _ values: UnsafeMutablePointer<CFArray?>) -> AXError
-
     //public struct AXCopyMultipleAttributeOptions : OptionSet {
     //    public init(rawValue: UInt32)
     //    public static var stopOnError: AXCopyMultipleAttributeOptions { get }
     //}
     //public func AXUIElementCopyMultipleAttributeValues(_ element: AXUIElement, _ attributes: CFArray, _ options: AXCopyMultipleAttributeOptions, _ values: UnsafeMutablePointer<CFArray?>) -> AXError
-
     //public func AXUIElementGetPid(_ element: AXUIElement, _ pid: UnsafeMutablePointer<pid_t>) -> AXError
     public func processIdentifier() throws -> Int {
         var value: pid_t = 0
         let error = AXUIElementGetPid(self, &value)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
         return Int(value)
     }
@@ -105,7 +49,7 @@ public extension AXUIElement {
     public func set(messageTimeout: Double) throws {
         let error = AXUIElementSetMessagingTimeout(self, Float(messageTimeout))
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
     }
     //public func AXUIElementCopyAttributeNames(_ element: AXUIElement, _ names: UnsafeMutablePointer<CFArray?>) -> AXError
@@ -113,7 +57,7 @@ public extension AXUIElement {
         var names: CFArray?
         let error = AXUIElementCopyAttributeNames(self, &names)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
         return try cast(names)
     }
@@ -122,7 +66,7 @@ public extension AXUIElement {
         var names: CFArray?
         let error = AXUIElementCopyParameterizedAttributeNames(self, &names)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
         return try cast(names)
     }
@@ -131,7 +75,7 @@ public extension AXUIElement {
         var value: CFTypeRef?
         let error = AXUIElementCopyAttributeValue(self, attribute.rawValue as CFString, &value)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
         return try cast(value)
     }
@@ -140,7 +84,7 @@ public extension AXUIElement {
         var value: CFTypeRef?
         let error = AXUIElementCopyParameterizedAttributeValue(self, attribute.rawValue as CFString, parameter as CFTypeRef, &value)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
         return try cast(value)
     }
@@ -149,7 +93,7 @@ public extension AXUIElement {
         var count: CFIndex = 0
         let error = AXUIElementGetAttributeValueCount(self, attribute.rawValue as CFString, &count)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
         return count
     }
@@ -158,7 +102,7 @@ public extension AXUIElement {
         var value: DarwinBoolean = false
         let error = AXUIElementIsAttributeSettable(self, attribute.rawValue as CFString, &value)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
         return value.boolValue
     }
@@ -166,7 +110,7 @@ public extension AXUIElement {
     public func set(attribute: NSAccessibilityAttributeName, value: Any?) throws {
         let error = AXUIElementSetAttributeValue(self, attribute.rawValue as CFString, value as CFTypeRef)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
     }
     //public func AXUIElementCopyActionNames(_ element: AXUIElement, _ names: UnsafeMutablePointer<CFArray?>) -> AXError
@@ -174,7 +118,7 @@ public extension AXUIElement {
         var actions: CFArray?
         let error = AXUIElementCopyActionNames(self, &actions)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
         return try cast(actions)
     }
@@ -183,7 +127,7 @@ public extension AXUIElement {
         var description: CFString?
         let error = AXUIElementCopyActionDescription(self, action.rawValue as CFString, &description)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
         return try cast(description)
     }
@@ -191,7 +135,7 @@ public extension AXUIElement {
     public func perform(action: NSAccessibilityActionName) throws {
         let error = AXUIElementPerformAction(self, action as CFString)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
     }
     //public func AXUIElementCopyElementAtPosition(_ application: AXUIElement, _ x: Float, _ y: Float, _ element: UnsafeMutablePointer<AXUIElement?>) -> AXError
@@ -199,13 +143,13 @@ public extension AXUIElement {
         var uiElement: AXUIElement?
         let error = AXUIElementCopyElementAtPosition(self, Float(point.x), Float(point.y), &uiElement)
         guard error == .success else {
-            throw AXError(error: error)
+            throw ElementError(axError: error)
         }
         return try cast(uiElement)
     }
     private func cast<T>(_ value: Any?) throws -> T {
         guard let a = value else {
-            throw AXError.noValue
+            throw ElementError.noValue
         }
         guard let b = a as? T else {
             throw AccessibilityError.typeMismatch

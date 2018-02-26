@@ -22,19 +22,19 @@ extension AXObserver {
         var observer: AXObserver?
         let error = AXObserverCreateWithInfoCallback(pid_t(processIdentifier), observer_callback, &observer)
         guard error == .success else {
-            throw AXUIElement.AXError(error: error)
+            throw ObserverError(axError: error)
         }
         if let observer = observer {
             return observer
         }
-        throw AXUIElement.AXError.noValue
+        throw ObserverError.noValue
     }
     //public func AXObserverAddNotification(_ observer: AXObserver, _ element: AXUIElement, _ notification: CFString, _ refcon: UnsafeMutableRawPointer?) -> AXError
     public func add(element: AXUIElement, notification: NSAccessibilityNotificationName, handler: @escaping AXObserverHandler) throws -> Int {
         let identifier = axObserverState.next()
         let error = AXObserverAddNotification(self, element, notification as CFString, UnsafeMutableRawPointer(bitPattern: identifier))
         guard error == .success else {
-            throw AXUIElement.AXError(error: error)
+            throw ObserverError(axError: error)
         }
         axObserverState.set(state: handler, identifier: identifier)
         return identifier
@@ -43,7 +43,7 @@ extension AXObserver {
     public func remove(element: AXUIElement, notification: NSAccessibilityNotificationName, identifier: Int) throws {
         let error = AXObserverRemoveNotification(self, element, notification as CFString)
         guard error == .success else {
-            throw AXUIElement.AXError(error: error)
+            throw ObserverError(axError: error)
         }
         axObserverState.remove(identifier: identifier)
     }
