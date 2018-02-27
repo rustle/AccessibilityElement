@@ -10,8 +10,6 @@ fileprivate struct SharedStorage {
     static var registrars = [String:Any]()
 }
 
-//public typealias EventHandlerProvider<ObserverProvidingType> = (Node<ObserverProvidingType.ElementType>, ApplicationObserver<ObserverProvidingType>) throws -> AnyEventHandler where ObserverProvidingType : ObserverProviding
-
 public class EventHandlerRegistrar<ObserverProvidingType> where ObserverProvidingType : ObserverProviding {
     public enum Error : Swift.Error {
         case registrarUnavailable
@@ -25,8 +23,7 @@ public class EventHandlerRegistrar<ObserverProvidingType> where ObserverProvidin
         }
         return (registrar as! EventHandlerRegistrar<ObserverProvidingType>)
     }
-    //private var map = [Key:EventHandlerProvider<ObserverProvidingType>]()
-    private var map = [Key:Any]()
+    private var map = [Key:AnyEventHandler.Type]()
     private struct Key : Hashable {
         var hashValue: Int {
             var seed = 0
@@ -61,16 +58,11 @@ public class EventHandlerRegistrar<ObserverProvidingType> where ObserverProvidin
             self.identifier = identifier
         }
     }
-    private func key(role: NSAccessibilityRole?,
-                     subrole: NSAccessibilitySubrole?,
-                     identifier: String?) -> Key? {
-        return Key(role: role, subrole: subrole, identifier: identifier)
-    }
     public func register(role: NSAccessibilityRole?,
                          subrole: NSAccessibilitySubrole?,
                          identifier: String?,
                          eventHandler: AnyEventHandler.Type) {
-        guard let key = key(role: role, subrole: subrole, identifier: identifier) else {
+        guard let key = Key(role: role, subrole: subrole, identifier: identifier) else {
             return
         }
         map[key] = eventHandler
@@ -83,10 +75,10 @@ public class EventHandlerRegistrar<ObserverProvidingType> where ObserverProvidin
         }
         let subrole = try? node.element.subrole()
         let identifer: String? = nil
-        if let key = key(role: role,
+        if let key = Key(role: role,
                          subrole: subrole,
                          identifier: identifer) {
-            if let EventHandlerType = map[key] as? AnyEventHandler.Type {
+            if let EventHandlerType = map[key] {
                 do {
                     return try EventHandlerType.eventHandler(node: node,
                                                              applicationObserver: applicationObserver)
