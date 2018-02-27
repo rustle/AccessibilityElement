@@ -33,15 +33,25 @@ public protocol AnyElement {
     func role() throws -> NSAccessibilityRole
     /// Localized string that describes the element’s role in the app.
     func roleDescription() throws -> String
+    ///
     func subrole() throws -> NSAccessibilitySubrole
+    ///
     func value() throws -> Any
+    ///
     func string<IndexType>(range: Range<Position<IndexType>>) throws -> String
+    ///
     func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString
+    ///
     func numberOfCharacters() throws -> Int
+    ///
     func description() throws -> String
+    ///
     func title() throws -> String
+    ///
     func url() throws -> URL
+    ///
     func isKeyboardFocused() throws -> Bool
+    ///
     func frame() throws -> Frame
     /// Value of caret browsing preference in a web area.
     ///
@@ -57,14 +67,23 @@ public protocol AnyElement {
     ///
     /// Appropriate for use with a WebKit web area element.
     func set(caretBrowsing: Bool) throws
+    ///
     func range<IndexType>(unorderedPositions: (first: Position<IndexType>, second: Position<IndexType>)) throws -> Range<Position<IndexType>>
+    ///
     func enhancedUserInterface() throws -> Bool
+    ///
     func set(enhancedUserInterface: Bool) throws
+    ///
     func selectedTextRanges() throws -> [Range<Position<Int>>]
+    ///
     func line<IndexType>(position: Position<IndexType>) throws -> Int
+    ///
     func range<IndexType>(line: Int) throws -> Range<Position<IndexType>>
+    ///
     func first<IndexType>() throws -> Position<IndexType>
+    ///
     func last<IndexType>() throws -> Position<IndexType>
+    ///
     var processIdentifier: Int { get }
 }
 
@@ -73,14 +92,23 @@ public enum _ElementError : Swift.Error {
 }
 
 public protocol _Element : AnyElement, TreeElement, Hashable {
+    ///
     static var systemWide: Self { get }
+    ///
     static func application(processIdentifier: Int) -> Self
+    ///
     func titleElement() throws -> Self
+    ///
     func parent() throws -> Self
+    ///
     func children() throws -> [Self]
+    ///
     func topLevelElement() throws -> Self
+    ///
     func applicationFocusedElement() throws -> Self
+    ///
     func windows() throws -> [Self]
+    ///
     func focusedWindow() throws -> Self
 }
 
