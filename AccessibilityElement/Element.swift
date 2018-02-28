@@ -76,6 +76,10 @@ public protocol AnyElement {
     ///
     func selectedTextRanges() throws -> [Range<Position<Int>>]
     ///
+    func selectedTextMarkerRanges() throws -> [Range<Position<AXTextMarker>>]
+    ///
+    func set(selectedTextMarkerRanges: [Range<Position<AXTextMarker>>]) throws
+    ///
     func line<IndexType>(position: Position<IndexType>) throws -> Int
     ///
     func range<IndexType>(line: Int) throws -> Range<Position<IndexType>>
@@ -234,6 +238,12 @@ extension _Element {
     public func selectedTextRanges() throws -> [Range<Position<Int>>] {
         throw _ElementError.unimplemented
     }
+    public func selectedTextMarkerRanges() throws -> [Range<Position<AXTextMarker>>] {
+        throw _ElementError.unimplemented
+    }
+    public func set(selectedTextMarkerRanges: [Range<Position<AXTextMarker>>]) throws {
+        throw _ElementError.unimplemented
+    }
     public func line<IndexType>(position: Position<IndexType>) throws -> Int {
         throw _ElementError.unimplemented
     }
@@ -319,6 +329,13 @@ public struct Element : _Element {
         let value = try axValue(attribute: attribute)
         let cfRange = try value.rangeValue()
         return cfRange.location..<cfRange.location+cfRange.length
+    }
+    private func textMarkerRange(attribute: NSAccessibilityAttributeName) throws -> Range<Position<AXTextMarker>> {
+        let value = try element.value(attribute: attribute)
+        guard CFGetTypeID(value as CFTypeRef) == accessibility_element_get_marker_range_type_id() else {
+            throw AccessibilityError.typeMismatch
+        }
+        return Range(value as AXTextMarkerRange, element: self)
     }
     private func position(attribute: NSAccessibilityAttributeName) throws -> Position<AXTextMarker> {
         let value = try element.value(attribute: attribute)
@@ -450,6 +467,12 @@ public struct Element : _Element {
     }
     public func set(enhancedUserInterface: Bool) throws {
         try set(attribute: NSAccessibilityAttributeName.enhancedUserInterface, bool: enhancedUserInterface)
+    }
+    public func selectedTextMarkerRanges() throws -> [Range<Position<AXTextMarker>>] {
+        return [try textMarkerRange(attribute: .selectedTextMarkerRange)]
+    }
+    public func set(selectedTextMarkerRanges: [Range<Position<AXTextMarker>>]) throws {
+        throw _ElementError.unimplemented
     }
 
     public func frame() throws -> Frame {

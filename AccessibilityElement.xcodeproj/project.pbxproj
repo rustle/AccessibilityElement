@@ -27,6 +27,11 @@
 		911DEA3320326C5900F956C1 /* Atomics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 911DEA3420326C5900F956C1 /* Atomics.framework */; };
 		911DEA3620326FB600F956C1 /* WhitespaceClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911DEA3520326FB600F956C1 /* WhitespaceClassifier.swift */; };
 		911DEA3C20328C7400F956C1 /* CompoundSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911DEA3B20328C7400F956C1 /* CompoundSound.swift */; };
+		913314322045EB8100B2FA7A /* TextMarkerRichSelectionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913314312045EB8100B2FA7A /* TextMarkerRichSelectionChange.swift */; };
+		913314342045EEB100B2FA7A /* SelectionChangeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913314332045EEB100B2FA7A /* SelectionChangeHandler.swift */; };
+		913314362045EEF000B2FA7A /* TextMarkerSelectionChangeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913314352045EEF000B2FA7A /* TextMarkerSelectionChangeHandler.swift */; };
+		91331438204613D700B2FA7A /* IntegerIndexSelectionChangeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91331437204613D700B2FA7A /* IntegerIndexSelectionChangeHandler.swift */; };
+		9133143A2046153C00B2FA7A /* IntegerIndexSelectionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913314392046153C00B2FA7A /* IntegerIndexSelectionChange.swift */; };
 		914E28BC1FF83E3700765FCE /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28BB1FF83E3700765FCE /* Observer.swift */; };
 		914E28D41FF9DCF000765FCE /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28D31FF9DCF000765FCE /* Controller.swift */; };
 		914E28F71FFB297A00765FCE /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914E28F61FFB297A00765FCE /* Debug.swift */; };
@@ -51,6 +56,7 @@
 		917FEA45201136270036280E /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917FEA44201136270036280E /* Position.swift */; };
 		917FEA4920113EF90036280E /* TextMarker.h in Headers */ = {isa = PBXBuildFile; fileRef = 917FEA4720113EF90036280E /* TextMarker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		917FEA4A20113EF90036280E /* TextMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 917FEA4820113EF90036280E /* TextMarker.m */; };
+		9187D9052046487900A7BE93 /* TextMarkerSelectionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187D9042046487900A7BE93 /* TextMarkerSelectionChange.swift */; };
 		91BA29B3202FFBEB00A978A6 /* SimpleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BA29B2202FFBEB00A978A6 /* SimpleState.swift */; };
 		91BA29B52030D5B300A978A6 /* Tap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BA29B42030D5B300A978A6 /* Tap.swift */; };
 		91BA29B72030D67600A978A6 /* GestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BA29B62030D67600A978A6 /* GestureRecognizer.swift */; };
@@ -97,6 +103,11 @@
 		911DEA3420326C5900F956C1 /* Atomics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Atomics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		911DEA3520326FB600F956C1 /* WhitespaceClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhitespaceClassifier.swift; sourceTree = "<group>"; };
 		911DEA3B20328C7400F956C1 /* CompoundSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompoundSound.swift; sourceTree = "<group>"; };
+		913314312045EB8100B2FA7A /* TextMarkerRichSelectionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMarkerRichSelectionChange.swift; sourceTree = "<group>"; };
+		913314332045EEB100B2FA7A /* SelectionChangeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionChangeHandler.swift; sourceTree = "<group>"; };
+		913314352045EEF000B2FA7A /* TextMarkerSelectionChangeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMarkerSelectionChangeHandler.swift; sourceTree = "<group>"; };
+		91331437204613D700B2FA7A /* IntegerIndexSelectionChangeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerIndexSelectionChangeHandler.swift; sourceTree = "<group>"; };
+		913314392046153C00B2FA7A /* IntegerIndexSelectionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerIndexSelectionChange.swift; sourceTree = "<group>"; };
 		914E28BB1FF83E3700765FCE /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		914E28D31FF9DCF000765FCE /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
 		914E28F61FFB297A00765FCE /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
@@ -121,6 +132,7 @@
 		917FEA44201136270036280E /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Position.swift; path = AccessibilityElement/Position.swift; sourceTree = SOURCE_ROOT; };
 		917FEA4720113EF90036280E /* TextMarker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextMarker.h; sourceTree = "<group>"; };
 		917FEA4820113EF90036280E /* TextMarker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextMarker.m; sourceTree = "<group>"; };
+		9187D9042046487900A7BE93 /* TextMarkerSelectionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMarkerSelectionChange.swift; sourceTree = "<group>"; };
 		91BA29B2202FFBEB00A978A6 /* SimpleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleState.swift; sourceTree = "<group>"; };
 		91BA29B42030D5B300A978A6 /* Tap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tap.swift; sourceTree = "<group>"; };
 		91BA29B62030D67600A978A6 /* GestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureRecognizer.swift; sourceTree = "<group>"; };
@@ -237,11 +249,30 @@
 				917E54A6200477EB00D490A8 /* Toggle.swift */,
 				9111CF2A2005BBE9006B56AA /* Checkbox.swift */,
 				91187E3D2010592D004DA209 /* WebArea.swift */,
-				91187E4120107241004DA209 /* SelectionChange.swift */,
-				917FEA44201136270036280E /* Position.swift */,
 				9111CF2C2005DBA2006B56AA /* Text */,
 			);
 			path = EventHandler;
+			sourceTree = "<group>";
+		};
+		9187D9022046471800A7BE93 /* Selection Change */ = {
+			isa = PBXGroup;
+			children = (
+				913314392046153C00B2FA7A /* IntegerIndexSelectionChange.swift */,
+				91187E4120107241004DA209 /* SelectionChange.swift */,
+				913314312045EB8100B2FA7A /* TextMarkerRichSelectionChange.swift */,
+				9187D9042046487900A7BE93 /* TextMarkerSelectionChange.swift */,
+			);
+			path = "Selection Change";
+			sourceTree = "<group>";
+		};
+		9187D9032046477D00A7BE93 /* Selection Change Handler */ = {
+			isa = PBXGroup;
+			children = (
+				91331437204613D700B2FA7A /* IntegerIndexSelectionChangeHandler.swift */,
+				913314332045EEB100B2FA7A /* SelectionChangeHandler.swift */,
+				913314352045EEF000B2FA7A /* TextMarkerSelectionChangeHandler.swift */,
+			);
+			path = "Selection Change Handler";
 			sourceTree = "<group>";
 		};
 		91BF2DD41FF17FE400FB993D = {
@@ -277,6 +308,7 @@
 				91196124200FE7D80073A998 /* Frame.swift */,
 				9119611E200FE6CE0073A998 /* Node.swift */,
 				914E296D1FFF163D00765FCE /* Hierarchy.swift */,
+				917FEA44201136270036280E /* Position.swift */,
 				91C5531E200969F9001CF14B /* ScreenGrab.swift */,
 				91BA29B2202FFBEB00A978A6 /* SimpleState.swift */,
 				91BA29B42030D5B300A978A6 /* Tap.swift */,
@@ -285,6 +317,8 @@
 				917FEA4820113EF90036280E /* TextMarker.m */,
 				91196120200FE7250073A998 /* TreeElement.swift */,
 				911DEA3520326FB600F956C1 /* WhitespaceClassifier.swift */,
+				9187D9032046477D00A7BE93 /* Selection Change Handler */,
+				9187D9022046471800A7BE93 /* Selection Change */,
 				917E546E2002F7AF00D490A8 /* EventHandler */,
 				914E28C01FF85A1400765FCE /* HIServices */,
 				9173AAF8202A3CA500B41819 /* Observer */,
@@ -422,12 +456,14 @@
 			files = (
 				917E546B2002E48E00D490A8 /* Application.swift in Sources */,
 				91BA29B72030D67600A978A6 /* GestureRecognizer.swift in Sources */,
+				913314362045EEF000B2FA7A /* TextMarkerSelectionChangeHandler.swift in Sources */,
 				915B29932039FAEC0040BA66 /* Queues.swift in Sources */,
 				91FFFD011FF6F09A00BF89A0 /* AXObserver.swift in Sources */,
 				917E54A7200477EB00D490A8 /* Toggle.swift in Sources */,
 				91196125200FE7D80073A998 /* Frame.swift in Sources */,
 				9114A903200C471D00C294CC /* String.swift in Sources */,
 				917E54A1200423F200D490A8 /* StaticText.swift in Sources */,
+				913314342045EEB100B2FA7A /* SelectionChangeHandler.swift in Sources */,
 				911DEA3620326FB600F956C1 /* WhitespaceClassifier.swift in Sources */,
 				9173AAF52029159300B41819 /* ObserverProviding.swift in Sources */,
 				914E28F71FFB297A00765FCE /* Debug.swift in Sources */,
@@ -441,6 +477,7 @@
 				9111CF2B2005BBE9006B56AA /* Checkbox.swift in Sources */,
 				917E54A3200427E800D490A8 /* Button.swift in Sources */,
 				9111CF30200703D1006B56AA /* AttributedString.swift in Sources */,
+				913314322045EB8100B2FA7A /* TextMarkerRichSelectionChange.swift in Sources */,
 				91187E3E2010592D004DA209 /* WebArea.swift in Sources */,
 				91BF2DF91FF1800700FB993D /* Element.swift in Sources */,
 				910D6B4E2034DB4200A816F3 /* Output.swift in Sources */,
@@ -451,8 +488,11 @@
 				914E28BC1FF83E3700765FCE /* Observer.swift in Sources */,
 				9173AAF120290EF400B41819 /* ObserverError.swift in Sources */,
 				91187E4220107241004DA209 /* SelectionChange.swift in Sources */,
+				91331438204613D700B2FA7A /* IntegerIndexSelectionChangeHandler.swift in Sources */,
 				917E54702002F7D800D490A8 /* Window.swift in Sources */,
+				9133143A2046153C00B2FA7A /* IntegerIndexSelectionChange.swift in Sources */,
 				914E296E1FFF163D00765FCE /* Hierarchy.swift in Sources */,
+				9187D9052046487900A7BE93 /* TextMarkerSelectionChange.swift in Sources */,
 				911DEA3C20328C7400F956C1 /* CompoundSound.swift in Sources */,
 				91FFFCFF1FF5B6B400BF89A0 /* AccessibilityError.swift in Sources */,
 				917FEA4A20113EF90036280E /* TextMarker.m in Sources */,
