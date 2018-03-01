@@ -80,12 +80,12 @@ public extension Range where Bound == Position<AXTextMarker> {
             fatalError()
         }
         let start = accessibility_element_copy_start_marker(axTextMarkerRange as CFTypeRef)
-        let lowerBound = Position(index: start?.takeRetainedValue() as AXTextMarker, element: element)
+        let lowerBound = Position(index: start as AXTextMarker, element: element)
         let end = accessibility_element_copy_end_marker(axTextMarkerRange as CFTypeRef)
-        let upperBound = Position(index: end?.takeRetainedValue() as AXTextMarker, element: element)
+        let upperBound = Position(index: end as AXTextMarker, element: element)
         self = Range(uncheckedBounds: (lowerBound, upperBound))
     }
     public var axTextMarkerRange: AXTextMarkerRange? {
-        return accessibility_element_create_marker_range(lowerBound.index, upperBound.index)?.takeRetainedValue()
+        return accessibility_element_create_marker_range(lowerBound.index, upperBound.index)
     }
 }

@@ -11,5 +11,3 @@ FOUNDATION_EXPORT double AccessibilityElementVersionNumber;
 
 //! Project version string for AccessibilityElement.
 FOUNDATION_EXPORT const unsigned char AccessibilityElementVersionString[];
-
-#import <AccessibilityElement/TextMarker.h>

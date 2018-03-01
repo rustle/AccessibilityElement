@@ -54,8 +54,6 @@
 		917E54A92004800C00D490A8 /* Describer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54A82004800C00D490A8 /* Describer.swift */; };
 		917E54AC2005727200D490A8 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917E54AB2005727200D490A8 /* TextField.swift */; };
 		917FEA45201136270036280E /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917FEA44201136270036280E /* Position.swift */; };
-		917FEA4920113EF90036280E /* TextMarker.h in Headers */ = {isa = PBXBuildFile; fileRef = 917FEA4720113EF90036280E /* TextMarker.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		917FEA4A20113EF90036280E /* TextMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 917FEA4820113EF90036280E /* TextMarker.m */; };
 		9187D9052046487900A7BE93 /* TextMarkerSelectionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187D9042046487900A7BE93 /* TextMarkerSelectionChange.swift */; };
 		91BA29B3202FFBEB00A978A6 /* SimpleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BA29B2202FFBEB00A978A6 /* SimpleState.swift */; };
 		91BA29B52030D5B300A978A6 /* Tap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BA29B42030D5B300A978A6 /* Tap.swift */; };
@@ -68,6 +66,7 @@
 		91BF2DFD1FF1F8AE00FB993D /* AXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BF2DFC1FF1F8AE00FB993D /* AXValue.swift */; };
 		91C5531A20080228001CF14B /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C5531920080228001CF14B /* Bundle.swift */; };
 		91C5531F200969F9001CF14B /* ScreenGrab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C5531E200969F9001CF14B /* ScreenGrab.swift */; };
+		91D5998B204843B200AF51CC /* AXTextMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5998A204843B200AF51CC /* AXTextMarker.swift */; };
 		91FFFCFF1FF5B6B400BF89A0 /* AccessibilityError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91FFFCFE1FF5B6B400BF89A0 /* AccessibilityError.swift */; };
 		91FFFD011FF6F09A00BF89A0 /* AXObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91FFFD001FF6F09A00BF89A0 /* AXObserver.swift */; };
 /* End PBXBuildFile section */
@@ -130,8 +129,6 @@
 		917E54A82004800C00D490A8 /* Describer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Describer.swift; sourceTree = "<group>"; };
 		917E54AB2005727200D490A8 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		917FEA44201136270036280E /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Position.swift; path = AccessibilityElement/Position.swift; sourceTree = SOURCE_ROOT; };
-		917FEA4720113EF90036280E /* TextMarker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextMarker.h; sourceTree = "<group>"; };
-		917FEA4820113EF90036280E /* TextMarker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextMarker.m; sourceTree = "<group>"; };
 		9187D9042046487900A7BE93 /* TextMarkerSelectionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMarkerSelectionChange.swift; sourceTree = "<group>"; };
 		91BA29B2202FFBEB00A978A6 /* SimpleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleState.swift; sourceTree = "<group>"; };
 		91BA29B42030D5B300A978A6 /* Tap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tap.swift; sourceTree = "<group>"; };
@@ -147,6 +144,7 @@
 		91BF2DFC1FF1F8AE00FB993D /* AXValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXValue.swift; sourceTree = "<group>"; };
 		91C5531920080228001CF14B /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		91C5531E200969F9001CF14B /* ScreenGrab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGrab.swift; sourceTree = "<group>"; };
+		91D5998A204843B200AF51CC /* AXTextMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXTextMarker.swift; sourceTree = "<group>"; };
 		91FFFCFE1FF5B6B400BF89A0 /* AccessibilityError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityError.swift; sourceTree = "<group>"; };
 		91FFFD001FF6F09A00BF89A0 /* AXObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXObserver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -221,6 +219,7 @@
 				91BF2DFA1FF1F02200FB993D /* AXUIElement.swift */,
 				91BF2DFC1FF1F8AE00FB993D /* AXValue.swift */,
 				91FFFD001FF6F09A00BF89A0 /* AXObserver.swift */,
+				91D5998A204843B200AF51CC /* AXTextMarker.swift */,
 			);
 			path = HIServices;
 			sourceTree = "<group>";
@@ -313,8 +312,6 @@
 				91BA29B2202FFBEB00A978A6 /* SimpleState.swift */,
 				91BA29B42030D5B300A978A6 /* Tap.swift */,
 				91BA29B62030D67600A978A6 /* GestureRecognizer.swift */,
-				917FEA4720113EF90036280E /* TextMarker.h */,
-				917FEA4820113EF90036280E /* TextMarker.m */,
 				91196120200FE7250073A998 /* TreeElement.swift */,
 				911DEA3520326FB600F956C1 /* WhitespaceClassifier.swift */,
 				9187D9032046477D00A7BE93 /* Selection Change Handler */,
@@ -349,7 +346,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				917FEA4920113EF90036280E /* TextMarker.h in Headers */,
 				91BF2DEF1FF17FE400FB993D /* AccessibilityElement.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -463,6 +459,7 @@
 				91196125200FE7D80073A998 /* Frame.swift in Sources */,
 				9114A903200C471D00C294CC /* String.swift in Sources */,
 				917E54A1200423F200D490A8 /* StaticText.swift in Sources */,
+				91D5998B204843B200AF51CC /* AXTextMarker.swift in Sources */,
 				913314342045EEB100B2FA7A /* SelectionChangeHandler.swift in Sources */,
 				911DEA3620326FB600F956C1 /* WhitespaceClassifier.swift in Sources */,
 				9173AAF52029159300B41819 /* ObserverProviding.swift in Sources */,
@@ -495,7 +492,6 @@
 				9187D9052046487900A7BE93 /* TextMarkerSelectionChange.swift in Sources */,
 				911DEA3C20328C7400F956C1 /* CompoundSound.swift in Sources */,
 				91FFFCFF1FF5B6B400BF89A0 /* AccessibilityError.swift in Sources */,
-				917FEA4A20113EF90036280E /* TextMarker.m in Sources */,
 				917E54AC2005727200D490A8 /* TextField.swift in Sources */,
 				91BF2DFB1FF1F02200FB993D /* AXUIElement.swift in Sources */,
 				91BF2DFD1FF1F8AE00FB993D /* AXValue.swift in Sources */,
