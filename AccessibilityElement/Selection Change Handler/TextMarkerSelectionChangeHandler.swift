@@ -23,7 +23,15 @@ public class TextMarkerSelectionChangeHandler<ObserverProvidingType> : Selection
         guard selectionChangeSubscription == nil else {
             return
         }
-        let signal = try applicationObserver.signal(element: element, notification: .selectedTextChanged)
+        let signal: ObserverSignal<ObserverProvidingType>
+        do {
+            // Poke a WebKit only property to differentiate Blink from WebKit
+            _ = try element.caretBrowsingEnabled()
+            signal = try applicationObserver.signal(element: element, notification: .selectedTextChanged)
+        } catch {
+            let application = type(of: element).application(processIdentifier: element.processIdentifier)
+            signal = try applicationObserver.signal(element: application, notification: .selectedTextChanged)
+        }
         selectionChangeSubscription = signal.subscribe { [weak self] element, info in
             do {
                 guard let selectionChange = try SelectionChangeForTextMarkerChangeNotification(info: info, element: element) else {
@@ -38,5 +46,11 @@ public class TextMarkerSelectionChangeHandler<ObserverProvidingType> : Selection
     public func stop() {
         selectionChangeSubscription?.cancel()
         selectionChangeSubscription = nil
+    }
+    public func rangeForMove(previousSelection: Range<Position<IndexType>>,
+                             selection: Range<Position<IndexType>>,
+                             direction: Navigation<IndexType>.Direction,
+                             granularity: Navigation<IndexType>.Granularity) throws -> Range<Position<IndexType>> {
+        return try element.range(unorderedPositions: (previousSelection.lowerBound, selection.lowerBound))
     }
 }

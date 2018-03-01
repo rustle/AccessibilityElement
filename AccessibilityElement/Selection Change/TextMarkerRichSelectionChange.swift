@@ -51,6 +51,14 @@ fileprivate struct TextMarkerSelectionChangeKeys {
     static let editType = "AXTextStateChangeType"
 }
 
+fileprivate func _ProbablyChromiumSelectionChangeForRichTextMarkerChangeNotification(info: [String:Any],
+                                                                                     element: AnyElement) -> SelectionChange<AXTextMarker>? {
+    guard let navigation = NavigationForRichTextMarkerChangeNotification(info: info, element: element) else {
+        return nil
+    }
+    return .move(navigation)
+}
+
 public func SelectionChangeForRichTextMarkerChangeNotification(info: [String:Any],
                                                                element: AnyElement) -> SelectionChange<AXTextMarker>? {
     guard let typeRawValue = info[TextMarkerSelectionChangeKeys.changeType] as? Int else {
@@ -61,7 +69,8 @@ public func SelectionChangeForRichTextMarkerChangeNotification(info: [String:Any
     }
     switch type {
     case .unknown:
-        return nil
+        return _ProbablyChromiumSelectionChangeForRichTextMarkerChangeNotification(info: info,
+                                                                                   element: element)
     case .edit:
         guard let editRawValue = info[TextMarkerSelectionChangeKeys.editType] as? Int else {
             return nil
@@ -117,6 +126,18 @@ fileprivate struct TextMarkerNavigationKeys {
     static let selectedTextMarkerRange = "AXSelectedTextMarkerRange"
 }
 
+public func _ProbablyChromiumNavigationForRichTextMarkerChangeNotification(info: [String:Any],
+                                                                           element: AnyElement) -> Navigation<AXTextMarker>? {
+    let element = info[TextMarkerNavigationKeys.textChangeElement] as? Element
+    let selection = info[TextMarkerNavigationKeys.selectedTextMarkerRange] as? Range<Position<AXTextMarker>>
+    return Navigation<AXTextMarker>(element: element,
+                                    selection: selection,
+                                    direction: nil,
+                                    granularity: nil,
+                                    focusChanged: false,
+                                    sync: false)
+}
+
 public func NavigationForRichTextMarkerChangeNotification(info: [String:Any],
                                                           element: AnyElement) -> Navigation<AXTextMarker>? {
     guard let directionRawValue = info[TextMarkerNavigationKeys.direction] as? Int else {
@@ -136,7 +157,8 @@ public func NavigationForRichTextMarkerChangeNotification(info: [String:Any],
     let direction: Navigation<AXTextMarker>.Direction
     switch axDirection {
     case .unknown:
-        return nil
+        return _ProbablyChromiumNavigationForRichTextMarkerChangeNotification(info: info,
+                                                                              element: element)
     case .beginning:
         direction = .beginning
     case .end:
@@ -151,7 +173,8 @@ public func NavigationForRichTextMarkerChangeNotification(info: [String:Any],
     let granularity: Navigation<AXTextMarker>.Granularity
     switch axGranularity {
     case .unknown:
-        return nil
+        return _ProbablyChromiumNavigationForRichTextMarkerChangeNotification(info: info,
+                                                                              element: element)
     case .character:
         granularity = .character
     case .word:

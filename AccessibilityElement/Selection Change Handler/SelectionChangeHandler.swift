@@ -22,7 +22,8 @@ public protocol SelectionChangeHandler : AnySelectionChangeHandler {
     func move(navigation: Navigation<IndexType>)
     func rangeForMove(previousSelection: Range<Position<IndexType>>,
                       selection: Range<Position<IndexType>>,
-                      direction: Navigation<IndexType>.Direction) throws -> Range<Position<IndexType>>
+                      direction: Navigation<IndexType>.Direction,
+                      granularity: Navigation<IndexType>.Granularity) throws -> Range<Position<IndexType>>
     init(element: ElementType,
          applicationObserver: ApplicationObserver<ObserverProvidingType>)
 }
@@ -48,10 +49,19 @@ public extension SelectionChangeHandler {
         guard let selection = navigation.selection else {
             return
         }
+        if previousSelection == selection {
+            return
+        }
         do {
-            let range = try rangeForMove(previousSelection: previousSelection,
+            let range: Range<Position<IndexType>>
+            if let direction = navigation.direction, let granularity = navigation.granularity {
+                range = try rangeForMove(previousSelection: previousSelection,
                                          selection: selection,
-                                         direction: navigation.direction)
+                                         direction: direction,
+                                         granularity: granularity)
+            } else {
+                range = try element.range(unorderedPositions: (previousSelection.lowerBound, selection.lowerBound))
+            }
             echo(range: range)
         } catch {
             
@@ -60,7 +70,8 @@ public extension SelectionChangeHandler {
     }
     public func rangeForMove(previousSelection: Range<Position<IndexType>>,
                              selection: Range<Position<IndexType>>,
-                             direction: Navigation<IndexType>.Direction) throws -> Range<Position<IndexType>> {
+                             direction: Navigation<IndexType>.Direction,
+                             granularity: Navigation<IndexType>.Granularity) throws -> Range<Position<IndexType>> {
         return try element.range(unorderedPositions: (previousSelection.lowerBound, selection.lowerBound))
     }
     public func echo(range: Range<Position<IndexType>>) {

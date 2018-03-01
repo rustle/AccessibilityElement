@@ -44,8 +44,8 @@ public struct Navigation<IndexType> {
     }
     public var element: AnyElement?
     public var selection: Range<Position<IndexType>>?
-    public var direction: Direction
-    public var granularity: Granularity
+    public var direction: Direction?
+    public var granularity: Granularity?
     public var focusChanged: Bool
     public var sync: Bool
 }
