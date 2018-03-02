@@ -4,7 +4,7 @@
 //  Copyright © 2017 Doug Russell. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 import Signals
 import CoreFoundationOverlay
 

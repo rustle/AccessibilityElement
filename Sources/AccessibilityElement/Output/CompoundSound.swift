@@ -4,7 +4,7 @@
 //  Copyright © 2018 Doug Russell. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 public class CompoundSound {
     private class Delegate : NSObject, NSSoundDelegate {

@@ -4,7 +4,7 @@
 //  Copyright © 2017 Doug Russell. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 public typealias AXObserverHandler = (AXUIElement, NSAccessibilityNotificationName, CFDictionary?) -> Void
 

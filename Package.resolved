@@ -1,0 +1,43 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Atomics",
+        "repositoryURL": "https://github.com/glessard/swift-atomics",
+        "state": {
+          "branch": null,
+          "revision": "f9294b963bc9a2f455e6aea9b279378c42d9f699",
+          "version": "4.0.0"
+        }
+      },
+      {
+        "package": "CoreFoundationOverlay",
+        "repositoryURL": "https://github.com/rustle/CoreFoundationOverlay.git",
+        "state": {
+          "branch": null,
+          "revision": "c32a00dc688a43a3bf5480c56078eac2a97fda32",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "Signals",
+        "repositoryURL": "https://github.com/rustle/Signals.git",
+        "state": {
+          "branch": null,
+          "revision": "abb3506ffc450f2c296c77d9e765ba803853d074",
+          "version": "5.0.0"
+        }
+      },
+      {
+        "package": "SwiftScanner",
+        "repositoryURL": "https://github.com/rustle/SwiftScanner.git",
+        "state": {
+          "branch": null,
+          "revision": "8fb41613b5b507853b980bfe8470f936dc0faf92",
+          "version": "1.0.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
