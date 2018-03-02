@@ -1,6 +1,5 @@
 /.build
 /Packages
-/*.xcodeproj
 build/
 DerivedData/
 *.pbxuser

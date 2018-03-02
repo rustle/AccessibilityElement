@@ -1,0 +1,1704 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		"AccessibilityElement::AccessibilityElementPackageTests::ProductTarget" /* AccessibilityElementPackageTests */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = OBJ_279 /* Build configuration list for PBXAggregateTarget "AccessibilityElementPackageTests" */;
+			buildPhases = (
+			);
+			dependencies = (
+				OBJ_282 /* PBXTargetDependency */,
+			);
+			name = AccessibilityElementPackageTests;
+			productName = AccessibilityElementPackageTests;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		OBJ_117 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
+		OBJ_123 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_88 /* Package.swift */; };
+		OBJ_129 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_90 /* Package.swift */; };
+		OBJ_135 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_93 /* Package.swift */; };
+		OBJ_141 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_103 /* Package.swift */; };
+		OBJ_147 /* AttributedStringsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_71 /* AttributedStringsTest.swift */; };
+		OBJ_148 /* HierarchyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_72 /* HierarchyTests.swift */; };
+		OBJ_149 /* MockElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_73 /* MockElement.swift */; };
+		OBJ_150 /* ObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_74 /* ObserverTests.swift */; };
+		OBJ_151 /* SubstitutionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_75 /* SubstitutionsTests.swift */; };
+		OBJ_153 /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AccessibilityElement::AccessibilityElement::Product" /* AccessibilityElement.framework */; };
+		OBJ_154 /* Atomics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Atomics::Atomics::Product" /* Atomics.framework */; };
+		OBJ_155 /* CAtomics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Atomics::CAtomics::Product" /* CAtomics.framework */; };
+		OBJ_156 /* SwiftScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftScanner::SwiftScanner::Product" /* SwiftScanner.framework */; };
+		OBJ_157 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Signals::Signals::Product" /* Signals.framework */; };
+		OBJ_158 /* CoreFoundationOverlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "CoreFoundationOverlay::CoreFoundationOverlay::Product" /* CoreFoundationOverlay.framework */; };
+		OBJ_175 /* AccessibilityElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AccessibilityElement.swift */; };
+		OBJ_176 /* AccessibilityError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* AccessibilityError.swift */; };
+		OBJ_177 /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* AttributedString.swift */; };
+		OBJ_178 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* Bundle.swift */; };
+		OBJ_179 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* Controller.swift */; };
+		OBJ_180 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* Debug.swift */; };
+		OBJ_181 /* Describer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* Describer.swift */; };
+		OBJ_182 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* Element.swift */; };
+		OBJ_183 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* Application.swift */; };
+		OBJ_184 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* Button.swift */; };
+		OBJ_185 /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* Checkbox.swift */; };
+		OBJ_186 /* Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* Default.swift */; };
+		OBJ_187 /* EventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* EventHandler.swift */; };
+		OBJ_188 /* Registrar.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* Registrar.swift */; };
+		OBJ_189 /* StaticText.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* StaticText.swift */; };
+		OBJ_190 /* TextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* TextAttachment.swift */; };
+		OBJ_191 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* TextField.swift */; };
+		OBJ_192 /* Toggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* Toggle.swift */; };
+		OBJ_193 /* WebArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* WebArea.swift */; };
+		OBJ_194 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* Window.swift */; };
+		OBJ_195 /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* Frame.swift */; };
+		OBJ_196 /* GestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* GestureRecognizer.swift */; };
+		OBJ_197 /* AXObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* AXObserver.swift */; };
+		OBJ_198 /* AXTextMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* AXTextMarker.swift */; };
+		OBJ_199 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_36 /* AXUIElement.swift */; };
+		OBJ_200 /* AXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_37 /* AXValue.swift */; };
+		OBJ_201 /* Hierarchy.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_38 /* Hierarchy.swift */; };
+		OBJ_202 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_39 /* Node.swift */; };
+		OBJ_203 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_41 /* Observer.swift */; };
+		OBJ_204 /* ObserverError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* ObserverError.swift */; };
+		OBJ_205 /* ObserverProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* ObserverProviding.swift */; };
+		OBJ_206 /* ObserverSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_44 /* ObserverSignal.swift */; };
+		OBJ_207 /* SystemObserverProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_45 /* SystemObserverProviding.swift */; };
+		OBJ_208 /* CompoundSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_47 /* CompoundSound.swift */; };
+		OBJ_209 /* Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* Output.swift */; };
+		OBJ_210 /* Queues.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_49 /* Queues.swift */; };
+		OBJ_211 /* Substitutions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_50 /* Substitutions.swift */; };
+		OBJ_212 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_51 /* Position.swift */; };
+		OBJ_213 /* ScreenGrab.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_52 /* ScreenGrab.swift */; };
+		OBJ_214 /* IntegerIndexSelectionChangeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_54 /* IntegerIndexSelectionChangeHandler.swift */; };
+		OBJ_215 /* SelectionChangeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_55 /* SelectionChangeHandler.swift */; };
+		OBJ_216 /* TextMarkerSelectionChangeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_56 /* TextMarkerSelectionChangeHandler.swift */; };
+		OBJ_217 /* IntegerIndexSelectionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* IntegerIndexSelectionChange.swift */; };
+		OBJ_218 /* SelectionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* SelectionChange.swift */; };
+		OBJ_219 /* TextMarkerRichSelectionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* TextMarkerRichSelectionChange.swift */; };
+		OBJ_220 /* TextMarkerSelectionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* TextMarkerSelectionChange.swift */; };
+		OBJ_221 /* SimpleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* SimpleState.swift */; };
+		OBJ_222 /* Tap.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* Tap.swift */; };
+		OBJ_223 /* TreeElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_64 /* TreeElement.swift */; };
+		OBJ_224 /* WhitespaceClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_65 /* WhitespaceClassifier.swift */; };
+		OBJ_225 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_67 /* Dictionary.swift */; };
+		OBJ_226 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_68 /* String.swift */; };
+		OBJ_228 /* Atomics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Atomics::Atomics::Product" /* Atomics.framework */; };
+		OBJ_229 /* CAtomics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Atomics::CAtomics::Product" /* CAtomics.framework */; };
+		OBJ_230 /* SwiftScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftScanner::SwiftScanner::Product" /* SwiftScanner.framework */; };
+		OBJ_231 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Signals::Signals::Product" /* Signals.framework */; };
+		OBJ_232 /* CoreFoundationOverlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "CoreFoundationOverlay::CoreFoundationOverlay::Product" /* CoreFoundationOverlay.framework */; };
+		OBJ_242 /* atomics-fence.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_84 /* atomics-fence.swift */; };
+		OBJ_243 /* atomics-integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_85 /* atomics-integer.swift */; };
+		OBJ_244 /* atomics-pointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_86 /* atomics-pointer.swift */; };
+		OBJ_245 /* atomics-reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_87 /* atomics-reference.swift */; };
+		OBJ_247 /* CAtomics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Atomics::CAtomics::Product" /* CAtomics.framework */; };
+		OBJ_253 /* CAtomics.c in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_79 /* CAtomics.c */; };
+		OBJ_259 /* StringScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_91 /* StringScanner.swift */; };
+		OBJ_265 /* Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_94 /* Signal.swift */; };
+		OBJ_271 /* CF.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_97 /* CF.swift */; };
+		OBJ_272 /* CFDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_98 /* CFDictionary.swift */; };
+		OBJ_273 /* CFNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_99 /* CFNumber.swift */; };
+		OBJ_274 /* CFRunLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_100 /* CFRunLoop.swift */; };
+		OBJ_275 /* CFString.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_101 /* CFString.swift */; };
+		OBJ_276 /* CoreFoundationOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_102 /* CoreFoundationOverlay.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		91D59B6E204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Atomics::Atomics";
+			remoteInfo = Atomics;
+		};
+		91D59B6F204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Atomics::CAtomics";
+			remoteInfo = CAtomics;
+		};
+		91D59B70204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Atomics::CAtomics";
+			remoteInfo = CAtomics;
+		};
+		91D59B71204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "SwiftScanner::SwiftScanner";
+			remoteInfo = SwiftScanner;
+		};
+		91D59B72204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Signals::Signals";
+			remoteInfo = Signals;
+		};
+		91D59B73204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "CoreFoundationOverlay::CoreFoundationOverlay";
+			remoteInfo = CoreFoundationOverlay;
+		};
+		91D59B74204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "AccessibilityElement::AccessibilityElement";
+			remoteInfo = AccessibilityElement;
+		};
+		91D59B75204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Atomics::Atomics";
+			remoteInfo = Atomics;
+		};
+		91D59B76204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Atomics::CAtomics";
+			remoteInfo = CAtomics;
+		};
+		91D59B77204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "SwiftScanner::SwiftScanner";
+			remoteInfo = SwiftScanner;
+		};
+		91D59B78204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Signals::Signals";
+			remoteInfo = Signals;
+		};
+		91D59B79204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "CoreFoundationOverlay::CoreFoundationOverlay";
+			remoteInfo = CoreFoundationOverlay;
+		};
+		91D59B7A204904E000AF51CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "AccessibilityElement::AccessibilityElementTests";
+			remoteInfo = AccessibilityElementTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		"AccessibilityElement::AccessibilityElement::Product" /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"AccessibilityElement::AccessibilityElementTests::Product" /* AccessibilityElementTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = AccessibilityElementTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"Atomics::Atomics::Product" /* Atomics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Atomics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"Atomics::CAtomics::Product" /* CAtomics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CAtomics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"CoreFoundationOverlay::CoreFoundationOverlay::Product" /* CoreFoundationOverlay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreFoundationOverlay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_10 /* AccessibilityError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityError.swift; sourceTree = "<group>"; };
+		OBJ_100 /* CFRunLoop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFRunLoop.swift; sourceTree = "<group>"; };
+		OBJ_101 /* CFString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFString.swift; sourceTree = "<group>"; };
+		OBJ_102 /* CoreFoundationOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreFoundationOverlay.swift; sourceTree = "<group>"; };
+		OBJ_103 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = "/Users/doug/Source/Accessibility/AccessibilityElement/.build/checkouts/CoreFoundationOverlay.git--8325486567584219650/Package.swift"; sourceTree = "<group>"; };
+		OBJ_11 /* AttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString.swift; sourceTree = "<group>"; };
+		OBJ_12 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
+		OBJ_13 /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
+		OBJ_14 /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
+		OBJ_15 /* Describer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Describer.swift; sourceTree = "<group>"; };
+		OBJ_16 /* Element.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Element.swift; sourceTree = "<group>"; };
+		OBJ_18 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		OBJ_19 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		OBJ_20 /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		OBJ_21 /* Default.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Default.swift; sourceTree = "<group>"; };
+		OBJ_22 /* EventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHandler.swift; sourceTree = "<group>"; };
+		OBJ_23 /* Registrar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Registrar.swift; sourceTree = "<group>"; };
+		OBJ_25 /* StaticText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticText.swift; sourceTree = "<group>"; };
+		OBJ_26 /* TextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAttachment.swift; sourceTree = "<group>"; };
+		OBJ_27 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
+		OBJ_28 /* Toggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toggle.swift; sourceTree = "<group>"; };
+		OBJ_29 /* WebArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebArea.swift; sourceTree = "<group>"; };
+		OBJ_30 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
+		OBJ_31 /* Frame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Frame.swift; sourceTree = "<group>"; };
+		OBJ_32 /* GestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureRecognizer.swift; sourceTree = "<group>"; };
+		OBJ_34 /* AXObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXObserver.swift; sourceTree = "<group>"; };
+		OBJ_35 /* AXTextMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXTextMarker.swift; sourceTree = "<group>"; };
+		OBJ_36 /* AXUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElement.swift; sourceTree = "<group>"; };
+		OBJ_37 /* AXValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXValue.swift; sourceTree = "<group>"; };
+		OBJ_38 /* Hierarchy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hierarchy.swift; sourceTree = "<group>"; };
+		OBJ_39 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		OBJ_41 /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
+		OBJ_42 /* ObserverError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverError.swift; sourceTree = "<group>"; };
+		OBJ_43 /* ObserverProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverProviding.swift; sourceTree = "<group>"; };
+		OBJ_44 /* ObserverSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverSignal.swift; sourceTree = "<group>"; };
+		OBJ_45 /* SystemObserverProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemObserverProviding.swift; sourceTree = "<group>"; };
+		OBJ_47 /* CompoundSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompoundSound.swift; sourceTree = "<group>"; };
+		OBJ_48 /* Output.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Output.swift; sourceTree = "<group>"; };
+		OBJ_49 /* Queues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queues.swift; sourceTree = "<group>"; };
+		OBJ_50 /* Substitutions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Substitutions.swift; sourceTree = "<group>"; };
+		OBJ_51 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
+		OBJ_52 /* ScreenGrab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGrab.swift; sourceTree = "<group>"; };
+		OBJ_54 /* IntegerIndexSelectionChangeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerIndexSelectionChangeHandler.swift; sourceTree = "<group>"; };
+		OBJ_55 /* SelectionChangeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionChangeHandler.swift; sourceTree = "<group>"; };
+		OBJ_56 /* TextMarkerSelectionChangeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMarkerSelectionChangeHandler.swift; sourceTree = "<group>"; };
+		OBJ_58 /* IntegerIndexSelectionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerIndexSelectionChange.swift; sourceTree = "<group>"; };
+		OBJ_59 /* SelectionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionChange.swift; sourceTree = "<group>"; };
+		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		OBJ_60 /* TextMarkerRichSelectionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMarkerRichSelectionChange.swift; sourceTree = "<group>"; };
+		OBJ_61 /* TextMarkerSelectionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMarkerSelectionChange.swift; sourceTree = "<group>"; };
+		OBJ_62 /* SimpleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleState.swift; sourceTree = "<group>"; };
+		OBJ_63 /* Tap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tap.swift; sourceTree = "<group>"; };
+		OBJ_64 /* TreeElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeElement.swift; sourceTree = "<group>"; };
+		OBJ_65 /* WhitespaceClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhitespaceClassifier.swift; sourceTree = "<group>"; };
+		OBJ_67 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
+		OBJ_68 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		OBJ_71 /* AttributedStringsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringsTest.swift; sourceTree = "<group>"; };
+		OBJ_72 /* HierarchyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HierarchyTests.swift; sourceTree = "<group>"; };
+		OBJ_73 /* MockElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockElement.swift; sourceTree = "<group>"; };
+		OBJ_74 /* ObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverTests.swift; sourceTree = "<group>"; };
+		OBJ_75 /* SubstitutionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstitutionsTests.swift; sourceTree = "<group>"; };
+		OBJ_79 /* CAtomics.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CAtomics.c; sourceTree = "<group>"; };
+		OBJ_81 /* CAtomics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAtomics.h; sourceTree = "<group>"; };
+		OBJ_82 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = /Users/doug/Source/Accessibility/AccessibilityElement/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics/module.modulemap; sourceTree = "<group>"; };
+		OBJ_84 /* atomics-fence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "atomics-fence.swift"; sourceTree = "<group>"; };
+		OBJ_85 /* atomics-integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "atomics-integer.swift"; sourceTree = "<group>"; };
+		OBJ_86 /* atomics-pointer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "atomics-pointer.swift"; sourceTree = "<group>"; };
+		OBJ_87 /* atomics-reference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "atomics-reference.swift"; sourceTree = "<group>"; };
+		OBJ_88 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = "/Users/doug/Source/Accessibility/AccessibilityElement/.build/checkouts/swift-atomics--7665388977442881344/Package.swift"; sourceTree = "<group>"; };
+		OBJ_9 /* AccessibilityElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityElement.swift; sourceTree = "<group>"; };
+		OBJ_90 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = "/Users/doug/Source/Accessibility/AccessibilityElement/.build/checkouts/SwiftScanner.git--3888101014598209270/Package.swift"; sourceTree = "<group>"; };
+		OBJ_91 /* StringScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringScanner.swift; sourceTree = "<group>"; };
+		OBJ_93 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = "/Users/doug/Source/Accessibility/AccessibilityElement/.build/checkouts/Signals.git--353844806167487743/Package.swift"; sourceTree = "<group>"; };
+		OBJ_94 /* Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signal.swift; sourceTree = "<group>"; };
+		OBJ_97 /* CF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CF.swift; sourceTree = "<group>"; };
+		OBJ_98 /* CFDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFDictionary.swift; sourceTree = "<group>"; };
+		OBJ_99 /* CFNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFNumber.swift; sourceTree = "<group>"; };
+		"Signals::Signals::Product" /* Signals.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Signals.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"SwiftScanner::SwiftScanner::Product" /* SwiftScanner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftScanner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		OBJ_152 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_153 /* AccessibilityElement.framework in Frameworks */,
+				OBJ_154 /* Atomics.framework in Frameworks */,
+				OBJ_155 /* CAtomics.framework in Frameworks */,
+				OBJ_156 /* SwiftScanner.framework in Frameworks */,
+				OBJ_157 /* Signals.framework in Frameworks */,
+				OBJ_158 /* CoreFoundationOverlay.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_227 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_228 /* Atomics.framework in Frameworks */,
+				OBJ_229 /* CAtomics.framework in Frameworks */,
+				OBJ_230 /* SwiftScanner.framework in Frameworks */,
+				OBJ_231 /* Signals.framework in Frameworks */,
+				OBJ_232 /* CoreFoundationOverlay.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_246 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_247 /* CAtomics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_254 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_260 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_266 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_277 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		OBJ_104 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				"AccessibilityElement::AccessibilityElementTests::Product" /* AccessibilityElementTests.xctest */,
+				"AccessibilityElement::AccessibilityElement::Product" /* AccessibilityElement.framework */,
+				"Atomics::Atomics::Product" /* Atomics.framework */,
+				"Atomics::CAtomics::Product" /* CAtomics.framework */,
+				"SwiftScanner::SwiftScanner::Product" /* SwiftScanner.framework */,
+				"Signals::Signals::Product" /* Signals.framework */,
+				"CoreFoundationOverlay::CoreFoundationOverlay::Product" /* CoreFoundationOverlay.framework */,
+			);
+			name = Products;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		OBJ_17 /* EventHandler */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_18 /* Application.swift */,
+				OBJ_19 /* Button.swift */,
+				OBJ_20 /* Checkbox.swift */,
+				OBJ_21 /* Default.swift */,
+				OBJ_22 /* EventHandler.swift */,
+				OBJ_23 /* Registrar.swift */,
+				OBJ_24 /* Text */,
+				OBJ_28 /* Toggle.swift */,
+				OBJ_29 /* WebArea.swift */,
+				OBJ_30 /* Window.swift */,
+			);
+			path = EventHandler;
+			sourceTree = "<group>";
+		};
+		OBJ_24 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_25 /* StaticText.swift */,
+				OBJ_26 /* TextAttachment.swift */,
+				OBJ_27 /* TextField.swift */,
+			);
+			path = Text;
+			sourceTree = "<group>";
+		};
+		OBJ_33 /* HIServices */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_34 /* AXObserver.swift */,
+				OBJ_35 /* AXTextMarker.swift */,
+				OBJ_36 /* AXUIElement.swift */,
+				OBJ_37 /* AXValue.swift */,
+			);
+			path = HIServices;
+			sourceTree = "<group>";
+		};
+		OBJ_40 /* Observer */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_41 /* Observer.swift */,
+				OBJ_42 /* ObserverError.swift */,
+				OBJ_43 /* ObserverProviding.swift */,
+				OBJ_44 /* ObserverSignal.swift */,
+				OBJ_45 /* SystemObserverProviding.swift */,
+			);
+			path = Observer;
+			sourceTree = "<group>";
+		};
+		OBJ_46 /* Output */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_47 /* CompoundSound.swift */,
+				OBJ_48 /* Output.swift */,
+				OBJ_49 /* Queues.swift */,
+				OBJ_50 /* Substitutions.swift */,
+			);
+			path = Output;
+			sourceTree = "<group>";
+		};
+		OBJ_5 /*  */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_6 /* Package.swift */,
+				OBJ_7 /* Sources */,
+				OBJ_69 /* Tests */,
+				OBJ_76 /* Dependencies */,
+				OBJ_104 /* Products */,
+			);
+			name = "";
+			sourceTree = "<group>";
+		};
+		OBJ_53 /* Selection Change Handler */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_54 /* IntegerIndexSelectionChangeHandler.swift */,
+				OBJ_55 /* SelectionChangeHandler.swift */,
+				OBJ_56 /* TextMarkerSelectionChangeHandler.swift */,
+			);
+			path = "Selection Change Handler";
+			sourceTree = "<group>";
+		};
+		OBJ_57 /* Selection Change */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_58 /* IntegerIndexSelectionChange.swift */,
+				OBJ_59 /* SelectionChange.swift */,
+				OBJ_60 /* TextMarkerRichSelectionChange.swift */,
+				OBJ_61 /* TextMarkerSelectionChange.swift */,
+			);
+			path = "Selection Change";
+			sourceTree = "<group>";
+		};
+		OBJ_66 /* stdlib */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_67 /* Dictionary.swift */,
+				OBJ_68 /* String.swift */,
+			);
+			path = stdlib;
+			sourceTree = "<group>";
+		};
+		OBJ_69 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_70 /* AccessibilityElementTests */,
+			);
+			name = Tests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_8 /* AccessibilityElement */,
+			);
+			name = Sources;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_70 /* AccessibilityElementTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_71 /* AttributedStringsTest.swift */,
+				OBJ_72 /* HierarchyTests.swift */,
+				OBJ_73 /* MockElement.swift */,
+				OBJ_74 /* ObserverTests.swift */,
+				OBJ_75 /* SubstitutionsTests.swift */,
+			);
+			name = AccessibilityElementTests;
+			path = Tests/AccessibilityElementTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_76 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_77 /* Atomics 4.0.0 */,
+				OBJ_89 /* SwiftScanner 1.0.3 */,
+				OBJ_92 /* Signals 5.0.0 */,
+				OBJ_95 /* CoreFoundationOverlay 1.0.0 */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		OBJ_77 /* Atomics 4.0.0 */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_78 /* CAtomics */,
+				OBJ_83 /* Atomics */,
+				OBJ_88 /* Package.swift */,
+			);
+			name = "Atomics 4.0.0";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_78 /* CAtomics */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_79 /* CAtomics.c */,
+				OBJ_80 /* include */,
+			);
+			name = CAtomics;
+			path = ".build/checkouts/swift-atomics--7665388977442881344/Sources/CAtomics";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_8 /* AccessibilityElement */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_9 /* AccessibilityElement.swift */,
+				OBJ_10 /* AccessibilityError.swift */,
+				OBJ_11 /* AttributedString.swift */,
+				OBJ_12 /* Bundle.swift */,
+				OBJ_13 /* Controller.swift */,
+				OBJ_14 /* Debug.swift */,
+				OBJ_15 /* Describer.swift */,
+				OBJ_16 /* Element.swift */,
+				OBJ_17 /* EventHandler */,
+				OBJ_31 /* Frame.swift */,
+				OBJ_32 /* GestureRecognizer.swift */,
+				OBJ_33 /* HIServices */,
+				OBJ_38 /* Hierarchy.swift */,
+				OBJ_39 /* Node.swift */,
+				OBJ_40 /* Observer */,
+				OBJ_46 /* Output */,
+				OBJ_51 /* Position.swift */,
+				OBJ_52 /* ScreenGrab.swift */,
+				OBJ_53 /* Selection Change Handler */,
+				OBJ_57 /* Selection Change */,
+				OBJ_62 /* SimpleState.swift */,
+				OBJ_63 /* Tap.swift */,
+				OBJ_64 /* TreeElement.swift */,
+				OBJ_65 /* WhitespaceClassifier.swift */,
+				OBJ_66 /* stdlib */,
+			);
+			name = AccessibilityElement;
+			path = Sources/AccessibilityElement;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_80 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_81 /* CAtomics.h */,
+				OBJ_82 /* module.modulemap */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		OBJ_83 /* Atomics */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_84 /* atomics-fence.swift */,
+				OBJ_85 /* atomics-integer.swift */,
+				OBJ_86 /* atomics-pointer.swift */,
+				OBJ_87 /* atomics-reference.swift */,
+			);
+			name = Atomics;
+			path = ".build/checkouts/swift-atomics--7665388977442881344/Sources/Atomics";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_89 /* SwiftScanner 1.0.3 */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_90 /* Package.swift */,
+				OBJ_91 /* StringScanner.swift */,
+			);
+			name = "SwiftScanner 1.0.3";
+			path = ".build/checkouts/SwiftScanner.git--3888101014598209270/Sources";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_92 /* Signals 5.0.0 */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_93 /* Package.swift */,
+				OBJ_94 /* Signal.swift */,
+			);
+			name = "Signals 5.0.0";
+			path = ".build/checkouts/Signals.git--353844806167487743/Sources";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_95 /* CoreFoundationOverlay 1.0.0 */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_96 /* CoreFoundationOverlay */,
+				OBJ_103 /* Package.swift */,
+			);
+			name = "CoreFoundationOverlay 1.0.0";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_96 /* CoreFoundationOverlay */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_97 /* CF.swift */,
+				OBJ_98 /* CFDictionary.swift */,
+				OBJ_99 /* CFNumber.swift */,
+				OBJ_100 /* CFRunLoop.swift */,
+				OBJ_101 /* CFString.swift */,
+				OBJ_102 /* CoreFoundationOverlay.swift */,
+			);
+			name = CoreFoundationOverlay;
+			path = ".build/checkouts/CoreFoundationOverlay.git--8325486567584219650/Sources/CoreFoundationOverlay";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		"AccessibilityElement::AccessibilityElement" /* AccessibilityElement */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_171 /* Build configuration list for PBXNativeTarget "AccessibilityElement" */;
+			buildPhases = (
+				OBJ_174 /* Sources */,
+				OBJ_227 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_233 /* PBXTargetDependency */,
+				OBJ_234 /* PBXTargetDependency */,
+				OBJ_235 /* PBXTargetDependency */,
+				OBJ_236 /* PBXTargetDependency */,
+				OBJ_237 /* PBXTargetDependency */,
+			);
+			name = AccessibilityElement;
+			productName = AccessibilityElement;
+			productReference = "AccessibilityElement::AccessibilityElement::Product" /* AccessibilityElement.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"AccessibilityElement::AccessibilityElementTests" /* AccessibilityElementTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_143 /* Build configuration list for PBXNativeTarget "AccessibilityElementTests" */;
+			buildPhases = (
+				OBJ_146 /* Sources */,
+				OBJ_152 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_159 /* PBXTargetDependency */,
+				OBJ_161 /* PBXTargetDependency */,
+				OBJ_163 /* PBXTargetDependency */,
+				OBJ_165 /* PBXTargetDependency */,
+				OBJ_167 /* PBXTargetDependency */,
+				OBJ_169 /* PBXTargetDependency */,
+			);
+			name = AccessibilityElementTests;
+			productName = AccessibilityElementTests;
+			productReference = "AccessibilityElement::AccessibilityElementTests::Product" /* AccessibilityElementTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		"AccessibilityElement::SwiftPMPackageDescription" /* AccessibilityElementPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_113 /* Build configuration list for PBXNativeTarget "AccessibilityElementPackageDescription" */;
+			buildPhases = (
+				OBJ_116 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AccessibilityElementPackageDescription;
+			productName = AccessibilityElementPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+		"Atomics::Atomics" /* Atomics */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_238 /* Build configuration list for PBXNativeTarget "Atomics" */;
+			buildPhases = (
+				OBJ_241 /* Sources */,
+				OBJ_246 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_248 /* PBXTargetDependency */,
+			);
+			name = Atomics;
+			productName = Atomics;
+			productReference = "Atomics::Atomics::Product" /* Atomics.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"Atomics::CAtomics" /* CAtomics */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_249 /* Build configuration list for PBXNativeTarget "CAtomics" */;
+			buildPhases = (
+				OBJ_252 /* Sources */,
+				OBJ_254 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CAtomics;
+			productName = CAtomics;
+			productReference = "Atomics::CAtomics::Product" /* CAtomics.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"Atomics::SwiftPMPackageDescription" /* AtomicsPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_119 /* Build configuration list for PBXNativeTarget "AtomicsPackageDescription" */;
+			buildPhases = (
+				OBJ_122 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AtomicsPackageDescription;
+			productName = AtomicsPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+		"CoreFoundationOverlay::CoreFoundationOverlay" /* CoreFoundationOverlay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_267 /* Build configuration list for PBXNativeTarget "CoreFoundationOverlay" */;
+			buildPhases = (
+				OBJ_270 /* Sources */,
+				OBJ_277 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CoreFoundationOverlay;
+			productName = CoreFoundationOverlay;
+			productReference = "CoreFoundationOverlay::CoreFoundationOverlay::Product" /* CoreFoundationOverlay.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"CoreFoundationOverlay::SwiftPMPackageDescription" /* CoreFoundationOverlayPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_137 /* Build configuration list for PBXNativeTarget "CoreFoundationOverlayPackageDescription" */;
+			buildPhases = (
+				OBJ_140 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CoreFoundationOverlayPackageDescription;
+			productName = CoreFoundationOverlayPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+		"Signals::Signals" /* Signals */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_261 /* Build configuration list for PBXNativeTarget "Signals" */;
+			buildPhases = (
+				OBJ_264 /* Sources */,
+				OBJ_266 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Signals;
+			productName = Signals;
+			productReference = "Signals::Signals::Product" /* Signals.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"Signals::SwiftPMPackageDescription" /* SignalsPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_131 /* Build configuration list for PBXNativeTarget "SignalsPackageDescription" */;
+			buildPhases = (
+				OBJ_134 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SignalsPackageDescription;
+			productName = SignalsPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+		"SwiftScanner::SwiftPMPackageDescription" /* SwiftScannerPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_125 /* Build configuration list for PBXNativeTarget "SwiftScannerPackageDescription" */;
+			buildPhases = (
+				OBJ_128 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftScannerPackageDescription;
+			productName = SwiftScannerPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+		"SwiftScanner::SwiftScanner" /* SwiftScanner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_255 /* Build configuration list for PBXNativeTarget "SwiftScanner" */;
+			buildPhases = (
+				OBJ_258 /* Sources */,
+				OBJ_260 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftScanner;
+			productName = SwiftScanner;
+			productReference = "SwiftScanner::SwiftScanner::Product" /* SwiftScanner.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		OBJ_1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 9999;
+			};
+			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "AccessibilityElement" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = OBJ_5 /*  */;
+			productRefGroup = OBJ_104 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				"AccessibilityElement::SwiftPMPackageDescription" /* AccessibilityElementPackageDescription */,
+				"Atomics::SwiftPMPackageDescription" /* AtomicsPackageDescription */,
+				"SwiftScanner::SwiftPMPackageDescription" /* SwiftScannerPackageDescription */,
+				"Signals::SwiftPMPackageDescription" /* SignalsPackageDescription */,
+				"CoreFoundationOverlay::SwiftPMPackageDescription" /* CoreFoundationOverlayPackageDescription */,
+				"AccessibilityElement::AccessibilityElementTests" /* AccessibilityElementTests */,
+				"AccessibilityElement::AccessibilityElement" /* AccessibilityElement */,
+				"Atomics::Atomics" /* Atomics */,
+				"Atomics::CAtomics" /* CAtomics */,
+				"SwiftScanner::SwiftScanner" /* SwiftScanner */,
+				"Signals::Signals" /* Signals */,
+				"CoreFoundationOverlay::CoreFoundationOverlay" /* CoreFoundationOverlay */,
+				"AccessibilityElement::AccessibilityElementPackageTests::ProductTarget" /* AccessibilityElementPackageTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		OBJ_116 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_117 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_122 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_123 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_128 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_129 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_134 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_135 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_140 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_141 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_146 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_147 /* AttributedStringsTest.swift in Sources */,
+				OBJ_148 /* HierarchyTests.swift in Sources */,
+				OBJ_149 /* MockElement.swift in Sources */,
+				OBJ_150 /* ObserverTests.swift in Sources */,
+				OBJ_151 /* SubstitutionsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_174 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_175 /* AccessibilityElement.swift in Sources */,
+				OBJ_176 /* AccessibilityError.swift in Sources */,
+				OBJ_177 /* AttributedString.swift in Sources */,
+				OBJ_178 /* Bundle.swift in Sources */,
+				OBJ_179 /* Controller.swift in Sources */,
+				OBJ_180 /* Debug.swift in Sources */,
+				OBJ_181 /* Describer.swift in Sources */,
+				OBJ_182 /* Element.swift in Sources */,
+				OBJ_183 /* Application.swift in Sources */,
+				OBJ_184 /* Button.swift in Sources */,
+				OBJ_185 /* Checkbox.swift in Sources */,
+				OBJ_186 /* Default.swift in Sources */,
+				OBJ_187 /* EventHandler.swift in Sources */,
+				OBJ_188 /* Registrar.swift in Sources */,
+				OBJ_189 /* StaticText.swift in Sources */,
+				OBJ_190 /* TextAttachment.swift in Sources */,
+				OBJ_191 /* TextField.swift in Sources */,
+				OBJ_192 /* Toggle.swift in Sources */,
+				OBJ_193 /* WebArea.swift in Sources */,
+				OBJ_194 /* Window.swift in Sources */,
+				OBJ_195 /* Frame.swift in Sources */,
+				OBJ_196 /* GestureRecognizer.swift in Sources */,
+				OBJ_197 /* AXObserver.swift in Sources */,
+				OBJ_198 /* AXTextMarker.swift in Sources */,
+				OBJ_199 /* AXUIElement.swift in Sources */,
+				OBJ_200 /* AXValue.swift in Sources */,
+				OBJ_201 /* Hierarchy.swift in Sources */,
+				OBJ_202 /* Node.swift in Sources */,
+				OBJ_203 /* Observer.swift in Sources */,
+				OBJ_204 /* ObserverError.swift in Sources */,
+				OBJ_205 /* ObserverProviding.swift in Sources */,
+				OBJ_206 /* ObserverSignal.swift in Sources */,
+				OBJ_207 /* SystemObserverProviding.swift in Sources */,
+				OBJ_208 /* CompoundSound.swift in Sources */,
+				OBJ_209 /* Output.swift in Sources */,
+				OBJ_210 /* Queues.swift in Sources */,
+				OBJ_211 /* Substitutions.swift in Sources */,
+				OBJ_212 /* Position.swift in Sources */,
+				OBJ_213 /* ScreenGrab.swift in Sources */,
+				OBJ_214 /* IntegerIndexSelectionChangeHandler.swift in Sources */,
+				OBJ_215 /* SelectionChangeHandler.swift in Sources */,
+				OBJ_216 /* TextMarkerSelectionChangeHandler.swift in Sources */,
+				OBJ_217 /* IntegerIndexSelectionChange.swift in Sources */,
+				OBJ_218 /* SelectionChange.swift in Sources */,
+				OBJ_219 /* TextMarkerRichSelectionChange.swift in Sources */,
+				OBJ_220 /* TextMarkerSelectionChange.swift in Sources */,
+				OBJ_221 /* SimpleState.swift in Sources */,
+				OBJ_222 /* Tap.swift in Sources */,
+				OBJ_223 /* TreeElement.swift in Sources */,
+				OBJ_224 /* WhitespaceClassifier.swift in Sources */,
+				OBJ_225 /* Dictionary.swift in Sources */,
+				OBJ_226 /* String.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_241 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_242 /* atomics-fence.swift in Sources */,
+				OBJ_243 /* atomics-integer.swift in Sources */,
+				OBJ_244 /* atomics-pointer.swift in Sources */,
+				OBJ_245 /* atomics-reference.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_252 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_253 /* CAtomics.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_258 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_259 /* StringScanner.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_264 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_265 /* Signal.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_270 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_271 /* CF.swift in Sources */,
+				OBJ_272 /* CFDictionary.swift in Sources */,
+				OBJ_273 /* CFNumber.swift in Sources */,
+				OBJ_274 /* CFRunLoop.swift in Sources */,
+				OBJ_275 /* CFString.swift in Sources */,
+				OBJ_276 /* CoreFoundationOverlay.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		OBJ_159 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "AccessibilityElement::AccessibilityElement" /* AccessibilityElement */;
+			targetProxy = 91D59B74204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_161 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Atomics::Atomics" /* Atomics */;
+			targetProxy = 91D59B75204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_163 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Atomics::CAtomics" /* CAtomics */;
+			targetProxy = 91D59B76204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_165 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "SwiftScanner::SwiftScanner" /* SwiftScanner */;
+			targetProxy = 91D59B77204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_167 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Signals::Signals" /* Signals */;
+			targetProxy = 91D59B78204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_169 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "CoreFoundationOverlay::CoreFoundationOverlay" /* CoreFoundationOverlay */;
+			targetProxy = 91D59B79204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_233 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Atomics::Atomics" /* Atomics */;
+			targetProxy = 91D59B6E204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_234 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Atomics::CAtomics" /* CAtomics */;
+			targetProxy = 91D59B70204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_235 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "SwiftScanner::SwiftScanner" /* SwiftScanner */;
+			targetProxy = 91D59B71204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_236 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Signals::Signals" /* Signals */;
+			targetProxy = 91D59B72204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_237 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "CoreFoundationOverlay::CoreFoundationOverlay" /* CoreFoundationOverlay */;
+			targetProxy = 91D59B73204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_248 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Atomics::CAtomics" /* CAtomics */;
+			targetProxy = 91D59B6F204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+		OBJ_282 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "AccessibilityElement::AccessibilityElementTests" /* AccessibilityElementTests */;
+			targetProxy = 91D59B7A204904E000AF51CC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		OBJ_114 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		OBJ_115 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		OBJ_120 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		OBJ_121 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		OBJ_126 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 3 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/3 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		OBJ_127 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 3 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/3 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		OBJ_132 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 3 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/3 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		OBJ_133 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 3 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/3 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		OBJ_138 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		OBJ_139 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		OBJ_144 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/.build/checkouts/swift-atomics--7665388977442881344/Sources/CAtomics/include",
+					"$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics",
+				);
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/AccessibilityElementTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -fmodule-map-file=$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics/module.modulemap";
+				SWIFT_VERSION = 4.0;
+				TARGET_NAME = AccessibilityElementTests;
+			};
+			name = Debug;
+		};
+		OBJ_145 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/.build/checkouts/swift-atomics--7665388977442881344/Sources/CAtomics/include",
+					"$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics",
+				);
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/AccessibilityElementTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -fmodule-map-file=$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics/module.modulemap";
+				SWIFT_VERSION = 4.0;
+				TARGET_NAME = AccessibilityElementTests;
+			};
+			name = Release;
+		};
+		OBJ_172 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/.build/checkouts/swift-atomics--7665388977442881344/Sources/CAtomics/include",
+					"$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics",
+				);
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/AccessibilityElement_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -fmodule-map-file=$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics/module.modulemap";
+				PRODUCT_BUNDLE_IDENTIFIER = AccessibilityElement;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGET_NAME = AccessibilityElement;
+			};
+			name = Debug;
+		};
+		OBJ_173 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/.build/checkouts/swift-atomics--7665388977442881344/Sources/CAtomics/include",
+					"$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics",
+				);
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/AccessibilityElement_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -fmodule-map-file=$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics/module.modulemap";
+				PRODUCT_BUNDLE_IDENTIFIER = AccessibilityElement;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGET_NAME = AccessibilityElement;
+			};
+			name = Release;
+		};
+		OBJ_239 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/.build/checkouts/swift-atomics--7665388977442881344/Sources/CAtomics/include",
+					"$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics",
+				);
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/Atomics_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -fmodule-map-file=$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics/module.modulemap";
+				PRODUCT_BUNDLE_IDENTIFIER = Atomics;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGET_NAME = Atomics;
+			};
+			name = Debug;
+		};
+		OBJ_240 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/.build/checkouts/swift-atomics--7665388977442881344/Sources/CAtomics/include",
+					"$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics",
+				);
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/Atomics_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -fmodule-map-file=$(SRCROOT)/AccessibilityElement.xcodeproj/GeneratedModuleMap/CAtomics/module.modulemap";
+				PRODUCT_BUNDLE_IDENTIFIER = Atomics;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGET_NAME = Atomics;
+			};
+			name = Release;
+		};
+		OBJ_250 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = NO;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/.build/checkouts/swift-atomics--7665388977442881344/Sources/CAtomics/include",
+				);
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/CAtomics_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CAtomics;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGET_NAME = CAtomics;
+			};
+			name = Debug;
+		};
+		OBJ_251 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = NO;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/.build/checkouts/swift-atomics--7665388977442881344/Sources/CAtomics/include",
+				);
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/CAtomics_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CAtomics;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGET_NAME = CAtomics;
+			};
+			name = Release;
+		};
+		OBJ_256 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/SwiftScanner_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftScanner;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = SwiftScanner;
+			};
+			name = Debug;
+		};
+		OBJ_257 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/SwiftScanner_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftScanner;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = SwiftScanner;
+			};
+			name = Release;
+		};
+		OBJ_262 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/Signals_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = Signals;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = Signals;
+			};
+			name = Debug;
+		};
+		OBJ_263 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/Signals_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = Signals;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = Signals;
+			};
+			name = Release;
+		};
+		OBJ_268 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/CoreFoundationOverlay_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreFoundationOverlay;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGET_NAME = CoreFoundationOverlay;
+			};
+			name = Debug;
+		};
+		OBJ_269 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = AccessibilityElement.xcodeproj/CoreFoundationOverlay_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreFoundationOverlay;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGET_NAME = CoreFoundationOverlay;
+			};
+			name = Release;
+		};
+		OBJ_280 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		OBJ_281 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		OBJ_3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		OBJ_4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = s;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				OTHER_SWIFT_FLAGS = "-DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		OBJ_113 /* Build configuration list for PBXNativeTarget "AccessibilityElementPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_114 /* Debug */,
+				OBJ_115 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_119 /* Build configuration list for PBXNativeTarget "AtomicsPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_120 /* Debug */,
+				OBJ_121 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_125 /* Build configuration list for PBXNativeTarget "SwiftScannerPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_126 /* Debug */,
+				OBJ_127 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_131 /* Build configuration list for PBXNativeTarget "SignalsPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_132 /* Debug */,
+				OBJ_133 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_137 /* Build configuration list for PBXNativeTarget "CoreFoundationOverlayPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_138 /* Debug */,
+				OBJ_139 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_143 /* Build configuration list for PBXNativeTarget "AccessibilityElementTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_144 /* Debug */,
+				OBJ_145 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_171 /* Build configuration list for PBXNativeTarget "AccessibilityElement" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_172 /* Debug */,
+				OBJ_173 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_2 /* Build configuration list for PBXProject "AccessibilityElement" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_3 /* Debug */,
+				OBJ_4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_238 /* Build configuration list for PBXNativeTarget "Atomics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_239 /* Debug */,
+				OBJ_240 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_249 /* Build configuration list for PBXNativeTarget "CAtomics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_250 /* Debug */,
+				OBJ_251 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_255 /* Build configuration list for PBXNativeTarget "SwiftScanner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_256 /* Debug */,
+				OBJ_257 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_261 /* Build configuration list for PBXNativeTarget "Signals" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_262 /* Debug */,
+				OBJ_263 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_267 /* Build configuration list for PBXNativeTarget "CoreFoundationOverlay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_268 /* Debug */,
+				OBJ_269 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_279 /* Build configuration list for PBXAggregateTarget "AccessibilityElementPackageTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_280 /* Debug */,
+				OBJ_281 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = OBJ_1 /* Project object */;
+}
