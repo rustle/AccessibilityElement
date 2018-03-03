@@ -4,7 +4,7 @@
 //  Copyright © 2018 Doug Russell. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 @testable import AccessibilityElement
 
 func compare<T>(lhs: T, rhs: Node<T>) -> Bool where T : _Element {
