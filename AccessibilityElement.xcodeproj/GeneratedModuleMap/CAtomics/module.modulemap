@@ -1,4 +1,0 @@
-module CAtomics {
-    umbrella header "/Users/doug/Source/Accessibility/AccessibilityElement/.build/checkouts/swift-atomics--7665388977442881344/Sources/CAtomics/include/CAtomics.h"
-    export *
-}
