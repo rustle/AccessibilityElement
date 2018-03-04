@@ -6,14 +6,6 @@
 
 import Foundation
 
-public extension Array where Element : AnyObject {
-    public func index(identity: Element) -> Index? {
-        return self.index { reference in
-            return reference === identity
-        }
-    }
-}
-
 fileprivate protocol WorkImplementation {
     func async(qos: DispatchQoS,
                flags: DispatchWorkItemFlags,

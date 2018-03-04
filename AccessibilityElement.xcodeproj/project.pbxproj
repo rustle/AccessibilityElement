@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9160F01F204A543A0088527F /* KVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F012204A543A0088527F /* KVO.swift */; };
+		9160F027204C9FF30088527F /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F026204C9FF30088527F /* Array.swift */; };
 		9172424B204A0D050009A79F /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724241204A0D050009A79F /* AccessibilityElement.framework */; };
 		91724DD4204A0D4D0009A79F /* ScreenGrab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91724D98204A0D4D0009A79F /* ScreenGrab.swift */; };
 		91724DD5204A0D4D0009A79F /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91724D9A204A0D4D0009A79F /* AXUIElement.swift */; };
@@ -230,6 +232,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9160F012204A543A0088527F /* KVO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KVO.swift; sourceTree = "<group>"; };
+		9160F026204C9FF30088527F /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		91724241204A0D050009A79F /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9172424A204A0D050009A79F /* AccessibilityElementTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AccessibilityElementTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		91724D98204A0D4D0009A79F /* ScreenGrab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenGrab.swift; sourceTree = "<group>"; };
@@ -341,6 +345,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9160F011204A543A0088527F /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				9160F012204A543A0088527F /* KVO.swift */,
+			);
+			path = Foundation;
+			sourceTree = "<group>";
+		};
 		91724237204A0D050009A79F = {
 			isa = PBXGroup;
 			children = (
@@ -385,6 +397,7 @@
 				91724DBD204A0D4D0009A79F /* TreeElement.swift */,
 				91724DA4204A0D4D0009A79F /* WhitespaceClassifier.swift */,
 				91724DC2204A0D4D0009A79F /* EventHandler */,
+				9160F011204A543A0088527F /* Foundation */,
 				91724D99204A0D4D0009A79F /* HIServices */,
 				91724DAC204A0D4D0009A79F /* Observer */,
 				91724DA6204A0D4D0009A79F /* Output */,
@@ -454,6 +467,7 @@
 		91724DBE204A0D4D0009A79F /* stdlib */ = {
 			isa = PBXGroup;
 			children = (
+				9160F026204C9FF30088527F /* Array.swift */,
 				91724DBF204A0D4D0009A79F /* Dictionary.swift */,
 				91724DC0204A0D4D0009A79F /* String.swift */,
 			);
@@ -890,6 +904,7 @@
 				91724DDB204A0D4D0009A79F /* SelectionChangeHandler.swift in Sources */,
 				91724E04204A0D4D0009A79F /* Position.swift in Sources */,
 				91724DE1204A0D4D0009A79F /* CompoundSound.swift in Sources */,
+				9160F027204C9FF30088527F /* Array.swift in Sources */,
 				91724DD4204A0D4D0009A79F /* ScreenGrab.swift in Sources */,
 				91724DD6204A0D4D0009A79F /* AXObserver.swift in Sources */,
 				91724DDE204A0D4D0009A79F /* WhitespaceClassifier.swift in Sources */,
@@ -932,6 +947,7 @@
 				91724DF6204A0D4D0009A79F /* String.swift in Sources */,
 				91724DDC204A0D4D0009A79F /* TextMarkerSelectionChangeHandler.swift in Sources */,
 				91724DED204A0D4D0009A79F /* Frame.swift in Sources */,
+				9160F01F204A543A0088527F /* KVO.swift in Sources */,
 				91724DF8204A0D4D0009A79F /* Default.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
