@@ -10,9 +10,6 @@ import Signals
 fileprivate class KeyValueObservationTarget : NSObject {
     var isObserving = false
     var observers = [AnyKeyValueObserver]()
-    override init() {
-        super.init()
-    }
     override func observeValue(forKeyPath keyPath: String?,
                                of object: Any?,
                                change: [NSKeyValueChangeKey : Any]?,
