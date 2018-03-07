@@ -250,9 +250,9 @@ open class Application<ObserverProvidingType> : EventHandler where ObserverProvi
         let element = _node._element
         return (controller, element, applicationObserver)
     }
-    private var onFocusedUIElementChanged: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
-    private var onWindowCreated: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
-    private var onFocusedWindowChanged: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
+    private var onFocusedUIElementChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
+    private var onWindowCreated: Subscription<(element: ElementType, info: ObserverInfo?)>?
+    private var onFocusedWindowChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
     private func registerObservers() throws {
         let (controller, element, observer) = try observerContext()
         onWindowCreated = try observer.signal(element: element,

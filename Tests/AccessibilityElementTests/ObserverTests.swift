@@ -60,11 +60,12 @@ class ObserverTests: XCTestCase {
             let observer = try observerManager?.registerObserver(application: element)
             let signal = try observer?.signal(element: element, notification: .focusedUIElementChanged)
             var fired = false
-            signal?.subscribe { element, info in
+            let sub = signal?.subscribe { element, info in
                 fired = true
             }
             provider?.fire(element: element, notification: .focusedUIElementChanged, info: nil)
             XCTAssertTrue(fired)
+            sub?.cancel()
         } catch let error {
             XCTFail("\(error)")
         }
@@ -79,15 +80,7 @@ class ObserverTests: XCTestCase {
             }
             XCTAssertNotNil(provider!.handler)
             subscription.cancel()
-            var disposed = false
-            for _ in 1..<3 {
-                RunLoop.main.run(until: Date(timeInterval: 1.0, since: Date()))
-                if provider!.handler == nil {
-                    disposed = true
-                    break
-                }
-            }
-            XCTAssertTrue(disposed)
+            XCTAssertTrue(provider!.handler == nil)
         } catch {
             XCTFail("\(error)")
         }

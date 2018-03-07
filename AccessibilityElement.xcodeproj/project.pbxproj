@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9160F01F204A543A0088527F /* KVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F012204A543A0088527F /* KVO.swift */; };
 		9160F027204C9FF30088527F /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F026204C9FF30088527F /* Array.swift */; };
 		9172424B204A0D050009A79F /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724241204A0D050009A79F /* AccessibilityElement.framework */; };
 		91724DD4204A0D4D0009A79F /* ScreenGrab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91724D98204A0D4D0009A79F /* ScreenGrab.swift */; };
@@ -77,8 +76,9 @@
 		91724EB3204A11D00009A79F /* CFNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91724EA7204A11C00009A79F /* CFNumber.swift */; };
 		91724EB7204A11FE0009A79F /* CoreFoundationOverlayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91724EB5204A11F60009A79F /* CoreFoundationOverlayTests.swift */; };
 		91724EBA204A121C0009A79F /* CoreFoundationOverlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724E75204A10F20009A79F /* CoreFoundationOverlay.framework */; };
-		91724EED204A12BC0009A79F /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724ECA204A126C0009A79F /* Signals.framework */; };
 		91724F0E204A13370009A79F /* SwiftScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724EF8204A12D40009A79F /* SwiftScanner.framework */; };
+		91DB215B2050405000B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
+		91DB2162205041D200B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,62 +138,6 @@
 			remoteGlobalIDString = 91724E74204A10F20009A79F;
 			remoteInfo = CoreFoundationOverlay;
 		};
-		91724EC5204A126C0009A79F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 91724EBB204A126C0009A79F /* Signals.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 720D11721A085314003C4361;
-			remoteInfo = "Signals iOS";
-		};
-		91724EC7204A126C0009A79F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 91724EBB204A126C0009A79F /* Signals.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 720D117D1A085315003C4361;
-			remoteInfo = "SignalsTests iOS";
-		};
-		91724EC9204A126C0009A79F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 91724EBB204A126C0009A79F /* Signals.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 72665B361C212BDB0067DF26;
-			remoteInfo = "Signals OSX";
-		};
-		91724ECB204A126C0009A79F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 91724EBB204A126C0009A79F /* Signals.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 72665B3F1C212BDB0067DF26;
-			remoteInfo = "SignalsTests OSX";
-		};
-		91724ECD204A126C0009A79F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 91724EBB204A126C0009A79F /* Signals.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 725B76B61C26558F001D04CC;
-			remoteInfo = "Signals tvOS";
-		};
-		91724ECF204A126C0009A79F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 91724EBB204A126C0009A79F /* Signals.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 725B76BF1C26558F001D04CC;
-			remoteInfo = "SignalsTests tvOS";
-		};
-		91724ED1204A126C0009A79F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 91724EBB204A126C0009A79F /* Signals.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 721E12B21C1E8E1D00CD0CBA;
-			remoteInfo = "Signals watchOS";
-		};
-		91724EEB204A12A80009A79F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 91724EBB204A126C0009A79F /* Signals.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 72665B351C212BDB0067DF26;
-			remoteInfo = "Signals OSX";
-		};
 		91724EF5204A12D40009A79F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 91724EEE204A12D40009A79F /* SwiftScanner.xcodeproj */;
@@ -229,10 +173,30 @@
 			remoteGlobalIDString = 910D6B6220363AC000A816F3;
 			remoteInfo = "SwiftScanner macOS";
 		};
+		91DB214820503A6400B84FA7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91724EBB204A126C0009A79F /* Signals.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 91C1E648204E50840074F60F;
+			remoteInfo = Signals;
+		};
+		91DB214F20503A6400B84FA7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91724EBB204A126C0009A79F /* Signals.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 91C1E649204E50840074F60F;
+			remoteInfo = Signals;
+		};
+		91DB215120503A6400B84FA7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91724EBB204A126C0009A79F /* Signals.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 91C1E652204E50840074F60F;
+			remoteInfo = SignalsTests;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9160F012204A543A0088527F /* KVO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KVO.swift; sourceTree = "<group>"; };
 		9160F026204C9FF30088527F /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		91724241204A0D050009A79F /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9172424A204A0D050009A79F /* AccessibilityElementTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AccessibilityElementTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -312,8 +276,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91DB215B2050405000B84FA7 /* Signals.framework in Frameworks */,
 				91724F0E204A13370009A79F /* SwiftScanner.framework in Frameworks */,
-				91724EED204A12BC0009A79F /* Signals.framework in Frameworks */,
 				91724EBA204A121C0009A79F /* CoreFoundationOverlay.framework in Frameworks */,
 				91724E6F204A10BE0009A79F /* Atomics.framework in Frameworks */,
 			);
@@ -323,6 +287,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91DB2162205041D200B84FA7 /* Signals.framework in Frameworks */,
 				9172424B204A0D050009A79F /* AccessibilityElement.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,14 +310,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9160F011204A543A0088527F /* Foundation */ = {
-			isa = PBXGroup;
-			children = (
-				9160F012204A543A0088527F /* KVO.swift */,
-			);
-			path = Foundation;
-			sourceTree = "<group>";
-		};
 		91724237204A0D050009A79F = {
 			isa = PBXGroup;
 			children = (
@@ -360,7 +317,6 @@
 				91724E08204A0DC10009A79F /* AccessibilityElementTests */,
 				91724E5C204A106D0009A79F /* Dependencies */,
 				91724242204A0D050009A79F /* Products */,
-				91724E6E204A10BE0009A79F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -397,7 +353,6 @@
 				91724DBD204A0D4D0009A79F /* TreeElement.swift */,
 				91724DA4204A0D4D0009A79F /* WhitespaceClassifier.swift */,
 				91724DC2204A0D4D0009A79F /* EventHandler */,
-				9160F011204A543A0088527F /* Foundation */,
 				91724D99204A0D4D0009A79F /* HIServices */,
 				91724DAC204A0D4D0009A79F /* Observer */,
 				91724DA6204A0D4D0009A79F /* Output */,
@@ -537,13 +492,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		91724E6E204A10BE0009A79F /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		91724EA1204A11C00009A79F /* CoreFoundationOverlay */ = {
 			isa = PBXGroup;
 			children = (
@@ -570,13 +518,8 @@
 		91724EBC204A126C0009A79F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				91724EC6204A126C0009A79F /* Signals.framework */,
-				91724EC8204A126C0009A79F /* SignalsTests iOS.xctest */,
-				91724ECA204A126C0009A79F /* Signals.framework */,
-				91724ECC204A126C0009A79F /* SignalsTests OSX.xctest */,
-				91724ECE204A126C0009A79F /* Signals.framework */,
-				91724ED0204A126C0009A79F /* SignalsTests tvOS.xctest */,
-				91724ED2204A126C0009A79F /* Signals.framework */,
+				91DB215020503A6400B84FA7 /* Signals.framework */,
+				91DB215220503A6400B84FA7 /* SignalsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -624,8 +567,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				91DB214920503A6400B84FA7 /* PBXTargetDependency */,
 				91724F0D204A13300009A79F /* PBXTargetDependency */,
-				91724EEC204A12A80009A79F /* PBXTargetDependency */,
 				91724EB9204A12160009A79F /* PBXTargetDependency */,
 				91724E6D204A10B80009A79F /* PBXTargetDependency */,
 			);
@@ -780,55 +723,6 @@
 			remoteRef = 91724E6A204A10A90009A79F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		91724EC6204A126C0009A79F /* Signals.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Signals.framework;
-			remoteRef = 91724EC5204A126C0009A79F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		91724EC8204A126C0009A79F /* SignalsTests iOS.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "SignalsTests iOS.xctest";
-			remoteRef = 91724EC7204A126C0009A79F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		91724ECA204A126C0009A79F /* Signals.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Signals.framework;
-			remoteRef = 91724EC9204A126C0009A79F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		91724ECC204A126C0009A79F /* SignalsTests OSX.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "SignalsTests OSX.xctest";
-			remoteRef = 91724ECB204A126C0009A79F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		91724ECE204A126C0009A79F /* Signals.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Signals.framework;
-			remoteRef = 91724ECD204A126C0009A79F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		91724ED0204A126C0009A79F /* SignalsTests tvOS.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "SignalsTests tvOS.xctest";
-			remoteRef = 91724ECF204A126C0009A79F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		91724ED2204A126C0009A79F /* Signals.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Signals.framework;
-			remoteRef = 91724ED1204A126C0009A79F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		91724EF6204A12D40009A79F /* SwiftScanner.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -855,6 +749,20 @@
 			fileType = wrapper.cfbundle;
 			path = SwiftScannerTests.xctest;
 			remoteRef = 91724EFB204A12D40009A79F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		91DB215020503A6400B84FA7 /* Signals.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Signals.framework;
+			remoteRef = 91DB214F20503A6400B84FA7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		91DB215220503A6400B84FA7 /* SignalsTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = SignalsTests.xctest;
+			remoteRef = 91DB215120503A6400B84FA7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -947,7 +855,6 @@
 				91724DF6204A0D4D0009A79F /* String.swift in Sources */,
 				91724DDC204A0D4D0009A79F /* TextMarkerSelectionChangeHandler.swift in Sources */,
 				91724DED204A0D4D0009A79F /* Frame.swift in Sources */,
-				9160F01F204A543A0088527F /* KVO.swift in Sources */,
 				91724DF8204A0D4D0009A79F /* Default.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1008,15 +915,15 @@
 			target = 91724E74204A10F20009A79F /* CoreFoundationOverlay */;
 			targetProxy = 91724EB8204A12160009A79F /* PBXContainerItemProxy */;
 		};
-		91724EEC204A12A80009A79F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Signals OSX";
-			targetProxy = 91724EEB204A12A80009A79F /* PBXContainerItemProxy */;
-		};
 		91724F0D204A13300009A79F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "SwiftScanner macOS";
 			targetProxy = 91724F0C204A13300009A79F /* PBXContainerItemProxy */;
+		};
+		91DB214920503A6400B84FA7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Signals;
+			targetProxy = 91DB214820503A6400B84FA7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

@@ -13,7 +13,7 @@ public class TextMarkerSelectionChangeHandler<ObserverProvidingType> : Selection
     public let element: ElementType
     public let applicationObserver: ApplicationObserver<ObserverProvidingType>
     public var previousSelection: Range<Position<IndexType>>?
-    private var selectionChangeSubscription: SignalSubscription<(element: ElementType, info: ObserverInfo?)>?
+    private var selectionChangeSubscription: Subscription<(element: ElementType, info: ObserverInfo?)>?
     public var output: (([Output.Job.Payload]) -> Void)?
     public required init(element: ElementType, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
         self.element = element

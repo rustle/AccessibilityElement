@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/rustle/CoreFoundationOverlay.git", from: "1.0.0"),
-        .package(url: "https://github.com/rustle/Signals.git", from: "5.0.0+"),
+        .package(url: "https://github.com/rustle/Signals.git", .revision("0ac9b20da14ff790d11e09efe0b1742de714fe40")),
         .package(url: "https://github.com/rustle/SwiftScanner.git", from: "1.0.3+"),
         .package(url: "https://github.com/glessard/swift-atomics", from: "4.0.0"),
     ],
