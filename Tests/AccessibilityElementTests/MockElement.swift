@@ -133,3 +133,22 @@ extension MockElement : Hashable {
         return _hash
     }
 }
+
+extension MockElement : CustomDebugStringConvertible {
+    var debugDescription: String {
+        let describer = Describer<MockElement>()
+        let requests: [DescriberRequest] = [
+            Describer<MockElement>.Single(required: true, attribute: .role),
+            Describer<MockElement>.Single(required: false, attribute: .subrole),
+            Describer<MockElement>.Single(required: false, attribute: .stringValue(nil)),
+        ]
+        do {
+            let values = try describer.describe(element: self, requests: requests).flatMap({ return $0 })
+            return values.joined(separator: ", ")
+        } catch {
+            return "<MockElement>"
+        }
+    }
+    
+    
+}
