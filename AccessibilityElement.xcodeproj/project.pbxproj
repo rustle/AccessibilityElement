@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		91105A9F2050D8C00099094E /* ArrayObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91105A972050D8C00099094E /* ArrayObserver.swift */; };
 		9160F027204C9FF30088527F /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F026204C9FF30088527F /* Array.swift */; };
 		9172424B204A0D050009A79F /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724241204A0D050009A79F /* AccessibilityElement.framework */; };
 		91724DD4204A0D4D0009A79F /* ScreenGrab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91724D98204A0D4D0009A79F /* ScreenGrab.swift */; };
@@ -197,6 +198,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		91105A972050D8C00099094E /* ArrayObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayObserver.swift; sourceTree = "<group>"; };
 		9160F026204C9FF30088527F /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		91724241204A0D050009A79F /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9172424A204A0D050009A79F /* AccessibilityElementTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AccessibilityElementTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -334,6 +336,7 @@
 		91724D97204A0D4D0009A79F /* AccessibilityElement */ = {
 			isa = PBXGroup;
 			children = (
+				91105A972050D8C00099094E /* ArrayObserver.swift */,
 				91724DB4204A0D4D0009A79F /* AccessibilityElement.swift */,
 				91724D9E204A0D4D0009A79F /* AccessibilityError.swift */,
 				91724DBB204A0D4D0009A79F /* AttributedString.swift */,
@@ -822,6 +825,7 @@
 				91724DF4204A0D4D0009A79F /* TreeElement.swift in Sources */,
 				91724DE4204A0D4D0009A79F /* Controller.swift in Sources */,
 				91724DF7204A0D4D0009A79F /* Debug.swift in Sources */,
+				91105A9F2050D8C00099094E /* ArrayObserver.swift in Sources */,
 				91724E00204A0D4D0009A79F /* StaticText.swift in Sources */,
 				91724DE7204A0D4D0009A79F /* ObserverProviding.swift in Sources */,
 				91724DD9204A0D4D0009A79F /* AccessibilityError.swift in Sources */,
