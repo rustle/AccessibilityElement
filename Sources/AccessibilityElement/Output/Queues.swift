@@ -45,9 +45,9 @@ public class CancellableQueue {
         case serial
         case concurrent(Int)
     }
-    init(label: String,
-         qos: DispatchQoS = .`default`,
-         options: Options = .serial) {
+    public init(label: String,
+                qos: DispatchQoS = .`default`,
+                options: Options = .serial) {
         switch options {
         case .serial:
             work = SerialWorkImplementation(label: label,
