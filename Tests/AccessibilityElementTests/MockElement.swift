@@ -52,7 +52,7 @@ final class MockElement : _Element {
     static var systemWide: MockElement {
         fatalError()
     }
-    static func application(processIdentifier: Int) -> MockElement {
+    static func application(processIdentifier: ProcessIdentifier) -> MockElement {
         return MockElement(uniqueID: 1,
                            role: .application,
                            subrole: nil,
@@ -104,7 +104,7 @@ final class MockElement : _Element {
     func children() throws -> [MockElement] {
         return try unwrap(_children)
     }
-    var processIdentifier: Int {
+    var processIdentifier: ProcessIdentifier {
         return uniqueID
     }
     init(uniqueID: Int,

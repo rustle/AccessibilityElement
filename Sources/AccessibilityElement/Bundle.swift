@@ -6,7 +6,7 @@
 
 import Foundation
 
-public func makeSystemApplicationController(processIdentifier: Int) throws -> AnyController {
+public func makeSystemApplicationController(processIdentifier: ProcessIdentifier) throws -> AnyController {
     let uiElement = AXUIElement.application(processIdentifier: processIdentifier)
     let element = Element(element: uiElement)
     let node = DefaultHierarchy<Element>().buildHierarchy(from: element)
@@ -20,6 +20,6 @@ public func makeSystemApplicationController(processIdentifier: Int) throws -> An
 
 public protocol AccessibilityBundle : class {
     // Return controller representing the application
-    func load(processIdentifier: Int) throws -> AnyController
+    func load(processIdentifier: ProcessIdentifier) throws -> AnyController
     init()
 }

@@ -18,7 +18,7 @@ extension AXObserver {
     }
     //public func AXObserverCreate(_ application: pid_t, _ callback: @escaping ApplicationServices.AXObserverCallback, _ outObserver: UnsafeMutablePointer<AXObserver?>) -> AXError
     //public func AXObserverCreateWithInfoCallback(_ application: pid_t, _ callback: @escaping ApplicationServices.AXObserverCallbackWithInfo, _ outObserver: UnsafeMutablePointer<AXObserver?>) -> AXError
-    public static func observer(processIdentifier: Int) throws -> AXObserver {
+    public static func observer(processIdentifier: ProcessIdentifier) throws -> AXObserver {
         var observer: AXObserver?
         let error = AXObserverCreateWithInfoCallback(pid_t(processIdentifier), observer_callback, &observer)
         guard error == .success else {

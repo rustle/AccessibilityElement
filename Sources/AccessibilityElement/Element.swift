@@ -88,7 +88,7 @@ public protocol AnyElement {
     ///
     func last<IndexType>() throws -> Position<IndexType>
     ///
-    var processIdentifier: Int { get }
+    var processIdentifier: ProcessIdentifier { get }
 }
 
 public enum _ElementError : Swift.Error {
@@ -99,7 +99,7 @@ public protocol _Element : AnyElement, TreeElement, Hashable {
     ///
     static var systemWide: Self { get }
     ///
-    static func application(processIdentifier: Int) -> Self
+    static func application(processIdentifier: ProcessIdentifier) -> Self
     ///
     func titleElement() throws -> Self
     ///
@@ -256,7 +256,7 @@ extension _Element {
     public func last<IndexType>() throws -> Position<IndexType> {
         throw _ElementError.unimplemented
     }
-    public var processIdentifier: Int {
+    public var processIdentifier: ProcessIdentifier {
         return 0
     }
 }
@@ -265,7 +265,7 @@ public struct Element : _Element {
     public static var systemWide: Element = {
         Element(element: AXUIElement.systemWide())
     }()
-    public static func application(processIdentifier: Int) -> Element {
+    public static func application(processIdentifier: ProcessIdentifier) -> Element {
         return Element(element: AXUIElement.application(processIdentifier: processIdentifier))
     }
     let element: AXUIElement
@@ -479,7 +479,7 @@ public struct Element : _Element {
         return try frame(attribute: NSAccessibilityAttributeName.frame)
     }
 
-    public var processIdentifier: Int {
+    public var processIdentifier: ProcessIdentifier {
         return (try? self.element.processIdentifier()) ?? 0
     }
 }

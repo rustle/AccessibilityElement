@@ -7,13 +7,13 @@
 import Cocoa
 
 public struct SystemObserverProviding : ObserverProviding {
-    public static func provider() -> ((Int) throws -> SystemObserverProviding) {
+    public static func provider() -> ((ProcessIdentifier) throws -> SystemObserverProviding) {
         return {
             SystemObserverProviding(processIdentifier: $0)
         }
     }
     public typealias ElementType = Element
-    private var processIdentifier: Int
+    private var processIdentifier: ProcessIdentifier
     private var _observer: AXObserver?
     private mutating func observer() throws -> AXObserver {
         if let observer = _observer {
@@ -24,7 +24,7 @@ public struct SystemObserverProviding : ObserverProviding {
         CFRunLoop.main.add(source: observer.runLoopSource, mode: .defaultMode)
         return observer
     }
-    public init(processIdentifier: Int) {
+    public init(processIdentifier: ProcessIdentifier) {
         self.processIdentifier = processIdentifier
     }
     public mutating func add(element: Element,

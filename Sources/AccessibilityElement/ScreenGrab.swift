@@ -10,8 +10,8 @@ public struct ScreenGrab {
     private enum Error : Swift.Error {
         case unpackFailure
     }
-    private static func unpack(processIdentifier: Int, windowInfo: [String:Any]) throws -> CGRect {
-        guard let pid = windowInfo[kCGWindowOwnerPID as String] as? Int, pid == processIdentifier else {
+    private static func unpack(processIdentifier: ProcessIdentifier, windowInfo: [String:Any]) throws -> CGRect {
+        guard let pid = windowInfo[kCGWindowOwnerPID as String] as? ProcessIdentifier, pid == processIdentifier else {
             throw ScreenGrab.Error.unpackFailure
         }
         guard let frameDictionary = windowInfo[kCGWindowBounds as String] as? [String:Any] else {

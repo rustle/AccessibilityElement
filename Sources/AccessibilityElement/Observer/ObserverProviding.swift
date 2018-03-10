@@ -6,9 +6,9 @@
 
 import Cocoa
 
-func provider<ObserverProvidingType>(type: ObserverProvidingType.Type) -> ((Int) -> ObserverProvidingType) where ObserverProvidingType : ObserverProviding {
+func provider<ObserverProvidingType>(type: ObserverProvidingType.Type) -> ((ProcessIdentifier) -> ObserverProvidingType) where ObserverProvidingType : ObserverProviding {
     if type.self == SystemObserverProviding.self {
-        return SystemObserverProviding.provider() as! ((Int) -> ObserverProvidingType)
+        return SystemObserverProviding.provider() as! ((ProcessIdentifier) -> ObserverProvidingType)
     }
     fatalError()
 }

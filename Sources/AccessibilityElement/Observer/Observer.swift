@@ -19,7 +19,7 @@ public protocol AnyApplicationObserver {
 public class ObserverManager<ObserverProvidingType> : AnyObserverManager where ObserverProvidingType : ObserverProviding {
     public typealias ElementType = ObserverProvidingType.ElementType
     private var map = [Int : ApplicationObserver<ObserverProvidingType>]()
-    private let provider: (Int) throws -> ObserverProvidingType
+    private let provider: (ProcessIdentifier) throws -> ObserverProvidingType
     public init(provider: @escaping (Int) throws -> ObserverProvidingType) {
         self.provider = provider
     }
@@ -51,8 +51,8 @@ public class ApplicationObserver<ObserverProvidingType> : AnyApplicationObserver
             _observer = newValue
         }
     }
-    private let provider: (Int) throws -> ObserverProvidingType
-    private let processIdentifier: Int
+    private let provider: (ProcessIdentifier) throws -> ObserverProvidingType
+    private let processIdentifier: ProcessIdentifier
     private var tokens = Set<Token>()
     public struct Token : Equatable, Hashable {
         public static func ==(lhs: Token, rhs: Token) -> Bool {
@@ -65,7 +65,7 @@ public class ApplicationObserver<ObserverProvidingType> : AnyApplicationObserver
         fileprivate let notification: NSAccessibilityNotificationName
         fileprivate let identifier: Int
     }
-    public init(processIdentifier: Int, provider: @escaping (Int) throws -> ObserverProvidingType) throws {
+    public init(processIdentifier: ProcessIdentifier, provider: @escaping (ProcessIdentifier) throws -> ObserverProvidingType) throws {
         self.processIdentifier = processIdentifier
         self.provider = provider
     }

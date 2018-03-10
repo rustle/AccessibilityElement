@@ -26,7 +26,7 @@ public extension AXUIElement {
         return AXUIElementCreateSystemWide()
     }
     //public func AXUIElementCreateApplication(_ pid: pid_t) -> AXUIElement
-    public static func application(processIdentifier: Int) -> AXUIElement {
+    public static func application(processIdentifier: ProcessIdentifier) -> AXUIElement {
         return AXUIElementCreateApplication(pid_t(processIdentifier))
     }
 
@@ -37,13 +37,13 @@ public extension AXUIElement {
     //}
     //public func AXUIElementCopyMultipleAttributeValues(_ element: AXUIElement, _ attributes: CFArray, _ options: AXCopyMultipleAttributeOptions, _ values: UnsafeMutablePointer<CFArray?>) -> AXError
     //public func AXUIElementGetPid(_ element: AXUIElement, _ pid: UnsafeMutablePointer<pid_t>) -> AXError
-    public func processIdentifier() throws -> Int {
+    public func processIdentifier() throws -> ProcessIdentifier {
         var value: pid_t = 0
         let error = AXUIElementGetPid(self, &value)
         guard error == .success else {
             throw ElementError(axError: error)
         }
-        return Int(value)
+        return ProcessIdentifier(value)
     }
     //public func AXUIElementSetMessagingTimeout(_ element: AXUIElement, _ timeoutInSeconds: Float) -> AXError
     public func set(messageTimeout: Double) throws {

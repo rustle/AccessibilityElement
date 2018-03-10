@@ -8,7 +8,7 @@ import XCTest
 @testable import AccessibilityElement
 
 class MockObserverProviding : ObserverProviding {
-    static func provider() -> ((Int) throws -> MockObserverProviding) {
+    static func provider() -> ((ProcessIdentifier) throws -> MockObserverProviding) {
         return { _ in
             MockObserverProviding()
         }
