@@ -8,7 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		91105A9F2050D8C00099094E /* ArrayObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91105A972050D8C00099094E /* ArrayObserver.swift */; };
+		9116AF2720549EEA0027A018 /* Runner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9116AF2620549EEA0027A018 /* Runner.swift */; };
 		9160F027204C9FF30088527F /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F026204C9FF30088527F /* Array.swift */; };
+		91641FD52053141E004DD9FE /* FocusTheftObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91641FD42053141E004DD9FE /* FocusTheftObserver.swift */; };
+		91641FE0205460CE004DD9FE /* FocusObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91641FDE205460CE004DD9FE /* FocusObserver.swift */; };
+		91641FE1205460CE004DD9FE /* FocusArbitration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91641FDF205460CE004DD9FE /* FocusArbitration.swift */; };
 		9172424B204A0D050009A79F /* AccessibilityElement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724241204A0D050009A79F /* AccessibilityElement.framework */; };
 		91724DD4204A0D4D0009A79F /* ScreenGrab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91724D98204A0D4D0009A79F /* ScreenGrab.swift */; };
 		91724DD5204A0D4D0009A79F /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91724D9A204A0D4D0009A79F /* AXUIElement.swift */; };
@@ -199,7 +203,11 @@
 
 /* Begin PBXFileReference section */
 		91105A972050D8C00099094E /* ArrayObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayObserver.swift; sourceTree = "<group>"; };
+		9116AF2620549EEA0027A018 /* Runner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner.swift; sourceTree = "<group>"; };
 		9160F026204C9FF30088527F /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
+		91641FD42053141E004DD9FE /* FocusTheftObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusTheftObserver.swift; sourceTree = "<group>"; };
+		91641FDE205460CE004DD9FE /* FocusObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusObserver.swift; sourceTree = "<group>"; };
+		91641FDF205460CE004DD9FE /* FocusArbitration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusArbitration.swift; sourceTree = "<group>"; };
 		91724241204A0D050009A79F /* AccessibilityElement.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AccessibilityElement.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9172424A204A0D050009A79F /* AccessibilityElementTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AccessibilityElementTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		91724D98204A0D4D0009A79F /* ScreenGrab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenGrab.swift; sourceTree = "<group>"; };
@@ -312,6 +320,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		91641FDD2053142F004DD9FE /* Focus */ = {
+			isa = PBXGroup;
+			children = (
+				91641FDF205460CE004DD9FE /* FocusArbitration.swift */,
+				91641FDE205460CE004DD9FE /* FocusObserver.swift */,
+				91641FD42053141E004DD9FE /* FocusTheftObserver.swift */,
+			);
+			path = Focus;
+			sourceTree = "<group>";
+		};
 		91724237204A0D050009A79F = {
 			isa = PBXGroup;
 			children = (
@@ -350,12 +368,14 @@
 				91724DD2204A0D4D0009A79F /* Hierarchy.swift */,
 				91724DD3204A0D4D0009A79F /* Node.swift */,
 				91724DD0204A0D4D0009A79F /* Position.swift */,
+				9116AF2620549EEA0027A018 /* Runner.swift */,
 				91724D98204A0D4D0009A79F /* ScreenGrab.swift */,
 				91724DB3204A0D4D0009A79F /* SimpleState.swift */,
 				91724D9F204A0D4D0009A79F /* Tap.swift */,
 				91724DBD204A0D4D0009A79F /* TreeElement.swift */,
 				91724DA4204A0D4D0009A79F /* WhitespaceClassifier.swift */,
 				91724DC2204A0D4D0009A79F /* EventHandler */,
+				91641FDD2053142F004DD9FE /* Focus */,
 				91724D99204A0D4D0009A79F /* HIServices */,
 				91724DAC204A0D4D0009A79F /* Observer */,
 				91724DA6204A0D4D0009A79F /* Output */,
@@ -825,10 +845,14 @@
 				91724DF4204A0D4D0009A79F /* TreeElement.swift in Sources */,
 				91724DE4204A0D4D0009A79F /* Controller.swift in Sources */,
 				91724DF7204A0D4D0009A79F /* Debug.swift in Sources */,
+				9116AF2720549EEA0027A018 /* Runner.swift in Sources */,
 				91105A9F2050D8C00099094E /* ArrayObserver.swift in Sources */,
 				91724E00204A0D4D0009A79F /* StaticText.swift in Sources */,
 				91724DE7204A0D4D0009A79F /* ObserverProviding.swift in Sources */,
+				91641FE0205460CE004DD9FE /* FocusObserver.swift in Sources */,
 				91724DD9204A0D4D0009A79F /* AccessibilityError.swift in Sources */,
+				91641FE1205460CE004DD9FE /* FocusArbitration.swift in Sources */,
+				91641FD52053141E004DD9FE /* FocusTheftObserver.swift in Sources */,
 				91724DE2204A0D4D0009A79F /* Queues.swift in Sources */,
 				91724E03204A0D4D0009A79F /* Button.swift in Sources */,
 				91724DF9204A0D4D0009A79F /* WebArea.swift in Sources */,
