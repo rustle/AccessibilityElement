@@ -5,8 +5,10 @@
 //
 
 import Foundation
+import Signals
 
-public struct ArrayObserver<Element> {
+/// Typesafe KVO change tracking for Array
+public struct ArrayObserver<Element> : Runner where Element : Equatable {
     private class ObserverTarget : NSObject {
         var change: ((Change) -> Void)?
         override func observeValue(forKeyPath keyPath: String?,
@@ -16,7 +18,7 @@ public struct ArrayObserver<Element> {
             guard let change = change else {
                 return
             }
-            guard let typeValue = change[.kindKey] as? NSNumber, let type = NSKeyValueChange.init(rawValue: typeValue.uintValue) else {
+            guard let typeValue = change[.kindKey] as? NSNumber, let type = NSKeyValueChange(rawValue: typeValue.uintValue) else {
                 return
             }
             switch type {
@@ -39,20 +41,75 @@ public struct ArrayObserver<Element> {
             }
         }
     }
-    public enum Change {
+    private var observer = ObserverTarget()
+    /// Type and value of a single KVO notification
+    public enum Change : Equatable {
+        /// Indicates that the value of the observed key path was set to a new value. This change can occur when observing an attribute of an object, as well as properties that specify to-one and to-many relationships.
         case set([Element])
+        /// Indicates that an object has been inserted into the to-many relationship that is being observed.
         case insert([Element])
+        /// Indicates that an object has been removed from the to-many relationship that is being observed.
         case remove([Element])
+        /// Indicates that an object has been replaced in the to-many relationship that is being observed.
         case replace([Element], [Element])
+        public static func ==(lhs: Change, rhs: Change) -> Bool {
+            switch lhs {
+            case .set(let lValue):
+                switch rhs {
+                case .set(let rValue):
+                    return lValue == rValue
+                case .insert(_):
+                    return false
+                case .remove(_):
+                    return false
+                case .replace(_, _):
+                    return false
+                }
+            case .insert(let lValue):
+                switch rhs {
+                case .set(_):
+                    return false
+                case .insert(let rValue):
+                    return lValue == rValue
+                case .remove(_):
+                    return false
+                case .replace(_, _):
+                    return false
+                }
+            case .remove(let lValue):
+                switch rhs {
+                case .set(_):
+                    return false
+                case .insert(_):
+                    return false
+                case .remove(let rValue):
+                    return lValue == rValue
+                case .replace(_, _):
+                    return false
+                }
+            case .replace(let lValue1, let lValue2):
+                switch rhs {
+                case .set(_):
+                    return false
+                case .insert(_):
+                    return false
+                case .remove(_):
+                    return false
+                case .replace(let rValue1, let rValue2):
+                    return lValue1 == rValue1 && lValue2 == rValue2
+                }
+            }
+        }
     }
+    /// Handler called whenever a KVO notification is observed. Called on undefined queue.
     public var change: ((Change) -> Void)? {
         get {
             return observer.change
         }
         set {
-            switch state {
+            switch running {
             case .started:
-                fatalError()
+                preconditionFailure("Mutating change() while running is not supported behavior.")
             case .stopped:
                 if !isKnownUniquelyReferenced(&observer) {
                     observer = ObserverTarget()
@@ -61,33 +118,41 @@ public struct ArrayObserver<Element> {
             }
         }
     }
-    private var observer = ObserverTarget()
-    private enum State {
-        case stopped
-        case started
+    /// Subscribe for notifications when observer starts or stops
+    public let runningSignal = Signal<Running>()
+    ///
+    public private(set) var running = Running.stopped {
+        didSet {
+            runningSignal⏦running
+        }
     }
-    private var state: State = .stopped
+    /// Start observing for KVO notifications
     public mutating func start() {
-        switch state {
+        switch running {
         case .stopped:
             self.target?.addObserver(observer, forKeyPath: keyPath, options: [.new, .old, .initial], context: nil)
-            state = .started
+            running = .started
         case .started:
             break
         }
     }
+    /// Stop observing KVO notifications
     public mutating func stop() {
-        switch state {
+        switch running {
         case .stopped:
             break
         case .started:
             self.target?.removeObserver(observer, forKeyPath: keyPath, context: nil)
-            state = .stopped
+            running = .stopped
         }
     }
-    private weak var target: NSObject?
-    private let keyPath: String
-    public init(target: NSObject, keyPath: String) {
+    /// KVO target
+    public private(set) weak var target: NSObject?
+    /// KVO keypath
+    public let keyPath: String
+    /// Key Value Observe target for notifications on keyPath
+    public init(target: NSObject,
+                keyPath: String) {
         self.target = target
         self.keyPath = keyPath
     }
