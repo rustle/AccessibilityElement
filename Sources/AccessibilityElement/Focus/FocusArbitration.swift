@@ -55,14 +55,14 @@ public class FocusArbitrator {
         }
         let focusedElement = try systemFocus(timeout: 16)
         if let bundleIdentifier = runningApplication(processIdentifier: focusedElement.processIdentifier)?.bundleIdentifier {
-            return (focusedElement.processIdentifier, bundleIdentifier)
+            return (focusedElement.processIdentifier, BundleIdentifier(value: bundleIdentifier))
         }
         throw FocusArbitrator.Error.nilBundleIdentifier
     }
     public static func frontmostApplication() throws -> (ProcessIdentifier, BundleIdentifier) {
         if let frontmost = NSWorkspace.shared.frontmostApplication {
             if let bundleIdentifier = frontmost.bundleIdentifier {
-                return (ProcessIdentifier(frontmost.processIdentifier), bundleIdentifier)
+                return (ProcessIdentifier(frontmost.processIdentifier), BundleIdentifier(value: bundleIdentifier))
             }
             throw FocusArbitrator.Error.nilBundleIdentifier
         }
@@ -71,7 +71,7 @@ public class FocusArbitrator {
     public static func menuBarOwningApplication() throws -> (ProcessIdentifier, BundleIdentifier) {
         if let menuBar = NSWorkspace.shared.menuBarOwningApplication {
             if let bundleIdentifier = menuBar.bundleIdentifier {
-                return (Int(menuBar.processIdentifier), bundleIdentifier)
+                return (Int(menuBar.processIdentifier), BundleIdentifier(value: bundleIdentifier))
             }
             throw FocusArbitrator.Error.nilBundleIdentifier
         }

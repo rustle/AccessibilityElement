@@ -10,7 +10,7 @@ import Signals
 public class FocusObserver<ObserverProvidingType> : Runner where ObserverProvidingType : ObserverProviding {
     public let spotlightObserver: FocusTheftObserver<ObserverProvidingType>
     public init(observerManager: ObserverManager<ObserverProvidingType>) {
-        spotlightObserver = FocusTheftObserver(bundleIdentifier: SpotlightBundleIdentifier,
+        spotlightObserver = FocusTheftObserver(bundleIdentifier: .spotlight,
                                                applicationProvider: FocusTheftObserver<ObserverProvidingType>.systemApplicationLookup,
                                                observerManager: observerManager)
     }

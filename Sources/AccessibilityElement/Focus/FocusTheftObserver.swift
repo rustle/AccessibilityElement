@@ -46,7 +46,7 @@ public class FocusTheftObserver<ObserverProvidingType> : Runner where ObserverPr
     public init(bundleIdentifier: BundleIdentifier,
                 applicationProvider: @escaping (BundleIdentifier) throws -> ProcessIdentifier,
                 observerManager: ObserverManager<ObserverProvidingType>) {
-        self.bundleIdentifier = bundleIdentifier.lowercased()
+        self.bundleIdentifier = bundleIdentifier
         self.applicationProvider = applicationProvider
         self.observerManager = observerManager
     }

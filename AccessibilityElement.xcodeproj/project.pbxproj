@@ -82,6 +82,7 @@
 		91724EB7204A11FE0009A79F /* CoreFoundationOverlayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91724EB5204A11F60009A79F /* CoreFoundationOverlayTests.swift */; };
 		91724EBA204A121C0009A79F /* CoreFoundationOverlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724E75204A10F20009A79F /* CoreFoundationOverlay.framework */; };
 		91724F0E204A13370009A79F /* SwiftScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724EF8204A12D40009A79F /* SwiftScanner.framework */; };
+		9184F0E6205F7481006B78FD /* BundleIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9184F0E5205F7481006B78FD /* BundleIdentifier.swift */; };
 		91DB215B2050405000B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91DB2162205041D200B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 /* End PBXBuildFile section */
@@ -279,6 +280,7 @@
 		91724EB5204A11F60009A79F /* CoreFoundationOverlayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreFoundationOverlayTests.swift; sourceTree = "<group>"; };
 		91724EBB204A126C0009A79F /* Signals.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Signals.xcodeproj; path = ".build/checkouts/Signals.git--353844806167487743/Signals.xcodeproj"; sourceTree = "<group>"; };
 		91724EEE204A12D40009A79F /* SwiftScanner.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftScanner.xcodeproj; path = ".build/checkouts/SwiftScanner.git--3888101014598209270/SwiftScanner/SwiftScanner.xcodeproj"; sourceTree = "<group>"; };
+		9184F0E5205F7481006B78FD /* BundleIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleIdentifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -359,6 +361,7 @@
 				91724D9E204A0D4D0009A79F /* AccessibilityError.swift */,
 				91724DBB204A0D4D0009A79F /* AttributedString.swift */,
 				91724DD1204A0D4D0009A79F /* Bundle.swift */,
+				9184F0E5205F7481006B78FD /* BundleIdentifier.swift */,
 				91724DAB204A0D4D0009A79F /* Controller.swift */,
 				91724DC1204A0D4D0009A79F /* Debug.swift */,
 				91724DBC204A0D4D0009A79F /* Describer.swift */,
@@ -844,6 +847,7 @@
 				91724E05204A0D4D0009A79F /* Bundle.swift in Sources */,
 				91724DF4204A0D4D0009A79F /* TreeElement.swift in Sources */,
 				91724DE4204A0D4D0009A79F /* Controller.swift in Sources */,
+				9184F0E6205F7481006B78FD /* BundleIdentifier.swift in Sources */,
 				91724DF7204A0D4D0009A79F /* Debug.swift in Sources */,
 				9116AF2720549EEA0027A018 /* Runner.swift in Sources */,
 				91105A9F2050D8C00099094E /* ArrayObserver.swift in Sources */,
