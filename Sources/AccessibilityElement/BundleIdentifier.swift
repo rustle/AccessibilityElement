@@ -15,7 +15,7 @@ public struct BundleIdentifier {
     public static let webkitDatabase: BundleIdentifier = "com.apple.webkit.databases"
     public static let webkitContent: BundleIdentifier = "com.apple.webkit.webcontent"
     public static let webkitNetworking: BundleIdentifier = "com.apple.webkit.networking"
-    public static let lateragent: BundleIdentifier = "com.apple.lateragent"
+    public static let laterAgent: BundleIdentifier = "com.apple.lateragent"
     public static let loginWindow: BundleIdentifier = "com.apple.loginwindow"
     public static let viewBridgeAuxiliary: BundleIdentifier = "com.apple.viewbridgeauxiliary"
     public static let cloudphotosd: BundleIdentifier = "com.apple.cloudphotosd"
