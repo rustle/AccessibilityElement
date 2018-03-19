@@ -54,15 +54,15 @@ public class FocusArbitrator {
             }
         }
         let focusedElement = try systemFocus(timeout: 16)
-        if let bundleIdentifier = runningApplication(processIdentifier: focusedElement.processIdentifier)?.bundleIdentifier {
-            return (focusedElement.processIdentifier, BundleIdentifier(rawValue: bundleIdentifier))
+        if let bundleIdentifier = BundleIdentifier(rawValue: runningApplication(processIdentifier: focusedElement.processIdentifier)?.bundleIdentifier) {
+            return (focusedElement.processIdentifier, bundleIdentifier)
         }
         throw FocusArbitrator.Error.nilBundleIdentifier
     }
     public static func frontmostApplication() throws -> (ProcessIdentifier, BundleIdentifier) {
         if let frontmost = NSWorkspace.shared.frontmostApplication {
-            if let bundleIdentifier = frontmost.bundleIdentifier {
-                return (ProcessIdentifier(frontmost.processIdentifier), BundleIdentifier(rawValue: bundleIdentifier))
+            if let bundleIdentifier = BundleIdentifier(rawValue: frontmost.bundleIdentifier) {
+                return (ProcessIdentifier(frontmost.processIdentifier), bundleIdentifier)
             }
             throw FocusArbitrator.Error.nilBundleIdentifier
         }
@@ -70,8 +70,8 @@ public class FocusArbitrator {
     }
     public static func menuBarOwningApplication() throws -> (ProcessIdentifier, BundleIdentifier) {
         if let menuBar = NSWorkspace.shared.menuBarOwningApplication {
-            if let bundleIdentifier = menuBar.bundleIdentifier {
-                return (Int(menuBar.processIdentifier), BundleIdentifier(rawValue: bundleIdentifier))
+            if let bundleIdentifier = BundleIdentifier(rawValue: menuBar.bundleIdentifier) {
+                return (Int(menuBar.processIdentifier), bundleIdentifier)
             }
             throw FocusArbitrator.Error.nilBundleIdentifier
         }

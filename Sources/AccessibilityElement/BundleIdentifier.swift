@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct BundleIdentifier {
+public struct BundleIdentifier : RawRepresentable {
     public static let spotlight: BundleIdentifier = "com.apple.spotlight"
     public static let console: BundleIdentifier = "com.apple.console"
     public static let safari: BundleIdentifier = "com.apple.safari"
@@ -31,16 +31,23 @@ public struct BundleIdentifier {
     public static let localAuthenticationUIAgent: BundleIdentifier = "com.apple.localauthentication.uiagent"
     public static let wifiAgent: BundleIdentifier = "com.apple.wifi.wifiagent"
     public static let nbAgent: BundleIdentifier = "com.apple.nbagent"
-    public var rawValue: String
-    public init(rawValue: String) {
-        self.rawValue = rawValue.lowercased()
+    public typealias RawValue = String
+    public let rawValue: String
+    public init?(rawValue: String) {
+        self.rawValue = rawValue
+    }
+    public init?(rawValue: String?) {
+        guard let rawValue = rawValue else {
+            return nil
+        }
+        self.rawValue = rawValue
     }
 }
 
 extension BundleIdentifier : ExpressibleByStringLiteral {
     public typealias StringLiteralType = String
     public init(stringLiteral value: StringLiteralType) {
-        self.init(rawValue: value)
+        self.init(rawValue: value)!
     }
 }
 
