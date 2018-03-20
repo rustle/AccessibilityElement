@@ -15,7 +15,7 @@ public protocol AnyEventHandler {
     static func eventHandler(node: AnyNode,
                              applicationObserver: AnyApplicationObserver) throws -> AnyEventHandler
     var node: AnyNode { get }
-    weak var controller: AnyController? { get set }
+    var controller: AnyController? { get set }
     var describerRequests: [DescriberRequest] { get }
     func makeController() throws -> AnyController
     mutating func configure(output: (([Output.Job.Payload]) -> Void)?)
@@ -30,7 +30,7 @@ public protocol EventHandler : AnyEventHandler {
     associatedtype ObserverProvidingType : ObserverProviding
     typealias ElementType = ObserverProvidingType.ElementType
     var _node: Node<ElementType> { get }
-    weak var _controller: Controller<Self>? { get set }
+    var _controller: Controller<Self>? { get set }
     var applicationObserver: ApplicationObserver<ObserverProvidingType> { get }
     init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>)
 }

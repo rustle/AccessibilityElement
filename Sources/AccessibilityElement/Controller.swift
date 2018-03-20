@@ -9,7 +9,7 @@ import os.log
 
 public protocol AnyController : class {
     var eventHandler: AnyEventHandler { get set }
-    weak var parentController: AnyController? { get set }
+    var parentController: AnyController? { get set }
     var childControllers: [AnyController] { get set }
 }
 
