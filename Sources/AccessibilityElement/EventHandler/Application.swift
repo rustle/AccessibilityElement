@@ -8,14 +8,8 @@ import Foundation
 import Signals
 
 public final class Application<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
-    public typealias ElementType = ObserverProvidingType.ElementType
-    public var describerRequests: [DescriberRequest] {
-        return []
-    }
+    // MARK: EventHandler
     public var output: (([Output.Job.Payload]) -> Void)?
-    public func configure(output: (([Output.Job.Payload]) -> Void)?) {
-        self.output = output
-    }
     public weak var _controller: Controller<Application<ObserverProvidingType>>?
     public let _node: Node<ElementType>
     public required init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
@@ -23,14 +17,41 @@ public final class Application<ObserverProvidingType> : EventHandler where Obser
         self.applicationObserver = applicationObserver
         focus = Focus(applicationObserver: applicationObserver)
     }
-    private enum Error : Swift.Error {
+    // MARK: Window State
+    private var windowTokenMap = [ObserverProvidingType.ElementType:ApplicationObserver<ObserverProvidingType>.Token]()
+    private var childrenDirty = false
+    // MARK: Focused UI Element
+    private var focus: Focus
+    private let hierarchy = DefaultHierarchy<ElementType>()
+    public var isFocused: Bool = false
+    // MARK: Observers
+    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
+    private var onFocusedUIElementChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
+    private var onWindowCreated: Subscription<(element: ElementType, info: ObserverInfo?)>?
+    private var onFocusedWindowChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
+}
+
+// MARK: EventHandler
+public extension Application {
+    public typealias ElementType = ObserverProvidingType.ElementType
+    public var describerRequests: [DescriberRequest] {
+        return []
+    }
+    public func configure(output: (([Output.Job.Payload]) -> Void)?) {
+        self.output = output
+    }
+}
+
+public extension Application {
+    public enum Error : Swift.Error {
         case invalidElement
         case containerSearchFailed
         case nilController
     }
-    // MARK: Window State
-    private var windowTokenMap = [ObserverProvidingType.ElementType:ApplicationObserver<ObserverProvidingType>.Token]()
-    private var childrenDirty = false
+}
+
+// MARK: Window State
+public extension Application {
     private func rebuildChildrenIfNeeded() {
         guard let controller = _controller else {
             return
@@ -88,7 +109,10 @@ public final class Application<ObserverProvidingType> : EventHandler where Obser
             focusChanged(element: window)
         }
     }
-    // MARK: Focused UI Element
+}
+
+// MARK: Focused UI Element
+public extension Application {
     private struct Focus {
         enum Error : Swift.Error {
             case focusFailed(Swift.Error)
@@ -200,8 +224,6 @@ public final class Application<ObserverProvidingType> : EventHandler where Obser
                             applicationController: applicationController)
         }
     }
-    private var focus: Focus
-    private let hierarchy = DefaultHierarchy<ElementType>()
     private func findContainer(element: ElementType) throws -> ElementType {
         var current: ElementType? = element
         while current != nil {
@@ -241,8 +263,10 @@ public final class Application<ObserverProvidingType> : EventHandler where Obser
             } catch { }
         }
     }
-    // MARK: Observers
-    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
+}
+
+// MARK: Observers
+public extension Application {
     public func observerContext() throws -> (Controller<Application>, ElementType, ApplicationObserver<ObserverProvidingType>) {
         guard let controller = _controller else {
             throw Application.Error.nilController
@@ -250,9 +274,6 @@ public final class Application<ObserverProvidingType> : EventHandler where Obser
         let element = _node._element
         return (controller, element, applicationObserver)
     }
-    private var onFocusedUIElementChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
-    private var onWindowCreated: Subscription<(element: ElementType, info: ObserverInfo?)>?
-    private var onFocusedWindowChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
     private func registerObservers() throws {
         let (controller, element, observer) = try observerContext()
         onWindowCreated = try observer.signal(element: element,
@@ -276,8 +297,10 @@ public final class Application<ObserverProvidingType> : EventHandler where Obser
         onFocusedWindowChanged?.cancel()
         onFocusedWindowChanged = nil
     }
-    // MARK: -
-    public var isFocused: Bool = false
+}
+
+// MARK: EventHandler
+public extension Application {
     public func connect() {
         do {
             try _node._element.set(enhancedUserInterface: true)
