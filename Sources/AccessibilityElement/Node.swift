@@ -25,12 +25,14 @@ public final class Node<ElementType> : AnyNode where ElementType : AnyElement {
 }
 
 #if swift(>=4.1)
-extension Node : Hashable, Equatable where ElementType : Hashable, ElementType : Equatable {
-    public var hashValue: Int {
-        return _element.hashValue
-    }
+extension Node : Equatable where ElementType : Equatable {
     public static func ==(lhs: Node<ElementType>, rhs: Node<ElementType>) -> Bool {
         return lhs._element == rhs._element
+    }
+}
+extension Node : Hashable where ElementType : Hashable {
+    public var hashValue: Int {
+        return _element.hashValue
     }
 }
 #else
