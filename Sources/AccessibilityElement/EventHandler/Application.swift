@@ -7,7 +7,7 @@
 import Foundation
 import Signals
 
-open class Application<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
+public final class Application<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
     public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         return []
