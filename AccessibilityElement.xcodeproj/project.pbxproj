@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		91105A9F2050D8C00099094E /* ArrayObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91105A972050D8C00099094E /* ArrayObserver.swift */; };
 		9116AF2720549EEA0027A018 /* Runner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9116AF2620549EEA0027A018 /* Runner.swift */; };
+		9160355D2061F972006A14E6 /* ApplicationFocus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160355C2061F972006A14E6 /* ApplicationFocus.swift */; };
 		9160F027204C9FF30088527F /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F026204C9FF30088527F /* Array.swift */; };
 		91641FD52053141E004DD9FE /* FocusTheftObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91641FD42053141E004DD9FE /* FocusTheftObserver.swift */; };
 		91641FE0205460CE004DD9FE /* FocusObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91641FDE205460CE004DD9FE /* FocusObserver.swift */; };
@@ -205,6 +206,7 @@
 /* Begin PBXFileReference section */
 		91105A972050D8C00099094E /* ArrayObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayObserver.swift; sourceTree = "<group>"; };
 		9116AF2620549EEA0027A018 /* Runner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner.swift; sourceTree = "<group>"; };
+		9160355C2061F972006A14E6 /* ApplicationFocus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFocus.swift; sourceTree = "<group>"; };
 		9160F026204C9FF30088527F /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		91641FD42053141E004DD9FE /* FocusTheftObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusTheftObserver.swift; sourceTree = "<group>"; };
 		91641FDE205460CE004DD9FE /* FocusObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusObserver.swift; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 		91641FDD2053142F004DD9FE /* Focus */ = {
 			isa = PBXGroup;
 			children = (
+				9160355C2061F972006A14E6 /* ApplicationFocus.swift */,
 				91641FDF205460CE004DD9FE /* FocusArbitration.swift */,
 				91641FDE205460CE004DD9FE /* FocusObserver.swift */,
 				91641FD42053141E004DD9FE /* FocusTheftObserver.swift */,
@@ -846,6 +849,7 @@
 				91724DEE204A0D4D0009A79F /* IntegerIndexSelectionChange.swift in Sources */,
 				91724E05204A0D4D0009A79F /* Bundle.swift in Sources */,
 				91724DF4204A0D4D0009A79F /* TreeElement.swift in Sources */,
+				9160355D2061F972006A14E6 /* ApplicationFocus.swift in Sources */,
 				91724DE4204A0D4D0009A79F /* Controller.swift in Sources */,
 				9184F0E6205F7481006B78FD /* BundleIdentifier.swift in Sources */,
 				91724DF7204A0D4D0009A79F /* Debug.swift in Sources */,
