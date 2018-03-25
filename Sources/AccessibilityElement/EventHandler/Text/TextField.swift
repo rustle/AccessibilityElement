@@ -30,7 +30,7 @@ public struct TextField<ObserverProvidingType> : EventHandler where ObserverProv
         guard let results: [String?] = try? Describer().describe(element: element, requests: describerRequests) else {
             return nil
         }
-        return results.prune().first
+        return results.flatMap({ $0 }).first
     }
     public mutating func focusOut() -> String? {
         return nil

@@ -30,7 +30,7 @@ public struct TextAttachment<ObserverProvidingType> : EventHandler where Observe
         guard let results: [String?] = try? Describer<ElementType>().describe(element: element, requests: describerRequests) else {
             return nil
         }
-        return results.prune().first
+        return results.flatMap({ $0 }).first
     }
     public func focusOut() -> String? {
         return nil

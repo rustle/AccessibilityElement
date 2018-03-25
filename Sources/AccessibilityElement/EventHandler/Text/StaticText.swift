@@ -29,7 +29,7 @@ public struct StaticText<ObserverProvidingType> : EventHandler where ObserverPro
         guard let results: [String?] = try? Describer<ElementType>().describe(element: element, requests: describerRequests) else {
             return nil
         }
-        return results.prune().joined(separator: "")
+        return results.flatMap({ $0 }).joined(separator: "")
     }
     public func focusOut() -> String? {
         return nil

@@ -29,7 +29,7 @@ public struct DefaultEventHandler<ObserverProvidingType> : EventHandler where Ob
         let element = _node._element
         do {
             let results = try Describer().describe(element: element, requests: describerRequests)
-            return results.prune().joined(separator: ", ")
+            return results.flatMap({ $0 }).joined(separator: ", ")
         } catch {
             return nil
         }

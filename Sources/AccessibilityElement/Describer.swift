@@ -7,18 +7,6 @@
 import Foundation
 import os.log
 
-extension Array where Element == String? {
-    public func prune() -> [String] {
-        var strings = [String]()
-        for maybe in self {
-            if let string = maybe, string.count > 0 {
-                strings.append(string)
-            }
-        }
-        return strings
-    }
-}
-
 public protocol DescriberRequest {
     
 }
