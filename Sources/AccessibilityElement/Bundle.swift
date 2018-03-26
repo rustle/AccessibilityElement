@@ -19,7 +19,7 @@ public func makeSystemApplicationController(processIdentifier: ProcessIdentifier
 }
 
 public protocol AccessibilityBundle : class {
-    // Return controller representing the application
+    /// Return controller representing the application
     func load(processIdentifier: ProcessIdentifier) throws -> AnyController
     init()
 }
