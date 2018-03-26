@@ -7,14 +7,14 @@
 import Foundation
 import CoreFoundationOverlay
 
-extension NSRange {
-    func range() -> Range<Int> {
+fileprivate extension NSRange {
+    fileprivate func range() -> Range<Int> {
         return location ..< (location + length)
     }
 }
 
-extension Range where Bound == Int {
-    func nsRange() -> NSRange {
+fileprivate extension Range where Bound == Int {
+    fileprivate func nsRange() -> NSRange {
         return NSMakeRange(lowerBound, count)
     }
 }
