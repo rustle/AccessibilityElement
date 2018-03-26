@@ -130,7 +130,7 @@ public struct BasicRebuildStrategy<ObserverProvidingType> : FocusRebuildStrategy
             for node in nodes {
                 // TODO: need to add dirty flag for children to _Controller
                 if controller.childControllers.count == 0 {
-                    controller.childControllers = try controller.childControllers(node: node)
+                    controller._childControllers = try controller.childControllers(node: node)
                 }
                 guard let index = controller._childControllers.index(where: { return $0.node == node }) else {
                     throw ApplicationFocus<ObserverProvidingType>.Error.focusedElementNotInHierarchy
@@ -227,7 +227,7 @@ public class ApplicationFocus<ObserverProvidingType>
         let eventHandler = try shared.eventHandler(node: target,
                                                    applicationObserver: applicationObserver)
         let controller = (try eventHandler.makeController()) as! _Controller<ElementType>
-        controller.applicationController = applicationController
+        controller._applicationController = applicationController
         return controller
     }
     private func reset(applicationController: _Controller<ElementType>) throws {

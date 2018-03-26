@@ -7,29 +7,37 @@
 import Foundation
 import os.log
 
+///
 public protocol AnyController : class {
+    ///
     var eventHandler: AnyEventHandler { get set }
-    var parentController: AnyController? { get set }
-    var childControllers: [AnyController] { get set }
+    ///
+    var applicationController: AnyController? { get }
+    ///
+    var parentController: AnyController? { get }
+    ///
+    var childControllers: [AnyController] { get }
 }
 
+///
 public class _Controller<ElementType> : AnyController where ElementType : _Element {
-    public weak var applicationController: _Controller<ElementType>?
+    ///
+    public weak var applicationController: AnyController? {
+        get {
+            return _applicationController
+        }
+    }
+    public weak var _applicationController: _Controller<ElementType>?
+    ///
     public weak var parentController: AnyController? {
         get {
             return _parentController
-        }
-        set {
-            _parentController = newValue as? _Controller<ElementType>
         }
     }
     public weak var _parentController: _Controller<ElementType>?
     public var childControllers: [AnyController] {
         get {
             return _childControllers
-        }
-        set {
-            _childControllers = (newValue as? [_Controller<ElementType>]) ?? []
         }
     }
     public var _childControllers: [_Controller<ElementType>] = []
@@ -77,7 +85,8 @@ public class Controller<EventHandlerType> : _Controller<EventHandlerType.Observe
         super.init()
         _eventHandler.controller = self
     }
-    public override func childControllers(node: Node<ElementType>, reuse: Bool = true) throws -> [_Controller<ElementType>] {
+    public override func childControllers(node: Node<ElementType>,
+                                          reuse: Bool = true) throws -> [_Controller<ElementType>] {
 #if swift(>=4.1)
         let currentChildrenReuseMap: [Node<ElementType>:_Controller<ElementType>]
         if reuse {
@@ -112,8 +121,8 @@ public class Controller<EventHandlerType> : _Controller<EventHandlerType.Observe
             guard let controller = try shared.eventHandler(node: node, applicationObserver: applicationObserver).makeController() as? _Controller<ElementType> else {
                 throw AccessibilityError.typeMismatch
             }
-            controller.applicationController = applicationController
-            controller.parentController = self
+            controller._applicationController = _applicationController
+            controller._parentController = self
             return controller
         }
     }

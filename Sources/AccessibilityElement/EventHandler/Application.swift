@@ -58,9 +58,9 @@ public extension Application {
         }
         if childrenDirty {
             do {
-                controller.childControllers = try controller.childControllers(node: _node)
+                controller._childControllers = try controller.childControllers(node: _node)
             } catch {
-                controller.childControllers = []
+                controller._childControllers = []
             }
             childrenDirty = false
         }
