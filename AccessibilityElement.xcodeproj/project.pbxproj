@@ -10,6 +10,7 @@
 		91105A9F2050D8C00099094E /* ArrayObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91105A972050D8C00099094E /* ArrayObserver.swift */; };
 		9116AF2720549EEA0027A018 /* Runner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9116AF2620549EEA0027A018 /* Runner.swift */; };
 		9128DB1A2068AA8D00A3390D /* WindowLifeCycleObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9128DB192068AA8D00A3390D /* WindowLifeCycleObserver.swift */; };
+		9128DB23206BEDFA00A3390D /* FocusedUIElementChangedHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9128DB22206BEDFA00A3390D /* FocusedUIElementChangedHandler.swift */; };
 		9160355D2061F972006A14E6 /* ApplicationFocus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160355C2061F972006A14E6 /* ApplicationFocus.swift */; };
 		9160F027204C9FF30088527F /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F026204C9FF30088527F /* Array.swift */; };
 		91641FD52053141E004DD9FE /* FocusTheftObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91641FD42053141E004DD9FE /* FocusTheftObserver.swift */; };
@@ -208,6 +209,7 @@
 		91105A972050D8C00099094E /* ArrayObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayObserver.swift; sourceTree = "<group>"; };
 		9116AF2620549EEA0027A018 /* Runner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner.swift; sourceTree = "<group>"; };
 		9128DB192068AA8D00A3390D /* WindowLifeCycleObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowLifeCycleObserver.swift; sourceTree = "<group>"; };
+		9128DB22206BEDFA00A3390D /* FocusedUIElementChangedHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusedUIElementChangedHandler.swift; sourceTree = "<group>"; };
 		9160355C2061F972006A14E6 /* ApplicationFocus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFocus.swift; sourceTree = "<group>"; };
 		9160F026204C9FF30088527F /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		91641FD42053141E004DD9FE /* FocusTheftObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusTheftObserver.swift; sourceTree = "<group>"; };
@@ -371,6 +373,7 @@
 				91724DC1204A0D4D0009A79F /* Debug.swift */,
 				91724DBC204A0D4D0009A79F /* Describer.swift */,
 				91724DB2204A0D4D0009A79F /* Element.swift */,
+				9128DB22206BEDFA00A3390D /* FocusedUIElementChangedHandler.swift */,
 				91724DB5204A0D4D0009A79F /* Frame.swift */,
 				91724DA5204A0D4D0009A79F /* GestureRecognizer.swift */,
 				91724DD2204A0D4D0009A79F /* Hierarchy.swift */,
@@ -875,6 +878,7 @@
 				91724DFF204A0D4D0009A79F /* TextField.swift in Sources */,
 				91724DDD204A0D4D0009A79F /* IntegerIndexSelectionChangeHandler.swift in Sources */,
 				91724DFD204A0D4D0009A79F /* Window.swift in Sources */,
+				9128DB23206BEDFA00A3390D /* FocusedUIElementChangedHandler.swift in Sources */,
 				91724E07204A0D4D0009A79F /* Node.swift in Sources */,
 				91724DEB204A0D4D0009A79F /* SimpleState.swift in Sources */,
 				91724DD7204A0D4D0009A79F /* AXValue.swift in Sources */,

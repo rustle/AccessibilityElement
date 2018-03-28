@@ -23,6 +23,7 @@ public final class Application<ObserverProvidingType> : EventHandler where Obser
     // MARK: Focused UI Element
     private var focus: ApplicationFocus<ObserverProvidingType>
     private let hierarchy = DefaultHierarchy<ElementType>()
+    private let focusedUIElementChangedHandler = DefaultFocusedUIElementChangedHandler()
     public var isFocused: Bool = false
     // MARK: Observers
     public let applicationObserver: ApplicationObserver<ObserverProvidingType>
@@ -65,6 +66,18 @@ public extension Application {
             windowLifeCycleObserver.windowsDirty = false
         }
     }
+    private func focusChanged(element: ElementType) {
+        guard let controller = _controller else {
+            return
+        }
+        let value = focusedUIElementChangedHandler.focusChanged(element: element,
+                                                                hierarchy: hierarchy,
+                                                                focus: focus,
+                                                                applicationController: controller)
+        if let echo = value, echo.count > 0 {
+            output?([.speech(echo, nil)])
+        }
+    }
     private func focusChanged(window: ElementType) {
         if let focusedElement = try? _node._element.applicationFocusedElement() {
             focusChanged(element: focusedElement)
@@ -78,56 +91,10 @@ public extension Application {
                 }
                 if let focused = focused {
                     focusChanged(element: focused)
-                    return
                 }
-            } catch { }
-            focusChanged(element: window)
-        }
-    }
-}
-
-// MARK: Focused UI Element
-public extension Application {
-    private func findContainer(element: ElementType) throws -> ElementType {
-        var current: ElementType? = element
-        while current != nil {
-            if hierarchy.classify(current!) == .container {
-                return current!
+            } catch {
+                focusChanged(element: window)
             }
-            do {
-                current = try current!.parent()
-            } catch let error {
-                print(error)
-                throw error
-            }
-        }
-        throw Application.Error.containerSearchFailed
-    }
-    private func focusChanged(element: ElementType) {
-        guard let controller = _controller else {
-            return
-        }
-        do {
-            let container = try findContainer(element: element)
-            var focusedNode: Node<ElementType>? = Node(element: element, role: .include)
-            let node = hierarchy.buildHierarchy(from: container,
-                                                targeting: &focusedNode)
-            try focus.set(focusedContainerNode: node,
-                          focusedControllerNode: focusedNode,
-                          applicationController: controller)
-            if let echo = focus.state.focused?.eventHandler.focusIn(), echo.count > 0 {
-                output?([.speech(echo, nil)])
-            }
-        } catch {
-            do {
-                let node = Node(element: element, role: .include)
-                try focus.set(focusedContainerNode: nil,
-                              focusedControllerNode: node,
-                              applicationController: controller)
-                if let echo = focus.state.focused?.eventHandler.focusIn(), echo.count > 0 {
-                    output?([.speech(echo, nil)])
-                }
-            } catch { }
         }
     }
 }
