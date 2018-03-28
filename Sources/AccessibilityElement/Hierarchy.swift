@@ -20,17 +20,20 @@ public enum HierarchyError : Error {
 public protocol Hierarchy {
     associatedtype ElementType : _Element
     func classify(_ element: ElementType) -> HierarchyRole
-    func buildHierarchy(from element: ElementType) -> Node<ElementType>
+    func buildHierarchy(from element: ElementType,
+                        targeting target: inout Node<ElementType>?) -> Node<ElementType>
 }
 
 public extension Hierarchy {
     public func classify(_ element: ElementType) -> HierarchyRole {
         return .include
     }
-    public func buildHierarchy(from element: ElementType) -> Node<ElementType> {
+    public func buildHierarchy(from element: ElementType,
+                               targeting target: inout Node<ElementType>?) -> Node<ElementType> {
         let children = (try? element.down()) ?? []
         let childNodes = children.map { child in
-            return buildHierarchy(from: child)
+            return buildHierarchy(from: child,
+                                  targeting: &target)
         }
         let node = Node(element: element, role: classify(element))
         childNodes.forEach { childNode in

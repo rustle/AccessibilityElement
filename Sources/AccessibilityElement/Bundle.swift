@@ -9,7 +9,8 @@ import Foundation
 public func makeSystemApplicationController(processIdentifier: ProcessIdentifier) throws -> AnyController {
     let uiElement = AXUIElement.application(processIdentifier: processIdentifier)
     let element = Element(element: uiElement)
-    let node = DefaultHierarchy<Element>().buildHierarchy(from: element)
+    var ignored: Node<Element>? = nil
+    let node = DefaultHierarchy<Element>().buildHierarchy(from: element, targeting: &ignored)
     let eventHandler: AnyEventHandler?
     let observerManager = ObserverManager(provider: SystemObserverProviding.provider())
     let applicationObserver = try observerManager.registerObserver(application: element)

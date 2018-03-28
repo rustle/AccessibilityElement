@@ -23,7 +23,9 @@ class AccessibilityElementTests: XCTestCase {
                 tree(MockElement(uniqueID: 3, role: .staticText, value: "2")),
             ]
         }
-        let node = DefaultHierarchy().buildHierarchy(from: element)
+        var ignored: Node<MockElement>? = nil
+        let node = DefaultHierarchy().buildHierarchy(from: element,
+                                                     targeting: &ignored)
         XCTAssertTrue(compare(lhs: expected, rhs: node))
     }
 }
