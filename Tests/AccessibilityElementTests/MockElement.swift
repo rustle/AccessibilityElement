@@ -143,8 +143,12 @@ extension MockElement : CustomDebugStringConvertible {
             Describer<MockElement>.Single(required: false, attribute: .stringValue(nil)),
         ]
         do {
-            let values = try describer.describe(element: self, requests: requests).flatMap({ return $0 })
-            return values.joined(separator: ", ")
+            let values = try describer.describe(element: self, requests: requests)
+#if swift(>=4.1)
+            return values.compactMap({ return $0 }).joined(separator: ", ")
+#else
+            return values.flatMap({ return $0 }).joined(separator: ", ")
+#endif
         } catch {
             return "<MockElement>"
         }
