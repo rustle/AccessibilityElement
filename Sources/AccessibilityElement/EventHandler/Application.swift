@@ -4,7 +4,7 @@
 //  Copyright © 2018 Doug Russell. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 import Signals
 
 public final class Application<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
@@ -12,14 +12,14 @@ public final class Application<ObserverProvidingType> : EventHandler where Obser
     public var output: (([Output.Job.Payload]) -> Void)?
     public weak var _controller: Controller<Application<ObserverProvidingType>>?
     public let _node: Node<ElementType>
-    public required init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
+    public required init(node: Node<ElementType>,
+                         applicationObserver: ApplicationObserver<ObserverProvidingType>) {
         _node = node
         self.applicationObserver = applicationObserver
         focus = ApplicationFocus(applicationObserver: applicationObserver)
+        windowLifeCycleObserver = WindowLifeCycleObserver(element:node._element,
+                                                          applicationObserver: applicationObserver)
     }
-    // MARK: Window State
-    private var windowTokenMap = [ObserverProvidingType.ElementType:ApplicationObserver<ObserverProvidingType>.Token]()
-    private var childrenDirty = false
     // MARK: Focused UI Element
     private var focus: ApplicationFocus<ObserverProvidingType>
     private let hierarchy = DefaultHierarchy<ElementType>()
@@ -27,8 +27,8 @@ public final class Application<ObserverProvidingType> : EventHandler where Obser
     // MARK: Observers
     public let applicationObserver: ApplicationObserver<ObserverProvidingType>
     private var onFocusedUIElementChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
-    private var onWindowCreated: Subscription<(element: ElementType, info: ObserverInfo?)>?
     private var onFocusedWindowChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
+    private let windowLifeCycleObserver: WindowLifeCycleObserver<ObserverProvidingType>
 }
 
 // MARK: EventHandler
@@ -56,39 +56,14 @@ public extension Application {
         guard let controller = _controller else {
             return
         }
-        if childrenDirty {
+        if windowLifeCycleObserver.windowsDirty {
             do {
                 controller._childControllers = try controller.childControllers(node: _node)
             } catch {
                 controller._childControllers = []
             }
-            childrenDirty = false
+            windowLifeCycleObserver.windowsDirty = false
         }
-    }
-    private func destroyed(window: ElementType) {
-        guard let (_, _, observer) = try? observerContext() else {
-            return
-        }
-        guard let token = windowTokenMap[window] else {
-            return
-        }
-        do {
-            try observer.stopObserving(token: token)
-        } catch {
-            
-        }
-        childrenDirty = true
-    }
-    private func created(window: ElementType) {
-        childrenDirty = true
-        guard let (controller, _, observer) = try? observerContext() else {
-            return
-        }
-        do {
-            windowTokenMap[window] = try observer.startObserving(element: window, notification: .uiElementDestroyed) { window, _ in
-                controller._eventHandler.destroyed(window: window)
-            }
-        } catch {}
     }
     private func focusChanged(window: ElementType) {
         if let focusedElement = try? _node._element.applicationFocusedElement() {
@@ -159,31 +134,19 @@ public extension Application {
 
 // MARK: Observers
 public extension Application {
-    public func observerContext() throws -> (Controller<Application>, ElementType, ApplicationObserver<ObserverProvidingType>) {
-        guard let controller = _controller else {
-            throw Application.Error.nilController
-        }
-        let element = _node._element
-        return (controller, element, applicationObserver)
-    }
     private func registerObservers() throws {
-        let (controller, element, observer) = try observerContext()
-        onWindowCreated = try observer.signal(element: element,
-                                              notification: .windowCreated).subscribe { [weak controller] in
-            controller?._eventHandler.created(window: $0.element)
+        try windowLifeCycleObserver.start()
+        onFocusedUIElementChanged = try applicationObserver.signal(element: _node._element,
+                                                                   notification: .focusedUIElementChanged).subscribe { [weak self] in
+            self?.focusChanged(element: $0.element)
         }
-        onFocusedUIElementChanged = try observer.signal(element: element,
-                                                        notification: .focusedUIElementChanged).subscribe { [weak controller] in
-            controller?._eventHandler.focusChanged(element: $0.element)
-        }
-        onFocusedWindowChanged = try observer.signal(element: element,
-                                                     notification: .focusedWindowChanged).subscribe { [weak controller] in
-            controller?._eventHandler.focusChanged(window: $0.element)
+        onFocusedWindowChanged = try applicationObserver.signal(element: _node._element,
+                                                                notification: .focusedWindowChanged).subscribe { [weak self] in
+            self?.focusChanged(window: $0.element)
         }
     }
     private func unregisterObservers() {
-        onWindowCreated?.cancel()
-        onWindowCreated = nil
+        windowLifeCycleObserver.stop()
         onFocusedUIElementChanged?.cancel()
         onFocusedUIElementChanged = nil
         onFocusedWindowChanged?.cancel()
@@ -203,7 +166,7 @@ public extension Application {
         } catch let error {
             print(error)
         }
-        childrenDirty = true
+        windowLifeCycleObserver.windowsDirty = true
     }
     public func focusIn() -> String? {
         if isFocused {

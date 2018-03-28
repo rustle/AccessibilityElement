@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		91105A9F2050D8C00099094E /* ArrayObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91105A972050D8C00099094E /* ArrayObserver.swift */; };
 		9116AF2720549EEA0027A018 /* Runner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9116AF2620549EEA0027A018 /* Runner.swift */; };
+		9128DB1A2068AA8D00A3390D /* WindowLifeCycleObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9128DB192068AA8D00A3390D /* WindowLifeCycleObserver.swift */; };
 		9160355D2061F972006A14E6 /* ApplicationFocus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160355C2061F972006A14E6 /* ApplicationFocus.swift */; };
 		9160F027204C9FF30088527F /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F026204C9FF30088527F /* Array.swift */; };
 		91641FD52053141E004DD9FE /* FocusTheftObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91641FD42053141E004DD9FE /* FocusTheftObserver.swift */; };
@@ -206,6 +207,7 @@
 /* Begin PBXFileReference section */
 		91105A972050D8C00099094E /* ArrayObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayObserver.swift; sourceTree = "<group>"; };
 		9116AF2620549EEA0027A018 /* Runner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner.swift; sourceTree = "<group>"; };
+		9128DB192068AA8D00A3390D /* WindowLifeCycleObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowLifeCycleObserver.swift; sourceTree = "<group>"; };
 		9160355C2061F972006A14E6 /* ApplicationFocus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFocus.swift; sourceTree = "<group>"; };
 		9160F026204C9FF30088527F /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		91641FD42053141E004DD9FE /* FocusTheftObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusTheftObserver.swift; sourceTree = "<group>"; };
@@ -380,6 +382,7 @@
 				91724D9F204A0D4D0009A79F /* Tap.swift */,
 				91724DBD204A0D4D0009A79F /* TreeElement.swift */,
 				91724DA4204A0D4D0009A79F /* WhitespaceClassifier.swift */,
+				9128DB192068AA8D00A3390D /* WindowLifeCycleObserver.swift */,
 				91724DC2204A0D4D0009A79F /* EventHandler */,
 				91641FDD2053142F004DD9FE /* Focus */,
 				91724D99204A0D4D0009A79F /* HIServices */,
@@ -867,6 +870,7 @@
 				91724DE3204A0D4D0009A79F /* Output.swift in Sources */,
 				91724DF0204A0D4D0009A79F /* TextMarkerRichSelectionChange.swift in Sources */,
 				91724DE0204A0D4D0009A79F /* Substitutions.swift in Sources */,
+				9128DB1A2068AA8D00A3390D /* WindowLifeCycleObserver.swift in Sources */,
 				91724DE9204A0D4D0009A79F /* ObserverSignal.swift in Sources */,
 				91724DFF204A0D4D0009A79F /* TextField.swift in Sources */,
 				91724DDD204A0D4D0009A79F /* IntegerIndexSelectionChangeHandler.swift in Sources */,
