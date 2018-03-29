@@ -8,8 +8,7 @@ import Foundation
 import Atomics
 
 public class SimpleState<StateType> {
-    private var state = [Int : StateType]()
-    private let queue = DispatchQueue(label: "SimpleState.sync")
+    private var state = ConcurrentDictionary<Int, StateType>()
     private var counter = AtomicInt64()
     public init() {
         counter.initialize(1234)
@@ -18,18 +17,12 @@ public class SimpleState<StateType> {
         return Int(counter.increment())
     }
     public func set(state: StateType, identifier: Int) {
-        queue.sync(flags: [.barrier]) {
-            self.state[identifier] = state
-        }
+        self.state.set(value: state, key: identifier)
     }
     public func remove(identifier: Int) {
-        queue.sync(flags: [.barrier]) { () -> Void in
-            self.state.removeValue(forKey: identifier)
-        }
+        self.state.remove(key: identifier)
     }
     public func state(identifier: Int) -> StateType? {
-        return queue.sync {
-            return self.state[identifier]
-        }
+        return self.state.value(key: identifier)
     }
 }

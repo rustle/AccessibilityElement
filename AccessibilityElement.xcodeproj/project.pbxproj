@@ -89,6 +89,7 @@
 		91DB215B2050405000B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91DB2162205041D200B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91E69E16206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */; };
+		91E69E1F206D92F200F29B70 /* ConcurrentDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69E1E206D92F200F29B70 /* ConcurrentDictionary.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -289,6 +290,7 @@
 		91724EEE204A12D40009A79F /* SwiftScanner.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftScanner.xcodeproj; path = ".build/checkouts/SwiftScanner.git--3888101014598209270/SwiftScanner/SwiftScanner.xcodeproj"; sourceTree = "<group>"; };
 		9184F0E5205F7481006B78FD /* BundleIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleIdentifier.swift; sourceTree = "<group>"; };
 		91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedGraphemeClusterSet.swift; sourceTree = "<group>"; };
+		91E69E1E206D92F200F29B70 /* ConcurrentDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentDictionary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -371,6 +373,7 @@
 				91724DBB204A0D4D0009A79F /* AttributedString.swift */,
 				91724DD1204A0D4D0009A79F /* Bundle.swift */,
 				9184F0E5205F7481006B78FD /* BundleIdentifier.swift */,
+				91E69E1E206D92F200F29B70 /* ConcurrentDictionary.swift */,
 				91724DAB204A0D4D0009A79F /* Controller.swift */,
 				91724DC1204A0D4D0009A79F /* Debug.swift */,
 				91724DBC204A0D4D0009A79F /* Describer.swift */,
@@ -887,6 +890,7 @@
 				91724DEB204A0D4D0009A79F /* SimpleState.swift in Sources */,
 				91724DD7204A0D4D0009A79F /* AXValue.swift in Sources */,
 				91724DD5204A0D4D0009A79F /* AXUIElement.swift in Sources */,
+				91E69E1F206D92F200F29B70 /* ConcurrentDictionary.swift in Sources */,
 				91724DE6204A0D4D0009A79F /* ObserverError.swift in Sources */,
 				91724DF1204A0D4D0009A79F /* TextMarkerSelectionChange.swift in Sources */,
 				91724DDF204A0D4D0009A79F /* GestureRecognizer.swift in Sources */,
