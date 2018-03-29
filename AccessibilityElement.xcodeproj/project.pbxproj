@@ -88,6 +88,7 @@
 		9184F0E6205F7481006B78FD /* BundleIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9184F0E5205F7481006B78FD /* BundleIdentifier.swift */; };
 		91DB215B2050405000B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91DB2162205041D200B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
+		91E69E16206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -287,6 +288,7 @@
 		91724EBB204A126C0009A79F /* Signals.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Signals.xcodeproj; path = ".build/checkouts/Signals.git--353844806167487743/Signals.xcodeproj"; sourceTree = "<group>"; };
 		91724EEE204A12D40009A79F /* SwiftScanner.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftScanner.xcodeproj; path = ".build/checkouts/SwiftScanner.git--3888101014598209270/SwiftScanner/SwiftScanner.xcodeproj"; sourceTree = "<group>"; };
 		9184F0E5205F7481006B78FD /* BundleIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleIdentifier.swift; sourceTree = "<group>"; };
+		91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedGraphemeClusterSet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -376,6 +378,7 @@
 				9128DB22206BEDFA00A3390D /* FocusedUIElementChangedHandler.swift */,
 				91724DB5204A0D4D0009A79F /* Frame.swift */,
 				91724DA5204A0D4D0009A79F /* GestureRecognizer.swift */,
+				91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */,
 				91724DD2204A0D4D0009A79F /* Hierarchy.swift */,
 				91724DD3204A0D4D0009A79F /* Node.swift */,
 				91724DD0204A0D4D0009A79F /* Position.swift */,
@@ -873,6 +876,7 @@
 				91724DE3204A0D4D0009A79F /* Output.swift in Sources */,
 				91724DF0204A0D4D0009A79F /* TextMarkerRichSelectionChange.swift in Sources */,
 				91724DE0204A0D4D0009A79F /* Substitutions.swift in Sources */,
+				91E69E16206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift in Sources */,
 				9128DB1A2068AA8D00A3390D /* WindowLifeCycleObserver.swift in Sources */,
 				91724DE9204A0D4D0009A79F /* ObserverSignal.swift in Sources */,
 				91724DFF204A0D4D0009A79F /* TextField.swift in Sources */,

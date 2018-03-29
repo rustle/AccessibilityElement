@@ -57,14 +57,7 @@ public struct SimpleSubstitutions : Substitutions, Codable {
 
 extension Character {
     func isWhitespaceOrNewline() -> Bool {
-        let unicodeScalars = self.unicodeScalars
-        if unicodeScalars.count == 1 {
-            let unicode = unicodeScalars[unicodeScalars.startIndex]
-            if CharacterSet.whitespacesAndNewlines.contains(unicode) {
-                return true
-            }
-        }
-        return false
+        return ExtendedGraphemeClusterSet.whitespacesAndNewlines.contains(self)
     }
 }
 
@@ -271,17 +264,10 @@ public struct PunctuationExpansion : Substitutions {
                 mode = newMode
             }
         }
-        let punctuation = CharacterSet.punctuationCharacters
+        let punctuation = ExtendedGraphemeClusterSet.punctuationCharacters
         buffer.reserveCapacity(value.utf16.count)
         for character in value {
-            let unicodeScalars = character.unicodeScalars
-            guard unicodeScalars.count == 1 else {
-                setMode(.other)
-                buffer.append(character)
-                continue
-            }
-            let unicodeScalar = unicodeScalars[unicodeScalars.startIndex]
-            if punctuation.contains(unicodeScalar) {
+            if punctuation.contains(character) {
                 setMode(.punctuation)
             } else {
                 setMode(.other)
