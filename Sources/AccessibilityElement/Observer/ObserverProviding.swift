@@ -14,11 +14,10 @@ func provider<ObserverProvidingType>(type: ObserverProvidingType.Type) -> ((Proc
 }
 
 public protocol ObserverProviding {
-    associatedtype ElementType : _Element
-    mutating func add(element: ElementType,
+    mutating func add(element: AnyElement,
                       notification: NSAccessibilityNotificationName,
-                      handler: @escaping (ElementType, NSAccessibilityNotificationName, [String:Any]?) -> Void) throws -> Int
-    mutating func remove(element: ElementType,
+                      handler: @escaping (AnyElement, NSAccessibilityNotificationName, [String:Any]?) -> Void) throws -> Int
+    mutating func remove(element: AnyElement,
                          notification: NSAccessibilityNotificationName,
                          identifier: Int) throws
 }

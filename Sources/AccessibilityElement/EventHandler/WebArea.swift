@@ -7,14 +7,13 @@
 import Cocoa
 import Signals
 
-public struct WebArea<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
-    public typealias ElementType = ObserverProvidingType.ElementType
+public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
     public var describerRequests: [DescriberRequest] {
         return []
     }
-    public weak var _controller: Controller<WebArea<ObserverProvidingType>>?
+    public weak var _controller: Controller<WebArea<ElementType>>?
     public let _node: Node<ElementType>
-    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
+    public let applicationObserver: ApplicationObserver<ElementType>
     private lazy var selectionChangeHandler: AnySelectionChangeHandler = {
         let handler: AnySelectionChangeHandler
         do {
@@ -26,14 +25,14 @@ public struct WebArea<ObserverProvidingType> : EventHandler where ObserverProvid
             handler = IntegerIndexSelectionChangeHandler(element: _node._element,
                                                          applicationObserver: applicationObserver)
         }
-        if let applicationController = (_controller?.applicationController) as? Controller<Application<ObserverProvidingType>> {
+        if let applicationController = (_controller?.applicationController) as? Controller<Application<ElementType>> {
             handler.output = { [weak applicationController] payload in
                 applicationController?._eventHandler.output?(payload)
             }
         }
         return handler
     }()
-    public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
+    public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ElementType>) {
         _node = node
         self.applicationObserver = applicationObserver
     }

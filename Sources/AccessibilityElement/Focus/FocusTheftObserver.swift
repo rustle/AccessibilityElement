@@ -9,8 +9,7 @@ import Signals
 
 /// Infer focus changes indirectly via accessibility notifications on applications that take focus, but don't become frontmost.
 /// Known culprits are Spotlight and NotificationCenter
-public class FocusTheftObserver<ObserverProvidingType> : Runner where ObserverProvidingType : ObserverProviding {
-    public typealias ElementType = ObserverProvidingType.ElementType
+public class FocusTheftObserver<ElementType> : Runner where ElementType : _Element {
     public static func systemApplicationLookup(_ bundleIdentifier: BundleIdentifier) throws -> ProcessIdentifier {
         let applications = NSWorkspace.shared.runningApplications;
         let index = applications.index() { application in
@@ -41,18 +40,18 @@ public class FocusTheftObserver<ObserverProvidingType> : Runner where ObserverPr
         }
     }
     public let bundleIdentifier: BundleIdentifier
-    public let observerManager: ObserverManager<ObserverProvidingType>
+    public let observerManager: ObserverManager<ElementType>
     public let applicationProvider: (BundleIdentifier) throws -> ProcessIdentifier
     public init(bundleIdentifier: BundleIdentifier,
                 applicationProvider: @escaping (BundleIdentifier) throws -> ProcessIdentifier,
-                observerManager: ObserverManager<ObserverProvidingType>) {
+                observerManager: ObserverManager<ElementType>) {
         self.bundleIdentifier = bundleIdentifier
         self.applicationProvider = applicationProvider
         self.observerManager = observerManager
     }
-    private var observer: ApplicationObserver<ObserverProvidingType>?
-    private var createdToken: ApplicationObserver<ObserverProvidingType>.Token?
-    private var destroyedToken: ApplicationObserver<ObserverProvidingType>.Token?
+    private var observer: ApplicationObserver<ElementType>?
+    private var createdToken: ApplicationObserver<ElementType>.Token?
+    private var destroyedToken: ApplicationObserver<ElementType>.Token?
     private func register(window: ElementType) {
         guard let observer = observer else {
             return

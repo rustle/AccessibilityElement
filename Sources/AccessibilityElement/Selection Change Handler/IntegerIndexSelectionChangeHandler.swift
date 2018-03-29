@@ -7,15 +7,15 @@
 import Cocoa
 import Signals
 
-public class IntegerIndexSelectionChangeHandler<ObserverProvidingType> : SelectionChangeHandler where ObserverProvidingType : ObserverProviding {
-    public typealias ElementType = ObserverProvidingType.ElementType
+public class IntegerIndexSelectionChangeHandler<ElementType> : SelectionChangeHandler where ElementType : _Element {
     public typealias IndexType = Int
     public let element: ElementType
-    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
+    public let applicationObserver: ApplicationObserver<ElementType>
     public var previousSelection: Range<Position<IndexType>>?
     private var selectionChangeSubscription: Subscription<(element: ElementType, info: ObserverInfo?)>?
     public var output: (([Output.Job.Payload]) -> Void)?
-    public required init(element: ElementType, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
+    public required init(element: ElementType,
+                         applicationObserver: ApplicationObserver<ElementType>) {
         self.element = element
         self.applicationObserver = applicationObserver
     }
@@ -23,13 +23,15 @@ public class IntegerIndexSelectionChangeHandler<ObserverProvidingType> : Selecti
         guard selectionChangeSubscription == nil else {
             return
         }
-        let signal = try applicationObserver.signal(element: element, notification: .selectedTextChanged)
+        let signal = try applicationObserver.signal(element: element,
+                                                    notification: .selectedTextChanged)
         selectionChangeSubscription = signal.subscribe { [weak self] element, info in
             guard let info = info else {
                 return
             }
             do {
-                guard let selectionChange = try SelectionChangeForIntegerIndexChangeNotification(info: info, element: element) else {
+                guard let selectionChange = try SelectionChangeForIntegerIndexChangeNotification(info: info,
+                                                                                                 element: element) else {
                     return
                 }
                 self?.handle(selectionChange: selectionChange)

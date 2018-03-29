@@ -6,18 +6,19 @@
 
 import Foundation
 
-public struct TextAttachment<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
-    public typealias ElementType = ObserverProvidingType.ElementType
+public struct TextAttachment<ElementType> : EventHandler where ElementType : _Element {
+    public typealias ObserverProvidingType = ElementType.ObserverProvidingType
     public var describerRequests: [DescriberRequest] = {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Single(required: true, attribute: .attachmentText),
         ]
         return requests
     }()
-    public weak var _controller: Controller<TextAttachment<ObserverProvidingType>>?
+    public weak var _controller: Controller<TextAttachment<ElementType>>?
     public let _node: Node<ElementType>
-    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
-    public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
+    public let applicationObserver: ApplicationObserver<ElementType>
+    public init(node: Node<ElementType>,
+                applicationObserver: ApplicationObserver<ElementType>) {
         _node = node
         self.applicationObserver = applicationObserver
     }

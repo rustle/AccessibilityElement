@@ -6,18 +6,18 @@
 
 import Foundation
 
-public struct Window<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
-    public typealias ElementType = ObserverProvidingType.ElementType
+public struct Window<ElementType> : EventHandler where ElementType : _Element {
     public var describerRequests: [DescriberRequest] {
         return [
             Describer<ElementType>.Single(required: false, attribute: .title),
             Describer<ElementType>.Single(required: false, attribute: .roleDescription),
         ]
     }
-    public weak var _controller: Controller<Window<ObserverProvidingType>>?
+    public weak var _controller: Controller<Window<ElementType>>?
     public let _node: Node<ElementType>
-    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
-    public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
+    public let applicationObserver: ApplicationObserver<ElementType>
+    public init(node: Node<ElementType>,
+                applicationObserver: ApplicationObserver<ElementType>) {
         _node = node
         self.applicationObserver = applicationObserver
     }

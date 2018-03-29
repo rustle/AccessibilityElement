@@ -27,12 +27,12 @@ public protocol AnyEventHandler {
 }
 
 public protocol EventHandler : AnyEventHandler {
-    associatedtype ObserverProvidingType : ObserverProviding
-    typealias ElementType = ObserverProvidingType.ElementType
+    associatedtype ElementType : _Element
     var _node: Node<ElementType> { get }
     var _controller: Controller<Self>? { get set }
-    var applicationObserver: ApplicationObserver<ObserverProvidingType> { get }
-    init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>)
+    var applicationObserver: ApplicationObserver<ElementType> { get }
+    init(node: Node<ElementType>,
+         applicationObserver: ApplicationObserver<ElementType>)
 }
 
 public extension EventHandler {
@@ -41,7 +41,7 @@ public extension EventHandler {
         guard let node = node as? Node<ElementType> else {
             throw AccessibilityError.typeMismatch
         }
-        guard let applicationObserver = applicationObserver as? ApplicationObserver<ObserverProvidingType> else {
+        guard let applicationObserver = applicationObserver as? ApplicationObserver<ElementType> else {
             throw AccessibilityError.typeMismatch
         }
         return Self.init(node: node,

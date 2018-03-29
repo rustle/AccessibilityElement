@@ -96,6 +96,7 @@ public enum _ElementError : Swift.Error {
 }
 
 public protocol _Element : AnyElement, TreeElement, Hashable {
+    associatedtype ObserverProvidingType : ObserverProviding where ObserverProvidingType.ElementType == Self
     ///
     static var systemWide: Self { get }
     ///
@@ -116,7 +117,7 @@ public protocol _Element : AnyElement, TreeElement, Hashable {
     func focusedWindow() throws -> Self
 }
 
-extension _Element {
+public extension _Element {
     public func up() throws -> Self {
         return try parent()
     }
@@ -262,6 +263,7 @@ extension _Element {
 }
 
 public struct Element : _Element {
+    public typealias ObserverProvidingType = SystemObserverProviding
     public static var systemWide: Element = {
         Element(element: AXUIElement.systemWide())
     }()

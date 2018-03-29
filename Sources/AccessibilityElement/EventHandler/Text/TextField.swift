@@ -6,18 +6,18 @@
 
 import Foundation
 
-public struct TextField<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
-    public typealias ElementType = ObserverProvidingType.ElementType
+public struct TextField<ElementType> : EventHandler where ElementType : _Element {
     public var describerRequests: [DescriberRequest] = {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Single(required: true, attribute: .stringValue(nil)),
         ]
         return requests
     }()
-    public weak var _controller: Controller<TextField<ObserverProvidingType>>?
+    public weak var _controller: Controller<TextField<ElementType>>?
     public let _node: Node<ElementType>
-    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
-    public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
+    public let applicationObserver: ApplicationObserver<ElementType>
+    public init(node: Node<ElementType>,
+                applicationObserver: ApplicationObserver<ElementType>) {
         _node = node
         self.applicationObserver = applicationObserver
     }

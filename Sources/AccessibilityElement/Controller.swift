@@ -65,9 +65,8 @@ extension _Controller : Equatable {
     }
 }
 
-public class Controller<EventHandlerType> : _Controller<EventHandlerType.ObserverProvidingType.ElementType> where EventHandlerType : EventHandler {
-    public typealias ObserverProvidingType = EventHandlerType.ObserverProvidingType
-    public typealias ElementType = ObserverProvidingType.ElementType
+public class Controller<EventHandlerType> : _Controller<EventHandlerType.ElementType> where EventHandlerType : EventHandler {
+    public typealias ElementType = EventHandlerType.ElementType
     public var _eventHandler: EventHandlerType
     public override var eventHandler: AnyEventHandler {
         get {
@@ -77,7 +76,7 @@ public class Controller<EventHandlerType> : _Controller<EventHandlerType.Observe
             _eventHandler = newValue as! EventHandlerType
         }
     }
-    public var applicationObserver: ApplicationObserver<ObserverProvidingType> {
+    public var applicationObserver: ApplicationObserver<EventHandlerType.ElementType> {
         return _eventHandler.applicationObserver
     }
     public required init(eventHandler: EventHandlerType) throws {
@@ -107,7 +106,7 @@ public class Controller<EventHandlerType> : _Controller<EventHandlerType.Observe
         }
 #endif
         let applicationObserver = _eventHandler.applicationObserver
-        let shared = try EventHandlerRegistrar<ObserverProvidingType>.shared()
+        let shared = try EventHandlerRegistrar<ElementType>.shared()
         return try node.children.map { node in
 #if swift(>=4.1)
             if let controller = currentChildrenReuseMap[node] {

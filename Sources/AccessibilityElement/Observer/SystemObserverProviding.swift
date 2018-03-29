@@ -27,18 +27,18 @@ public struct SystemObserverProviding : ObserverProviding {
     public init(processIdentifier: ProcessIdentifier) {
         self.processIdentifier = processIdentifier
     }
-    public mutating func add(element: Element,
+    public mutating func add(element: AnyElement,
                              notification: NSAccessibilityNotificationName,
-                             handler: @escaping (Element, NSAccessibilityNotificationName, [String : Any]?) -> Void) throws -> Int {
-        return try observer().add(element: element.element, notification: notification) { element, notification, info in
+                             handler: @escaping (AnyElement, NSAccessibilityNotificationName, [String : Any]?) -> Void) throws -> Int {
+        return try observer().add(element: (element as! Element).element, notification: notification) { element, notification, info in
             let element = Element(element: element)
             handler(element, notification, Helper.repackage(dictionary: info, element: element))
         }
     }
-    public mutating func remove(element: Element,
+    public mutating func remove(element: AnyElement,
                                 notification: NSAccessibilityNotificationName,
                                 identifier: Int) throws {
-        try observer().remove(element: element.element, notification: notification, identifier: identifier)
+        try observer().remove(element: (element as! Element).element, notification: notification, identifier: identifier)
     }
 }
 

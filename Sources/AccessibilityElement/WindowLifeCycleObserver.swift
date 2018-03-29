@@ -7,15 +7,14 @@
 import Cocoa
 import Signals
 
-public class WindowLifeCycleObserver<ObserverProvidingType> : Runner where ObserverProvidingType : ObserverProviding {
-    public typealias ElementType = ObserverProvidingType.ElementType
-    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
+public class WindowLifeCycleObserver<ElementType> : Runner where ElementType : _Element {
+    public let applicationObserver: ApplicationObserver<ElementType>
     public let element: ElementType
     public var windowsDirty: Bool = false
-    private var windowTokenMap = [ElementType:ApplicationObserver<ObserverProvidingType>.Token]()
+    private var windowTokenMap = [ElementType:ApplicationObserver<ElementType>.Token]()
     private var onWindowCreated: Subscription<(element: ElementType, info: ObserverInfo?)>?
     public init(element: ElementType,
-                applicationObserver: ApplicationObserver<ObserverProvidingType>) {
+                applicationObserver: ApplicationObserver<ElementType>) {
         self.element = element
         self.applicationObserver = applicationObserver
     }
@@ -35,7 +34,9 @@ public class WindowLifeCycleObserver<ObserverProvidingType> : Runner where Obser
                                                                             notification: .uiElementDestroyed) { [weak self] window, _ in
                 self?.destroyed(window: window)
             }
-        } catch {}
+        } catch {
+            
+        }
     }
     public let runningSignal = Signal<Running>()
     public private(set) var running = Running.stopped {

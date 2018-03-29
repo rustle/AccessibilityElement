@@ -7,13 +7,13 @@
 import Cocoa
 import Signals
 
-public final class Application<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
+public final class Application<ElementType> : EventHandler where ElementType : _Element {
     // MARK: EventHandler
     public var output: (([Output.Job.Payload]) -> Void)?
-    public weak var _controller: Controller<Application<ObserverProvidingType>>?
+    public weak var _controller: Controller<Application<ElementType>>?
     public let _node: Node<ElementType>
     public required init(node: Node<ElementType>,
-                         applicationObserver: ApplicationObserver<ObserverProvidingType>) {
+                         applicationObserver: ApplicationObserver<ElementType>) {
         _node = node
         self.applicationObserver = applicationObserver
         focus = ApplicationFocus(applicationObserver: applicationObserver)
@@ -21,20 +21,19 @@ public final class Application<ObserverProvidingType> : EventHandler where Obser
                                                           applicationObserver: applicationObserver)
     }
     // MARK: Focused UI Element
-    private var focus: ApplicationFocus<ObserverProvidingType>
+    private var focus: ApplicationFocus<ElementType>
     private let hierarchy = DefaultHierarchy<ElementType>()
     private let focusedUIElementChangedHandler = DefaultFocusedUIElementChangedHandler()
     public var isFocused: Bool = false
     // MARK: Observers
-    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
+    public let applicationObserver: ApplicationObserver<ElementType>
     private var onFocusedUIElementChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
     private var onFocusedWindowChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
-    private let windowLifeCycleObserver: WindowLifeCycleObserver<ObserverProvidingType>
+    private let windowLifeCycleObserver: WindowLifeCycleObserver<ElementType>
 }
 
 // MARK: EventHandler
 public extension Application {
-    public typealias ElementType = ObserverProvidingType.ElementType
     public var describerRequests: [DescriberRequest] {
         return []
     }

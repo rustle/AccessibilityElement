@@ -13,8 +13,7 @@ public protocol AnySelectionChangeHandler : class {
 }
 
 public protocol SelectionChangeHandler : AnySelectionChangeHandler {
-    associatedtype ObserverProvidingType where ObserverProvidingType : ObserverProviding
-    associatedtype ElementType where ElementType == ObserverProvidingType.ElementType
+    associatedtype ElementType where ElementType : _Element
     associatedtype IndexType
     var element: ElementType { get }
     var previousSelection: Range<Position<IndexType>>? { get set }
@@ -25,7 +24,7 @@ public protocol SelectionChangeHandler : AnySelectionChangeHandler {
                       direction: Navigation<IndexType>.Direction,
                       granularity: Navigation<IndexType>.Granularity) throws -> Range<Position<IndexType>>
     init(element: ElementType,
-         applicationObserver: ApplicationObserver<ObserverProvidingType>)
+         applicationObserver: ApplicationObserver<ElementType>)
 }
 
 public extension SelectionChangeHandler {

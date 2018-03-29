@@ -12,9 +12,9 @@ public func makeSystemApplicationController(processIdentifier: ProcessIdentifier
     var ignored: Node<Element>? = nil
     let node = DefaultHierarchy<Element>().buildHierarchy(from: element, targeting: &ignored)
     let eventHandler: AnyEventHandler?
-    let observerManager = ObserverManager(provider: SystemObserverProviding.provider())
+    let observerManager = ObserverManager<Element>(provider: SystemObserverProviding.provider())
     let applicationObserver = try observerManager.registerObserver(application: element)
-    let shared = try EventHandlerRegistrar<SystemObserverProviding>.shared()
+    let shared = try EventHandlerRegistrar<Element>.shared()
     eventHandler = try? shared.eventHandler(node: node, applicationObserver: applicationObserver)
     return try eventHandler?.makeController() as! _Controller<Element>
 }

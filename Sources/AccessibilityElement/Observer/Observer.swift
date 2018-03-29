@@ -16,14 +16,13 @@ public protocol AnyApplicationObserver {
     
 }
 
-public class ObserverManager<ObserverProvidingType> : AnyObserverManager where ObserverProvidingType : ObserverProviding {
-    public typealias ElementType = ObserverProvidingType.ElementType
-    private var map = [Int : ApplicationObserver<ObserverProvidingType>]()
-    private let provider: (ProcessIdentifier) throws -> ObserverProvidingType
-    public init(provider: @escaping (Int) throws -> ObserverProvidingType) {
+public class ObserverManager<ElementType> : AnyObserverManager where ElementType : _Element {
+    private var map = [Int : ApplicationObserver<ElementType>]()
+    private let provider: (ProcessIdentifier) throws -> ElementType.ObserverProvidingType
+    public init(provider: @escaping (Int) throws -> ElementType.ObserverProvidingType) {
         self.provider = provider
     }
-    public func registerObserver(application: ElementType) throws -> ApplicationObserver<ObserverProvidingType> {
+    public func registerObserver(application: ElementType) throws -> ApplicationObserver<ElementType> {
         let processIdentifier = application.processIdentifier
         guard processIdentifier > 0 else {
             throw ObserverManager.Error.invalidApplication
@@ -31,16 +30,16 @@ public class ObserverManager<ObserverProvidingType> : AnyObserverManager where O
         if let observer = map[processIdentifier] {
             return observer
         }
-        let observer = try ApplicationObserver(processIdentifier: processIdentifier, provider: provider)
+        let observer = try ApplicationObserver<ElementType>(processIdentifier: processIdentifier,
+                                                            provider: provider)
         map[processIdentifier] = observer
         return observer
     }
 }
 
-public class ApplicationObserver<ObserverProvidingType> : AnyApplicationObserver where ObserverProvidingType : ObserverProviding {
-    public typealias ElementType = ObserverProvidingType.ElementType
-    private var _observer: ObserverProvidingType?
-    private var observer: ObserverProvidingType {
+public class ApplicationObserver<ElementType> : AnyApplicationObserver where ElementType : _Element {
+    private var _observer: ElementType.ObserverProvidingType?
+    private var observer: ElementType.ObserverProvidingType {
         get {
             if _observer == nil {
                 _observer = try? provider(processIdentifier)
@@ -51,7 +50,7 @@ public class ApplicationObserver<ObserverProvidingType> : AnyApplicationObserver
             _observer = newValue
         }
     }
-    private let provider: (ProcessIdentifier) throws -> ObserverProvidingType
+    private let provider: (ProcessIdentifier) throws -> ElementType.ObserverProvidingType
     private let processIdentifier: ProcessIdentifier
     private var tokens = Set<Token>()
     public struct Token : Equatable, Hashable {
@@ -65,16 +64,17 @@ public class ApplicationObserver<ObserverProvidingType> : AnyApplicationObserver
         fileprivate let notification: NSAccessibilityNotificationName
         fileprivate let identifier: Int
     }
-    public init(processIdentifier: ProcessIdentifier, provider: @escaping (ProcessIdentifier) throws -> ObserverProvidingType) throws {
+    public init(processIdentifier: ProcessIdentifier,
+                provider: @escaping (ProcessIdentifier) throws -> ElementType.ObserverProvidingType) throws {
         self.processIdentifier = processIdentifier
         self.provider = provider
     }
     deinit {
         stop()
     }
-    private lazy var signalMap = [ElementType:[NSAccessibilityNotificationName:ObserverSignal<ObserverProvidingType>]]()
-    public func signal(element: ObserverProvidingType.ElementType,
-                       notification: NSAccessibilityNotificationName) throws -> ObserverSignal<ObserverProvidingType> {
+    private lazy var signalMap = [ElementType:[NSAccessibilityNotificationName:ObserverSignal<ElementType>]]()
+    public func signal(element: ElementType,
+                       notification: NSAccessibilityNotificationName) throws -> ObserverSignal<ElementType> {
         if let signal = signalMap[element]?[notification] {
             return signal
         }
@@ -87,12 +87,12 @@ public class ApplicationObserver<ObserverProvidingType> : AnyApplicationObserver
         signalMap[element]?[notification] = observerSignal
         return observerSignal
     }
-    public func startObserving(element: ObserverProvidingType.ElementType,
+    public func startObserving(element: ElementType,
                                notification: NSAccessibilityNotificationName,
                                handler: @escaping (ElementType, ObserverInfo?) -> Void) throws -> Token {
         let identifier = try observer.add(element: element,
                                           notification: notification) { element, _, info in
-            handler(element, info)
+            handler(element as! ElementType, info)
         }
         let token = Token(element: element, notification: notification, identifier: identifier)
         tokens.insert(token)
@@ -102,7 +102,7 @@ public class ApplicationObserver<ObserverProvidingType> : AnyApplicationObserver
         if tokens.contains(token) {
             try observer.remove(element: token.element, notification: token.notification, identifier: token.identifier)
         } else {
-            throw ObserverManager<ObserverProvidingType>.Error.invalidToken
+            throw ObserverManager<ElementType>.Error.invalidToken
         }
     }
     public func stop() {

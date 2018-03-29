@@ -10,18 +10,18 @@ fileprivate struct SharedStorage {
     static var registrars = [String:Any]()
 }
 
-public class EventHandlerRegistrar<ObserverProvidingType> where ObserverProvidingType : ObserverProviding {
+public class EventHandlerRegistrar<ElementType> where ElementType : _Element {
     public enum Error : Swift.Error {
         case registrarUnavailable
     }
-    public static func shared() throws -> EventHandlerRegistrar<ObserverProvidingType> {
-        let key = String(describing: ObserverProvidingType.self)
+    public static func shared() throws -> EventHandlerRegistrar<ElementType> {
+        let key = String(describing: ElementType.ObserverProvidingType.self)
         guard let registrar = SharedStorage.registrars[key] else {
-            let registrar = EventHandlerRegistrar<ObserverProvidingType>()
+            let registrar = EventHandlerRegistrar<ElementType>()
             SharedStorage.registrars[key] = registrar
             return registrar
         }
-        return (registrar as! EventHandlerRegistrar<ObserverProvidingType>)
+        return (registrar as! EventHandlerRegistrar<ElementType>)
     }
     private var map = [Key:AnyEventHandler.Type]()
     private struct Key : Hashable {
@@ -67,8 +67,8 @@ public class EventHandlerRegistrar<ObserverProvidingType> where ObserverProvidin
         }
         map[key] = eventHandler
     }
-    public func eventHandler(node: Node<ObserverProvidingType.ElementType>,
-                             applicationObserver: ApplicationObserver<ObserverProvidingType>) throws -> AnyEventHandler {
+    public func eventHandler(node: Node<ElementType>,
+                             applicationObserver: ApplicationObserver<ElementType>) throws -> AnyEventHandler {
         guard let role = try? node.element.role() else {
             return DefaultEventHandler(node: node,
                                        applicationObserver: applicationObserver)

@@ -7,8 +7,7 @@
 import Foundation
 import os.log
 
-public struct Toggle<ObserverProvidingType> : EventHandler where ObserverProvidingType : ObserverProviding {
-    public typealias ElementType = ObserverProvidingType.ElementType
+public struct Toggle<ElementType> : EventHandler where ElementType : _Element {
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Fallthrough(required: true, attributes: [.titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.stringValue(nil), .title, .description])), .title, .description, .stringValue(nil)]),
@@ -17,10 +16,11 @@ public struct Toggle<ObserverProvidingType> : EventHandler where ObserverProvidi
         ]
         return requests
     }
-    public weak var _controller: Controller<Toggle<ObserverProvidingType>>?
+    public weak var _controller: Controller<Toggle<ElementType>>?
     public let _node: Node<ElementType>
-    public let applicationObserver: ApplicationObserver<ObserverProvidingType>
-    public init(node: Node<ElementType>, applicationObserver: ApplicationObserver<ObserverProvidingType>) {
+    public let applicationObserver: ApplicationObserver<ElementType>
+    public init(node: Node<ElementType>,
+                applicationObserver: ApplicationObserver<ElementType>) {
         _node = node
         self.applicationObserver = applicationObserver
     }

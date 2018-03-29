@@ -9,15 +9,15 @@ import Signals
 
 public typealias ObserverInfo = [String:Any]
 
-public final class ObserverSignal<ObserverProvidingType> : AnySignal where ObserverProvidingType : ObserverProviding {
-    public typealias T = (element: ObserverProvidingType.ElementType, info: ObserverInfo?)
-    private weak var observer: ApplicationObserver<ObserverProvidingType>?
-    private let element: ObserverProvidingType.ElementType
+public final class ObserverSignal<ElementType> : AnySignal where ElementType : _Element {
+    public typealias T = (element: ElementType, info: ObserverInfo?)
+    private weak var observer: ApplicationObserver<ElementType>?
+    private let element: ElementType
     private let notification: NSAccessibilityNotificationName
-    private var token: ApplicationObserver<ObserverProvidingType>.Token?
-    init(element: ObserverProvidingType.ElementType,
+    private var token: ApplicationObserver<ElementType>.Token?
+    init(element: ElementType,
          notification: NSAccessibilityNotificationName,
-         observer: ApplicationObserver<ObserverProvidingType>) {
+         observer: ApplicationObserver<ElementType>) {
         self.element = element
         self.notification = notification
         self.observer = observer

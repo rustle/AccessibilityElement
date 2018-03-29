@@ -15,10 +15,10 @@ public enum FocusedUIElementChangedHandlerError : Error {
 public protocol FocusedUIElementChangedHandler {
     func findContainer<ElementType, HierarchyType>(element: ElementType,
                                                    hierarchy: HierarchyType) throws -> ElementType where HierarchyType : Hierarchy, HierarchyType.ElementType == ElementType
-    func focusChanged<ObserverProvidingType, HierarchyType>(element: ObserverProvidingType.ElementType,
-                                                            hierarchy: HierarchyType,
-                                                            focus: ApplicationFocus<ObserverProvidingType>,
-                                                            applicationController: _Controller<ObserverProvidingType.ElementType>) -> String? where ObserverProvidingType : ObserverProviding, HierarchyType : Hierarchy, HierarchyType.ElementType == ObserverProvidingType.ElementType
+    func focusChanged<ElementType, HierarchyType>(element: ElementType,
+                                                  hierarchy: HierarchyType,
+                                                  focus: ApplicationFocus<ElementType>,
+                                                  applicationController: _Controller<ElementType>) -> String? where HierarchyType : Hierarchy, HierarchyType.ElementType == ElementType 
 }
 
 public extension FocusedUIElementChangedHandler {
@@ -38,15 +38,15 @@ public extension FocusedUIElementChangedHandler {
         }
         throw FocusedUIElementChangedHandlerError.containerSearchFailed
     }
-    public func focusChanged<ObserverProvidingType, HierarchyType>(element: ObserverProvidingType.ElementType,
-                                                                   hierarchy: HierarchyType,
-                                                                   focus: ApplicationFocus<ObserverProvidingType>,
-                                                                   applicationController: _Controller<ObserverProvidingType.ElementType>) -> String? where ObserverProvidingType : ObserverProviding, HierarchyType : Hierarchy, HierarchyType.ElementType == ObserverProvidingType.ElementType {
+    public func focusChanged<ElementType, HierarchyType>(element: ElementType,
+                                                         hierarchy: HierarchyType,
+                                                         focus: ApplicationFocus<ElementType>,
+                                                         applicationController: _Controller<ElementType>) -> String? where HierarchyType : Hierarchy, HierarchyType.ElementType == ElementType {
         do {
             let container = try findContainer(element: element,
                                               hierarchy: hierarchy)
-            var focusedNode: Node<ObserverProvidingType.ElementType>? = Node(element: element,
-                                                                             role: .include)
+            var focusedNode: Node<ElementType>? = Node(element: element,
+                                                       role: .include)
             let node = hierarchy.buildHierarchy(from: container,
                                                 targeting: &focusedNode)
             try focus.set(focusedContainerNode: node,
