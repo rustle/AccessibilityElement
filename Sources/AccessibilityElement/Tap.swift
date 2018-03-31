@@ -23,6 +23,22 @@ public class Tap {
         public var keyCode: CGKeyCode {
             return CGKeyCode(cgEvent?.getIntegerValueField(.keyboardEventKeycode) ?? 0)
         }
+        public var characters: String? {
+            guard let event = cgEvent else {
+                return nil
+            }
+            var count = 0
+            event.keyboardGetUnicodeString(maxStringLength: 0, actualStringLength: &count, unicodeString: nil)
+            guard count > 0 else {
+                return nil
+            }
+            let bufferCapacity = count * MemoryLayout<UniChar>.size
+            let characters = UnsafeMutablePointer<UniChar>.allocate(capacity: bufferCapacity)
+            event.keyboardGetUnicodeString(maxStringLength: count, actualStringLength: &count, unicodeString: characters)
+            let value = String(utf16CodeUnits: characters, count: count)
+            characters.deallocate(capacity: bufferCapacity)
+            return value
+        }
     }
     public enum Placement {
         case head
