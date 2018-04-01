@@ -36,7 +36,11 @@ public class Tap {
             let characters = UnsafeMutablePointer<UniChar>.allocate(capacity: bufferCapacity)
             event.keyboardGetUnicodeString(maxStringLength: count, actualStringLength: &count, unicodeString: characters)
             let value = String(utf16CodeUnits: characters, count: count)
+#if swift(>=4.1)
+            characters.deallocate()
+#else
             characters.deallocate(capacity: bufferCapacity)
+#endif
             return value
         }
     }
