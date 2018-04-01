@@ -96,7 +96,7 @@ public enum _ElementError : Swift.Error {
 }
 
 public protocol _Element : AnyElement, TreeElement, Hashable {
-    associatedtype ObserverProvidingType : ObserverProviding where ObserverProvidingType.ElementType == Self
+    associatedtype ObserverProvidingType : ObserverProviding
     ///
     static var systemWide: Self { get }
     ///
