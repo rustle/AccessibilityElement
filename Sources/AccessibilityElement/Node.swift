@@ -49,7 +49,7 @@ extension Node where ElementType : Equatable {
         return lhs._element == rhs._element
     }
 }
-public struct HashableNode<ElementType> : Hashable, TreeElement where ElementType : _Element {
+public struct HashableNode<ElementType> : Hashable, TreeElement where ElementType : Element {
     public let node: Node<ElementType>
     public init(node: Node<ElementType>) {
         self.node = node

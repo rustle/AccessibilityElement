@@ -7,7 +7,7 @@
 import Cocoa
 import Signals
 
-public class IntegerIndexSelectionChangeHandler<ElementType> : SelectionChangeHandler where ElementType : _Element {
+public class IntegerIndexSelectionChangeHandler<ElementType> : SelectionChangeHandler where ElementType : Element {
     public typealias IndexType = Int
     public let element: ElementType
     public let applicationObserver: ApplicationObserver<ElementType>

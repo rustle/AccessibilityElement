@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct TextField<ElementType> : EventHandler where ElementType : _Element {
+public struct TextField<ElementType> : EventHandler where ElementType : Element {
     public var describerRequests: [DescriberRequest] = {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Single(required: true, attribute: .stringValue(nil)),

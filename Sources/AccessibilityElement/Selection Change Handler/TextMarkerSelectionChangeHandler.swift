@@ -7,7 +7,7 @@
 import Cocoa
 import Signals
 
-public class TextMarkerSelectionChangeHandler<ElementType> : SelectionChangeHandler where ElementType : _Element {
+public class TextMarkerSelectionChangeHandler<ElementType> : SelectionChangeHandler where ElementType : Element {
     public typealias IndexType = AXTextMarker
     public let element: ElementType
     public let applicationObserver: ApplicationObserver<ElementType>

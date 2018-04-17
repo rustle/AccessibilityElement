@@ -11,21 +11,21 @@ public enum FocusRebuildStrategyError : Error {
     case invalidTarget
 }
 
-public typealias ControllerProvider<ElementType> = (Node<ElementType>) throws -> _Controller<ElementType> where ElementType : _Element
+public typealias ControllerProvider<ElementType> = (Node<ElementType>) throws -> _Controller<ElementType> where ElementType : Element
 
-public struct FocusRebuildTarget<ElementType> where ElementType : _Element {
+public struct FocusRebuildTarget<ElementType> where ElementType : Element {
     public internal(set) var container: Node<ElementType>?
     public internal(set) var target: Node<ElementType>?
 }
 
 public protocol FocusRebuildStrategy {
-    associatedtype ElementType where ElementType : _Element
+    associatedtype ElementType where ElementType : Element
     func move(focus: inout ApplicationFocus<ElementType>.FocusState,
               to target: FocusRebuildTarget<ElementType>,
               controllerProvider: ControllerProvider<ElementType>) throws
 }
 
-public struct CompositeRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : _Element {
+public struct CompositeRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
     private struct CompositeEntry : FocusRebuildStrategy {
         let move: (inout ApplicationFocus<ElementType>.FocusState,
                    FocusRebuildTarget<ElementType>,
@@ -58,7 +58,7 @@ public struct CompositeRebuildStrategy<ElementType> : FocusRebuildStrategy where
     }
 }
 
-public struct FullResetRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : _Element {
+public struct FullResetRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
     public func move(focus: inout ApplicationFocus<ElementType>.FocusState,
                      to target: FocusRebuildTarget<ElementType>,
                      controllerProvider: ControllerProvider<ElementType>) throws {
@@ -69,7 +69,7 @@ public struct FullResetRebuildStrategy<ElementType> : FocusRebuildStrategy where
     }
 }
 
-public struct ContainerResetRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : _Element {
+public struct ContainerResetRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
     public func move(focus: inout ApplicationFocus<ElementType>.FocusState,
                      to target: FocusRebuildTarget<ElementType>,
                      controllerProvider: ControllerProvider<ElementType>) throws {
@@ -80,7 +80,7 @@ public struct ContainerResetRebuildStrategy<ElementType> : FocusRebuildStrategy 
     }
 }
 
-public struct BasicRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : _Element {
+public struct BasicRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
     public func move(focus: inout ApplicationFocus<ElementType>.FocusState,
                      to target: FocusRebuildTarget<ElementType>,
                      controllerProvider: ControllerProvider<ElementType>) throws {
@@ -136,7 +136,7 @@ public struct BasicRebuildStrategy<ElementType> : FocusRebuildStrategy where Ele
     }
 }
 
-public struct FullRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : _Element {
+public struct FullRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
     public func move(focus: inout ApplicationFocus<ElementType>.FocusState,
                      to target: FocusRebuildTarget<ElementType>,
                      controllerProvider: ControllerProvider<ElementType>) throws {
@@ -159,7 +159,7 @@ public struct FullRebuildStrategy<ElementType> : FocusRebuildStrategy where Elem
     }
 }
 
-public struct SameContainerRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : _Element {
+public struct SameContainerRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
     public func move(focus: inout ApplicationFocus<ElementType>.FocusState,
                      to target: FocusRebuildTarget<ElementType>,
                      controllerProvider: ControllerProvider<ElementType>) throws {
@@ -188,7 +188,7 @@ public struct SameContainerRebuildStrategy<ElementType> : FocusRebuildStrategy w
     }
 }
 
-public class ApplicationFocus<ElementType> where ElementType : _Element {
+public class ApplicationFocus<ElementType> where ElementType : Element {
     public enum Error : Swift.Error {
         case focusFailed(Swift.Error)
         case typeMismatch

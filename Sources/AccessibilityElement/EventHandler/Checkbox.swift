@@ -7,7 +7,7 @@
 import Foundation
 import os.log
 
-public struct Checkbox<ElementType> : EventHandler where ElementType : _Element {
+public struct Checkbox<ElementType> : EventHandler where ElementType : Element {
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Fallthrough(required: true, attributes: [.titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.stringValue(nil), .title, .description])), .title, .description, .stringValue(nil)]),

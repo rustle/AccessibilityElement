@@ -13,7 +13,7 @@ public protocol AnySelectionChangeHandler : class {
 }
 
 public protocol SelectionChangeHandler : AnySelectionChangeHandler {
-    associatedtype ElementType where ElementType : _Element
+    associatedtype ElementType where ElementType : Element
     associatedtype IndexType
     var element: ElementType { get }
     var previousSelection: Range<Position<IndexType>>? { get set }

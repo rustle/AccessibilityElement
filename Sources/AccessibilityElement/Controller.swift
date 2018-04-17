@@ -20,7 +20,7 @@ public protocol AnyController : class {
 }
 
 ///
-public class _Controller<ElementType> : AnyController where ElementType : _Element {
+public class _Controller<ElementType> : AnyController where ElementType : Element {
     ///
     public weak var applicationController: AnyController? {
         get {

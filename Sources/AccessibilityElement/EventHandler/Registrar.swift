@@ -10,7 +10,7 @@ fileprivate struct SharedStorage {
     static var registrars = [String:Any]()
 }
 
-public class EventHandlerRegistrar<ElementType> where ElementType : _Element {
+public class EventHandlerRegistrar<ElementType> where ElementType : Element {
     public enum Error : Swift.Error {
         case registrarUnavailable
     }

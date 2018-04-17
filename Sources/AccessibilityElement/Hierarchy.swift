@@ -18,7 +18,7 @@ public enum HierarchyError : Error {
 }
 
 public protocol Hierarchy {
-    associatedtype ElementType : _Element
+    associatedtype ElementType : Element
     func classify(_ element: ElementType) -> HierarchyRole
     func buildHierarchy(from element: ElementType,
                         targeting target: inout Node<ElementType>?) -> Node<ElementType>
@@ -44,7 +44,7 @@ public extension Hierarchy {
     }
 }
 
-public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : _Element {
+public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : Element {
     let containerRoles = Set([
         .application,
         .window,

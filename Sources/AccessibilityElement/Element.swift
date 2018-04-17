@@ -91,11 +91,7 @@ public protocol AnyElement {
     var processIdentifier: ProcessIdentifier { get }
 }
 
-public enum _ElementError : Swift.Error {
-    case unimplemented
-}
-
-public protocol _Element : AnyElement, TreeElement, Hashable {
+public protocol Element : AnyElement, TreeElement, Hashable {
     associatedtype ObserverProvidingType : ObserverProviding
     ///
     static var systemWide: Self { get }
@@ -117,7 +113,7 @@ public protocol _Element : AnyElement, TreeElement, Hashable {
     func focusedWindow() throws -> Self
 }
 
-public extension _Element {
+public extension Element {
     public func up() throws -> Self {
         return try parent()
     }
@@ -156,58 +152,58 @@ public extension _Element {
     }
     
     public func titleElement() throws -> Self {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func parent() throws -> Self {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func children() throws -> [Self] {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func topLevelElement() throws -> Self {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func applicationFocusedElement() throws -> Self {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func role() throws -> NSAccessibilityRole {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func roleDescription() throws -> String {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func subrole() throws -> NSAccessibilitySubrole {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func value() throws -> Any {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func string<IndexType>(range: Range<Position<IndexType>>) throws -> String {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func attributedString<IndexType>(range: Range<Position<IndexType>>) throws -> AttributedString {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func numberOfCharacters() throws -> Int {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func description() throws -> String {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func title() throws -> String {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func isKeyboardFocused() throws -> Bool {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func frame() throws -> Frame {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func caretBrowsingEnabled() throws -> Bool {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func set(caretBrowsing: Bool) throws {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func range<IndexType>(unorderedPositions: (first: Position<IndexType>, second: Position<IndexType>)) throws -> Range<Position<IndexType>> {
         if IndexType.self == Int.self {
@@ -219,50 +215,50 @@ public extension _Element {
             }
             return Range(uncheckedBounds: (unorderedPositions.first, unorderedPositions.second))
         }
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func enhancedUserInterface() throws -> Bool {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func set(enhancedUserInterface: Bool) throws {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func windows() throws -> [Self] {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func focusedWindow() throws ->  Self {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func url() throws -> URL {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func selectedTextRanges() throws -> [Range<Position<Int>>] {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func selectedTextMarkerRanges() throws -> [Range<Position<AXTextMarker>>] {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func set(selectedTextMarkerRanges: [Range<Position<AXTextMarker>>]) throws {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func line<IndexType>(position: Position<IndexType>) throws -> Int {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func range<IndexType>(line: Int) throws -> Range<Position<IndexType>> {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func first<IndexType>() throws -> Position<IndexType> {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func last<IndexType>() throws -> Position<IndexType> {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public var processIdentifier: ProcessIdentifier {
         return 0
     }
 }
 
-public struct SystemElement : _Element {
+public struct SystemElement : Element {
     public typealias ObserverProvidingType = SystemObserverProviding
     public static var systemWide: SystemElement = {
         SystemElement(element: AXUIElement.systemWide())
@@ -450,19 +446,19 @@ public struct SystemElement : _Element {
     }
     public func first<IndexType>() throws -> Position<IndexType> {
         if IndexType.self == Int.self {
-            throw _ElementError.unimplemented
+            throw ElementError.notImplemented
         } else if IndexType.self == AXTextMarker.self {
             return try position(attribute: .startTextMarker) as! Position<IndexType>
         }
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func last<IndexType>() throws -> Position<IndexType> {
         if IndexType.self == Int.self {
-            throw _ElementError.unimplemented
+            throw ElementError.notImplemented
         } else if IndexType.self == AXTextMarker.self {
             return try position(attribute: .endTextMarker) as! Position<IndexType>
         }
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
     public func enhancedUserInterface() throws -> Bool {
         return try bool(attribute: NSAccessibilityAttributeName.enhancedUserInterface)
@@ -474,7 +470,7 @@ public struct SystemElement : _Element {
         return [try textMarkerRange(attribute: .selectedTextMarkerRange)]
     }
     public func set(selectedTextMarkerRanges: [Range<Position<AXTextMarker>>]) throws {
-        throw _ElementError.unimplemented
+        throw ElementError.notImplemented
     }
 
     public func frame() throws -> Frame {

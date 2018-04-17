@@ -7,7 +7,7 @@
 import Cocoa
 import Signals
 
-public struct WebArea<ElementType> : EventHandler where ElementType : _Element {
+public struct WebArea<ElementType> : EventHandler where ElementType : Element {
     public var describerRequests: [DescriberRequest] {
         return []
     }

@@ -16,7 +16,7 @@ public protocol AnyApplicationObserver {
     
 }
 
-public class ObserverManager<ElementType> : AnyObserverManager where ElementType : _Element {
+public class ObserverManager<ElementType> : AnyObserverManager where ElementType : Element {
     private var map = [Int : ApplicationObserver<ElementType>]()
     private let provider: (ProcessIdentifier) throws -> ElementType.ObserverProvidingType
     public init(provider: @escaping (Int) throws -> ElementType.ObserverProvidingType) {
@@ -37,7 +37,7 @@ public class ObserverManager<ElementType> : AnyObserverManager where ElementType
     }
 }
 
-public class ApplicationObserver<ElementType> : AnyApplicationObserver where ElementType : _Element {
+public class ApplicationObserver<ElementType> : AnyApplicationObserver where ElementType : Element {
     private var _observer: ElementType.ObserverProvidingType?
     private var observer: ElementType.ObserverProvidingType {
         get {

@@ -27,7 +27,7 @@ public protocol AnyEventHandler {
 }
 
 public protocol EventHandler : AnyEventHandler {
-    associatedtype ElementType : _Element
+    associatedtype ElementType : Element
     var _node: Node<ElementType> { get }
     var _controller: Controller<Self>? { get set }
     var applicationObserver: ApplicationObserver<ElementType> { get }

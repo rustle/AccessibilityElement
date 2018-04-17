@@ -11,7 +11,7 @@ public protocol DescriberRequest {
     
 }
 
-public class Describer<ElementType> where ElementType : _Element {
+public class Describer<ElementType> where ElementType : Element {
     public enum Attribute {
         case role
         case roleDescription

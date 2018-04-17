@@ -7,7 +7,7 @@
 import Cocoa
 import Signals
 
-public class FocusObserver<ElementType> : Runner where ElementType : _Element {
+public class FocusObserver<ElementType> : Runner where ElementType : Element {
     public let spotlightObserver: FocusTheftObserver<ElementType>
     public init(observerManager: ObserverManager<ElementType>) {
         spotlightObserver = FocusTheftObserver(bundleIdentifier: .spotlight,

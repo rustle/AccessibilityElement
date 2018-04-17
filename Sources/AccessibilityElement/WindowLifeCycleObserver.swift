@@ -7,7 +7,7 @@
 import Cocoa
 import Signals
 
-public class WindowLifeCycleObserver<ElementType> : Runner where ElementType : _Element {
+public class WindowLifeCycleObserver<ElementType> : Runner where ElementType : Element {
     public let applicationObserver: ApplicationObserver<ElementType>
     public let element: ElementType
     public var windowsDirty: Bool = false

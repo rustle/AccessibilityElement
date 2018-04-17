@@ -9,7 +9,7 @@ import Signals
 
 public typealias ObserverInfo = [String:Any]
 
-public final class ObserverSignal<ElementType> : AnySignal where ElementType : _Element {
+public final class ObserverSignal<ElementType> : AnySignal where ElementType : Element {
     public typealias T = (element: ElementType, info: ObserverInfo?)
     private weak var observer: ApplicationObserver<ElementType>?
     private let element: ElementType

@@ -7,7 +7,7 @@
 import Cocoa
 import Signals
 
-public final class Application<ElementType> : EventHandler where ElementType : _Element {
+public final class Application<ElementType> : EventHandler where ElementType : Element {
     // MARK: EventHandler
     public var output: (([Output.Job.Payload]) -> Void)?
     public weak var _controller: Controller<Application<ElementType>>?

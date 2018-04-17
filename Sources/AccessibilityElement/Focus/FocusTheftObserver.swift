@@ -9,7 +9,7 @@ import Signals
 
 /// Infer focus changes indirectly via accessibility notifications on applications that take focus, but don't become frontmost.
 /// Known culprits are Spotlight and NotificationCenter
-public class FocusTheftObserver<ElementType> : Runner where ElementType : _Element {
+public class FocusTheftObserver<ElementType> : Runner where ElementType : Element {
     public static func systemApplicationLookup(_ bundleIdentifier: BundleIdentifier) throws -> ProcessIdentifier {
         let applications = NSWorkspace.shared.runningApplications;
         let index = applications.index() { application in

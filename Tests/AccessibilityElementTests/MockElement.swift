@@ -7,7 +7,7 @@
 import Cocoa
 @testable import AccessibilityElement
 
-func compare<T>(lhs: T, rhs: Node<T>) -> Bool where T : _Element {
+func compare<T>(lhs: T, rhs: Node<T>) -> Bool where T : Element {
     var flattenedLHS = [T]()
     lhs.walk { element in
         flattenedLHS.append(element)
@@ -48,7 +48,7 @@ func tree(_ element: MockElement, childrenProvider: (() -> [MockElement])?) -> M
     return element
 }
 
-final class MockElement : _Element {
+final class MockElement : Element {
     typealias ObserverProvidingType = MockObserverProviding
     
     static var systemWide: MockElement {
