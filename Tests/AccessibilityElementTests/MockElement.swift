@@ -49,6 +49,8 @@ func tree(_ element: MockElement, childrenProvider: (() -> [MockElement])?) -> M
 }
 
 final class MockElement : _Element {
+    typealias ObserverProvidingType = MockObserverProviding
+    
     static var systemWide: MockElement {
         fatalError()
     }

@@ -18,15 +18,12 @@ class MockObserverProviding : ObserverProviding {
     init() {
         
     }
-    func add(element: MockElement,
-                      notification: NSAccessibilityNotificationName,
-                      handler: @escaping (MockElement, NSAccessibilityNotificationName, [String : Any]?) -> Void) throws -> Int {
-        self.handler = handler
+    func add(element: AnyElement, notification: NSAccessibilityNotificationName, handler: @escaping (AnyElement, NSAccessibilityNotificationName, [String : Any]?) -> Void) throws -> Int {
+        self.handler = handler as (MockElement, NSAccessibilityNotificationName, [String : Any]?) -> Void
         return 2
     }
-    func remove(element: MockElement,
-                         notification: NSAccessibilityNotificationName,
-                         identifier: Int) throws {
+    
+    func remove(element: AnyElement, notification: NSAccessibilityNotificationName, identifier: Int) throws {
         self.handler = nil
     }
     func fire(element: MockElement,
@@ -38,7 +35,7 @@ class MockObserverProviding : ObserverProviding {
 
 class ObserverTests: XCTestCase {
     var provider: MockObserverProviding?
-    var observerManager: ObserverManager<MockObserverProviding>?
+    var observerManager: ObserverManager<MockElement>?
     override func setUp() {
         super.setUp()
         let provider = MockObserverProviding()
