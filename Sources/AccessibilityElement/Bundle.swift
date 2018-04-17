@@ -8,15 +8,15 @@ import Foundation
 
 public func makeSystemApplicationController(processIdentifier: ProcessIdentifier) throws -> AnyController {
     let uiElement = AXUIElement.application(processIdentifier: processIdentifier)
-    let element = Element(element: uiElement)
-    var ignored: Node<Element>? = nil
-    let node = DefaultHierarchy<Element>().buildHierarchy(from: element, targeting: &ignored)
+    let element = SystemElement(element: uiElement)
+    var ignored: Node<SystemElement>? = nil
+    let node = DefaultHierarchy<SystemElement>().buildHierarchy(from: element, targeting: &ignored)
     let eventHandler: AnyEventHandler?
-    let observerManager = ObserverManager<Element>(provider: SystemObserverProviding.provider())
+    let observerManager = ObserverManager<SystemElement>(provider: SystemObserverProviding.provider())
     let applicationObserver = try observerManager.registerObserver(application: element)
-    let shared = try EventHandlerRegistrar<Element>.shared()
+    let shared = try EventHandlerRegistrar<SystemElement>.shared()
     eventHandler = try? shared.eventHandler(node: node, applicationObserver: applicationObserver)
-    return try eventHandler?.makeController() as! _Controller<Element>
+    return try eventHandler?.makeController() as! _Controller<SystemElement>
 }
 
 public protocol AccessibilityBundle : class {

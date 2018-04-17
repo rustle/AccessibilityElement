@@ -128,7 +128,7 @@ fileprivate struct TextMarkerNavigationKeys {
 
 public func _ProbablyChromiumNavigationForRichTextMarkerChangeNotification(info: [String:Any],
                                                                            element: AnyElement) -> Navigation<AXTextMarker>? {
-    let element = info[TextMarkerNavigationKeys.textChangeElement] as? Element
+    let element = info[TextMarkerNavigationKeys.textChangeElement] as? SystemElement
     let selection = info[TextMarkerNavigationKeys.selectedTextMarkerRange] as? Range<Position<AXTextMarker>>
     return Navigation<AXTextMarker>(element: element,
                                     selection: selection,
@@ -192,7 +192,7 @@ public func NavigationForRichTextMarkerChangeNotification(info: [String:Any],
     case .all:
         granularity = .all
     }
-    let element = info[TextMarkerNavigationKeys.textChangeElement] as? Element
+    let element = info[TextMarkerNavigationKeys.textChangeElement] as? SystemElement
     let selection = info[TextMarkerNavigationKeys.selectedTextMarkerRange] as? Range<Position<AXTextMarker>>
     return Navigation<AXTextMarker>(element: element,
                                     selection: selection,

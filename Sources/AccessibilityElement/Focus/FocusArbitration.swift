@@ -16,10 +16,10 @@ public class FocusArbitrator {
         case nilBundleIdentifier
     }
     public static func systemFocusedApplicationElement() throws -> (ProcessIdentifier, BundleIdentifier) {
-        func systemFocus() throws -> Element {
+        func systemFocus() throws -> SystemElement {
             let value = try AXUIElement.systemWide().value(attribute: NSAccessibilityAttributeName(rawValue: "AXFocusedApplication")) as CFTypeRef
             if CFGetTypeID(value) == AXUIElement.typeID {
-                return Element(element: value as! AXUIElement)
+                return SystemElement(element: value as! AXUIElement)
             }
             throw AccessibilityError.typeMismatch
         }
@@ -31,10 +31,10 @@ public class FocusArbitrator {
             }
             return nil
         }
-        func systemFocus(timeout milliseconds: Int) throws -> Element {
+        func systemFocus(timeout milliseconds: Int) throws -> SystemElement {
             let group = DispatchGroup()
             group.enter()
-            var focusedApplication: Element?
+            var focusedApplication: SystemElement?
             DispatchQueue.global().async {
                 do {
                     focusedApplication = try systemFocus()

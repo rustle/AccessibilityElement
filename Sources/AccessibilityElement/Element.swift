@@ -262,13 +262,13 @@ public extension _Element {
     }
 }
 
-public struct Element : _Element {
+public struct SystemElement : _Element {
     public typealias ObserverProvidingType = SystemObserverProviding
-    public static var systemWide: Element = {
-        Element(element: AXUIElement.systemWide())
+    public static var systemWide: SystemElement = {
+        SystemElement(element: AXUIElement.systemWide())
     }()
-    public static func application(processIdentifier: ProcessIdentifier) -> Element {
-        return Element(element: AXUIElement.application(processIdentifier: processIdentifier))
+    public static func application(processIdentifier: ProcessIdentifier) -> SystemElement {
+        return SystemElement(element: AXUIElement.application(processIdentifier: processIdentifier))
     }
     let element: AXUIElement
     public init(element: AXUIElement) {
@@ -311,20 +311,20 @@ public struct Element : _Element {
     private func int(attribute: NSAccessibilityAttributeName) throws -> Int {
         return try number(attribute: attribute).intValue
     }
-    private func element(attribute: NSAccessibilityAttributeName) throws -> Element {
+    private func element(attribute: NSAccessibilityAttributeName) throws -> SystemElement {
         let value = try element.value(attribute: attribute)
         guard CFGetTypeID(value as CFTypeRef) == AXUIElementGetTypeID() else {
             throw AccessibilityError.typeMismatch
         }
-        return Element(element: value as! AXUIElement)
+        return SystemElement(element: value as! AXUIElement)
     }
-    private func elements(attribute: NSAccessibilityAttributeName) throws -> [Element] {
+    private func elements(attribute: NSAccessibilityAttributeName) throws -> [SystemElement] {
         let value = try element.value(attribute: attribute)
         guard let elements = value as? [AXUIElement]  else {
             throw AccessibilityError.typeMismatch
         }
         return elements.map() { element in
-            return Element(element: element)
+            return SystemElement(element: element)
         }
     }
     private func range(attribute: NSAccessibilityAttributeName) throws -> Range<Int> {
@@ -403,25 +403,25 @@ public struct Element : _Element {
     public func title() throws -> String {
         return try string(attribute: .title)
     }
-    public func titleElement() throws -> Element {
+    public func titleElement() throws -> SystemElement {
         return try element(attribute: .titleUIElement)
     }
     public func isKeyboardFocused() throws -> Bool {
         return try bool(attribute: .focused)
     }
-    public func parent() throws -> Element {
+    public func parent() throws -> SystemElement {
         return try element(attribute: .parent)
     }
-    public func children() throws -> [Element] {
+    public func children() throws -> [SystemElement] {
         return try elements(attribute: .children)
     }
     public func numberOfCharacters() throws -> Int {
         return try int(attribute: .numberOfCharacters)
     }
-    public func topLevelElement() throws -> Element {
+    public func topLevelElement() throws -> SystemElement {
         return try element(attribute: .topLevelUIElement)
     }
-    public func applicationFocusedElement() throws -> Element {
+    public func applicationFocusedElement() throws -> SystemElement {
         return try element(attribute: .focusedUIElement)
     }
     public func caretBrowsingEnabled() throws -> Bool {
@@ -486,13 +486,13 @@ public struct Element : _Element {
     }
 }
 
-extension Element : Equatable {
-    public static func ==(lhs: Element, rhs: Element) -> Bool {
+extension SystemElement : Equatable {
+    public static func ==(lhs: SystemElement, rhs: SystemElement) -> Bool {
         return CFEqual(lhs.element, rhs.element)
     }
 }
 
-extension Element : Hashable {
+extension SystemElement : Hashable {
     public var hashValue: Int {
         return Int(CFHash(element))
     }
@@ -501,7 +501,7 @@ extension Element : Hashable {
 fileprivate let IncludeAttributesInDebug = false
 fileprivate let IncludeParameterizedAttributesInDebug = false
 
-extension Element : CustomDebugStringConvertible {
+extension SystemElement : CustomDebugStringConvertible {
     public var debugDescription: String {
         var components = [String]()
         #if IncludeAttributesInDebug
@@ -514,11 +514,11 @@ extension Element : CustomDebugStringConvertible {
             components.append(contentsOf: parameterizedAttributes.map({ $0.rawValue }))
         }
         #endif
-        let describer = Describer<Element>()
+        let describer = Describer<SystemElement>()
         let requests: [DescriberRequest] = [
-            Describer<Element>.Single(required: true, attribute: .role),
-            Describer<Element>.Single(required: false, attribute: .subrole),
-            Describer<Element>.Fallthrough(required: false, attributes: [.title, .description, .stringValue(30), .titleElement(Describer<Element>.Fallthrough(required: true, attributes: [.title, .description, .stringValue(30)]))])
+            Describer<SystemElement>.Single(required: true, attribute: .role),
+            Describer<SystemElement>.Single(required: false, attribute: .subrole),
+            Describer<SystemElement>.Fallthrough(required: false, attributes: [.title, .description, .stringValue(30), .titleElement(Describer<SystemElement>.Fallthrough(required: true, attributes: [.title, .description, .stringValue(30)]))])
         ]
         do {
             let values = try describer.describe(element: self, requests: requests)
@@ -529,12 +529,12 @@ extension Element : CustomDebugStringConvertible {
             }
             return components.joined(separator: ", ")
         } catch {
-            return "<Element>"
+            return "<SystemElement>"
         }
     }
 }
 
-extension Element : CustomDebugDictionaryConvertible {
+extension SystemElement : CustomDebugDictionaryConvertible {
     public var debugInfo: [String:CustomDebugStringConvertible] {
         var info = [String:CustomDebugStringConvertible]()
         #if IncludeAttributesInDebug

@@ -287,16 +287,16 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
     public mutating func set(shadow: Bool?, range: Range<Int>) {
         set(key: Key.shadow, range: range, bool: shadow)
     }
-    public func attachment(at: Int) -> AccessibilityElement.Element? {
+    public func attachment(at: Int) -> SystemElement? {
         return element(Key.attachment, at: at)
     }
-    public mutating func set(attachment: AccessibilityElement.Element?, range: Range<Int>) {
+    public mutating func set(attachment: SystemElement?, range: Range<Int>) {
         set(key: Key.attachment, range: range, element: attachment)
     }
-    public func link(at: Int) -> Element? {
+    public func link(at: Int) -> SystemElement? {
         return element(Key.link, at: at)
     }
-    public mutating func set(link: Element?, range: Range<Int>) {
+    public mutating func set(link: SystemElement?, range: Range<Int>) {
         set(key: Key.link, range: range, element: link)
     }
     public func naturalLanguage(at: Int) -> String? {
@@ -416,16 +416,16 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
             implementation.writeOnly.removeAttribute(key, range: range.nsRange())
         }
     }
-    private func element(_ key: NSAttributedStringKey, at: Int) -> Element? {
+    private func element(_ key: NSAttributedStringKey, at: Int) -> SystemElement? {
         guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
         guard CFGetTypeID(value as CFTypeRef) == AXUIElement.typeID else {
             return nil
         }
-        return AccessibilityElement.Element(element: (value as! AXUIElement))
+        return SystemElement(element: (value as! AXUIElement))
     }
-    private mutating func set(key: NSAttributedStringKey, range: Range<Int>, element: Element?) {
+    private mutating func set(key: NSAttributedStringKey, range: Range<Int>, element: SystemElement?) {
         if let element = element {
             implementation.writeOnly.setAttributes([key:element.element], range: range.nsRange())
         } else {
@@ -439,7 +439,7 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
         guard CFGetTypeID(value as CFTypeRef) == CFBoolean.typeID else {
             return nil
         }
-        return CFBooleanGetValue(value as! CFBoolean)
+        return CFBooleanGetValue((value as! CFBoolean))
     }
     private mutating func set(key: NSAttributedStringKey, range: Range<Int>, bool: Bool?) {
         if let bool = bool {

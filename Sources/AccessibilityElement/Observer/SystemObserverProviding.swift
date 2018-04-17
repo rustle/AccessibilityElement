@@ -12,7 +12,7 @@ public struct SystemObserverProviding : ObserverProviding {
             SystemObserverProviding(processIdentifier: $0)
         }
     }
-    public typealias ElementType = Element
+    public typealias ElementType = SystemElement
     private var processIdentifier: ProcessIdentifier
     private var _observer: AXObserver?
     private mutating func observer() throws -> AXObserver {
@@ -30,23 +30,23 @@ public struct SystemObserverProviding : ObserverProviding {
     public mutating func add(element: AnyElement,
                              notification: NSAccessibilityNotificationName,
                              handler: @escaping (AnyElement, NSAccessibilityNotificationName, [String : Any]?) -> Void) throws -> Int {
-        return try observer().add(element: (element as! Element).element, notification: notification) { element, notification, info in
-            let element = Element(element: element)
+        return try observer().add(element: (element as! SystemElement).element, notification: notification) { element, notification, info in
+            let element = SystemElement(element: element)
             handler(element, notification, Helper.repackage(dictionary: info, element: element))
         }
     }
     public mutating func remove(element: AnyElement,
                                 notification: NSAccessibilityNotificationName,
                                 identifier: Int) throws {
-        try observer().remove(element: (element as! Element).element, notification: notification, identifier: identifier)
+        try observer().remove(element: (element as! SystemElement).element, notification: notification, identifier: identifier)
     }
 }
 
 fileprivate struct Helper {
-    private static func _repackage(element: AXUIElement) -> Element {
-        return Element(element: element)
+    private static func _repackage(element: AXUIElement) -> SystemElement {
+        return SystemElement(element: element)
     }
-    private static func _repackage(array: [Any], element: Element) -> [Any] {
+    private static func _repackage(array: [Any], element: SystemElement) -> [Any] {
         do {
             return try array.map { value in
                 return try _repackage(value: value, element: element)
@@ -55,7 +55,7 @@ fileprivate struct Helper {
             return []
         }
     }
-    private static func _repackage(dictionary: [String:Any], element: Element) -> [String:Any] {
+    private static func _repackage(dictionary: [String:Any], element: SystemElement) -> [String:Any] {
         do {
             return try dictionary.reduce() { result, pair in
                 result[pair.key] = try _repackage(value: pair.value as CFTypeRef, element: element)
@@ -83,7 +83,7 @@ fileprivate struct Helper {
             throw AccessibilityError.typeMismatch
         }
     }
-    private static func _repackage(value: Any, element: Element) throws -> Any {
+    private static func _repackage(value: Any, element: SystemElement) throws -> Any {
         let typeID = CFGetTypeID(value as CFTypeRef)
         switch typeID {
         case AXUIElement.typeID:
@@ -115,7 +115,7 @@ fileprivate struct Helper {
             throw AccessibilityError.typeMismatch
         }
     }
-    fileprivate static func repackage(dictionary: CFDictionary?, element: Element) -> [String : Any]? {
+    fileprivate static func repackage(dictionary: CFDictionary?, element: SystemElement) -> [String : Any]? {
         guard let dictionary = dictionary as? [String:Any] else {
             return nil
         }
