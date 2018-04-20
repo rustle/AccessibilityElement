@@ -17,7 +17,7 @@ public class FocusArbitrator {
     }
     public static func systemFocusedApplicationElement() throws -> (ProcessIdentifier, BundleIdentifier) {
         func systemFocus() throws -> SystemElement {
-            let value = try AXUIElement.systemWide().value(attribute: NSAccessibilityAttributeName(rawValue: "AXFocusedApplication")) as CFTypeRef
+            let value = try AXUIElement.systemWide().value(attribute: NSAccessibilityAttributeName.focusedApplication) as CFTypeRef
             if CFGetTypeID(value) == AXUIElement.typeID {
                 return SystemElement(element: value as! AXUIElement)
             }

@@ -73,8 +73,9 @@ public class FocusTheftObserver<ElementType> : Runner where ElementType : Elemen
             guard let application = try? applicationProvider(bundleIdentifier) else {
                 return
             }
-            let element = ElementType.application(processIdentifier: application)
+            let element: ElementType
             do {
+                element = try ElementType.application(processIdentifier: application)
                 observer = try observerManager.registerObserver(application: element)
             } catch {
                 return

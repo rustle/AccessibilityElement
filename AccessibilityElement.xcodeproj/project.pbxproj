@@ -86,7 +86,12 @@
 		91724EBA204A121C0009A79F /* CoreFoundationOverlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724E75204A10F20009A79F /* CoreFoundationOverlay.framework */; };
 		91724F0E204A13370009A79F /* SwiftScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724EF8204A12D40009A79F /* SwiftScanner.framework */; };
 		9184F0E6205F7481006B78FD /* BundleIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9184F0E5205F7481006B78FD /* BundleIdentifier.swift */; };
+		91A93BFA2086A831006EAFCA /* SystemElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93BF92086A831006EAFCA /* SystemElement.swift */; };
 		91A93BFE20882256006EAFCA /* AXUIElementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93BFD20882256006EAFCA /* AXUIElementTests.swift */; };
+		91A93C0520898200006EAFCA /* NSAccessibilityRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93C0420898200006EAFCA /* NSAccessibilityRole.swift */; };
+		91A93C07208984CA006EAFCA /* NSAccessibilitySubrole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93C06208984CA006EAFCA /* NSAccessibilitySubrole.swift */; };
+		91A93C0D208AB178006EAFCA /* NSAccessibilityParameterizedAttributeName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93C0C208AB178006EAFCA /* NSAccessibilityParameterizedAttributeName.swift */; };
+		91A93C16208AB347006EAFCA /* NSAccessibilityAttributeName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93C15208AB347006EAFCA /* NSAccessibilityAttributeName.swift */; };
 		91DB215B2050405000B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91DB2162205041D200B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91E69E16206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */; };
@@ -290,7 +295,12 @@
 		91724EBB204A126C0009A79F /* Signals.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Signals.xcodeproj; path = ".build/checkouts/Signals.git--353844806167487743/Signals.xcodeproj"; sourceTree = "<group>"; };
 		91724EEE204A12D40009A79F /* SwiftScanner.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftScanner.xcodeproj; path = ".build/checkouts/SwiftScanner.git--3888101014598209270/SwiftScanner/SwiftScanner.xcodeproj"; sourceTree = "<group>"; };
 		9184F0E5205F7481006B78FD /* BundleIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleIdentifier.swift; sourceTree = "<group>"; };
+		91A93BF92086A831006EAFCA /* SystemElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemElement.swift; sourceTree = "<group>"; };
 		91A93BFD20882256006EAFCA /* AXUIElementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElementTests.swift; sourceTree = "<group>"; };
+		91A93C0420898200006EAFCA /* NSAccessibilityRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAccessibilityRole.swift; sourceTree = "<group>"; };
+		91A93C06208984CA006EAFCA /* NSAccessibilitySubrole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAccessibilitySubrole.swift; sourceTree = "<group>"; };
+		91A93C0C208AB178006EAFCA /* NSAccessibilityParameterizedAttributeName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAccessibilityParameterizedAttributeName.swift; sourceTree = "<group>"; };
+		91A93C15208AB347006EAFCA /* NSAccessibilityAttributeName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAccessibilityAttributeName.swift; sourceTree = "<group>"; };
 		91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedGraphemeClusterSet.swift; sourceTree = "<group>"; };
 		91E69E1E206D92F200F29B70 /* ConcurrentDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentDictionary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -379,7 +389,6 @@
 				91724DAB204A0D4D0009A79F /* Controller.swift */,
 				91724DC1204A0D4D0009A79F /* Debug.swift */,
 				91724DBC204A0D4D0009A79F /* Describer.swift */,
-				91724DB2204A0D4D0009A79F /* Element.swift */,
 				9128DB22206BEDFA00A3390D /* FocusedUIElementChangedHandler.swift */,
 				91724DB5204A0D4D0009A79F /* Frame.swift */,
 				91724DA5204A0D4D0009A79F /* GestureRecognizer.swift */,
@@ -394,6 +403,8 @@
 				91724DBD204A0D4D0009A79F /* TreeElement.swift */,
 				91724DA4204A0D4D0009A79F /* WhitespaceClassifier.swift */,
 				9128DB192068AA8D00A3390D /* WindowLifeCycleObserver.swift */,
+				91A93C03208981F3006EAFCA /* AppKit */,
+				91A93BF12086A7C8006EAFCA /* Element */,
 				91724DC2204A0D4D0009A79F /* EventHandler */,
 				91641FDD2053142F004DD9FE /* Focus */,
 				91724D99204A0D4D0009A79F /* HIServices */,
@@ -577,6 +588,27 @@
 				91724EFC204A12D40009A79F /* SwiftScannerTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		91A93BF12086A7C8006EAFCA /* Element */ = {
+			isa = PBXGroup;
+			children = (
+				91724DB2204A0D4D0009A79F /* Element.swift */,
+				91A93BFB2086B3D7006EAFCA /* RemoteElement.swift */,
+				91A93BF92086A831006EAFCA /* SystemElement.swift */,
+			);
+			path = Element;
+			sourceTree = "<group>";
+		};
+		91A93C03208981F3006EAFCA /* AppKit */ = {
+			isa = PBXGroup;
+			children = (
+				91A93C15208AB347006EAFCA /* NSAccessibilityAttributeName.swift */,
+				91A93C0C208AB178006EAFCA /* NSAccessibilityParameterizedAttributeName.swift */,
+				91A93C0420898200006EAFCA /* NSAccessibilityRole.swift */,
+				91A93C06208984CA006EAFCA /* NSAccessibilitySubrole.swift */,
+			);
+			path = AppKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -847,6 +879,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91A93C07208984CA006EAFCA /* NSAccessibilitySubrole.swift in Sources */,
 				91724DEF204A0D4D0009A79F /* SelectionChange.swift in Sources */,
 				91724DF2204A0D4D0009A79F /* AttributedString.swift in Sources */,
 				91724DD8204A0D4D0009A79F /* AXTextMarker.swift in Sources */,
@@ -869,10 +902,12 @@
 				9184F0E6205F7481006B78FD /* BundleIdentifier.swift in Sources */,
 				91724DF7204A0D4D0009A79F /* Debug.swift in Sources */,
 				9116AF2720549EEA0027A018 /* Runner.swift in Sources */,
+				91A93C0D208AB178006EAFCA /* NSAccessibilityParameterizedAttributeName.swift in Sources */,
 				91105A9F2050D8C00099094E /* ArrayObserver.swift in Sources */,
 				91724E00204A0D4D0009A79F /* StaticText.swift in Sources */,
 				91724DE7204A0D4D0009A79F /* ObserverProviding.swift in Sources */,
 				91641FE0205460CE004DD9FE /* FocusObserver.swift in Sources */,
+				91A93BFA2086A831006EAFCA /* SystemElement.swift in Sources */,
 				91724DD9204A0D4D0009A79F /* AccessibilityError.swift in Sources */,
 				91641FE1205460CE004DD9FE /* FocusArbitration.swift in Sources */,
 				91641FD52053141E004DD9FE /* FocusTheftObserver.swift in Sources */,
@@ -883,6 +918,7 @@
 				91724DF0204A0D4D0009A79F /* TextMarkerRichSelectionChange.swift in Sources */,
 				91724DE0204A0D4D0009A79F /* Substitutions.swift in Sources */,
 				91E69E16206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift in Sources */,
+				91A93C0520898200006EAFCA /* NSAccessibilityRole.swift in Sources */,
 				9128DB1A2068AA8D00A3390D /* WindowLifeCycleObserver.swift in Sources */,
 				91724DE9204A0D4D0009A79F /* ObserverSignal.swift in Sources */,
 				91724DFF204A0D4D0009A79F /* TextField.swift in Sources */,
@@ -905,6 +941,7 @@
 				91724DE8204A0D4D0009A79F /* SystemObserverProviding.swift in Sources */,
 				91724DEA204A0D4D0009A79F /* Element.swift in Sources */,
 				91724DF3204A0D4D0009A79F /* Describer.swift in Sources */,
+				91A93C16208AB347006EAFCA /* NSAccessibilityAttributeName.swift in Sources */,
 				91724DF5204A0D4D0009A79F /* Dictionary.swift in Sources */,
 				91724DFA204A0D4D0009A79F /* Registrar.swift in Sources */,
 				91724DF6204A0D4D0009A79F /* String.swift in Sources */,

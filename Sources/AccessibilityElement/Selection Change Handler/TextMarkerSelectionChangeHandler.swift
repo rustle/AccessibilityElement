@@ -29,8 +29,12 @@ public class TextMarkerSelectionChangeHandler<ElementType> : SelectionChangeHand
             _ = try element.caretBrowsingEnabled()
             signal = try applicationObserver.signal(element: element, notification: .selectedTextChanged)
         } catch {
-            let application = type(of: element).application(processIdentifier: element.processIdentifier)
-            signal = try applicationObserver.signal(element: application, notification: .selectedTextChanged)
+            do {
+                let application = try type(of: element).application(processIdentifier: element.processIdentifier)
+                signal = try applicationObserver.signal(element: application, notification: .selectedTextChanged)
+            } catch {
+                throw error
+            }
         }
         selectionChangeSubscription = signal.subscribe { [weak self] element, info in
             do {

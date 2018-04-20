@@ -53,7 +53,7 @@ class ObserverTests: XCTestCase {
     }
     func testSignal() {
         do {
-            let element = MockElement.application(processIdentifier: 1)
+            let element = try MockElement.application(processIdentifier: 1)
             let observer = try observerManager?.registerObserver(application: element)
             let signal = try observer?.signal(element: element, notification: .focusedUIElementChanged)
             var fired = false
@@ -69,7 +69,7 @@ class ObserverTests: XCTestCase {
     }
     func testDisposeSignal() {
         do {
-            let element = MockElement.application(processIdentifier: 1)
+            let element = try MockElement.application(processIdentifier: 1)
             let observer = try observerManager!.registerObserver(application: element)
             let signal = try observer.signal(element: element, notification: .focusedUIElementChanged)
             let subscription = signal.subscribe { element, info in

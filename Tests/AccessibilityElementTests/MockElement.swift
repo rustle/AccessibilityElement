@@ -50,11 +50,7 @@ func tree(_ element: MockElement, childrenProvider: (() -> [MockElement])?) -> M
 
 final class MockElement : Element {
     typealias ObserverProvidingType = MockObserverProviding
-    
-    static var systemWide: MockElement {
-        fatalError()
-    }
-    static func application(processIdentifier: ProcessIdentifier) -> MockElement {
+    static func application(processIdentifier: ProcessIdentifier) throws -> MockElement {
         return MockElement(uniqueID: 1,
                            role: .application,
                            subrole: nil,
