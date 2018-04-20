@@ -86,6 +86,7 @@
 		91724EBA204A121C0009A79F /* CoreFoundationOverlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724E75204A10F20009A79F /* CoreFoundationOverlay.framework */; };
 		91724F0E204A13370009A79F /* SwiftScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91724EF8204A12D40009A79F /* SwiftScanner.framework */; };
 		9184F0E6205F7481006B78FD /* BundleIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9184F0E5205F7481006B78FD /* BundleIdentifier.swift */; };
+		91A93BFE20882256006EAFCA /* AXUIElementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93BFD20882256006EAFCA /* AXUIElementTests.swift */; };
 		91DB215B2050405000B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91DB2162205041D200B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91E69E16206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */; };
@@ -289,6 +290,7 @@
 		91724EBB204A126C0009A79F /* Signals.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Signals.xcodeproj; path = ".build/checkouts/Signals.git--353844806167487743/Signals.xcodeproj"; sourceTree = "<group>"; };
 		91724EEE204A12D40009A79F /* SwiftScanner.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftScanner.xcodeproj; path = ".build/checkouts/SwiftScanner.git--3888101014598209270/SwiftScanner/SwiftScanner.xcodeproj"; sourceTree = "<group>"; };
 		9184F0E5205F7481006B78FD /* BundleIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleIdentifier.swift; sourceTree = "<group>"; };
+		91A93BFD20882256006EAFCA /* AXUIElementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElementTests.swift; sourceTree = "<group>"; };
 		91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedGraphemeClusterSet.swift; sourceTree = "<group>"; };
 		91E69E1E206D92F200F29B70 /* ConcurrentDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentDictionary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -505,6 +507,7 @@
 				91724E0B204A0DC10009A79F /* MockElement.swift */,
 				91724E0A204A0DC10009A79F /* ObserverTests.swift */,
 				91724E09204A0DC10009A79F /* SubstitutionsTests.swift */,
+				91A93BFD20882256006EAFCA /* AXUIElementTests.swift */,
 			);
 			name = AccessibilityElementTests;
 			path = Tests/AccessibilityElementTests;
@@ -916,6 +919,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				91724E17204A0DD50009A79F /* SubstitutionsTests.swift in Sources */,
+				91A93BFE20882256006EAFCA /* AXUIElementTests.swift in Sources */,
 				91724E13204A0DD50009A79F /* AttributedStringsTest.swift in Sources */,
 				91724E16204A0DD50009A79F /* ObserverTests.swift in Sources */,
 				91724E15204A0DD50009A79F /* MockElement.swift in Sources */,

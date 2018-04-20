@@ -6,6 +6,20 @@
 
 import Cocoa
 
+fileprivate class _UIElement {
+    private static var RTLD_DEFAULT = UnsafeMutableRawPointer(bitPattern: -2)!
+    typealias UIElementTransportRepresentation = @convention(c) (AXUIElement) -> Unmanaged<CFData>
+    static var transportRepresentation: UIElementTransportRepresentation = {
+        let symbol = dlsym(RTLD_DEFAULT, "_AXUIElementRemoteTokenCreate")
+        return unsafeBitCast(symbol, to: UIElementTransportRepresentation.self)
+    }()
+    typealias UIElementCreateWithTransportRepresentation = @convention(c) (CFData) -> Unmanaged<AXUIElement>
+    static var createWithTransportRepresentation: UIElementCreateWithTransportRepresentation = {
+        let symbol = dlsym(RTLD_DEFAULT, "_AXUIElementCreateWithRemoteToken")
+        return unsafeBitCast(symbol, to: UIElementCreateWithTransportRepresentation.self)
+    }()
+}
+
 public extension AXUIElement {
     //public func AXUIElementGetTypeID() -> CFTypeID
     public static var typeID: CFTypeID {
@@ -29,7 +43,14 @@ public extension AXUIElement {
     public static func application(processIdentifier: ProcessIdentifier) -> AXUIElement {
         return AXUIElementCreateApplication(pid_t(processIdentifier))
     }
-
+    //private func _AXUIElementRemoteTokenCreate(_ element: AXUIElement) -> CFData
+    public func transportRepresentation() -> Data {
+        return _UIElement.transportRepresentation(self).takeUnretainedValue() as Data
+    }
+    //private func _AXUIElementCreateWithRemoteToken(_ data: CFData) -> AXUIElement
+    public static func element(transportRepresentation: Data) -> AXUIElement {
+        return _UIElement.createWithTransportRepresentation(transportRepresentation as CFData).takeRetainedValue()
+    }
     //public func AXUIElementCopyAttributeValues(_ element: AXUIElement, _ attribute: CFString, _ index: CFIndex, _ maxValues: CFIndex, _ values: UnsafeMutablePointer<CFArray?>) -> AXError
     //public struct AXCopyMultipleAttributeOptions : OptionSet {
     //    public init(rawValue: UInt32)
