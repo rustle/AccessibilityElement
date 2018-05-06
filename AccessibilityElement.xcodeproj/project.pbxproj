@@ -92,6 +92,7 @@
 		91A93C07208984CA006EAFCA /* NSAccessibilitySubrole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93C06208984CA006EAFCA /* NSAccessibilitySubrole.swift */; };
 		91A93C0D208AB178006EAFCA /* NSAccessibilityParameterizedAttributeName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93C0C208AB178006EAFCA /* NSAccessibilityParameterizedAttributeName.swift */; };
 		91A93C16208AB347006EAFCA /* NSAccessibilityAttributeName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93C15208AB347006EAFCA /* NSAccessibilityAttributeName.swift */; };
+		91A93C1A208C22FA006EAFCA /* CodableColorContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93C19208C22FA006EAFCA /* CodableColorContainer.swift */; };
 		91DB215B2050405000B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91DB2162205041D200B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91E69E16206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */; };
@@ -301,6 +302,7 @@
 		91A93C06208984CA006EAFCA /* NSAccessibilitySubrole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAccessibilitySubrole.swift; sourceTree = "<group>"; };
 		91A93C0C208AB178006EAFCA /* NSAccessibilityParameterizedAttributeName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAccessibilityParameterizedAttributeName.swift; sourceTree = "<group>"; };
 		91A93C15208AB347006EAFCA /* NSAccessibilityAttributeName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAccessibilityAttributeName.swift; sourceTree = "<group>"; };
+		91A93C19208C22FA006EAFCA /* CodableColorContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableColorContainer.swift; sourceTree = "<group>"; };
 		91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedGraphemeClusterSet.swift; sourceTree = "<group>"; };
 		91E69E1E206D92F200F29B70 /* ConcurrentDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentDictionary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -385,6 +387,7 @@
 				91724DBB204A0D4D0009A79F /* AttributedString.swift */,
 				91724DD1204A0D4D0009A79F /* Bundle.swift */,
 				9184F0E5205F7481006B78FD /* BundleIdentifier.swift */,
+				91A93C19208C22FA006EAFCA /* CodableColorContainer.swift */,
 				91E69E1E206D92F200F29B70 /* ConcurrentDictionary.swift */,
 				91724DAB204A0D4D0009A79F /* Controller.swift */,
 				91724DC1204A0D4D0009A79F /* Debug.swift */,
@@ -897,6 +900,7 @@
 				91724DEE204A0D4D0009A79F /* IntegerIndexSelectionChange.swift in Sources */,
 				91724E05204A0D4D0009A79F /* Bundle.swift in Sources */,
 				91724DF4204A0D4D0009A79F /* TreeElement.swift in Sources */,
+				91A93C1A208C22FA006EAFCA /* CodableColorContainer.swift in Sources */,
 				9160355D2061F972006A14E6 /* ApplicationFocus.swift in Sources */,
 				91724DE4204A0D4D0009A79F /* Controller.swift in Sources */,
 				9184F0E6205F7481006B78FD /* BundleIdentifier.swift in Sources */,
