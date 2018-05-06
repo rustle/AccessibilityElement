@@ -33,7 +33,7 @@ class SubstitutionsTests : XCTestCase {
         XCTAssertEqual(subs.perform("1s"),              "1s")
         XCTAssertEqual(subs.perform("1 s"),             "1 [[char ltrl]]s[[char norm]]")
         // TODO:
-//        XCTAssertEqual(subs.perform("1 cm"),             "1 [[char ltrl]]cm[[char norm]]")
+//       XCTAssertEqual(subs.perform("1 cm"),             "1 [[char ltrl]]cm[[char norm]]")
 //        XCTAssertEqual(subs.perform("1 nm"),             "1 [[char ltrl]]nm[[char norm]]")
 //        XCTAssertEqual(subs.perform("1 ft"),             "1 [[char ltrl]]ft[[char norm]]")
 //        XCTAssertEqual(subs.perform("1 in"),             "1 [[char ltrl]]in[[char norm]]")
@@ -44,5 +44,12 @@ class SubstitutionsTests : XCTestCase {
     func testPunctuation() {
         let subs = PunctuationExpansion()
         XCTAssertEqual(subs.perform("func hello() { }"), "func hello[[char ltrl]]()[[char norm]] [[char ltrl]]{[[char norm]] [[char ltrl]]}[[char norm]]")
+    }
+    func testDecomposingSubstitutions() {
+        let subs = DecomposingSubstitutions()
+        XCTAssertEqual(subs.perform("ḓĩẲçrätīčś"), "diAcratics")
+        XCTAssertEqual(subs.perform("Ⓚ"), "K")
+        XCTAssertEqual(subs.perform("𝔞"), "a")
+        XCTAssertEqual(subs.perform("U̵"), "U")
     }
 }

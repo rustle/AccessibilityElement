@@ -7,8 +7,30 @@
 import Foundation
 import SwiftScanner
 
+public struct SynthesizerMarkup {
+    public static let characterLiteral = "[[char ltrl]]"
+    public static let characterNormal = "[[char norm]]"
+    public static func literalMarkup(for value: Any) -> String {
+        return "\(characterLiteral)\(value)\(characterNormal)"
+    }
+}
+
 public protocol Substitutions {
     func perform(_ value: String) -> String
+}
+
+public struct ConfusableSubstitutions : Substitutions {
+    public func perform(_ value: String) -> String {
+        fatalError()
+    }
+}
+
+public struct DecomposingSubstitutions : Substitutions {
+    public func perform(_ value: String) -> String {
+        let folded = value.folding(options: .diacriticInsensitive, locale: .current)
+        let decomposed = folded.decomposedStringWithCompatibilityMapping
+        return decomposed
+    }
 }
 
 public struct SimpleSubstitutions : Substitutions, Codable {
@@ -62,13 +84,10 @@ extension Character {
 }
 
 public struct AbbreviationExpansion : Substitutions {
-    private static func literalMarkup(for value: Any) -> String {
-        return "[[char ltrl]]\(value)[[char norm]]"
-    }
-    static let ehm: String = literalMarkup(for: Character("m"))
-    static let ehs: String = literalMarkup(for: Character("s"))
-    static let ehmEhs: String = literalMarkup(for: "ms")
-    static let ehmEhm: String = literalMarkup(for: "mm")
+    static let ehm: String = SynthesizerMarkup.literalMarkup(for: Character("m"))
+    static let ehs: String = SynthesizerMarkup.literalMarkup(for: Character("s"))
+    static let ehmEhs: String = SynthesizerMarkup.literalMarkup(for: "ms")
+    static let ehmEhm: String = SynthesizerMarkup.literalMarkup(for: "mm")
     public static let m = Character("m")
     public static let s = Character("s")
     public static let space = Character(" ")
@@ -257,9 +276,9 @@ public struct PunctuationExpansion : Substitutions {
             if mode != newMode {
                 switch newMode {
                 case .punctuation:
-                    buffer.append("[[char ltrl]]")
+                    buffer.append(SynthesizerMarkup.characterLiteral)
                 case .other:
-                    buffer.append("[[char norm]]")
+                    buffer.append(SynthesizerMarkup.characterNormal)
                 }
                 mode = newMode
             }
