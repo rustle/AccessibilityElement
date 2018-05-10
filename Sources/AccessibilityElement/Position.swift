@@ -23,10 +23,7 @@ public struct Position<IndexType> : AnyPosition {
     public static func <(lhs: Position<IndexType>, rhs: Position<IndexType>) -> Bool {
         if IndexType.self == Int.self {
             return (lhs as! Position<Int>).index < (rhs as! Position<Int>).index
-        } else if IndexType.self == AXTextMarker.self {
-            if CFGetTypeID(lhs.index as CFTypeRef) != accessibility_element_get_marker_type_id() {
-                fatalError()
-            }
+        } else if CFGetTypeID(lhs.index as CFTypeRef) == accessibility_element_get_marker_type_id() {
             do {
                 let range = try lhs.element.range(unorderedPositions: (lhs, rhs))
                 if range.lowerBound == range.upperBound {
@@ -42,10 +39,7 @@ public struct Position<IndexType> : AnyPosition {
     public static func >(lhs: Position<IndexType>, rhs: Position<IndexType>) -> Bool {
         if IndexType.self == Int.self {
             return (lhs as! Position<Int>).index > (rhs as! Position<Int>).index
-        } else if IndexType.self == AXTextMarker.self {
-            if CFGetTypeID(lhs.index as CFTypeRef) != accessibility_element_get_marker_type_id() {
-                fatalError()
-            }
+        } else if CFGetTypeID(lhs.index as CFTypeRef) != accessibility_element_get_marker_type_id() {
             do {
                 let range = try lhs.element.range(unorderedPositions: (lhs, rhs))
                 if range.lowerBound == range.upperBound {
