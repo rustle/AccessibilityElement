@@ -62,6 +62,31 @@ public struct Position<IndexType> : AnyPosition {
     }
 }
 
+extension Position : Codable where IndexType : Codable {
+    public enum PositionCodingKeys : String, CodingKey {
+        case index
+        case element
+    }
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: PositionCodingKeys.self)
+        try container.encode(index, forKey: .index)
+        if let systemElement = element as? SystemElement {
+            try container.encode(systemElement.element.transportRepresentation(), forKey: .element)
+        } else {
+            fatalError()
+        }
+    }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: PositionCodingKeys.self)
+        index = try values.decode(IndexType.self, forKey: .index)
+        if let transportRepresentation = try values.decodeIfPresent(Data.self, forKey: .element) {
+            element = SystemElement(element: AXUIElement.element(transportRepresentation: transportRepresentation))
+        } else {
+            fatalError()
+        }
+    }
+}
+
 extension Position : CustomDebugStringConvertible {
     public var debugDescription: String {
         return "\(index)"
