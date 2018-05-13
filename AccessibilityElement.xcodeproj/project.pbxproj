@@ -93,6 +93,7 @@
 		91A93C0D208AB178006EAFCA /* NSAccessibilityParameterizedAttributeName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93C0C208AB178006EAFCA /* NSAccessibilityParameterizedAttributeName.swift */; };
 		91A93C16208AB347006EAFCA /* NSAccessibilityAttributeName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93C15208AB347006EAFCA /* NSAccessibilityAttributeName.swift */; };
 		91A93C1A208C22FA006EAFCA /* CodableColorContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A93C19208C22FA006EAFCA /* CodableColorContainer.swift */; };
+		91C04AA220A7E59A00373C12 /* CodableRangeContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C04A9A20A7E59A00373C12 /* CodableRangeContainer.swift */; };
 		91DB215B2050405000B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91DB2162205041D200B84FA7 /* Signals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91DB215020503A6400B84FA7 /* Signals.framework */; };
 		91E69E16206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */; };
@@ -303,6 +304,7 @@
 		91A93C0C208AB178006EAFCA /* NSAccessibilityParameterizedAttributeName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAccessibilityParameterizedAttributeName.swift; sourceTree = "<group>"; };
 		91A93C15208AB347006EAFCA /* NSAccessibilityAttributeName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAccessibilityAttributeName.swift; sourceTree = "<group>"; };
 		91A93C19208C22FA006EAFCA /* CodableColorContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableColorContainer.swift; sourceTree = "<group>"; };
+		91C04A9A20A7E59A00373C12 /* CodableRangeContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableRangeContainer.swift; sourceTree = "<group>"; };
 		91E69E15206D742E00F29B70 /* ExtendedGraphemeClusterSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedGraphemeClusterSet.swift; sourceTree = "<group>"; };
 		91E69E1E206D92F200F29B70 /* ConcurrentDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentDictionary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -388,6 +390,7 @@
 				91724DD1204A0D4D0009A79F /* Bundle.swift */,
 				9184F0E5205F7481006B78FD /* BundleIdentifier.swift */,
 				91A93C19208C22FA006EAFCA /* CodableColorContainer.swift */,
+				91C04A9A20A7E59A00373C12 /* CodableRangeContainer.swift */,
 				91E69E1E206D92F200F29B70 /* ConcurrentDictionary.swift */,
 				91724DAB204A0D4D0009A79F /* Controller.swift */,
 				91724DC1204A0D4D0009A79F /* Debug.swift */,
@@ -597,7 +600,6 @@
 			isa = PBXGroup;
 			children = (
 				91724DB2204A0D4D0009A79F /* Element.swift */,
-				91A93BFB2086B3D7006EAFCA /* RemoteElement.swift */,
 				91A93BF92086A831006EAFCA /* SystemElement.swift */,
 			);
 			path = Element;
@@ -939,6 +941,7 @@
 				91724DDF204A0D4D0009A79F /* GestureRecognizer.swift in Sources */,
 				91724E02204A0D4D0009A79F /* Checkbox.swift in Sources */,
 				91724DFC204A0D4D0009A79F /* Toggle.swift in Sources */,
+				91C04AA220A7E59A00373C12 /* CodableRangeContainer.swift in Sources */,
 				91724DFB204A0D4D0009A79F /* EventHandler.swift in Sources */,
 				91724DDA204A0D4D0009A79F /* Tap.swift in Sources */,
 				91724E01204A0D4D0009A79F /* Application.swift in Sources */,
