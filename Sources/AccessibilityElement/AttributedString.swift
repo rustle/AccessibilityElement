@@ -19,8 +19,101 @@ fileprivate extension Range where Bound == Int {
     }
 }
 
-public struct AttributedString : Equatable, CustomDebugStringConvertible {
-    public enum Attribute {
+public struct AttributedString : Equatable {
+    private enum Error : Swift.Error {
+        case unknownKey
+    }
+    private static func stringEnumToEnum(_ key: NSAttributedStringKey) throws -> Attribute {
+        switch key {
+        case Key.textAlignment:
+            return .textAlignment
+        case Key.font:
+            return .font
+        case Key.foregroundColor:
+            return .foregroundColor
+        case Key.backgroundColor:
+            return .backgroundColor
+        case Key.underlineColor:
+            return .underlineColor
+        case Key.strikethroughColor:
+            return .strikethroughColor
+        case Key.underlineStyle:
+            return .underlineStyle
+        case Key.superscript:
+            return .superscript
+        case Key.strikethrough:
+            return .strikethrough
+        case Key.shadow:
+            return .shadow
+        case Key.attachment:
+            return .attachment
+        case Key.link:
+            return .link
+        case Key.naturalLanguage:
+            return .naturalLanguage
+        case Key.replacement:
+            return .replacement
+        case Key.misspelled:
+            return .misspelled
+        case Key.markedMisspelled:
+            return .markedMisspelled
+        case Key.autocorrected:
+            return .autocorrected
+        case Key.listItemPrefix:
+            return .listItemPrefix
+        case Key.listItemIndex:
+            return .listItemIndex
+        case Key.listItemLevel:
+            return .listItemLevel
+        default:
+            throw AttributedString.Error.unknownKey
+        }
+    }
+    private static func enumToStringEnum(_ key: Attribute) -> NSAttributedStringKey {
+        switch key {
+        case .textAlignment:
+            return Key.textAlignment
+        case .font:
+            return Key.font
+        case .foregroundColor:
+            return Key.foregroundColor
+        case .backgroundColor:
+            return Key.backgroundColor
+        case .underlineColor:
+            return Key.underlineColor
+        case .strikethroughColor:
+            return Key.strikethroughColor
+        case .underlineStyle:
+            return Key.underlineStyle
+        case .superscript:
+            return Key.superscript
+        case .strikethrough:
+            return Key.strikethrough
+        case .shadow:
+            return Key.shadow
+        case .attachment:
+            return Key.attachment
+        case .link:
+            return Key.link
+        case .naturalLanguage:
+            return Key.naturalLanguage
+        case .replacement:
+            return Key.replacement
+        case .misspelled:
+            return Key.misspelled
+        case .markedMisspelled:
+            return Key.markedMisspelled
+        case .autocorrected:
+            return Key.autocorrected
+        case .listItemPrefix:
+            return Key.listItemPrefix
+        case .listItemIndex:
+            return Key.listItemIndex
+        case .listItemLevel:
+            return Key.listItemLevel
+        }
+    }
+    public enum Attribute : Codable {
         case textAlignment
         case font
         case foregroundColor
@@ -41,53 +134,25 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
         case listItemPrefix
         case listItemIndex
         case listItemLevel
+        private enum AttributeCodingKeys : String, CodingKey {
+            case value
+        }
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: AttributeCodingKeys.self)
+            try container.encode(AttributedString.enumToStringEnum(self).rawValue, forKey: .value)
+        }
+        public init(from decoder: Decoder) throws {
+            let values = try decoder.container(keyedBy: AttributeCodingKeys.self)
+            let value = try values.decode(String.self, forKey: .value)
+            let key = NSAttributedStringKey(rawValue: value)
+            self = try AttributedString.stringEnumToEnum(key)
+        }
     }
     fileprivate static func attributes(keys: [NSAttributedStringKey]) -> [Attribute] {
         var attributes = [Attribute]()
         for key in keys {
-            switch key {
-            case Key.textAlignment:
-                attributes.append(.textAlignment)
-            case Key.font:
-                attributes.append(.font)
-            case Key.foregroundColor:
-                attributes.append(.foregroundColor)
-            case Key.backgroundColor:
-                attributes.append(.backgroundColor)
-            case Key.underlineColor:
-                attributes.append(.underlineColor)
-            case Key.strikethroughColor:
-                attributes.append(.strikethroughColor)
-            case Key.underlineStyle:
-                attributes.append(.underlineStyle)
-            case Key.superscript:
-                attributes.append(.superscript)
-            case Key.strikethrough:
-                attributes.append(.strikethrough)
-            case Key.shadow:
-                attributes.append(.shadow)
-            case Key.attachment:
-                attributes.append(.attachment)
-            case Key.link:
-                attributes.append(.link)
-            case Key.naturalLanguage:
-                attributes.append(.naturalLanguage)
-            case Key.replacement:
-                attributes.append(.replacement)
-            case Key.misspelled:
-                attributes.append(.misspelled)
-            case Key.markedMisspelled:
-                attributes.append(.markedMisspelled)
-            case Key.autocorrected:
-                attributes.append(.autocorrected)
-            case Key.listItemPrefix:
-                attributes.append(.listItemPrefix)
-            case Key.listItemIndex:
-                attributes.append(.listItemIndex)
-            case Key.listItemLevel:
-                attributes.append(.listItemLevel)
-            default:
-                continue
+            if let value = try? stringEnumToEnum(key) {
+                attributes.append(value)
             }
         }
         return attributes
@@ -114,7 +179,7 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
         static let listItemIndex = NSAttributedStringKey(rawValue: kAXListItemIndexTextAttribute.takeUnretainedValue() as String) // CFNumber
         static let listItemLevel = NSAttributedStringKey(rawValue: kAXListItemLevelTextAttribute.takeUnretainedValue() as String) // CFNumber
     }
-    public struct Font : Equatable, CustomDebugStringConvertible {
+    public struct Font : Equatable, Codable {
         struct Key {
             static let name = kAXFontNameKey.takeUnretainedValue() as String // String
             static let family = kAXFontFamilyKey.takeUnretainedValue() as String // String
@@ -156,18 +221,6 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
             self.name = name
             self.size = size
         }
-        public var debugDescription: String {
-            var components = [String]()
-            components.append("Name; \(name)")
-            components.append("Size: \(size)")
-            if let family = family {
-                components.append("Family: \(family)")
-            }
-            if let visibleName = visibleName {
-                components.append("VisibleName: \(visibleName)")
-            }
-            return "Font \(components.joined(separator: ", "))"
-        }
         public static func ==(lhs: AttributedString.Font, rhs: AttributedString.Font) -> Bool {
             return
                 lhs.name == rhs.name &&
@@ -196,7 +249,7 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
         return implementation.readOnly.string
     }
     // TODO: These are just guesses
-    public enum TextAlignment : Int {
+    public enum TextAlignment : Int, Codable {
         case left
         case center
         case right
@@ -204,7 +257,7 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
     }
     public typealias UnderlineStyle = AXUnderlineStyle
     public func textAlignment(at: Int) -> TextAlignment? {
-        guard let value = implementation.writeOnly.attribute(Key.textAlignment, at: at, effectiveRange: nil) else {
+        guard let value = implementation.readOnly.attribute(Key.textAlignment, at: at, effectiveRange: nil) else {
             return nil
         }
         guard let int = value as? Int else {
@@ -354,9 +407,6 @@ public struct AttributedString : Equatable, CustomDebugStringConvertible {
     public static func ==(lhs: AttributedString, rhs: AttributedString) -> Bool {
         return false
     }
-    public var debugDescription: String {
-        return "\(implementation.readOnly)"
-    }
     // MARK: Helpers
     private func string(_ key: NSAttributedStringKey, at: Int) -> String? {
         guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
@@ -483,5 +533,248 @@ public struct AttributedStringIterator : IteratorProtocol {
 extension AttributedString : Sequence {
     public func makeIterator() -> AttributedStringIterator {
         return AttributedStringIterator(string: self)
+    }
+}
+
+extension AttributedString : Codable {
+    fileprivate enum AttributedStringCodingKeys : String, CodingKey {
+        case string
+        case attributes
+    }
+    // No need for book keeping logic for issues like overlapping ranges
+    // because this is boxing and unboxing NSAttributedString values
+    // that have already done that work.
+    fileprivate class AttributesContainer : Codable {
+        fileprivate struct Value<ValueType> : Codable where ValueType : Codable {
+            let range: Range<Int>
+            let value: ValueType
+            init(_ range: Range<Int>, _ value: ValueType) {
+                self.range = range
+                self.value = value
+            }
+            // MARK: Codable
+            fileprivate enum ValueCodingKeys : String, CodingKey {
+                case range
+                case value
+            }
+            public func encode(to encoder: Encoder) throws {
+                var container = encoder.container(keyedBy: ValueCodingKeys.self)
+                try container.encode(CodableRangeContainer(range: range), forKey: .range)
+                try container.encode(value, forKey: .value)
+            }
+            public init(from decoder: Decoder) throws {
+                let values = try decoder.container(keyedBy: ValueCodingKeys.self)
+                let rangeContainer = try values.decode(CodableRangeContainer<Int>.self, forKey: .range)
+                self.range = rangeContainer.range
+                self.value = try values.decode(ValueType.self, forKey: .value)
+            }
+        }
+        lazy var textAlignments = [Value<TextAlignment>]()
+        lazy var fonts = [Value<Font>]()
+        lazy var foregroundColors = [Value<CodableColorContainer>]()
+        lazy var backgroundColors = [Value<CodableColorContainer>]()
+        lazy var underlineColors = [Value<CodableColorContainer>]()
+        lazy var strikethroughColors = [Value<CodableColorContainer>]()
+        lazy var underlineStyles = [Value<Int>]()
+        lazy var superscripts = [Value<Int>]()
+        lazy var strikethroughs = [Value<Bool>]()
+        lazy var shadows = [Value<Bool>]()
+        lazy var attachments = [Value<SystemElement>]()
+        lazy var links = [Value<SystemElement>]()
+        lazy var naturalLanguages = [Value<String>]()
+        lazy var replacements = [Value<String>]()
+        lazy var misspelleds = [Value<Bool>]()
+        lazy var markedMisspelleds = [Value<Bool>]()
+        lazy var autocorrecteds = [Value<Bool>]()
+        lazy var listItemPrefixs = [Value<AttributedString>]()
+        lazy var listItemIndexs = [Value<Int>]()
+        lazy var listItemLevels = [Value<Int>]()
+    }
+    private func attributesContainer() -> AttributesContainer {
+        var attributesContainer = AttributesContainer()
+        func color(_ range: Range<Int>,
+                   _ color: CGColor) -> AttributesContainer.Value<CodableColorContainer> {
+            return AttributesContainer.Value(range, CodableColorContainer(color: color))
+        }
+        for (range, attributes) in self {
+            for attribute in attributes {
+                switch attribute {
+                case .textAlignment:
+                    attributesContainer.textAlignments
+                        .append(AttributesContainer.Value(range,
+                                                          textAlignment(at: range.lowerBound)!))
+                case .font:
+                    attributesContainer.fonts
+                        .append(AttributesContainer.Value(range,
+                                                          font(at: range.lowerBound)!))
+                case .foregroundColor:
+                    attributesContainer.foregroundColors
+                        .append(color(range,
+                                      foregroundColor(at: range.lowerBound)!))
+                case .backgroundColor:
+                    attributesContainer.backgroundColors
+                        .append(color(range,
+                                      backgroundColor(at: range.lowerBound)!))
+                case .underlineColor:
+                    attributesContainer.underlineColors
+                        .append(color(range,
+                                      underlineColor(at: range.lowerBound)!))
+                case .strikethroughColor:
+                    attributesContainer.strikethroughColors
+                        .append(color(range,
+                                      strikethroughColor(at: range.lowerBound)!))
+                case .underlineStyle:
+                    attributesContainer.underlineStyles
+                        .append(AttributesContainer.Value(range,
+                                                          Int(underlineStyle(at: range.lowerBound)!.rawValue)))
+                case .superscript:
+                    attributesContainer.superscripts
+                        .append(AttributesContainer.Value(range,
+                                                          superscript(at: range.lowerBound)!))
+                case .strikethrough:
+                    attributesContainer.strikethroughs
+                        .append(AttributesContainer.Value(range,
+                                                          strikethrough(at: range.lowerBound)!))
+                case .shadow:
+                    attributesContainer.shadows
+                        .append(AttributesContainer.Value(range,
+                                                          shadow(at: range.lowerBound)!))
+                case .attachment:
+                    attributesContainer.attachments
+                        .append(AttributesContainer.Value(range,
+                                                          attachment(at: range.lowerBound)!))
+                case .link:
+                    attributesContainer.links
+                        .append(AttributesContainer.Value(range,
+                                                          link(at: range.lowerBound)!))
+                case .naturalLanguage:
+                    attributesContainer.naturalLanguages
+                        .append(AttributesContainer.Value(range,
+                                                          naturalLanguage(at: range.lowerBound)!))
+                case .replacement:
+                    attributesContainer.replacements
+                        .append(AttributesContainer.Value(range,
+                                                          replacement(at: range.lowerBound)!))
+                case .misspelled:
+                    attributesContainer.misspelleds
+                        .append(AttributesContainer.Value(range,
+                                                          misspelled(at: range.lowerBound)!))
+                case .markedMisspelled:
+                    attributesContainer.markedMisspelleds
+                        .append(AttributesContainer.Value(range,
+                                                          markedMisspelled(at: range.lowerBound)!))
+                case .autocorrected:
+                    attributesContainer.autocorrecteds
+                        .append(AttributesContainer.Value(range,
+                                                          autocorrected(at: range.lowerBound)!))
+                case .listItemPrefix:
+                    attributesContainer.listItemPrefixs
+                        .append(AttributesContainer.Value(range,
+                                                          listItemPrefix(at: range.lowerBound)!))
+                case .listItemIndex:
+                    attributesContainer.listItemIndexs
+                        .append(AttributesContainer.Value(range,
+                                                          listItemIndex(at: range.lowerBound)!))
+                case .listItemLevel:
+                    attributesContainer.listItemLevels
+                        .append(AttributesContainer.Value(range,
+                                                          listItemLevel(at: range.lowerBound)!))
+                }
+            }
+        }
+        return attributesContainer
+    }
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: AttributedStringCodingKeys.self)
+        try container.encode(implementation.readOnly.string, forKey: .string)
+        try container.encode(attributesContainer(), forKey: .attributes)
+    }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: AttributedStringCodingKeys.self)
+        let string = try values.decode(String.self, forKey: .string)
+        let attributes = try values.decode(AttributesContainer.self, forKey: .attributes)
+        let attributedString = NSAttributedString(string: string)
+        implementation = Implementation(attributedString)
+        for textAlignment in attributes.textAlignments {
+            set(textAlignment: textAlignment.value, range: textAlignment.range)
+        }
+        for font in attributes.fonts {
+            set(font: font.value, range: font.range)
+        }
+        for foregroundColor in attributes.foregroundColors {
+            set(foregroundColor: foregroundColor.value.color, range: foregroundColor.range)
+        }
+        for backgroundColor in attributes.backgroundColors {
+            set(backgroundColor: backgroundColor.value.color, range: backgroundColor.range)
+        }
+        for underlineColor in attributes.underlineColors {
+            set(underlineColor: underlineColor.value.color, range: underlineColor.range)
+        }
+        for strikethroughColor in attributes.strikethroughColors {
+            set(strikethroughColor: strikethroughColor.value.color, range: strikethroughColor.range)
+        }
+        for underlineStyle in attributes.underlineStyles {
+            set(underlineStyle: UnderlineStyle(rawValue: UInt32(underlineStyle.value))!, range: underlineStyle.range)
+        }
+        for superscript in attributes.superscripts {
+            set(superscript: superscript.value, range: superscript.range)
+        }
+        for strikethrough in attributes.strikethroughs {
+            set(strikethrough: strikethrough.value, range: strikethrough.range)
+        }
+        for shadow in attributes.shadows {
+            set(shadow: shadow.value, range: shadow.range)
+        }
+        for attachment in attributes.attachments {
+            set(attachment: attachment.value, range: attachment.range)
+        }
+        for link in attributes.links {
+            set(link: link.value, range: link.range)
+        }
+        for naturalLanguage in attributes.naturalLanguages {
+            set(naturalLanguage: naturalLanguage.value, range: naturalLanguage.range)
+        }
+        for replacement in attributes.replacements {
+            set(replacement: replacement.value, range: replacement.range)
+        }
+        for misspelled in attributes.misspelleds {
+            set(misspelled: misspelled.value, range: misspelled.range)
+        }
+        for markedMisspelled in attributes.markedMisspelleds {
+            set(markedMisspelled: markedMisspelled.value, range: markedMisspelled.range)
+        }
+        for autocorrected in attributes.autocorrecteds {
+            set(autocorrected: autocorrected.value, range: autocorrected.range)
+        }
+        for listItemPrefix in attributes.listItemPrefixs {
+            set(listItemPrefix: listItemPrefix.value, range: listItemPrefix.range)
+        }
+        for listItemIndex in attributes.listItemIndexs {
+            set(listItemIndex: listItemIndex.value, range: listItemIndex.range)
+        }
+        for listItemLevel in attributes.listItemLevels {
+            set(listItemLevel: listItemLevel.value, range: listItemLevel.range)
+        }
+    }
+}
+
+extension AttributedString : CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "\(implementation.readOnly)"
+    }
+}
+
+extension AttributedString.Font : CustomDebugStringConvertible {
+    public var debugDescription: String {
+        var components = [String]()
+        components.append("Name; \(name)")
+        components.append("Size: \(size)")
+        if let family = family {
+            components.append("Family: \(family)")
+        }
+        if let visibleName = visibleName {
+            components.append("VisibleName: \(visibleName)")
+        }
+        return "Font \(components.joined(separator: ", "))"
     }
 }
