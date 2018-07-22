@@ -20,50 +20,55 @@ fileprivate extension Range where Bound == Int {
 }
 
 public struct AttributedString : Equatable {
+#if swift(>=4.2)
+    public typealias Key = NSAttributedString.Key
+#else
+    public typealias Key = NSAttributedStringKey
+#endif
     private enum Error : Swift.Error {
         case unknownKey
     }
-    private static func stringEnumToEnum(_ key: NSAttributedStringKey) throws -> Attribute {
+    private static func stringEnumToEnum(_ key: Key) throws -> Attribute {
         switch key {
-        case Key.textAlignment:
+        case Keys.textAlignment:
             return .textAlignment
-        case Key.font:
+        case Keys.font:
             return .font
-        case Key.foregroundColor:
+        case Keys.foregroundColor:
             return .foregroundColor
-        case Key.backgroundColor:
+        case Keys.backgroundColor:
             return .backgroundColor
-        case Key.underlineColor:
+        case Keys.underlineColor:
             return .underlineColor
-        case Key.strikethroughColor:
+        case Keys.strikethroughColor:
             return .strikethroughColor
-        case Key.underlineStyle:
+        case Keys.underlineStyle:
             return .underlineStyle
-        case Key.superscript:
+        case Keys.superscript:
             return .superscript
-        case Key.strikethrough:
+        case Keys.strikethrough:
             return .strikethrough
-        case Key.shadow:
+        case Keys.shadow:
             return .shadow
-        case Key.attachment:
+        case Keys.attachment:
             return .attachment
-        case Key.link:
+        case Keys.link:
             return .link
-        case Key.naturalLanguage:
+        case Keys.naturalLanguage:
             return .naturalLanguage
-        case Key.replacement:
+        case Keys.replacement:
             return .replacement
-        case Key.misspelled:
+        case Keys.misspelled:
             return .misspelled
-        case Key.markedMisspelled:
+        case Keys.markedMisspelled:
             return .markedMisspelled
-        case Key.autocorrected:
+        case Keys.autocorrected:
             return .autocorrected
-        case Key.listItemPrefix:
+        case Keys.listItemPrefix:
             return .listItemPrefix
-        case Key.listItemIndex:
+        case Keys.listItemIndex:
             return .listItemIndex
-        case Key.listItemLevel:
+        case Keys.listItemLevel:
             return .listItemLevel
         default:
             throw AttributedString.Error.unknownKey
@@ -72,45 +77,45 @@ public struct AttributedString : Equatable {
     private static func enumToStringEnum(_ key: Attribute) -> NSAttributedStringKey {
         switch key {
         case .textAlignment:
-            return Key.textAlignment
+            return Keys.textAlignment
         case .font:
-            return Key.font
+            return Keys.font
         case .foregroundColor:
-            return Key.foregroundColor
+            return Keys.foregroundColor
         case .backgroundColor:
-            return Key.backgroundColor
+            return Keys.backgroundColor
         case .underlineColor:
-            return Key.underlineColor
+            return Keys.underlineColor
         case .strikethroughColor:
-            return Key.strikethroughColor
+            return Keys.strikethroughColor
         case .underlineStyle:
-            return Key.underlineStyle
+            return Keys.underlineStyle
         case .superscript:
-            return Key.superscript
+            return Keys.superscript
         case .strikethrough:
-            return Key.strikethrough
+            return Keys.strikethrough
         case .shadow:
-            return Key.shadow
+            return Keys.shadow
         case .attachment:
-            return Key.attachment
+            return Keys.attachment
         case .link:
-            return Key.link
+            return Keys.link
         case .naturalLanguage:
-            return Key.naturalLanguage
+            return Keys.naturalLanguage
         case .replacement:
-            return Key.replacement
+            return Keys.replacement
         case .misspelled:
-            return Key.misspelled
+            return Keys.misspelled
         case .markedMisspelled:
-            return Key.markedMisspelled
+            return Keys.markedMisspelled
         case .autocorrected:
-            return Key.autocorrected
+            return Keys.autocorrected
         case .listItemPrefix:
-            return Key.listItemPrefix
+            return Keys.listItemPrefix
         case .listItemIndex:
-            return Key.listItemIndex
+            return Keys.listItemIndex
         case .listItemLevel:
-            return Key.listItemLevel
+            return Keys.listItemLevel
         }
     }
     public enum Attribute : Codable {
@@ -157,7 +162,7 @@ public struct AttributedString : Equatable {
         }
         return attributes
     }
-    private struct Key {
+    private struct Keys {
         static let textAlignment = NSAttributedStringKey(rawValue: "AXTextAlignmentValue")
         static let font = NSAttributedStringKey(rawValue: kAXFontTextAttribute.takeUnretainedValue() as String) // [String:Any]
         static let foregroundColor = NSAttributedStringKey(rawValue: kAXForegroundColorTextAttribute.takeUnretainedValue() as String) // CGColor
@@ -180,7 +185,7 @@ public struct AttributedString : Equatable {
         static let listItemLevel = NSAttributedStringKey(rawValue: kAXListItemLevelTextAttribute.takeUnretainedValue() as String) // CFNumber
     }
     public struct Font : Equatable, Codable {
-        struct Key {
+        struct Keys {
             static let name = kAXFontNameKey.takeUnretainedValue() as String // String
             static let family = kAXFontFamilyKey.takeUnretainedValue() as String // String
             static let visibleName = kAXVisibleNameKey.takeUnretainedValue() as String // String
@@ -195,11 +200,11 @@ public struct AttributedString : Equatable {
             var s: Int?
             for (key, value) in values {
                 switch key {
-                case Key.name:
+                case Keys.name:
                     if let string = value as? String {
                         n = string
                     }
-                case Key.size:
+                case Keys.size:
                     if let int = value as? Int {
                         s = int
                     } else if let double = value as? Double {
@@ -207,9 +212,9 @@ public struct AttributedString : Equatable {
                     } else if let float = value as? Float {
                         s = Int(float)
                     }
-                case Key.family:
+                case Keys.family:
                     family = value as? String
-                case Key.visibleName:
+                case Keys.visibleName:
                     visibleName = value as? String
                 default:
                     continue
@@ -257,7 +262,7 @@ public struct AttributedString : Equatable {
     }
     public typealias UnderlineStyle = AXUnderlineStyle
     public func textAlignment(at: Int) -> TextAlignment? {
-        guard let value = implementation.readOnly.attribute(Key.textAlignment, at: at, effectiveRange: nil) else {
+        guard let value = implementation.readOnly.attribute(Keys.textAlignment, at: at, effectiveRange: nil) else {
             return nil
         }
         guard let int = value as? Int else {
@@ -266,10 +271,10 @@ public struct AttributedString : Equatable {
         return TextAlignment(rawValue: int)
     }
     public mutating func set(textAlignment: TextAlignment, range: Range<Int>) {
-        implementation.writeOnly.setAttributes([Key.textAlignment:NSNumber(value: textAlignment.rawValue)], range: range.nsRange())
+        implementation.writeOnly.setAttributes([Keys.textAlignment:NSNumber(value: textAlignment.rawValue)], range: range.nsRange())
     }
     public func font(at: Int) -> Font? {
-        guard let value = implementation.readOnly.attribute(Key.font, at: at, effectiveRange: nil) else {
+        guard let value = implementation.readOnly.attribute(Keys.font, at: at, effectiveRange: nil) else {
             return nil
         }
         guard let fontDictionary = value as? [String:Any] else {
@@ -279,126 +284,126 @@ public struct AttributedString : Equatable {
     }
     public mutating func set(font: Font, range: Range<Int>) {
         var dictionary = [String:Any]()
-        dictionary[Font.Key.name] = font.name
-        dictionary[Font.Key.size] = NSNumber(value: font.size)
+        dictionary[Font.Keys.name] = font.name
+        dictionary[Font.Keys.size] = NSNumber(value: font.size)
         if let family = font.family {
-            dictionary[Font.Key.family] = family
+            dictionary[Font.Keys.family] = family
         }
         if let visibleName = font.visibleName {
-            dictionary[Font.Key.visibleName] = visibleName
+            dictionary[Font.Keys.visibleName] = visibleName
         }
-        implementation.writeOnly.setAttributes([Key.font:dictionary], range: range.nsRange())
+        implementation.writeOnly.setAttributes([Keys.font:dictionary], range: range.nsRange())
     }
     public func foregroundColor(at: Int) -> CGColor? {
-        return color(Key.font, at: at)
+        return color(Keys.font, at: at)
     }
     public mutating func set(foregroundColor: CGColor, range: Range<Int>) {
-        set(key: Key.foregroundColor, range: range, color: foregroundColor)
+        set(key: Keys.foregroundColor, range: range, color: foregroundColor)
     }
     public func backgroundColor(at: Int) -> CGColor? {
-        return color(Key.backgroundColor, at: at)
+        return color(Keys.backgroundColor, at: at)
     }
     public mutating func set(backgroundColor: CGColor, range: Range<Int>) {
-        set(key: Key.backgroundColor, range: range, color: backgroundColor)
+        set(key: Keys.backgroundColor, range: range, color: backgroundColor)
     }
     public func underlineColor(at: Int) -> CGColor? {
-        return color(Key.underlineColor, at: at)
+        return color(Keys.underlineColor, at: at)
     }
     public mutating func set(underlineColor: CGColor, range: Range<Int>) {
-        set(key: Key.underlineColor, range: range, color: underlineColor)
+        set(key: Keys.underlineColor, range: range, color: underlineColor)
     }
     public func strikethroughColor(at: Int) -> CGColor? {
-        return color(Key.strikethroughColor, at: at)
+        return color(Keys.strikethroughColor, at: at)
     }
     public mutating func set(strikethroughColor: CGColor, range: Range<Int>) {
-        set(key: Key.strikethroughColor, range: range, color: strikethroughColor)
+        set(key: Keys.strikethroughColor, range: range, color: strikethroughColor)
     }
     public func underlineStyle(at: Int) -> UnderlineStyle? {
-        guard let int = int(Key.underlineStyle, at: at) else {
+        guard let int = int(Keys.underlineStyle, at: at) else {
             return nil
         }
         return UnderlineStyle(rawValue: UInt32(int))
     }
     public mutating func set(underlineStyle: UnderlineStyle, range: Range<Int>) {
-        set(key: Key.underlineStyle, range: range, int:Int(underlineStyle.rawValue))
+        set(key: Keys.underlineStyle, range: range, int:Int(underlineStyle.rawValue))
     }
     public func superscript(at: Int) -> Int? {
-        return int(Key.superscript, at: at)
+        return int(Keys.superscript, at: at)
     }
     public mutating func set(superscript: Int?, range: Range<Int>) {
-        set(key: Key.superscript, range: range, int: superscript)
+        set(key: Keys.superscript, range: range, int: superscript)
     }
     public func strikethrough(at: Int) -> Bool? {
-        return bool(Key.strikethrough, at: at)
+        return bool(Keys.strikethrough, at: at)
     }
     public mutating func set(strikethrough: Bool?, range: Range<Int>) {
-        set(key: Key.strikethrough, range: range, bool: strikethrough)
+        set(key: Keys.strikethrough, range: range, bool: strikethrough)
     }
     public func shadow(at: Int) -> Bool? {
-        return bool(Key.shadow, at: at)
+        return bool(Keys.shadow, at: at)
     }
     public mutating func set(shadow: Bool?, range: Range<Int>) {
-        set(key: Key.shadow, range: range, bool: shadow)
+        set(key: Keys.shadow, range: range, bool: shadow)
     }
     public func attachment(at: Int) -> SystemElement? {
-        return element(Key.attachment, at: at)
+        return element(Keys.attachment, at: at)
     }
     public mutating func set(attachment: SystemElement?, range: Range<Int>) {
-        set(key: Key.attachment, range: range, element: attachment)
+        set(key: Keys.attachment, range: range, element: attachment)
     }
     public func link(at: Int) -> SystemElement? {
-        return element(Key.link, at: at)
+        return element(Keys.link, at: at)
     }
     public mutating func set(link: SystemElement?, range: Range<Int>) {
-        set(key: Key.link, range: range, element: link)
+        set(key: Keys.link, range: range, element: link)
     }
     public func naturalLanguage(at: Int) -> String? {
-        return string(Key.naturalLanguage, at: at)
+        return string(Keys.naturalLanguage, at: at)
     }
     public mutating func set(naturalLanguage: String?, range: Range<Int>) {
-        set(key: Key.link, range: range, string: naturalLanguage)
+        set(key: Keys.link, range: range, string: naturalLanguage)
     }
     public func replacement(at: Int) -> String? {
-        return string(Key.replacement, at: at)
+        return string(Keys.replacement, at: at)
     }
     public mutating func set(replacement: String?, range: Range<Int>) {
-        set(key: Key.link, range: range, string: replacement)
+        set(key: Keys.link, range: range, string: replacement)
     }
     public func misspelled(at: Int) -> Bool? {
-        return bool(Key.misspelled, at: at)
+        return bool(Keys.misspelled, at: at)
     }
     public mutating func set(misspelled: Bool?, range: Range<Int>) {
-        set(key: Key.misspelled, range: range, bool: misspelled)
+        set(key: Keys.misspelled, range: range, bool: misspelled)
     }
     public func markedMisspelled(at: Int) -> Bool? {
-        return bool(Key.markedMisspelled, at: at)
+        return bool(Keys.markedMisspelled, at: at)
     }
     public mutating func set(markedMisspelled: Bool?, range: Range<Int>) {
-        set(key: Key.markedMisspelled, range: range, bool: markedMisspelled)
+        set(key: Keys.markedMisspelled, range: range, bool: markedMisspelled)
     }
     public func autocorrected(at: Int) -> Bool? {
-        return bool(Key.autocorrected, at: at)
+        return bool(Keys.autocorrected, at: at)
     }
     public mutating func set(autocorrected: Bool?, range: Range<Int>) {
-        set(key: Key.autocorrected, range: range, bool: autocorrected)
+        set(key: Keys.autocorrected, range: range, bool: autocorrected)
     }
     public func listItemPrefix(at: Int) -> AttributedString? {
-        return attributedString(Key.listItemPrefix, at: at)
+        return attributedString(Keys.listItemPrefix, at: at)
     }
     public mutating func set(listItemPrefix: AttributedString?, range: Range<Int>) {
         
     }
     public func listItemIndex(at: Int) -> Int? {
-        return int(Key.listItemIndex, at: at)
+        return int(Keys.listItemIndex, at: at)
     }
     public mutating func set(listItemIndex: Int?, range: Range<Int>) {
-        set(key: Key.listItemIndex, range: range, int: listItemIndex)
+        set(key: Keys.listItemIndex, range: range, int: listItemIndex)
     }
     public func listItemLevel(at: Int) -> Int? {
-        return int(Key.listItemLevel, at: at)
+        return int(Keys.listItemLevel, at: at)
     }
     public mutating func set(listItemLevel: Int?, range: Range<Int>) {
-        set(key: Key.listItemLevel, range: range, int: listItemLevel)
+        set(key: Keys.listItemLevel, range: range, int: listItemLevel)
     }
     // MARK: -
     public init(attributedString: NSAttributedString) {
