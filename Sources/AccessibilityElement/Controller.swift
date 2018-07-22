@@ -86,7 +86,6 @@ public class Controller<EventHandlerType> : _Controller<EventHandlerType.Element
     }
     public override func childControllers(node: Node<ElementType>,
                                           reuse: Bool = true) throws -> [_Controller<ElementType>] {
-#if swift(>=4.1)
         let currentChildrenReuseMap: [Node<ElementType>:_Controller<ElementType>]
         if reuse {
             currentChildrenReuseMap = _childControllers.reduce(into: [Node<ElementType>:_Controller<ElementType>]()) { reuseMap, controller in
@@ -95,28 +94,12 @@ public class Controller<EventHandlerType> : _Controller<EventHandlerType.Element
         } else {
             currentChildrenReuseMap = [:]
         }
-#else
-        let currentChildrenReuseMap: [HashableNode<ElementType>:_Controller<ElementType>]
-        if reuse {
-            currentChildrenReuseMap = _childControllers.reduce(into: [HashableNode<ElementType>:_Controller<ElementType>]()) { reuseMap, controller in
-                reuseMap[HashableNode(node: controller.node)] = controller
-            }
-        } else {
-            currentChildrenReuseMap = [:]
-        }
-#endif
         let applicationObserver = _eventHandler.applicationObserver
         let shared = try EventHandlerRegistrar<ElementType>.shared()
         return try node.children.map { node in
-#if swift(>=4.1)
             if let controller = currentChildrenReuseMap[node] {
                 return controller
             }
-#else
-            if let controller = currentChildrenReuseMap[HashableNode(node: node)] {
-                return controller
-            }
-#endif
             guard let controller = try shared.eventHandler(node: node, applicationObserver: applicationObserver).makeController() as? _Controller<ElementType> else {
                 throw AccessibilityError.typeMismatch
             }

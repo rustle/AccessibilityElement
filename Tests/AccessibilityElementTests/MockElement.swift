@@ -13,15 +13,9 @@ func compare<T>(lhs: T, rhs: Node<T>) -> Bool where T : Element {
         flattenedLHS.append(element)
     }
     var flattenedRHS = [T]()
-#if swift(>=4.1)
     rhs.walk { node in
         flattenedRHS.append(node._element)
     }
-#else
-    HashableNode(node: rhs).walk { node in
-        flattenedRHS.append(node.node._element)
-    }
-#endif
     return flattenedLHS == flattenedRHS
 }
 
@@ -142,11 +136,7 @@ extension MockElement : CustomDebugStringConvertible {
         ]
         do {
             let values = try describer.describe(element: self, requests: requests)
-#if swift(>=4.1)
             return values.compactMap({ return $0 }).joined(separator: ", ")
-#else
-            return values.flatMap({ return $0 }).joined(separator: ", ")
-#endif
         } catch {
             return "<MockElement>"
         }

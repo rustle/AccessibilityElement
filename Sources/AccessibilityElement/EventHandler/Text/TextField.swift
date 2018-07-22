@@ -30,11 +30,7 @@ public struct TextField<ElementType> : EventHandler where ElementType : Element 
         guard let results: [String?] = try? Describer().describe(element: element, requests: describerRequests) else {
             return nil
         }
-#if swift(>=4.1)
         return results.compactMap({ $0 }).first
-#else
-        return results.flatMap({ $0 }).first
-#endif
     }
     public mutating func focusOut() -> String? {
         return nil

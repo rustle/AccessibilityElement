@@ -29,11 +29,7 @@ public struct DefaultEventHandler<ElementType> : EventHandler where ElementType 
         let element = _node._element
         do {
             let results = try Describer().describe(element: element, requests: describerRequests)
-#if swift(>=4.1)
             return results.compactMap({ $0 }).joined(separator: ", ")
-#else
-            return results.flatMap({ $0 }).joined(separator: ", ")
-#endif
         } catch {
             return nil
         }

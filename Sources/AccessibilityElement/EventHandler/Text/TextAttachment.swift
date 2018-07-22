@@ -31,11 +31,7 @@ public struct TextAttachment<ElementType> : EventHandler where ElementType : Ele
         guard let results: [String?] = try? Describer<ElementType>().describe(element: element, requests: describerRequests) else {
             return nil
         }
-#if swift(>=4.1)
         return results.compactMap({ $0 }).first
-#else
-        return results.flatMap({ $0 }).first
-#endif
     }
     public func focusOut() -> String? {
         return nil
