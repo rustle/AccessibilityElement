@@ -1,7 +1,7 @@
 //
 //  EventHandler.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Foundation
@@ -26,8 +26,8 @@ public protocol AnyEventHandler {
     mutating func handleEvent(identifier: String, type: EventType) throws
 }
 
-public protocol EventHandler : AnyEventHandler {
-    associatedtype ElementType : Element
+public protocol EventHandler: AnyEventHandler {
+    associatedtype ElementType: Element
     var _node: Node<ElementType> { get }
     var _controller: Controller<Self>? { get set }
     var applicationObserver: ApplicationObserver<ElementType> { get }
@@ -47,10 +47,10 @@ public extension EventHandler {
         return Self.init(node: node,
                          applicationObserver: applicationObserver)
     }
-    public var node: AnyNode {
-        return _node
+    var node: AnyNode {
+        _node
     }
-    public weak var controller: AnyController? {
+    weak var controller: AnyController? {
         get {
             return _controller
         }
@@ -58,13 +58,14 @@ public extension EventHandler {
             _controller = newValue as? Controller<Self>
         }
     }
-    public func makeController() throws -> AnyController {
-        return try Controller<Self>(eventHandler: self)
+    func makeController() throws -> AnyController {
+        try Controller<Self>(eventHandler: self)
     }
-    public func configure(output: (([Output.Job.Payload]) -> Void)?) {
+    func configure(output: (([Output.Job.Payload]) -> Void)?) {
         
     }
-    mutating func handleEvent(identifier: String, type: EventType) throws {
+    mutating func handleEvent(identifier: String,
+                              type: EventType) throws {
         
     }
 }

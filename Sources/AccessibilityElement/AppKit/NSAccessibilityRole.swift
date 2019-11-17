@@ -1,26 +1,26 @@
 //
-//  NSAccessibilityRole.swift
+//  NSAccessibility.Role.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
 
-public extension NSAccessibilityRole {
+public extension NSAccessibility.Role {
     /// Role value representing container for web content.
-    public static let webArea = NSAccessibilityRole(rawValue: "AXWebArea")
+    static let webArea = NSAccessibility.Role(rawValue: "AXWebArea")
 }
 
-extension NSAccessibilityRole : Codable {
-    public enum NSAccessibilityRoleCodingKeys : String, CodingKey {
+extension NSAccessibility.Role: Codable {
+    public enum CodingKeys: String, CodingKey {
         case rawValue
     }
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: NSAccessibilityRoleCodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(rawValue, forKey: .rawValue)
     }
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: NSAccessibilityRoleCodingKeys.self)
+        let values = try decoder.container(keyedBy: CodingKeys.self)
         self.init(rawValue: try values.decode(String.self, forKey: .rawValue))
     }
 }

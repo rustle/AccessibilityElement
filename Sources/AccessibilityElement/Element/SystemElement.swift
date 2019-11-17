@@ -1,68 +1,69 @@
 //
 //  SystemElement.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
 
-public struct SystemElement : Element {
+public struct SystemElement: Element {
     public typealias ObserverProvidingType = SystemObserverProviding
     public static func systemWide() throws -> SystemElement {
-        return SystemElement(element: AXUIElement.systemWide())
+        SystemElement(element: AXUIElement.systemWide())
     }
     public static func application(processIdentifier: ProcessIdentifier) throws -> SystemElement {
-        return SystemElement(element: AXUIElement.application(processIdentifier: processIdentifier))
+        SystemElement(element: AXUIElement.application(processIdentifier: processIdentifier))
     }
-    let element: AXUIElement
+
+    internal let element: AXUIElement
     public init(element: AXUIElement) {
         self.element = element
     }
 
-    private func string(attribute: NSAccessibilityAttributeName) throws -> String {
+    private func string(attribute: NSAccessibility.Attribute) throws -> String {
         let value = try element.value(attribute: attribute)
         guard let string = value as? String else {
             throw AccessibilityError.typeMismatch
         }
         return string
     }
-    private func axValue(attribute: NSAccessibilityAttributeName) throws -> AXValue {
+    private func axValue(attribute: NSAccessibility.Attribute) throws -> AXValue {
         let value = try element.value(attribute: attribute)
         guard CFGetTypeID(value as CFTypeRef) == AXValueGetTypeID() else {
             throw AccessibilityError.typeMismatch
         }
         return value as! AXValue
     }
-    private func frame(attribute: NSAccessibilityAttributeName) throws -> Frame {
-        return Frame(rect: try axValue(attribute: attribute).rectValue())
+    private func frame(attribute: NSAccessibility.Attribute) throws -> Frame {
+        Frame(rect: try axValue(attribute: attribute).rectValue())
     }
-    private func number(attribute: NSAccessibilityAttributeName) throws -> NSNumber {
+    private func number(attribute: NSAccessibility.Attribute) throws -> NSNumber {
         let value = try element.value(attribute: attribute)
         guard let number = value as? NSNumber else {
             throw AccessibilityError.typeMismatch
         }
         return number
     }
-    private func set(attribute: NSAccessibilityAttributeName, number: NSNumber) throws {
+    private func set(attribute: NSAccessibility.Attribute, number: NSNumber) throws {
         try element.set(attribute: attribute, value: number)
     }
-    private func bool(attribute: NSAccessibilityAttributeName) throws -> Bool {
-        return try number(attribute: attribute).boolValue
+    private func bool(attribute: NSAccessibility.Attribute) throws -> Bool {
+        try number(attribute: attribute).boolValue
     }
-    private func set(attribute: NSAccessibilityAttributeName, bool: Bool) throws {
+    private func set(attribute: NSAccessibility.Attribute, bool: Bool) throws {
         try set(attribute: attribute, number: NSNumber(value: bool))
     }
-    private func int(attribute: NSAccessibilityAttributeName) throws -> Int {
-        return try number(attribute: attribute).intValue
+    private func int(attribute: NSAccessibility.Attribute) throws -> Int {
+        try number(attribute: attribute).intValue
     }
-    private func element(attribute: NSAccessibilityAttributeName) throws -> SystemElement {
+    private func element(attribute: NSAccessibility.Attribute) throws -> SystemElement {
         let value = try element.value(attribute: attribute)
         guard CFGetTypeID(value as CFTypeRef) == AXUIElementGetTypeID() else {
             throw AccessibilityError.typeMismatch
         }
         return SystemElement(element: value as! AXUIElement)
     }
-    private func elements(attribute: NSAccessibilityAttributeName) throws -> [SystemElement] {
+    private func elements(attribute: NSAccessibility.Attribute) throws -> [SystemElement] {
         let value = try element.value(attribute: attribute)
         guard let elements = value as? [AXUIElement]  else {
             throw AccessibilityError.typeMismatch
@@ -71,19 +72,19 @@ public struct SystemElement : Element {
             return SystemElement(element: element)
         }
     }
-    private func range(attribute: NSAccessibilityAttributeName) throws -> Range<Int> {
+    private func range(attribute: NSAccessibility.Attribute) throws -> Range<Int> {
         let value = try axValue(attribute: attribute)
         let cfRange = try value.rangeValue()
         return cfRange.location..<cfRange.location+cfRange.length
     }
-    private func textMarkerRange(attribute: NSAccessibilityAttributeName) throws -> Range<Position<AXTextMarker>> {
+    private func textMarkerRange(attribute: NSAccessibility.Attribute) throws -> Range<Position<AXTextMarker>> {
         let value = try element.value(attribute: attribute)
         guard CFGetTypeID(value as CFTypeRef) == accessibility_element_get_marker_range_type_id() else {
             throw AccessibilityError.typeMismatch
         }
         return Range(value as AXTextMarkerRange, element: self)
     }
-    private func position(attribute: NSAccessibilityAttributeName) throws -> Position<AXTextMarker> {
+    private func position(attribute: NSAccessibility.Attribute) throws -> Position<AXTextMarker> {
         let value = try element.value(attribute: attribute)
         guard CFGetTypeID(value as CFTypeRef) == accessibility_element_get_marker_type_id() else {
             throw AccessibilityError.typeMismatch
@@ -91,17 +92,17 @@ public struct SystemElement : Element {
         return Position(index: value as AXTextMarker, element: self)
     }
 
-    public func role() throws -> NSAccessibilityRole {
-        return NSAccessibilityRole(rawValue: try string(attribute: .role))
+    public func role() throws -> NSAccessibility.Role {
+        NSAccessibility.Role(rawValue: try string(attribute: .role))
     }
     public func roleDescription() throws -> String {
-        return try string(attribute: .roleDescription)
+        try string(attribute: .roleDescription)
     }
-    public func subrole() throws -> NSAccessibilitySubrole {
-        return NSAccessibilitySubrole(rawValue: try string(attribute: .subrole))
+    public func subrole() throws -> NSAccessibility.Subrole {
+        NSAccessibility.Subrole(rawValue: try string(attribute: .subrole))
     }
     public func value() throws -> Any {
-        return try element.value(attribute: .value)
+        try element.value(attribute: .value)
     }
     public func string<IndexType>(range: Range<Position<IndexType>>) throws -> String {
         if let range = range as? Range<Position<Int>> {
@@ -115,7 +116,7 @@ public struct SystemElement : Element {
         guard let axTextMarkerRange = (range as! Range<Position<AXTextMarker>>).axTextMarkerRange else {
             throw AccessibilityError.invalidInput
         }
-        let value = try element.parameterizedValue(attribute: NSAccessibilityParameterizedAttributeName.stringForTextMarkerRange,
+        let value = try element.parameterizedValue(attribute: NSAccessibility.ParameterizedAttribute.stringForTextMarkerRange,
                                                    parameter: axTextMarkerRange)
         guard let string = value as? String else {
             throw AccessibilityError.typeMismatch
@@ -134,7 +135,7 @@ public struct SystemElement : Element {
         guard let axTextMarkerRange = (range as! Range<Position<AXTextMarker>>).axTextMarkerRange else {
             throw AccessibilityError.invalidInput
         }
-        let value = try element.parameterizedValue(attribute: NSAccessibilityParameterizedAttributeName.attributedStringForTextMarkerRange,
+        let value = try element.parameterizedValue(attribute: NSAccessibility.ParameterizedAttribute.attributedStringForTextMarkerRange,
                                                    parameter: axTextMarkerRange)
         guard let string = value as? NSAttributedString else {
             throw AccessibilityError.typeMismatch
@@ -142,37 +143,37 @@ public struct SystemElement : Element {
         return AttributedString(attributedString: string)
     }
     public func description() throws -> String {
-        return try string(attribute: .description)
+        try string(attribute: .description)
     }
     public func title() throws -> String {
-        return try string(attribute: .title)
+        try string(attribute: .title)
     }
     public func titleElement() throws -> SystemElement {
-        return try element(attribute: .titleUIElement)
+        try element(attribute: .titleUIElement)
     }
     public func isKeyboardFocused() throws -> Bool {
-        return try bool(attribute: .focused)
+        try bool(attribute: .focused)
     }
     public func parent() throws -> SystemElement {
-        return try element(attribute: .parent)
+        try element(attribute: .parent)
     }
     public func children() throws -> [SystemElement] {
-        return try elements(attribute: .children)
+        try elements(attribute: .children)
     }
     public func numberOfCharacters() throws -> Int {
-        return try int(attribute: .numberOfCharacters)
+        try int(attribute: .numberOfCharacters)
     }
     public func topLevelElement() throws -> SystemElement {
-        return try element(attribute: .topLevelUIElement)
+        try element(attribute: .topLevelUIElement)
     }
     public func applicationFocusedElement() throws -> SystemElement {
-        return try element(attribute: .focusedUIElement)
+        try element(attribute: .focusedUIElement)
     }
     public func caretBrowsingEnabled() throws -> Bool {
-        return try bool(attribute: NSAccessibilityAttributeName.caretBrowsingEnabled)
+        try bool(attribute: NSAccessibility.Attribute.caretBrowsingEnabled)
     }
     public func set(caretBrowsing: Bool) throws {
-        try set(attribute: NSAccessibilityAttributeName.caretBrowsingEnabled, bool: caretBrowsing)
+        try set(attribute: NSAccessibility.Attribute.caretBrowsingEnabled, bool: caretBrowsing)
     }
     public func range<IndexType>(unorderedPositions: (first: Position<IndexType>, second: Position<IndexType>)) throws -> Range<Position<IndexType>> {
         if IndexType.self == Int.self {
@@ -184,7 +185,7 @@ public struct SystemElement : Element {
             }
             return Range(uncheckedBounds: (unorderedPositions.first, unorderedPositions.second))
         }
-        let attribute = NSAccessibilityParameterizedAttributeName.textMarkerRangeForUnorderedTextMarkers
+        let attribute = NSAccessibility.ParameterizedAttribute.textMarkerRangeForUnorderedTextMarkers
         let value = try element.parameterizedValue(attribute: attribute, parameter: [unorderedPositions.first.index, unorderedPositions.second.index])
         guard CFGetTypeID(value as CFTypeRef) == accessibility_element_get_marker_range_type_id() else {
             throw AccessibilityError.typeMismatch
@@ -209,10 +210,10 @@ public struct SystemElement : Element {
         throw ElementError.notImplemented
     }
     public func enhancedUserInterface() throws -> Bool {
-        return try bool(attribute: NSAccessibilityAttributeName.enhancedUserInterface)
+        return try bool(attribute: NSAccessibility.Attribute.enhancedUserInterface)
     }
     public func set(enhancedUserInterface: Bool) throws {
-        try set(attribute: NSAccessibilityAttributeName.enhancedUserInterface, bool: enhancedUserInterface)
+        try set(attribute: NSAccessibility.Attribute.enhancedUserInterface, bool: enhancedUserInterface)
     }
     public func selectedTextMarkerRanges() throws -> [Range<Position<AXTextMarker>>] {
         return [try textMarkerRange(attribute: .selectedTextMarkerRange)]
@@ -222,30 +223,35 @@ public struct SystemElement : Element {
     }
 
     public func frame() throws -> Frame {
-        return try frame(attribute: NSAccessibilityAttributeName.frame)
+        try frame(attribute: NSAccessibility.Attribute.frame)
     }
 
     public var processIdentifier: ProcessIdentifier {
-        return (try? self.element.processIdentifier()) ?? 0
+        do {
+            return try self.element.processIdentifier()
+        } catch {
+            return 0
+        }
     }
 }
 
-extension SystemElement : Equatable {
-    public static func ==(lhs: SystemElement, rhs: SystemElement) -> Bool {
-        return CFEqual(lhs.element, rhs.element)
+extension SystemElement: Equatable {
+    public static func ==(lhs: SystemElement,
+                          rhs: SystemElement) -> Bool {
+        CFEqual(lhs.element, rhs.element)
     }
 }
 
-extension SystemElement : Hashable {
-    public var hashValue: Int {
-        return Int(CFHash(element))
+extension SystemElement: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(Int(CFHash(element)))
     }
 }
 
 fileprivate let IncludeAttributesInDebug = false
 fileprivate let IncludeParameterizedAttributesInDebug = false
 
-extension SystemElement : CustomDebugStringConvertible {
+extension SystemElement: CustomDebugStringConvertible {
     public var debugDescription: String {
         var components = [String]()
 #if IncludeAttributesInDebug
@@ -278,8 +284,8 @@ extension SystemElement : CustomDebugStringConvertible {
     }
 }
 
-extension SystemElement : Codable {
-    public enum SystemElementCodingKeys : String, CodingKey {
+extension SystemElement: Codable {
+    public enum SystemElementCodingKeys: String, CodingKey {
         case element
     }
     public func encode(to encoder: Encoder) throws {
@@ -292,7 +298,7 @@ extension SystemElement : Codable {
     }
 }
 
-extension SystemElement : CustomDebugDictionaryConvertible {
+extension SystemElement: CustomDebugDictionaryConvertible {
     public var debugInfo: [String:CustomDebugStringConvertible] {
         var info = [String:CustomDebugStringConvertible]()
 #if IncludeAttributesInDebug
@@ -306,19 +312,19 @@ extension SystemElement : CustomDebugDictionaryConvertible {
         }
 #endif
         if let role = try? self.role().rawValue, role.count > 0 {
-            info[NSAccessibilityAttributeName.role.rawValue] = role
+            info[NSAccessibility.Attribute.role.rawValue] = role
         }
         if let subrole = try? self.subrole().rawValue, subrole.count > 0 {
-            info[NSAccessibilityAttributeName.subrole.rawValue] = subrole
+            info[NSAccessibility.Attribute.subrole.rawValue] = subrole
         }
         if let description = try? self.description(), description.count > 0 {
-            info[NSAccessibilityAttributeName.description.rawValue] = description
+            info[NSAccessibility.Attribute.description.rawValue] = description
         }
         if let title = try? self.title(), title.count > 0 {
-            info[NSAccessibilityAttributeName.title.rawValue] = title
+            info[NSAccessibility.Attribute.title.rawValue] = title
         }
         if hasTextRole(), let value = try? self.value(), let string = value as? String, string.count > 0 {
-            info[NSAccessibilityAttributeName.value.rawValue] = string
+            info[NSAccessibility.Attribute.value.rawValue] = string
         }
         return info
     }

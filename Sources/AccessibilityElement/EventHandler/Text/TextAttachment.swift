@@ -1,12 +1,12 @@
 //
 //  TextAttachment.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Foundation
 
-public struct TextAttachment<ElementType> : EventHandler where ElementType : Element {
+public struct TextAttachment<ElementType: Element>: EventHandler {
     public typealias ObserverProvidingType = ElementType.ObserverProvidingType
     public var describerRequests: [DescriberRequest] = {
         let requests: [DescriberRequest] = [

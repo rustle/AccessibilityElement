@@ -1,32 +1,72 @@
 //
 //  ApplicationFocus.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
 
-public enum FocusRebuildStrategyError : Error {
+public enum FocusRebuildStrategyError: Error {
     case unableToCompleteMove
     case invalidTarget
 }
 
-public typealias ControllerProvider<ElementType> = (Node<ElementType>) throws -> _Controller<ElementType> where ElementType : Element
+public typealias ControllerProvider<ElementType> = (Node<ElementType>) throws -> _Controller<ElementType> where ElementType: Element
 
-public struct FocusRebuildTarget<ElementType> where ElementType : Element {
+public struct FocusRebuildTarget<ElementType: Element> {
     public internal(set) var container: Node<ElementType>?
     public internal(set) var target: Node<ElementType>?
 }
 
 public protocol FocusRebuildStrategy {
-    associatedtype ElementType where ElementType : Element
+    associatedtype ElementType: Element
     func move(focus: inout ApplicationFocus<ElementType>.FocusState,
               to target: FocusRebuildTarget<ElementType>,
               controllerProvider: ControllerProvider<ElementType>) throws
 }
 
-public struct CompositeRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
-    private struct CompositeEntry : FocusRebuildStrategy {
+public struct AnyFocusRebuildStrategy<ElementType: Element> {
+    private class Container {
+        func move(focus: inout ApplicationFocus<ElementType>.FocusState,
+                  to target: FocusRebuildTarget<ElementType>,
+                  controllerProvider: ControllerProvider<ElementType>) throws {
+            throw FocusRebuildStrategyError.unableToCompleteMove
+        }
+    }
+    private final class _Container<FocusRebuildStrategyType: FocusRebuildStrategy>: Container where FocusRebuildStrategyType.ElementType == ElementType {
+        override func move(focus: inout ApplicationFocus<ElementType>.FocusState,
+                           to target: FocusRebuildTarget<ElementType>,
+                           controllerProvider: ControllerProvider<ElementType>) throws {
+            try upstream.move(focus: &focus,
+                              to: target,
+                              controllerProvider: controllerProvider)
+        }
+        private let upstream: FocusRebuildStrategyType
+        init(upstream: FocusRebuildStrategyType) {
+            self.upstream = upstream
+        }
+    }
+    private let upstream: Container
+    init<FocusRebuildStrategyType: FocusRebuildStrategy>(upstream: FocusRebuildStrategyType) where FocusRebuildStrategyType.ElementType == ElementType {
+        self.upstream = _Container(upstream: upstream)
+    }
+    public func move(focus: inout ApplicationFocus<ElementType>.FocusState,
+                     to target: FocusRebuildTarget<ElementType>,
+                     controllerProvider: ControllerProvider<ElementType>) throws {
+        try upstream.move(focus: &focus,
+                          to: target,
+                          controllerProvider: controllerProvider)
+    }
+}
+
+public extension FocusRebuildStrategy {
+    func eraseToAnyFocusRebuildStrategy() -> AnyFocusRebuildStrategy<ElementType> {
+        AnyFocusRebuildStrategy(upstream: self)
+    }
+}
+
+public struct CompositeRebuildStrategy<ElementType: Element>: FocusRebuildStrategy {
+    private struct CompositeEntry: FocusRebuildStrategy {
         let move: (inout ApplicationFocus<ElementType>.FocusState,
                    FocusRebuildTarget<ElementType>,
                    ControllerProvider<ElementType>) throws -> Void
@@ -53,12 +93,12 @@ public struct CompositeRebuildStrategy<ElementType> : FocusRebuildStrategy where
     public init() {
         
     }
-    public mutating func append<StrategyType : FocusRebuildStrategy>(strategy: StrategyType) where StrategyType.ElementType == ElementType {
+    public mutating func append<StrategyType: FocusRebuildStrategy>(strategy: StrategyType) where StrategyType.ElementType == ElementType {
         strategies.append(CompositeEntry(move: strategy.move))
     }
 }
 
-public struct FullResetRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
+public struct FullResetRebuildStrategy<ElementType: Element>: FocusRebuildStrategy {
     public func move(focus: inout ApplicationFocus<ElementType>.FocusState,
                      to target: FocusRebuildTarget<ElementType>,
                      controllerProvider: ControllerProvider<ElementType>) throws {
@@ -69,7 +109,7 @@ public struct FullResetRebuildStrategy<ElementType> : FocusRebuildStrategy where
     }
 }
 
-public struct ContainerResetRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
+public struct ContainerResetRebuildStrategy<ElementType: Element>: FocusRebuildStrategy {
     public func move(focus: inout ApplicationFocus<ElementType>.FocusState,
                      to target: FocusRebuildTarget<ElementType>,
                      controllerProvider: ControllerProvider<ElementType>) throws {
@@ -80,7 +120,7 @@ public struct ContainerResetRebuildStrategy<ElementType> : FocusRebuildStrategy 
     }
 }
 
-public struct BasicRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
+public struct BasicRebuildStrategy<ElementType: Element>: FocusRebuildStrategy {
     public func move(focus: inout ApplicationFocus<ElementType>.FocusState,
                      to target: FocusRebuildTarget<ElementType>,
                      controllerProvider: ControllerProvider<ElementType>) throws {
@@ -121,7 +161,7 @@ public struct BasicRebuildStrategy<ElementType> : FocusRebuildStrategy where Ele
                 if controller.childControllers.count == 0 {
                     controller._childControllers = try controller.childControllers(node: node)
                 }
-                guard let index = controller._childControllers.index(where: { return $0.node == node }) else {
+                guard let index = controller._childControllers.firstIndex(where: { $0.node == node }) else {
                     throw ApplicationFocus<ElementType>.Error.focusedElementNotInHierarchy
                 }
                 controller = controller._childControllers[index]
@@ -136,7 +176,7 @@ public struct BasicRebuildStrategy<ElementType> : FocusRebuildStrategy where Ele
     }
 }
 
-public struct FullRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
+public struct FullRebuildStrategy<ElementType: Element>: FocusRebuildStrategy {
     public func move(focus: inout ApplicationFocus<ElementType>.FocusState,
                      to target: FocusRebuildTarget<ElementType>,
                      controllerProvider: ControllerProvider<ElementType>) throws {
@@ -159,37 +199,32 @@ public struct FullRebuildStrategy<ElementType> : FocusRebuildStrategy where Elem
     }
 }
 
-public struct SameContainerRebuildStrategy<ElementType> : FocusRebuildStrategy where ElementType : Element {
+public struct SameContainerRebuildStrategy<ElementType: Element>: FocusRebuildStrategy {
     public func move(focus: inout ApplicationFocus<ElementType>.FocusState,
                      to target: FocusRebuildTarget<ElementType>,
                      controllerProvider: ControllerProvider<ElementType>) throws {
-        // One day swift will get generalized existentials and the
-        // try strategy.move(focus:to:controllerProvider:)
-        // calls can be consolidated
+        let strategy: AnyFocusRebuildStrategy<ElementType>
         if let _ = target.target {
-            let strategy = BasicRebuildStrategy<ElementType>()
-            try strategy.move(focus: &focus,
-                              to: target,
-                              controllerProvider: controllerProvider)
+            strategy = BasicRebuildStrategy<ElementType>()
+                .eraseToAnyFocusRebuildStrategy()
         } else if let _ = target.container {
-            let strategy = ContainerResetRebuildStrategy<ElementType>()
-            try strategy.move(focus: &focus,
-                              to: target,
-                              controllerProvider: controllerProvider)
+            strategy = ContainerResetRebuildStrategy<ElementType>()
+                .eraseToAnyFocusRebuildStrategy()
         } else {
-            let strategy = FullResetRebuildStrategy<ElementType>()
-            try strategy.move(focus: &focus,
-                              to: target,
-                              controllerProvider: controllerProvider)
+            strategy = FullResetRebuildStrategy<ElementType>()
+                .eraseToAnyFocusRebuildStrategy()
         }
+        try strategy.move(focus: &focus,
+        to: target,
+        controllerProvider: controllerProvider)
     }
     public init() {
         
     }
 }
 
-public class ApplicationFocus<ElementType> where ElementType : Element {
-    public enum Error : Swift.Error {
+public class ApplicationFocus<ElementType: Element> {
+    public enum Error: Swift.Error {
         case focusFailed(Swift.Error)
         case typeMismatch
         case focusedElementNotInHierarchy

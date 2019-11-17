@@ -1,18 +1,18 @@
 //
 //  FocusTheftObserver.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
-import Signals
+import Combine
 
 /// Infer focus changes indirectly via accessibility notifications on applications that take focus, but don't become frontmost.
 /// Known culprits are Spotlight and NotificationCenter
 public class FocusTheftObserver<ElementType> : Runner where ElementType : Element {
     public static func systemApplicationLookup(_ bundleIdentifier: BundleIdentifier) throws -> ProcessIdentifier {
         let applications = NSWorkspace.shared.runningApplications;
-        let index = applications.index() { application in
+        let index = applications.firstIndex { application in
             guard let bundle = application.bundleIdentifier?.lowercased() else {
                 return false
             }
@@ -27,16 +27,27 @@ public class FocusTheftObserver<ElementType> : Runner where ElementType : Elemen
         case created
         case destroyed
     }
-    public let windowStateSignal = Signal<WindowState>()
+    //public let windowStateSignal = Signal<WindowState>()
+    public var windowStateSignal: AnyPublisher<WindowState, Never> {
+        _windowStateSignal
+            .eraseToAnyPublisher()
+    }
+    private let _windowStateSignal = PassthroughSubject<WindowState, Never>()
     public var windowState = WindowState.destroyed {
         didSet {
-            windowStateSignal⏦windowState
+            _windowStateSignal
+                .send(windowState)
         }
     }
-    public let runningSignal = Signal<Running>()
+    public var runningSignal: AnyPublisher<Running, Never> {
+        _runningSignal
+            .eraseToAnyPublisher()
+    }
+    private let _runningSignal = PassthroughSubject<Running, Never>()
     public private(set) var running = Running.stopped {
         didSet {
-            runningSignal⏦running
+            _runningSignal
+                .send(running)
         }
     }
     public let bundleIdentifier: BundleIdentifier

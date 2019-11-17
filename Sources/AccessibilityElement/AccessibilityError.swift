@@ -1,13 +1,13 @@
 //
 //  AccessibilityError.swift
 //
-//  Copyright © 2017 Doug Russell. All rights reserved.
+//  Copyright © 2017-2019 Doug Russell. All rights reserved.
 //
 
 import Foundation
 
 ///
-public enum AccessibilityError : Error {
+public enum AccessibilityError: Error {
     ///
     case typeMismatch
     ///
@@ -15,7 +15,7 @@ public enum AccessibilityError : Error {
 }
 
 /// 
-public enum ElementError : Error {
+public enum ElementError: Error {
     ///
     case actionUnsupported
     ///
@@ -73,12 +73,14 @@ public enum ElementError : Error {
             self = .noValue
         case .parameterizedAttributeUnsupported:
             self = .parameterizedAttributeUnsupported
+        @unknown default:
+            fatalError()
         }
     }
 }
 
 ///
-public enum ObserverError : Error {
+public enum ObserverError: Error {
     ///
     case actionUnsupported
     ///
@@ -144,6 +146,8 @@ public enum ObserverError : Error {
             self = .noValue
         case .parameterizedAttributeUnsupported:
             self = .parameterizedAttributeUnsupported
+        @unknown default:
+            fatalError()
         }
     }
 }

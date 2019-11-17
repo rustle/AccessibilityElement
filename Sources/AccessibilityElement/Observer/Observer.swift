@@ -1,20 +1,15 @@
 //
 //  AccessibilityObserver.swift
 //
-//  Copyright © 2017 Doug Russell. All rights reserved.
+//  Copyright © 2017-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
-import Signals
-import CoreFoundationOverlay
+import Combine
 
-public protocol AnyObserverManager {
-    
-}
+public protocol AnyObserverManager {}
 
-public protocol AnyApplicationObserver {
-    
-}
+public protocol AnyApplicationObserver {}
 
 public class ObserverManager<ElementType> : AnyObserverManager where ElementType : Element {
     private var map = [Int : ApplicationObserver<ElementType>]()
@@ -57,11 +52,11 @@ public class ApplicationObserver<ElementType> : AnyApplicationObserver where Ele
         public static func ==(lhs: Token, rhs: Token) -> Bool {
             return lhs.identifier == rhs.identifier
         }
-        public var hashValue: Int {
-            return identifier
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(identifier)
         }
         fileprivate let element: ElementType
-        fileprivate let notification: NSAccessibilityNotificationName
+        fileprivate let notification: NSAccessibility.Notification
         fileprivate let identifier: Int
     }
     public init(processIdentifier: ProcessIdentifier,
@@ -72,24 +67,16 @@ public class ApplicationObserver<ElementType> : AnyApplicationObserver where Ele
     deinit {
         stop()
     }
-    private lazy var signalMap = [ElementType:[NSAccessibilityNotificationName:ObserverSignal<ElementType>]]()
-    public func signal(element: ElementType,
-                       notification: NSAccessibilityNotificationName) throws -> ObserverSignal<ElementType> {
-        if let signal = signalMap[element]?[notification] {
-            return signal
-        }
-        if signalMap[element] == nil {
-            signalMap[element] = [NSAccessibilityNotificationName:ObserverSignal]()
-        }
-        let observerSignal = ObserverSignal(element: element,
-                                            notification: notification,
-                                            observer: self)
-        signalMap[element]?[notification] = observerSignal
-        return observerSignal
+    public func publisher(element: ElementType,
+                          notification: NSAccessibility.Notification) throws -> AnyPublisher<(element: ElementType, info: ElementNotificationInfo?), ObserverError> {
+        ElementNotificationPublisher(element: element,
+                                     notification: notification,
+                                     observer: self)
+            .eraseToAnyPublisher()
     }
     public func startObserving(element: ElementType,
-                               notification: NSAccessibilityNotificationName,
-                               handler: @escaping (ElementType, ObserverInfo?) -> Void) throws -> Token {
+                               notification: NSAccessibility.Notification,
+                               handler: @escaping (ElementType, ElementNotificationInfo?) -> Void) throws -> Token {
         let identifier = try observer.add(element: element,
                                           notification: notification) { element, _, info in
             handler(element as! ElementType, info)

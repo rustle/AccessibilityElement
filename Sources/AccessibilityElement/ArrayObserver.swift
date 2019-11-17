@@ -1,14 +1,14 @@
 //
 //  ArrayObserver.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Foundation
-import Signals
+import Combine
 
 /// Typesafe KVO change tracking for Array
-public struct ArrayObserver<Element> : Runner where Element : Equatable {
+public struct ArrayObserver<Element>: Runner where Element : Equatable {
     private class ObserverTarget : NSObject {
         var change: ((Change) -> Void)?
         override func observeValue(forKeyPath keyPath: String?,
@@ -38,6 +38,8 @@ public struct ArrayObserver<Element> : Runner where Element : Equatable {
                 let old: [Element] = change[.oldKey] as? [Element] ?? []
                 let new: [Element] = change[.newKey] as? [Element] ?? []
                 self.change?(.replace(old, new))
+            @unknown default:
+                break
             }
         }
     }
@@ -119,18 +121,27 @@ public struct ArrayObserver<Element> : Runner where Element : Equatable {
         }
     }
     /// Subscribe for notifications when observer starts or stops
-    public let runningSignal = Signal<Running>()
+    //public let runningSignal = Signal<Running>()
+    public var runningSignal: AnyPublisher<Running, Never> {
+        _runningSignal
+            .eraseToAnyPublisher()
+    }
+    public let _runningSignal = PassthroughSubject<Running, Never>()
     ///
     public private(set) var running = Running.stopped {
         didSet {
-            runningSignal⏦running
+            _runningSignal
+                .send(running)
         }
     }
     /// Start observing for KVO notifications
     public mutating func start() {
         switch running {
         case .stopped:
-            self.target?.addObserver(observer, forKeyPath: keyPath, options: [.new, .old, .initial], context: nil)
+            self.target?.addObserver(observer,
+                                     forKeyPath: keyPath,
+                                     options: [.new, .old, .initial],
+                                     context: nil)
             running = .started
         case .started:
             break

@@ -28,7 +28,7 @@ public protocol SelectionChangeHandler : AnySelectionChangeHandler {
 }
 
 public extension SelectionChangeHandler {
-    public func handle(selectionChange: SelectionChange<IndexType>) {
+    func handle(selectionChange: SelectionChange<IndexType>) {
         switch selectionChange {
         case .edit(_):
             break
@@ -40,7 +40,7 @@ public extension SelectionChangeHandler {
             break
         }
     }
-    public func move(navigation: Navigation<IndexType>) {
+    func move(navigation: Navigation<IndexType>) {
         guard let previousSelection = previousSelection else {
             self.previousSelection = navigation.selection
             return
@@ -67,13 +67,13 @@ public extension SelectionChangeHandler {
         }
         self.previousSelection = selection
     }
-    public func rangeForMove(previousSelection: Range<Position<IndexType>>,
+    func rangeForMove(previousSelection: Range<Position<IndexType>>,
                              selection: Range<Position<IndexType>>,
                              direction: Navigation<IndexType>.Direction,
                              granularity: Navigation<IndexType>.Granularity) throws -> Range<Position<IndexType>> {
         return try element.range(unorderedPositions: (previousSelection.lowerBound, selection.lowerBound))
     }
-    public func echo(range: Range<Position<IndexType>>) {
+    func echo(range: Range<Position<IndexType>>) {
         do {
             let value = try element.attributedString(range: range)
             output?([.speech(value.string, nil)])

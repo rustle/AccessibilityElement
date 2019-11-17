@@ -19,7 +19,7 @@ public class CompoundSound {
     private func cleanup(sound: NSSound,
                          didFinishPlaying: Bool) {
         queue.async { _ in
-            guard let index = self.inUse.index(of: sound) else {
+            guard let index = self.inUse.firstIndex(of: sound) else {
                 return
             }
             self.available.append(self.inUse.remove(at: index))

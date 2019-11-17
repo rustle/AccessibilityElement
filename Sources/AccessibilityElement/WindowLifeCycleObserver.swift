@@ -5,14 +5,18 @@
 //
 
 import Cocoa
-import Signals
+import Combine
 
-public class WindowLifeCycleObserver<ElementType> : Runner where ElementType : Element {
+public class WindowLifeCycleObserver<ElementType> : Runner, ObservableObject where ElementType : Element {
     public let applicationObserver: ApplicationObserver<ElementType>
     public let element: ElementType
     public var windowsDirty: Bool = false
     private var windowTokenMap = [ElementType:ApplicationObserver<ElementType>.Token]()
-    private var onWindowCreated: Subscription<(element: ElementType, info: ObserverInfo?)>?
+    private var onWindowCreated: AnyCancellable? {
+        didSet {
+            oldValue?.cancel()
+        }
+    }
     public init(element: ElementType,
                 applicationObserver: ApplicationObserver<ElementType>) {
         self.element = element
@@ -38,21 +42,21 @@ public class WindowLifeCycleObserver<ElementType> : Runner where ElementType : E
             
         }
     }
-    public let runningSignal = Signal<Running>()
-    public private(set) var running = Running.stopped {
-        didSet {
-            runningSignal⏦running
-        }
-    }
+    @Published public private(set) var running = Running.stopped
     public func start() throws {
         switch running {
         case .started:
             break
         case .stopped:
-            onWindowCreated = try applicationObserver.signal(element: element,
-                                                             notification: .windowCreated).subscribe { [weak self] in
-                self?.created(window: $0.element)
-            }
+            onWindowCreated = try applicationObserver
+                .publisher(element: element,
+                           notification: .windowCreated)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: { _ in
+                    
+                }, receiveValue: { [weak self] in
+                    self?.created(window: $0.element)
+                })
             running = .started
         }
     }

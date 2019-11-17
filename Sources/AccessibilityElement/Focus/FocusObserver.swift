@@ -1,50 +1,52 @@
 //
 //  FocusObserver.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
-import Signals
+import Combine
 
-public class FocusObserver<ElementType> : Runner where ElementType : Element {
+public class FocusObserver<ElementType>: Runner, ObservableObject where ElementType : Element {
     public let spotlightObserver: FocusTheftObserver<ElementType>
     public init(observerManager: ObserverManager<ElementType>) {
         spotlightObserver = FocusTheftObserver(bundleIdentifier: .spotlight,
                                                applicationProvider: FocusTheftObserver<ElementType>.systemApplicationLookup,
                                                observerManager: observerManager)
     }
-    public let runningSignal = Signal<Running>()
-    public private(set) var running = Running.stopped {
+    @Published public private(set) var running = Running.stopped
+    public var shouldEvaluateFocus: AnyPublisher<Void, Never> {
+        _shouldEvaluateFocus
+            .eraseToAnyPublisher()
+    }
+    private let _shouldEvaluateFocus = PassthroughSubject<Void, Never>()
+    private var frontmost: AnyCancellable? {
         didSet {
-            runningSignal⏦running
+            oldValue?.cancel()
         }
     }
-    public var shouldEvaluateFocusSignal: Signal<Void> = Signal()
-    private var frontmostObservable: KeyValueObservable?
-    private var menuBarObservable: KeyValueObservable?
+    private var menuBar: AnyCancellable? {
+        didSet {
+            oldValue?.cancel()
+        }
+    }
     public func start() {
         switch running {
         case .stopped:
             let workspace = NSWorkspace.shared
             let update: () -> Void = { [weak self] in
-                self?.shouldEvaluateFocusSignal.fire(())
+                self?._shouldEvaluateFocus.send(())
             }
-            func observe(object: NSObject,
-                         keyPath: String) -> KeyValueObservable {
-                let observer = KeyValueObserverSignal<NSRunningApplication>()
-                let observable = KeyValueObservable(object: object,
-                                                    keyPath: keyPath)
-                observable.add(observer: observer)
-                observer.subscribe { _ in
-                    update()
-                }.queue(DispatchQueue.main)
-                return observable
+            func observe(keyPath: KeyPath<NSWorkspace, NSRunningApplication?>) -> AnyCancellable? {
+                workspace
+                    .publisher(for: keyPath)
+                    .receive(on: DispatchQueue.main)
+                    .sink { _ in
+                        update()
+                    }
             }
-            frontmostObservable = observe(object: workspace,
-                                          keyPath: #keyPath(NSWorkspace.frontmostApplication))
-            menuBarObservable = observe(object: workspace,
-                                        keyPath: #keyPath(NSWorkspace.menuBarOwningApplication))
+            frontmost = observe(keyPath: \NSWorkspace.frontmostApplication)
+            menuBar = observe(keyPath: \NSWorkspace.menuBarOwningApplication)
             spotlightObserver.start()
             running = .started
         case .started:
@@ -56,10 +58,10 @@ public class FocusObserver<ElementType> : Runner where ElementType : Element {
         case .stopped:
             break
         case .started:
-            frontmostObservable?.stopObserving()
-            frontmostObservable = nil
-            menuBarObservable?.stopObserving()
-            menuBarObservable = nil
+            frontmost?.cancel()
+            frontmost = nil
+            menuBar?.cancel()
+            menuBar = nil
             spotlightObserver.stop()
             running = .stopped
         }

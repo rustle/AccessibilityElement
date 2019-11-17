@@ -14,20 +14,20 @@ class MockObserverProviding : ObserverProviding {
         }
     }
     typealias ElementType = MockElement
-    var handler: ((MockElement, NSAccessibilityNotificationName, [String : Any]?) -> Void)?
+    var handler: ((MockElement, NSAccessibility.Notification, [String : Any]?) -> Void)?
     init() {
         
     }
-    func add(element: AnyElement, notification: NSAccessibilityNotificationName, handler: @escaping (AnyElement, NSAccessibilityNotificationName, [String : Any]?) -> Void) throws -> Int {
-        self.handler = handler as (MockElement, NSAccessibilityNotificationName, [String : Any]?) -> Void
+    func add(element: AnyElement, notification: NSAccessibility.Notification, handler: @escaping (AnyElement, NSAccessibility.Notification, [String : Any]?) -> Void) throws -> Int {
+        self.handler = handler as (MockElement, NSAccessibility.Notification, [String : Any]?) -> Void
         return 2
     }
     
-    func remove(element: AnyElement, notification: NSAccessibilityNotificationName, identifier: Int) throws {
+    func remove(element: AnyElement, notification: NSAccessibility.Notification, identifier: Int) throws {
         self.handler = nil
     }
     func fire(element: MockElement,
-              notification: NSAccessibilityNotificationName,
+              notification: NSAccessibility.Notification,
               info: [String : Any]?) {
         self.handler?(element, notification, info)
     }
@@ -51,32 +51,38 @@ class ObserverTests: XCTestCase {
             XCTFail("\(error)")
         }
     }
-    func testSignal() {
+    func testPublisher() {
         do {
             let element = try MockElement.application(processIdentifier: 1)
             let observer = try observerManager?.registerObserver(application: element)
-            let signal = try observer?.signal(element: element, notification: .focusedUIElementChanged)
+            let publisher = try observer?.publisher(element: element,
+                                                    notification: .focusedUIElementChanged)
             var fired = false
-            let sub = signal?.subscribe { element, info in
+            let cancellable = publisher?.sink(receiveCompletion: { _ in
+                
+            }, receiveValue: { _, _ in
                 fired = true
-            }
+            })
             provider?.fire(element: element, notification: .focusedUIElementChanged, info: nil)
             XCTAssertTrue(fired)
-            sub?.cancel()
+            cancellable?.cancel()
         } catch let error {
             XCTFail("\(error)")
         }
     }
-    func testDisposeSignal() {
+    func testPublisherCancel() {
         do {
             let element = try MockElement.application(processIdentifier: 1)
-            let observer = try observerManager!.registerObserver(application: element)
-            let signal = try observer.signal(element: element, notification: .focusedUIElementChanged)
-            let subscription = signal.subscribe { element, info in
+            let observer = try observerManager?.registerObserver(application: element)
+            let publisher = try observer?.publisher(element: element,
+                                                    notification: .focusedUIElementChanged)
+            let cancellable = publisher?.sink(receiveCompletion: { _ in
                 
-            }
+            }, receiveValue: { _, _ in
+                
+            })
             XCTAssertNotNil(provider!.handler)
-            subscription.cancel()
+            cancellable?.cancel()
             XCTAssertTrue(provider!.handler == nil)
         } catch {
             XCTFail("\(error)")

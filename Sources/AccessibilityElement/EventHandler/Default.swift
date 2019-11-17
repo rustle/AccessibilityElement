@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct DefaultEventHandler<ElementType> : EventHandler where ElementType : Element {
+public struct DefaultEventHandler<ElementType: Element>: EventHandler {
     public typealias ObserverProvidingType = ElementType.ObserverProvidingType
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [

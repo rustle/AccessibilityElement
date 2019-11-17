@@ -1,11 +1,11 @@
 //
 //  FocusArbitration.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
-import Signals
+import Combine
 
 /// Evaluate cascading list of focus providers to find the currently focused application
 public class FocusArbitrator {
@@ -17,7 +17,7 @@ public class FocusArbitrator {
     }
     public static func systemFocusedApplicationElement() throws -> (ProcessIdentifier, BundleIdentifier) {
         func systemFocus() throws -> SystemElement {
-            let value = try AXUIElement.systemWide().value(attribute: NSAccessibilityAttributeName.focusedApplication) as CFTypeRef
+            let value = try AXUIElement.systemWide().value(attribute: NSAccessibility.Attribute.focusedApplication) as CFTypeRef
             if CFGetTypeID(value) == AXUIElement.typeID {
                 return SystemElement(element: value as! AXUIElement)
             }
@@ -77,7 +77,11 @@ public class FocusArbitrator {
         }
         throw FocusArbitrator.Error.nilFocus
     }
-    public let focus: Signal<(ProcessIdentifier, BundleIdentifier)> = Signal()
+    public var focus: AnyPublisher<(ProcessIdentifier, BundleIdentifier), Never> {
+        _focus
+            .eraseToAnyPublisher()
+    }
+    public let _focus = PassthroughSubject<(ProcessIdentifier, BundleIdentifier), Never>()
     public init(focusProviders: [() throws -> (ProcessIdentifier, BundleIdentifier)]) {
         self.focusProviders = focusProviders
     }
@@ -93,7 +97,7 @@ public class FocusArbitrator {
                     }
                     let value = try provider()
                     if !workItem.isCancelled {
-                        self.focus⏦value
+                        self._focus.send(value)
                     }
                     break
                 } catch {

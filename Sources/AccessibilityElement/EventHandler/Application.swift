@@ -1,13 +1,13 @@
 //
 //  Application.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
-import Signals
+import Combine
 
-public final class Application<ElementType> : EventHandler where ElementType : Element {
+public final class Application<ElementType: Element>: EventHandler {
     // MARK: EventHandler
     public var output: (([Output.Job.Payload]) -> Void)?
     public weak var _controller: Controller<Application<ElementType>>?
@@ -27,23 +27,31 @@ public final class Application<ElementType> : EventHandler where ElementType : E
     public var isFocused: Bool = false
     // MARK: Observers
     public let applicationObserver: ApplicationObserver<ElementType>
-    private var onFocusedUIElementChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
-    private var onFocusedWindowChanged: Subscription<(element: ElementType, info: ObserverInfo?)>?
+    private var onFocusedUIElementChanged: AnyCancellable? {
+        didSet {
+            oldValue?.cancel()
+        }
+    }
+    private var onFocusedWindowChanged: AnyCancellable? {
+        didSet {
+            oldValue?.cancel()
+        }
+    }
     private let windowLifeCycleObserver: WindowLifeCycleObserver<ElementType>
 }
 
 // MARK: EventHandler
 public extension Application {
-    public var describerRequests: [DescriberRequest] {
+    var describerRequests: [DescriberRequest] {
         return []
     }
-    public func configure(output: (([Output.Job.Payload]) -> Void)?) {
+    func configure(output: (([Output.Job.Payload]) -> Void)?) {
         self.output = output
     }
 }
 
 public extension Application {
-    public enum Error : Swift.Error {
+    enum Error: Swift.Error {
         case invalidElement
         case containerSearchFailed
         case nilController
@@ -102,12 +110,18 @@ public extension Application {
 public extension Application {
     private func registerObservers() throws {
         try windowLifeCycleObserver.start()
-        onFocusedUIElementChanged = try applicationObserver.signal(element: _node._element,
-                                                                   notification: .focusedUIElementChanged).subscribe { [weak self] in
+        func observe(_ notification: NSAccessibility.Notification,
+                     handler: @escaping ((element: ElementType, info: ElementNotificationInfo?)) -> Void) throws -> AnyCancellable {
+            try applicationObserver
+                .publisher(element: _node._element,
+                           notification: notification)
+                .sink(receiveCompletion: { _ in },
+                      receiveValue: handler)
+        }
+        onFocusedUIElementChanged = try observe(.focusedUIElementChanged) { [weak self] in
             self?.focusChanged(element: $0.element)
         }
-        onFocusedWindowChanged = try applicationObserver.signal(element: _node._element,
-                                                                notification: .focusedWindowChanged).subscribe { [weak self] in
+        onFocusedWindowChanged = try observe(.focusedWindowChanged) { [weak self] in
             self?.focusChanged(window: $0.element)
         }
     }
@@ -122,7 +136,7 @@ public extension Application {
 
 // MARK: EventHandler
 public extension Application {
-    public func connect() {
+    func connect() {
         do {
             try _node._element.set(enhancedUserInterface: true)
         } catch {
@@ -134,7 +148,7 @@ public extension Application {
         }
         windowLifeCycleObserver.windowsDirty = true
     }
-    public func focusIn() -> String? {
+    func focusIn() -> String? {
         if isFocused {
             return nil
         }
@@ -168,14 +182,14 @@ public extension Application {
         }
         return title
     }
-    public func focusOut() -> String? {
+    func focusOut() -> String? {
         isFocused = false
         return nil
     }
-    public func disconnect() {
+    func disconnect() {
         unregisterObservers()
     }
-    public func handleEvent(identifier: String, type: EventType) throws {
+    func handleEvent(identifier: String, type: EventType) throws {
         try self.focus.state.focused?.eventHandler.handleEvent(identifier: identifier, type: type)
     }
 }

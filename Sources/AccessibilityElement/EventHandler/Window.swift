@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct Window<ElementType> : EventHandler where ElementType : Element {
+public struct Window<ElementType: Element>: EventHandler {
     public var describerRequests: [DescriberRequest] {
         return [
             Describer<ElementType>.Single(required: false, attribute: .title),

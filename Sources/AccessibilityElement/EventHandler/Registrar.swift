@@ -1,7 +1,7 @@
 //
 //  Registrar.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
@@ -10,8 +10,8 @@ fileprivate struct SharedStorage {
     static var registrars = [String:Any]()
 }
 
-public class EventHandlerRegistrar<ElementType> where ElementType : Element {
-    public enum Error : Swift.Error {
+public class EventHandlerRegistrar<ElementType: Element> {
+    public enum Error: Swift.Error {
         case registrarUnavailable
     }
     public static func shared() throws -> EventHandlerRegistrar<ElementType> {
@@ -24,31 +24,30 @@ public class EventHandlerRegistrar<ElementType> where ElementType : Element {
         return (registrar as! EventHandlerRegistrar<ElementType>)
     }
     private var map = [Key:AnyEventHandler.Type]()
-    private struct Key : Hashable {
-        var hashValue: Int {
-            var seed = 0
+    private struct Key: Hashable {
+        func hash(into hasher: inout Hasher) {
             if let role = role {
-                seed ^= role.hashValue
+                hasher.combine(role)
             }
             if let subrole = subrole {
-                seed ^= subrole.hashValue
+                hasher.combine(subrole)
             }
             if let identifier = identifier {
-                seed ^= identifier.hashValue
+                hasher.combine(identifier)
             }
-            return seed
         }
-        static func ==(lhs: EventHandlerRegistrar.Key, rhs: EventHandlerRegistrar.Key) -> Bool {
+        static func ==(lhs: EventHandlerRegistrar.Key,
+                       rhs: EventHandlerRegistrar.Key) -> Bool {
             return
                 lhs.role == rhs.role &&
                 lhs.subrole == rhs.subrole &&
                 lhs.identifier == rhs.identifier
         }
-        var role: NSAccessibilityRole?
-        var subrole: NSAccessibilitySubrole?
+        var role: NSAccessibility.Role?
+        var subrole: NSAccessibility.Subrole?
         var identifier: String?
-        init?(role: NSAccessibilityRole?,
-              subrole: NSAccessibilitySubrole?,
+        init?(role: NSAccessibility.Role?,
+              subrole: NSAccessibility.Subrole?,
               identifier: String?) {
             if role == nil, subrole == nil, identifier == nil {
                 return nil
@@ -58,8 +57,8 @@ public class EventHandlerRegistrar<ElementType> where ElementType : Element {
             self.identifier = identifier
         }
     }
-    public func register(role: NSAccessibilityRole?,
-                         subrole: NSAccessibilitySubrole?,
+    public func register(role: NSAccessibility.Role?,
+                         subrole: NSAccessibility.Subrole?,
                          identifier: String?,
                          eventHandler: AnyEventHandler.Type) {
         guard let key = Key(role: role, subrole: subrole, identifier: identifier) else {
@@ -114,7 +113,7 @@ public class EventHandlerRegistrar<ElementType> where ElementType : Element {
         case .textField:
             return TextField(node: node,
                              applicationObserver: applicationObserver)
-        case NSAccessibilityRole.webArea:
+        case NSAccessibility.Role.webArea:
             return WebArea(node: node,
                            applicationObserver: applicationObserver)
         default:

@@ -25,10 +25,10 @@ public protocol Hierarchy {
 }
 
 public extension Hierarchy {
-    public func classify(_ element: ElementType) -> HierarchyRole {
+    func classify(_ element: ElementType) -> HierarchyRole {
         return .include
     }
-    public func buildHierarchy(from element: ElementType,
+    func buildHierarchy(from element: ElementType,
                                targeting target: inout Node<ElementType>?) -> Node<ElementType> {
         let children = (try? element.down()) ?? []
         let childNodes = children.map { child in
@@ -52,7 +52,7 @@ public struct DefaultHierarchy<ElementType> : Hierarchy where ElementType : Elem
         .toolbar,
         .scrollArea,
         .table,
-        NSAccessibilityRole.webArea,
+        NSAccessibility.Role.webArea,
     ])
     public func classify(_ element: ElementType) -> HierarchyRole {
         guard let role = try? element.role() else {

@@ -29,9 +29,10 @@ extension Node : Equatable where ElementType : Equatable {
         return lhs._element == rhs._element
     }
 }
+
 extension Node : Hashable where ElementType : Hashable {
-    public var hashValue: Int {
-        return _element.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(_element)
     }
 }
 

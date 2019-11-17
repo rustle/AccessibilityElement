@@ -1,30 +1,25 @@
 //
 //  AttributedString.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Foundation
-import CoreFoundationOverlay
 
 fileprivate extension NSRange {
-    fileprivate func range() -> Range<Int> {
+    func range() -> Range<Int> {
         return location ..< (location + length)
     }
 }
 
 fileprivate extension Range where Bound == Int {
-    fileprivate func nsRange() -> NSRange {
+    func nsRange() -> NSRange {
         return NSMakeRange(lowerBound, count)
     }
 }
 
-public struct AttributedString : Equatable {
-#if swift(>=4.2)
+public struct AttributedString: Equatable {
     public typealias Key = NSAttributedString.Key
-#else
-    public typealias Key = NSAttributedStringKey
-#endif
     private enum Error : Swift.Error {
         case unknownKey
     }
@@ -74,7 +69,7 @@ public struct AttributedString : Equatable {
             throw AttributedString.Error.unknownKey
         }
     }
-    private static func enumToStringEnum(_ key: Attribute) -> NSAttributedStringKey {
+    private static func enumToStringEnum(_ key: Attribute) -> NSAttributedString.Key {
         switch key {
         case .textAlignment:
             return Keys.textAlignment
@@ -118,7 +113,7 @@ public struct AttributedString : Equatable {
             return Keys.listItemLevel
         }
     }
-    public enum Attribute : Codable {
+    public enum Attribute: Codable {
         case textAlignment
         case font
         case foregroundColor
@@ -149,11 +144,11 @@ public struct AttributedString : Equatable {
         public init(from decoder: Decoder) throws {
             let values = try decoder.container(keyedBy: AttributeCodingKeys.self)
             let value = try values.decode(String.self, forKey: .value)
-            let key = NSAttributedStringKey(rawValue: value)
+            let key = NSAttributedString.Key(rawValue: value)
             self = try AttributedString.stringEnumToEnum(key)
         }
     }
-    fileprivate static func attributes(keys: [NSAttributedStringKey]) -> [Attribute] {
+    fileprivate static func attributes(keys: [NSAttributedString.Key]) -> [Attribute] {
         var attributes = [Attribute]()
         for key in keys {
             if let value = try? stringEnumToEnum(key) {
@@ -163,26 +158,26 @@ public struct AttributedString : Equatable {
         return attributes
     }
     private struct Keys {
-        static let textAlignment = NSAttributedStringKey(rawValue: "AXTextAlignmentValue")
-        static let font = NSAttributedStringKey(rawValue: kAXFontTextAttribute.takeUnretainedValue() as String) // [String:Any]
-        static let foregroundColor = NSAttributedStringKey(rawValue: kAXForegroundColorTextAttribute.takeUnretainedValue() as String) // CGColor
-        static let backgroundColor = NSAttributedStringKey(rawValue: kAXBackgroundColorTextAttribute.takeUnretainedValue() as String) // CGColor
-        static let underlineColor = NSAttributedStringKey(rawValue: kAXUnderlineColorTextAttribute.takeUnretainedValue() as String) // CGColor
-        static let strikethroughColor = NSAttributedStringKey(rawValue: kAXStrikethroughColorTextAttribute.takeUnretainedValue() as String) // CGColor
-        static let underlineStyle = NSAttributedStringKey(rawValue: kAXUnderlineTextAttribute.takeUnretainedValue() as String) // CFNumber - AXUnderlineStyle
-        static let superscript = NSAttributedStringKey(rawValue: kAXSuperscriptTextAttribute.takeUnretainedValue() as String) // CFNumber = + number for superscript - for subscript
-        static let strikethrough = NSAttributedStringKey(rawValue: kAXStrikethroughTextAttribute.takeUnretainedValue() as String) // CFBoolean
-        static let shadow = NSAttributedStringKey(rawValue: kAXShadowTextAttribute.takeUnretainedValue() as String) // CFBoolean
-        static let attachment = NSAttributedStringKey(rawValue: kAXAttachmentTextAttribute.takeUnretainedValue() as String) // AXUIElement
-        static let link = NSAttributedStringKey(rawValue: kAXLinkTextAttribute.takeUnretainedValue() as String) // AXUIElement
-        static let naturalLanguage = NSAttributedStringKey(rawValue: kAXNaturalLanguageTextAttribute.takeUnretainedValue() as String) // String
-        static let replacement = NSAttributedStringKey(rawValue: kAXReplacementStringTextAttribute.takeUnretainedValue() as String) // String
-        static let misspelled = NSAttributedStringKey(rawValue: kAXMisspelledTextAttribute.takeUnretainedValue() as String) // CFBoolean
-        static let markedMisspelled = NSAttributedStringKey(rawValue: kAXMarkedMisspelledTextAttribute.takeUnretainedValue() as String) // CFBoolean
-        static let autocorrected = NSAttributedStringKey(rawValue: kAXAutocorrectedTextAttribute.takeUnretainedValue() as String) // CFBoolean
-        static let listItemPrefix = NSAttributedStringKey(rawValue: kAXListItemPrefixTextAttribute.takeUnretainedValue() as String) // CFAttributedString
-        static let listItemIndex = NSAttributedStringKey(rawValue: kAXListItemIndexTextAttribute.takeUnretainedValue() as String) // CFNumber
-        static let listItemLevel = NSAttributedStringKey(rawValue: kAXListItemLevelTextAttribute.takeUnretainedValue() as String) // CFNumber
+        static let textAlignment = NSAttributedString.Key(rawValue: "AXTextAlignmentValue")
+        static let font = NSAttributedString.Key(rawValue: kAXFontTextAttribute.takeUnretainedValue() as String) // [String:Any]
+        static let foregroundColor = NSAttributedString.Key(rawValue: kAXForegroundColorTextAttribute.takeUnretainedValue() as String) // CGColor
+        static let backgroundColor = NSAttributedString.Key(rawValue: kAXBackgroundColorTextAttribute.takeUnretainedValue() as String) // CGColor
+        static let underlineColor = NSAttributedString.Key(rawValue: kAXUnderlineColorTextAttribute.takeUnretainedValue() as String) // CGColor
+        static let strikethroughColor = NSAttributedString.Key(rawValue: kAXStrikethroughColorTextAttribute.takeUnretainedValue() as String) // CGColor
+        static let underlineStyle = NSAttributedString.Key(rawValue: kAXUnderlineTextAttribute.takeUnretainedValue() as String) // CFNumber - AXUnderlineStyle
+        static let superscript = NSAttributedString.Key(rawValue: kAXSuperscriptTextAttribute.takeUnretainedValue() as String) // CFNumber = + number for superscript - for subscript
+        static let strikethrough = NSAttributedString.Key(rawValue: kAXStrikethroughTextAttribute.takeUnretainedValue() as String) // CFBoolean
+        static let shadow = NSAttributedString.Key(rawValue: kAXShadowTextAttribute.takeUnretainedValue() as String) // CFBoolean
+        static let attachment = NSAttributedString.Key(rawValue: kAXAttachmentTextAttribute.takeUnretainedValue() as String) // AXUIElement
+        static let link = NSAttributedString.Key(rawValue: kAXLinkTextAttribute.takeUnretainedValue() as String) // AXUIElement
+        static let naturalLanguage = NSAttributedString.Key(rawValue: kAXNaturalLanguageTextAttribute.takeUnretainedValue() as String) // String
+        static let replacement = NSAttributedString.Key(rawValue: kAXReplacementStringTextAttribute.takeUnretainedValue() as String) // String
+        static let misspelled = NSAttributedString.Key(rawValue: kAXMisspelledTextAttribute.takeUnretainedValue() as String) // CFBoolean
+        static let markedMisspelled = NSAttributedString.Key(rawValue: kAXMarkedMisspelledTextAttribute.takeUnretainedValue() as String) // CFBoolean
+        static let autocorrected = NSAttributedString.Key(rawValue: kAXAutocorrectedTextAttribute.takeUnretainedValue() as String) // CFBoolean
+        static let listItemPrefix = NSAttributedString.Key(rawValue: kAXListItemPrefixTextAttribute.takeUnretainedValue() as String) // CFAttributedString
+        static let listItemIndex = NSAttributedString.Key(rawValue: kAXListItemIndexTextAttribute.takeUnretainedValue() as String) // CFNumber
+        static let listItemLevel = NSAttributedString.Key(rawValue: kAXListItemLevelTextAttribute.takeUnretainedValue() as String) // CFNumber
     }
     public struct Font : Equatable, Codable {
         struct Keys {
@@ -413,20 +408,20 @@ public struct AttributedString : Equatable {
         return false
     }
     // MARK: Helpers
-    private func string(_ key: NSAttributedStringKey, at: Int) -> String? {
+    private func string(_ key: NSAttributedString.Key, at: Int) -> String? {
         guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
         return value as? String
     }
-    private mutating func set(key: NSAttributedStringKey, range: Range<Int>, string: String?) {
+    private mutating func set(key: NSAttributedString.Key, range: Range<Int>, string: String?) {
         if let string = string {
             implementation.writeOnly.setAttributes([key:string], range: range.nsRange())
         } else {
             implementation.writeOnly.removeAttribute(key, range: range.nsRange())
         }
     }
-    private func attributedString(_ key: NSAttributedStringKey, at: Int) -> AttributedString? {
+    private func attributedString(_ key: NSAttributedString.Key, at: Int) -> AttributedString? {
         guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
@@ -435,27 +430,27 @@ public struct AttributedString : Equatable {
         }
         return AttributedString(attributedString: attributedString)
     }
-    private mutating func set(key: NSAttributedStringKey, range: Range<Int>, attributedString: AttributedString?) {
+    private mutating func set(key: NSAttributedString.Key, range: Range<Int>, attributedString: AttributedString?) {
         if let attributedString = attributedString {
             implementation.writeOnly.setAttributes([key:attributedString.implementation.readOnly], range: range.nsRange())
         } else {
             implementation.writeOnly.removeAttribute(key, range: range.nsRange())
         }
     }
-    private func int(_ key: NSAttributedStringKey, at: Int) -> Int? {
+    private func int(_ key: NSAttributedString.Key, at: Int) -> Int? {
         guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
         return (value as? NSNumber)?.intValue
     }
-    private mutating func set(key: NSAttributedStringKey, range: Range<Int>, int: Int?) {
+    private mutating func set(key: NSAttributedString.Key, range: Range<Int>, int: Int?) {
         if let int = int {
             implementation.writeOnly.setAttributes([key:NSNumber(value: int)], range: range.nsRange())
         } else {
             implementation.writeOnly.removeAttribute(key, range: range.nsRange())
         }
     }
-    private func color(_ key: NSAttributedStringKey, at: Int) -> CGColor? {
+    private func color(_ key: NSAttributedString.Key, at: Int) -> CGColor? {
         guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
@@ -464,14 +459,14 @@ public struct AttributedString : Equatable {
         }
         return (value as! CGColor)
     }
-    private mutating func set(key: NSAttributedStringKey, range: Range<Int>, color: CGColor?) {
+    private mutating func set(key: NSAttributedString.Key, range: Range<Int>, color: CGColor?) {
         if let color = color {
             implementation.writeOnly.setAttributes([key:color], range: range.nsRange())
         } else {
             implementation.writeOnly.removeAttribute(key, range: range.nsRange())
         }
     }
-    private func element(_ key: NSAttributedStringKey, at: Int) -> SystemElement? {
+    private func element(_ key: NSAttributedString.Key, at: Int) -> SystemElement? {
         guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
@@ -480,23 +475,23 @@ public struct AttributedString : Equatable {
         }
         return SystemElement(element: (value as! AXUIElement))
     }
-    private mutating func set(key: NSAttributedStringKey, range: Range<Int>, element: SystemElement?) {
+    private mutating func set(key: NSAttributedString.Key, range: Range<Int>, element: SystemElement?) {
         if let element = element {
             implementation.writeOnly.setAttributes([key:element.element], range: range.nsRange())
         } else {
             implementation.writeOnly.removeAttribute(key, range: range.nsRange())
         }
     }
-    private func bool(_ key: NSAttributedStringKey, at: Int) -> Bool? {
+    private func bool(_ key: NSAttributedString.Key, at: Int) -> Bool? {
         guard let value = implementation.readOnly.attribute(key, at: at, effectiveRange: nil) else {
             return nil
         }
-        guard CFGetTypeID(value as CFTypeRef) == CFBoolean.typeID else {
+        guard CFGetTypeID(value as CFTypeRef) == CFBooleanGetTypeID() else {
             return nil
         }
         return CFBooleanGetValue((value as! CFBoolean))
     }
-    private mutating func set(key: NSAttributedStringKey, range: Range<Int>, bool: Bool?) {
+    private mutating func set(key: NSAttributedString.Key, range: Range<Int>, bool: Bool?) {
         if let bool = bool {
             let value = (bool ? kCFBooleanTrue : kCFBooleanFalse) as Any
             implementation.writeOnly.setAttributes([key:value], range: range.nsRange())
@@ -521,7 +516,7 @@ public struct AttributedStringIterator : IteratorProtocol {
         var next: NSRange?
         string.implementation.readOnly.enumerateAttributes(in: current, options: []) { attributesDictionary, range, stop in
             next = range
-            attributes = AttributedString.attributes(keys: Array<NSAttributedStringKey>(attributesDictionary.keys))
+            attributes = AttributedString.attributes(keys: Array<NSAttributedString.Key>(attributesDictionary.keys))
             stop.initialize(to: true)
         }
         if let next = next {

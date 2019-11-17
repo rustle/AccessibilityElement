@@ -1,7 +1,7 @@
 //
 //  SystemObserverProviding.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
@@ -21,22 +21,24 @@ public struct SystemObserverProviding : ObserverProviding {
         }
         let observer = try AXObserver.observer(processIdentifier: processIdentifier)
         _observer = observer
-        CFRunLoop.main.add(source: observer.runLoopSource, mode: .defaultMode)
+        CFRunLoopAddSource(CFRunLoopGetMain(),
+                           observer.runLoopSource,
+                           .defaultMode)
         return observer
     }
     public init(processIdentifier: ProcessIdentifier) {
         self.processIdentifier = processIdentifier
     }
     public mutating func add(element: AnyElement,
-                             notification: NSAccessibilityNotificationName,
-                             handler: @escaping (AnyElement, NSAccessibilityNotificationName, [String : Any]?) -> Void) throws -> Int {
+                             notification: NSAccessibility.Notification,
+                             handler: @escaping (AnyElement, NSAccessibility.Notification, [String : Any]?) -> Void) throws -> Int {
         return try observer().add(element: (element as! SystemElement).element, notification: notification) { element, notification, info in
             let element = SystemElement(element: element)
             handler(element, notification, Helper.repackage(dictionary: info, element: element))
         }
     }
     public mutating func remove(element: AnyElement,
-                                notification: NSAccessibilityNotificationName,
+                                notification: NSAccessibility.Notification,
                                 identifier: Int) throws {
         try observer().remove(element: (element as! SystemElement).element, notification: notification, identifier: identifier)
     }
@@ -81,6 +83,8 @@ fileprivate struct Helper {
             throw AccessibilityError.typeMismatch
         case .illegal:
             throw AccessibilityError.typeMismatch
+        @unknown default:
+            throw AccessibilityError.typeMismatch
         }
     }
     private static func _repackage(value: Any, element: SystemElement) throws -> Any {
@@ -90,9 +94,9 @@ fileprivate struct Helper {
             return _repackage(element: (value as! AXUIElement))
         case AXValue.typeID:
             return try _repackage(axValue: (value as! AXValue))
-        case CFNumber.typeID:
+        case CFNumberGetTypeID():
             return (value as! NSNumber).intValue
-        case CFBoolean.typeID:
+        case CFBooleanGetTypeID():
             return (value as! NSNumber).boolValue
         case accessibility_element_get_marker_type_id():
             return Position(index: value as AXTextMarker, element: element)

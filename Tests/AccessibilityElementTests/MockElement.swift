@@ -54,8 +54,8 @@ final class MockElement : Element {
                            isKeyboardFocused: nil)
     }
     private let uniqueID: Int
-    private var _role: NSAccessibilityRole?
-    private var _subrole: NSAccessibilitySubrole?
+    private var _role: NSAccessibility.Role?
+    private var _subrole: NSAccessibility.Subrole?
     private var _value: Any?
     private var _description: String?
     private var _title: String?
@@ -72,10 +72,10 @@ final class MockElement : Element {
         }
         return value
     }
-    func role() throws -> NSAccessibilityRole {
+    func role() throws -> NSAccessibility.Role {
         return try unwrap(_role)
     }
-    func subrole() throws -> NSAccessibilitySubrole {
+    func subrole() throws -> NSAccessibility.Subrole {
         return try unwrap(_subrole)
     }
     func value() throws -> Any {
@@ -100,8 +100,8 @@ final class MockElement : Element {
         return uniqueID
     }
     init(uniqueID: Int,
-         role: NSAccessibilityRole? = nil,
-         subrole: NSAccessibilitySubrole? = nil,
+         role: NSAccessibility.Role? = nil,
+         subrole: NSAccessibility.Subrole? = nil,
          value: Any? = nil,
          description: String? = nil,
          title: String? = nil,
@@ -121,8 +121,8 @@ final class MockElement : Element {
 }
 
 extension MockElement : Hashable {
-    var hashValue: Int {
-        return _hash
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(_hash)
     }
 }
 

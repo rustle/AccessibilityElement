@@ -7,7 +7,7 @@
 import Foundation
 import os.log
 
-public struct Toggle<ElementType> : EventHandler where ElementType : Element {
+public struct Toggle<ElementType: Element>: EventHandler {
     public var describerRequests: [DescriberRequest] {
         let requests: [DescriberRequest] = [
             Describer<ElementType>.Fallthrough(required: true, attributes: [.titleElement(Describer<ElementType>.Fallthrough(required: true, attributes: [.stringValue(nil), .title, .description])), .title, .description, .stringValue(nil)]),

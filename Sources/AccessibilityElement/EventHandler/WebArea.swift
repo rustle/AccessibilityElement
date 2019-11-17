@@ -1,13 +1,12 @@
 //
 //  WebArea.swift
 //
-//  Copyright © 2018 Doug Russell. All rights reserved.
+//  Copyright © 2018-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
-import Signals
 
-public struct WebArea<ElementType> : EventHandler where ElementType : Element {
+public struct WebArea<ElementType: Element>: EventHandler {
     public var describerRequests: [DescriberRequest] {
         return []
     }

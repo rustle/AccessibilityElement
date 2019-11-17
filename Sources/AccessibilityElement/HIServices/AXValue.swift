@@ -1,38 +1,41 @@
 //
 //  AXValue.swift
 //
-//  Copyright © 2017 Doug Russell. All rights reserved.
+//  Copyright © 2017-2019 Doug Russell. All rights reserved.
 //
 
 import Cocoa
 
 public extension AXValue {
-    public static var typeID: CFTypeID {
+    static var typeID: CFTypeID {
         return AXValueGetTypeID()
     }
-    public var type: AXValueType {
+    var type: AXValueType {
         return AXValueGetType(self)
     }
     private func get<T>(_ defaultValue: T) throws -> T {
         var value = defaultValue
-        guard AXValueGetValue(self, type, &value) else {
+        guard AXValueGetValue(self,
+                              type,
+                              &value) else {
             throw AccessibilityError.typeMismatch
         }
         return value
     }
-    public func rectValue() throws -> CGRect {
-        return try get(CGRect.null)
+    func rectValue() throws -> CGRect {
+        try get(CGRect.null)
     }
-    public func sizeValue() throws -> CGSize {
-        return try get(CGSize.zero)
+    func sizeValue() throws -> CGSize {
+        try get(CGSize.zero)
     }
-    public func pointValue() throws -> CGPoint {
-        return try get(CGPoint.zero)
+    func pointValue() throws -> CGPoint {
+        try get(CGPoint.zero)
     }
-    public func rangeValue() throws -> CFRange {
-        return try get(CFRange.init(location: kCFNotFound, length: 0))
+    func rangeValue() throws -> CFRange {
+        try get(CFRange(location: kCFNotFound,
+                        length: 0))
     }
-    public func value() throws -> Any {
+    func value() throws -> Any {
         switch type {
         case .cgPoint:
             return try pointValue()
@@ -46,10 +49,14 @@ public extension AXValue {
             throw AccessibilityError.typeMismatch
         case .illegal:
             throw AccessibilityError.typeMismatch
+        @unknown default:
+            throw AccessibilityError.typeMismatch
         }
     }
-    public static func range(_ range: Range<Int>) -> AXValue {
-        var cfRange = CFRangeMake(range.lowerBound, range.count)
-        return AXValueCreate(.cfRange, &cfRange)!
+    static func range(_ range: Range<Int>) -> AXValue {
+        var cfRange = CFRangeMake(range.lowerBound,
+                                  range.count)
+        return AXValueCreate(.cfRange,
+                             &cfRange)!
     }
 }

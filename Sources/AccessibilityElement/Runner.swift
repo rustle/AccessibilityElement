@@ -5,7 +5,7 @@
 //
 
 import Cocoa
-import Signals
+import Combine
 
 public enum Running {
     case stopped
@@ -13,6 +13,5 @@ public enum Running {
 }
 
 public protocol Runner {
-    var runningSignal: Signal<Running> { get }
     var running: Running { get }
 }

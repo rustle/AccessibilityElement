@@ -22,8 +22,8 @@ public protocol FocusedUIElementChangedHandler {
 }
 
 public extension FocusedUIElementChangedHandler {
-    public func findContainer<ElementType, HierarchyType>(element: ElementType,
-                                                          hierarchy: HierarchyType) throws -> ElementType where HierarchyType : Hierarchy, HierarchyType.ElementType == ElementType {
+    func findContainer<ElementType, HierarchyType>(element: ElementType,
+                                                   hierarchy: HierarchyType) throws -> ElementType where HierarchyType : Hierarchy, HierarchyType.ElementType == ElementType {
         var current: ElementType? = element
         while current != nil {
             if hierarchy.classify(current!) == .container {
@@ -38,10 +38,10 @@ public extension FocusedUIElementChangedHandler {
         }
         throw FocusedUIElementChangedHandlerError.containerSearchFailed
     }
-    public func focusChanged<ElementType, HierarchyType>(element: ElementType,
-                                                         hierarchy: HierarchyType,
-                                                         focus: ApplicationFocus<ElementType>,
-                                                         applicationController: _Controller<ElementType>) -> String? where HierarchyType : Hierarchy, HierarchyType.ElementType == ElementType {
+    func focusChanged<ElementType, HierarchyType>(element: ElementType,
+                                                  hierarchy: HierarchyType,
+                                                  focus: ApplicationFocus<ElementType>,
+                                                  applicationController: _Controller<ElementType>) -> String? where HierarchyType : Hierarchy, HierarchyType.ElementType == ElementType {
         do {
             let container = try findContainer(element: element,
                                               hierarchy: hierarchy)
@@ -68,7 +68,7 @@ public extension FocusedUIElementChangedHandler {
 }
 
 public struct DefaultFocusedUIElementChangedHandler : FocusedUIElementChangedHandler {
-    public init() {
+    init() {
         
     }
 }
