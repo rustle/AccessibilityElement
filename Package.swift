@@ -14,12 +14,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/rustle/SwiftScanner.git", from: "1.0.3+"),
-        .package(url: "https://github.com/glessard/swift-atomics", from: "5.1.0"),
     ],
     targets: [
         .target(
             name: "AccessibilityElement",
-            dependencies: ["SwiftScanner", "SwiftAtomics"]),
+            dependencies: ["SwiftScanner"]),
         .testTarget(
             name: "AccessibilityElementTests",
             dependencies: ["AccessibilityElement"]),

@@ -121,7 +121,6 @@ public struct ArrayObserver<Element>: Runner where Element : Equatable {
         }
     }
     /// Subscribe for notifications when observer starts or stops
-    //public let runningSignal = Signal<Running>()
     public var runningSignal: AnyPublisher<Running, Never> {
         _runningSignal
             .eraseToAnyPublisher()

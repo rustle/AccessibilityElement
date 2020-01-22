@@ -6,16 +6,19 @@
 
 import Cocoa
 import Combine
+import os.log
 
 /// Evaluate cascading list of focus providers to find the currently focused application
-public class FocusArbitrator {
+public final class FocusArbitrator: ObservableObject {
+    static let log = OSLog(subsystem: "A11Y", category: "FocusArbitrator")
+
     /// Common errors a focus provider may encounter
-    public enum Error : Swift.Error {
+    public enum Error: Swift.Error {
         case timedOut
         case nilFocus
         case nilBundleIdentifier
     }
-    public static func systemFocusedApplicationElement() throws -> (ProcessIdentifier, BundleIdentifier) {
+    public static func systemFocusedApplicationElement() throws -> Focus {
         func systemFocus() throws -> SystemElement {
             let value = try AXUIElement.systemWide().value(attribute: NSAccessibility.Attribute.focusedApplication) as CFTypeRef
             if CFGetTypeID(value) == AXUIElement.typeID {
@@ -55,41 +58,46 @@ public class FocusArbitrator {
         }
         let focusedElement = try systemFocus(timeout: 16)
         if let bundleIdentifier = BundleIdentifier(rawValue: runningApplication(processIdentifier: focusedElement.processIdentifier)?.bundleIdentifier) {
-            return (focusedElement.processIdentifier, bundleIdentifier)
+            return Focus(processIdentifier: focusedElement.processIdentifier,
+                         bundleIdentifier: bundleIdentifier)
         }
         throw FocusArbitrator.Error.nilBundleIdentifier
     }
-    public static func frontmostApplication() throws -> (ProcessIdentifier, BundleIdentifier) {
+    public static func frontmostApplication() throws -> Focus {
         if let frontmost = NSWorkspace.shared.frontmostApplication {
             if let bundleIdentifier = BundleIdentifier(rawValue: frontmost.bundleIdentifier) {
-                return (ProcessIdentifier(frontmost.processIdentifier), bundleIdentifier)
+                return Focus(processIdentifier: ProcessIdentifier(frontmost.processIdentifier),
+                             bundleIdentifier: bundleIdentifier)
             }
             throw FocusArbitrator.Error.nilBundleIdentifier
         }
         throw FocusArbitrator.Error.nilFocus
     }
-    public static func menuBarOwningApplication() throws -> (ProcessIdentifier, BundleIdentifier) {
-        if let menuBar = NSWorkspace.shared.menuBarOwningApplication {
-            if let bundleIdentifier = BundleIdentifier(rawValue: menuBar.bundleIdentifier) {
-                return (Int(menuBar.processIdentifier), bundleIdentifier)
-            }
+    public static func menuBarOwningApplication() throws -> Focus {
+        guard let menuBar = NSWorkspace.shared.menuBarOwningApplication else {
+            throw FocusArbitrator.Error.nilFocus
+        }
+        guard let bundleIdentifier = BundleIdentifier(rawValue: menuBar.bundleIdentifier) else {
             throw FocusArbitrator.Error.nilBundleIdentifier
         }
-        throw FocusArbitrator.Error.nilFocus
+        return Focus(processIdentifier: ProcessIdentifier(menuBar.processIdentifier),
+                     bundleIdentifier: bundleIdentifier)
     }
-    public var focus: AnyPublisher<(ProcessIdentifier, BundleIdentifier), Never> {
-        _focus
-            .eraseToAnyPublisher()
+    public struct Focus {
+        public let processIdentifier: ProcessIdentifier
+        public let bundleIdentifier: BundleIdentifier
     }
-    public let _focus = PassthroughSubject<(ProcessIdentifier, BundleIdentifier), Never>()
-    public init(focusProviders: [() throws -> (ProcessIdentifier, BundleIdentifier)]) {
+    @Published public private(set) var focus = Focus(processIdentifier: -1,
+                                                     bundleIdentifier: "")
+    public init(focusProviders: [() throws -> Focus]) {
         self.focusProviders = focusProviders
     }
     private let queue = CancellableQueue(label: "FocusArbitrator")
-    private let focusProviders: [() throws -> (ProcessIdentifier, BundleIdentifier)]
+    private let focusProviders: [() throws -> Focus]
     public func update() {
         queue.cancelAll()
         queue.async { workItem in
+            os_log(.info, log: FocusArbitrator.log, "Updating focus")
             for provider in self.focusProviders {
                 do {
                     if workItem.isCancelled {
@@ -97,11 +105,12 @@ public class FocusArbitrator {
                     }
                     let value = try provider()
                     if !workItem.isCancelled {
-                        self._focus.send(value)
+                        os_log(.info, log: FocusArbitrator.log, "Found focus %{public}@", "\(value)")
+                        self.focus = value
                     }
                     break
                 } catch {
-                    
+                    os_log(.info, log: FocusArbitrator.log, "Error while searching for focus %{public}@", "\(error)")
                 }
             }
         }

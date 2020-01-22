@@ -13,11 +13,13 @@ func provider<ObserverProvidingType>(type: ObserverProvidingType.Type) -> ((Proc
     fatalError()
 }
 
+public protocol ObserverToken {}
+
 public protocol ObserverProviding {
     mutating func add(element: AnyElement,
                       notification: NSAccessibility.Notification,
-                      handler: @escaping (AnyElement, NSAccessibility.Notification, [String:Any]?) -> Void) throws -> Int
+                      handler: @escaping (AnyElement, NSAccessibility.Notification, [String:Any]?) -> Void) throws -> ObserverToken
     mutating func remove(element: AnyElement,
                          notification: NSAccessibility.Notification,
-                         identifier: Int) throws
+                         token: ObserverToken) throws
 }

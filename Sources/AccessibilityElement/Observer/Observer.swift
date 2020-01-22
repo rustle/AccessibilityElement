@@ -47,25 +47,15 @@ public class ApplicationObserver<ElementType> : AnyApplicationObserver where Ele
     }
     private let provider: (ProcessIdentifier) throws -> ElementType.ObserverProvidingType
     private let processIdentifier: ProcessIdentifier
-    private var tokens = Set<Token>()
-    public struct Token : Equatable, Hashable {
-        public static func ==(lhs: Token, rhs: Token) -> Bool {
-            return lhs.identifier == rhs.identifier
-        }
-        public func hash(into hasher: inout Hasher) {
-            hasher.combine(identifier)
-        }
+    public struct Token {
         fileprivate let element: ElementType
         fileprivate let notification: NSAccessibility.Notification
-        fileprivate let identifier: Int
+        fileprivate let observerToken: ObserverToken
     }
     public init(processIdentifier: ProcessIdentifier,
                 provider: @escaping (ProcessIdentifier) throws -> ElementType.ObserverProvidingType) throws {
         self.processIdentifier = processIdentifier
         self.provider = provider
-    }
-    deinit {
-        stop()
     }
     public func publisher(element: ElementType,
                           notification: NSAccessibility.Notification) throws -> AnyPublisher<(element: ElementType, info: ElementNotificationInfo?), ObserverError> {
@@ -77,24 +67,18 @@ public class ApplicationObserver<ElementType> : AnyApplicationObserver where Ele
     public func startObserving(element: ElementType,
                                notification: NSAccessibility.Notification,
                                handler: @escaping (ElementType, ElementNotificationInfo?) -> Void) throws -> Token {
-        let identifier = try observer.add(element: element,
-                                          notification: notification) { element, _, info in
-            handler(element as! ElementType, info)
+        let observerToken = try observer.add(element: element,
+                                             notification: notification) { element, _, info in
+            handler(element as! ElementType,
+                    info)
         }
-        let token = Token(element: element, notification: notification, identifier: identifier)
-        tokens.insert(token)
-        return token
+        return Token(element: element,
+                     notification: notification,
+                     observerToken: observerToken)
     }
     public func stopObserving(token: Token) throws {
-        if tokens.contains(token) {
-            try observer.remove(element: token.element, notification: token.notification, identifier: token.identifier)
-        } else {
-            throw ObserverManager<ElementType>.Error.invalidToken
-        }
-    }
-    public func stop() {
-        for token in tokens {
-            try? stopObserving(token: token)
-        }
+        try observer.remove(element: token.element,
+                            notification: token.notification,
+                            token: token.observerToken)
     }
 }

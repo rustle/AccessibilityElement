@@ -6,6 +6,8 @@
 
 import Cocoa
 
+extension AXObserverToken: ObserverToken {}
+
 public struct SystemObserverProviding : ObserverProviding {
     public static func provider() -> ((ProcessIdentifier) throws -> SystemObserverProviding) {
         return {
@@ -31,16 +33,19 @@ public struct SystemObserverProviding : ObserverProviding {
     }
     public mutating func add(element: AnyElement,
                              notification: NSAccessibility.Notification,
-                             handler: @escaping (AnyElement, NSAccessibility.Notification, [String : Any]?) -> Void) throws -> Int {
-        return try observer().add(element: (element as! SystemElement).element, notification: notification) { element, notification, info in
+                             handler: @escaping (AnyElement, NSAccessibility.Notification, [String : Any]?) -> Void) throws -> ObserverToken {
+        return try observer().add(element: (element as! SystemElement).element,
+                                  notification: notification) { element, notification, info in
             let element = SystemElement(element: element)
             handler(element, notification, Helper.repackage(dictionary: info, element: element))
         }
     }
     public mutating func remove(element: AnyElement,
                                 notification: NSAccessibility.Notification,
-                                identifier: Int) throws {
-        try observer().remove(element: (element as! SystemElement).element, notification: notification, identifier: identifier)
+                                token: ObserverToken) throws {
+        try observer().remove(element: (element as! SystemElement).element,
+                              notification: notification,
+                              token: token as! AXObserverToken)
     }
 }
 

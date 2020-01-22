@@ -8,7 +8,7 @@ import Foundation
 import os.log
 
 ///
-public protocol AnyController : class {
+public protocol AnyController: class {
     ///
     var eventHandler: AnyEventHandler { get set }
     ///
@@ -20,7 +20,7 @@ public protocol AnyController : class {
 }
 
 ///
-public class _Controller<ElementType> : AnyController where ElementType : Element {
+public class _Controller<ElementType>: AnyController where ElementType : Element {
     ///
     public weak var applicationController: AnyController? {
         get {
@@ -59,13 +59,13 @@ public class _Controller<ElementType> : AnyController where ElementType : Elemen
     }
 }
 
-extension _Controller : Equatable {
+extension _Controller: Equatable {
     public static func ==(lhs: _Controller<ElementType>, rhs: _Controller<ElementType>) -> Bool {
         return lhs.node == rhs.node
     }
 }
 
-public class Controller<EventHandlerType> : _Controller<EventHandlerType.ElementType> where EventHandlerType : EventHandler {
+public class Controller<EventHandlerType>: _Controller<EventHandlerType.ElementType> where EventHandlerType : EventHandler {
     public typealias ElementType = EventHandlerType.ElementType
     public var _eventHandler: EventHandlerType
     public override var eventHandler: AnyEventHandler {
@@ -115,7 +115,7 @@ public class Controller<EventHandlerType> : _Controller<EventHandlerType.Element
     }
 }
 
-extension Controller : CustomDebugStringConvertible {
+extension Controller: CustomDebugStringConvertible {
     public var debugDescription: String {
         var debugDescription = "<\(String(describing: type(of: self)))>"
         if let debugElement = eventHandler.node.element as? CustomDebugStringConvertible {
@@ -128,7 +128,7 @@ extension Controller : CustomDebugStringConvertible {
     }
 }
 
-extension Controller : CustomDebugDictionaryConvertible {
+extension Controller: CustomDebugDictionaryConvertible {
     public var debugInfo: [String:CustomDebugStringConvertible] {
         var debugInfo = [String:CustomDebugStringConvertible]()
         debugInfo["type"] = String(describing: type(of: self))

@@ -28,14 +28,19 @@ public class Tap {
                 return nil
             }
             var count = 0
-            event.keyboardGetUnicodeString(maxStringLength: 0, actualStringLength: &count, unicodeString: nil)
+            event.keyboardGetUnicodeString(maxStringLength: 0,
+                                           actualStringLength: &count,
+                                           unicodeString: nil)
             guard count > 0 else {
                 return nil
             }
             let bufferCapacity = count * MemoryLayout<UniChar>.size
             let characters = UnsafeMutablePointer<UniChar>.allocate(capacity: bufferCapacity)
-            event.keyboardGetUnicodeString(maxStringLength: count, actualStringLength: &count, unicodeString: characters)
-            let value = String(utf16CodeUnits: characters, count: count)
+            event.keyboardGetUnicodeString(maxStringLength: count,
+                                           actualStringLength: &count,
+                                           unicodeString: characters)
+            let value = String(utf16CodeUnits: characters,
+                               count: count)
             characters.deallocate()
             return value
         }
@@ -49,7 +54,6 @@ public class Tap {
         case passive
     }
     private let tap: CFMachPort
-    private let identifier: Int
     public enum Error : Swift.Error {
         case couldNotCreateTap
     }
@@ -58,9 +62,11 @@ public class Tap {
             return CGEvent.tapIsEnabled(tap: tap)
         }
         set {
-            CGEvent.tapEnable(tap: tap, enable: newValue)
+            CGEvent.tapEnable(tap: tap,
+                              enable: newValue)
         }
     }
+    private let userInfo: CallbackContext<TapHandler>
     public init(placement: Placement = .head,
                 configuration: Configuration = .passive,
                 eventsOfInterest: CGEventMask,
@@ -79,38 +85,37 @@ public class Tap {
         case .passive:
             options = .listenOnly
         }
-        identifier = tapState.next()
+        let userInfo = CallbackContext(handler)
         guard let tap = CGEvent.tapCreate(tap: .cghidEventTap,
                                           place: cgPlacement,
                                           options: options,
                                           eventsOfInterest: eventsOfInterest,
                                           callback: callback,
-                                          userInfo: UnsafeMutableRawPointer(bitPattern: identifier)) else {
+                                          userInfo: userInfo.unsafeReference) else {
             throw Tap.Error.couldNotCreateTap
         }
         self.tap = tap
-        tapState.set(state: handler,
-                     identifier: identifier)
+        self.userInfo = userInfo
     }
     deinit {
-        tapState.remove(identifier: identifier)
+        
     }
     public func runLoopSource(order: Int) -> CFRunLoopSource {
         return CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
     }
 }
 
-fileprivate let tapState = SimpleState<TapHandler>()
-
-fileprivate func callback(_ proxy: CGEventTapProxy,
-                          _ eventType: CGEventType,
-                          _ event: CGEvent,
-                          _ info: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
-    let identifier = unsafeBitCast(info, to: Int.self)
-    guard let handler = tapState.state(identifier: identifier) else {
+private func callback(_ proxy: CGEventTapProxy,
+                      _ eventType: CGEventType,
+                      _ event: CGEvent,
+                      _ info: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
+    guard let info = info else {
         return Unmanaged.passUnretained(event)
     }
-    var tapEvent = Tap.Event(proxy: proxy, eventType: eventType, cgEvent: event)
+    let handler = info.assumingMemoryBound(to: TapHandler.self).pointee
+    var tapEvent = Tap.Event(proxy: proxy,
+                             eventType: eventType,
+                             cgEvent: event)
     handler(&tapEvent)
     guard let outEvent = tapEvent.cgEvent else {
         return nil

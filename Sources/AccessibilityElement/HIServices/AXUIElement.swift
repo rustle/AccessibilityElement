@@ -5,8 +5,9 @@
 //
 
 import Cocoa
+import os.log
 
-fileprivate class _UIElement {
+private class _UIElement {
     private static var RTLD_DEFAULT = UnsafeMutableRawPointer(bitPattern: -2)!
     typealias UIElementTransportRepresentation = @convention(c) (AXUIElement) -> Unmanaged<CFData>
     static var transportRepresentation: UIElementTransportRepresentation = {
@@ -23,6 +24,8 @@ fileprivate class _UIElement {
 }
 
 public extension AXUIElement {
+    static let log = OSLog(subsystem: "A11Y", category: "AXUIElement")
+
     //public func AXUIElementGetTypeID() -> CFTypeID
     static var typeID: CFTypeID {
         AXUIElementGetTypeID()
@@ -117,6 +120,8 @@ public extension AXUIElement {
         var value: CFTypeRef?
         let error = AXUIElementCopyAttributeValue(self, attribute.rawValue as CFString, &value)
         guard error == .success else {
+            os_log(.debug, log: Self.log, "%{public}@ error %{public}@", #function, error.rawValue as NSNumber)
+
             throw ElementError(axError: error)
         }
         return try cast(value)

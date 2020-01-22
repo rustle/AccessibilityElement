@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct CodableRangeContainer<Bound> : Codable where Bound : Codable, Bound : Comparable {
+public struct CodableRangeContainer<Bound>: Codable where Bound: Codable, Bound: Comparable {
     public enum RangeCodingKeys : String, CodingKey {
         case lowerBound
         case upperBound

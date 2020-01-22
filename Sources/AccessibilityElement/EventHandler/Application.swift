@@ -6,6 +6,9 @@
 
 import Cocoa
 import Combine
+import os.log
+
+private let log = OSLog(subsystem: "A11Y", category: "Application")
 
 public final class Application<ElementType: Element>: EventHandler {
     // MARK: EventHandler
@@ -20,6 +23,9 @@ public final class Application<ElementType: Element>: EventHandler {
         windowLifeCycleObserver = WindowLifeCycleObserver(element:node._element,
                                                           applicationObserver: applicationObserver)
     }
+    deinit {
+        cancellables.forEach { $0.cancel() }
+    }
     // MARK: Focused UI Element
     private var focus: ApplicationFocus<ElementType>
     private let hierarchy = DefaultHierarchy<ElementType>()
@@ -27,16 +33,7 @@ public final class Application<ElementType: Element>: EventHandler {
     public var isFocused: Bool = false
     // MARK: Observers
     public let applicationObserver: ApplicationObserver<ElementType>
-    private var onFocusedUIElementChanged: AnyCancellable? {
-        didSet {
-            oldValue?.cancel()
-        }
-    }
-    private var onFocusedWindowChanged: AnyCancellable? {
-        didSet {
-            oldValue?.cancel()
-        }
-    }
+    private var cancellables = Set<AnyCancellable>()
     private let windowLifeCycleObserver: WindowLifeCycleObserver<ElementType>
 }
 
@@ -109,6 +106,8 @@ public extension Application {
 // MARK: Observers
 public extension Application {
     private func registerObservers() throws {
+        os_log(.debug, log: log, "%{public}@", #function)
+
         try windowLifeCycleObserver.start()
         func observe(_ notification: NSAccessibility.Notification,
                      handler: @escaping ((element: ElementType, info: ElementNotificationInfo?)) -> Void) throws -> AnyCancellable {
@@ -118,37 +117,41 @@ public extension Application {
                 .sink(receiveCompletion: { _ in },
                       receiveValue: handler)
         }
-        onFocusedUIElementChanged = try observe(.focusedUIElementChanged) { [weak self] in
+        try observe(.focusedUIElementChanged) { [weak self] in
             self?.focusChanged(element: $0.element)
-        }
-        onFocusedWindowChanged = try observe(.focusedWindowChanged) { [weak self] in
+        }.store(in: &cancellables)
+        try observe(.focusedWindowChanged) { [weak self] in
             self?.focusChanged(window: $0.element)
-        }
+        }.store(in: &cancellables)
     }
     private func unregisterObservers() {
+        os_log(.debug, log: log, "%{public}@", #function)
+
         windowLifeCycleObserver.stop()
-        onFocusedUIElementChanged?.cancel()
-        onFocusedUIElementChanged = nil
-        onFocusedWindowChanged?.cancel()
-        onFocusedWindowChanged = nil
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
     }
 }
 
 // MARK: EventHandler
 public extension Application {
     func connect() {
+        os_log(.debug, log: log, "%{public}@", #function)
+
         do {
             try _node._element.set(enhancedUserInterface: true)
         } catch {
         }
         do {
             try registerObservers()
-        } catch let error {
-            print(error)
+        } catch {
+            os_log(.debug, log: log, "registerObservers() error %{public}@", "\(error)")
         }
         windowLifeCycleObserver.windowsDirty = true
     }
     func focusIn() -> String? {
+        os_log(.debug, log: log, "%{public}@", #function)
+
         if isFocused {
             return nil
         }
@@ -183,13 +186,19 @@ public extension Application {
         return title
     }
     func focusOut() -> String? {
+        os_log(.debug, log: log, "%{public}@", #function)
+
         isFocused = false
         return nil
     }
     func disconnect() {
+        os_log(.debug, log: log, "%{public}@", #function)
+
         unregisterObservers()
     }
     func handleEvent(identifier: String, type: EventType) throws {
+        os_log(.debug, log: log, "%{public}@", #function)
+
         try self.focus.state.focused?.eventHandler.handleEvent(identifier: identifier, type: type)
     }
 }

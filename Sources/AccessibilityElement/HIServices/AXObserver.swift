@@ -8,12 +8,26 @@ import Cocoa
 
 public typealias AXObserverHandler = (AXUIElement, NSAccessibility.Notification, CFDictionary?) -> Void
 
-extension AXObserver {
-    public static var typeID: CFTypeID {
+public class AXObserverToken {
+    fileprivate let handler: AXObserverHandler
+    fileprivate let unsafeReference: UnsafeMutablePointer<AXObserverHandler>
+    fileprivate init(_ handler: @escaping AXObserverHandler) {
+        self.handler = handler
+        unsafeReference = UnsafeMutablePointer<AXObserverHandler>.allocate(capacity: 1)
+        unsafeReference.initialize(to: handler)
+    }
+    deinit {
+        unsafeReference.deinitialize(count: 1)
+        unsafeReference.deallocate()
+    }
+}
+
+public extension AXObserver {
+    static var typeID: CFTypeID {
         return AXObserverGetTypeID()
     }
     //public func AXObserverGetRunLoopSource(_ observer: AXObserver) -> CFRunLoopSource
-    public var runLoopSource: CFRunLoopSource {
+    var runLoopSource: CFRunLoopSource {
         return AXObserverGetRunLoopSource(self)
     }
     //public func AXObserverCreate(_ application: pid_t,
@@ -22,7 +36,7 @@ extension AXObserver {
     //public func AXObserverCreateWithInfoCallback(_ application: pid_t,
     //                                             _ callback: @escaping ApplicationServices.AXObserverCallbackWithInfo,
     //                                             _ outObserver: UnsafeMutablePointer<AXObserver?>) -> AXError
-    public static func observer(processIdentifier: ProcessIdentifier) throws -> AXObserver {
+    static func observer(processIdentifier: ProcessIdentifier) throws -> AXObserver {
         var observer: AXObserver?
         let error = AXObserverCreateWithInfoCallback(pid_t(processIdentifier),
                                                      observer_callback,
@@ -39,44 +53,43 @@ extension AXObserver {
     //                                      _ element: AXUIElement,
     //                                      _ notification: CFString,
     //                                      _ refcon: UnsafeMutableRawPointer?) -> AXError
-    public func add(element: AXUIElement,
-                    notification: NSAccessibility.Notification,
-                    handler: @escaping AXObserverHandler) throws -> Int {
-        let identifier = axObserverState.next()
+    func add(element: AXUIElement,
+             notification: NSAccessibility.Notification,
+             handler: @escaping AXObserverHandler) throws -> AXObserverToken {
+        let token = AXObserverToken(handler)
         let error = AXObserverAddNotification(self,
                                               element,
                                               notification as CFString,
-                                              UnsafeMutableRawPointer(bitPattern: identifier))
+                                              token.unsafeReference)
         guard error == .success else {
             throw ObserverError(axError: error)
         }
-        axObserverState.set(state: handler, identifier: identifier)
-        return identifier
+        return token
     }
     //public func AXObserverRemoveNotification(_ observer: AXObserver,
     //                                         _ element: AXUIElement,
     //                                         _ notification: CFString) -> AXError
-    public func remove(element: AXUIElement,
-                       notification: NSAccessibility.Notification,
-                       identifier: Int) throws {
-        let error = AXObserverRemoveNotification(self, element, notification as CFString)
+    func remove(element: AXUIElement,
+                notification: NSAccessibility.Notification,
+                token: AXObserverToken) throws {
+        let error = AXObserverRemoveNotification(self,
+                                                 element,
+                                                 notification as CFString)
         guard error == .success else {
             throw ObserverError(axError: error)
         }
-        axObserverState.remove(identifier: identifier)
     }
 }
 
-fileprivate let axObserverState = SimpleState<AXObserverHandler>()
-
-fileprivate func observer_callback(_ observer: AXObserver,
-                                   _ uiElement: AXUIElement,
-                                   _ name: CFString,
-                                   _ info: CFDictionary?,
-                                   _ refCon: UnsafeMutableRawPointer?) {
-    let identifier = unsafeBitCast(refCon, to: Int.self)
-    guard let handler = axObserverState.state(identifier: identifier) else {
+private func observer_callback(_ observer: AXObserver,
+                               _ uiElement: AXUIElement,
+                               _ name: CFString,
+                               _ info: CFDictionary?,
+                               _ refCon: UnsafeMutableRawPointer?) {
+    guard let handler = refCon?.assumingMemoryBound(to: AXObserverHandler.self).pointee else {
         return
     }
-    handler(uiElement, name as NSAccessibility.Notification, info)
+    handler(uiElement,
+            name as NSAccessibility.Notification,
+            info)
 }

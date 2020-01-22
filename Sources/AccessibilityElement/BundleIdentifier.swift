@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct BundleIdentifier : RawRepresentable {
+public struct BundleIdentifier: RawRepresentable {
     public static let spotlight: BundleIdentifier = "com.apple.spotlight"
     public static let console: BundleIdentifier = "com.apple.console"
     public static let safari: BundleIdentifier = "com.apple.safari"
@@ -44,16 +44,16 @@ public struct BundleIdentifier : RawRepresentable {
     }
 }
 
-extension BundleIdentifier : ExpressibleByStringLiteral {
+extension BundleIdentifier: ExpressibleByStringLiteral {
     public typealias StringLiteralType = String
     public init(stringLiteral value: StringLiteralType) {
         self.init(rawValue: value)!
     }
 }
 
-extension BundleIdentifier : Hashable {
-    public var hashValue: Int {
-        return rawValue.hashValue
+extension BundleIdentifier: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(rawValue)
     }
     public static func ==(lhs: BundleIdentifier, rhs: BundleIdentifier) -> Bool {
         return lhs.rawValue == rhs.rawValue

@@ -6,7 +6,7 @@
 
 import CoreGraphics
 
-public struct CodableColorContainer : Codable {
+public struct CodableColorContainer: Codable {
     public enum ColorCodingKeys : String, CodingKey {
         case colorSpace
         case components

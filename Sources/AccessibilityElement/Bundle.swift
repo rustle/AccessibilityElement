@@ -19,8 +19,9 @@ public func makeSystemApplicationController(processIdentifier: ProcessIdentifier
     return try eventHandler?.makeController() as! _Controller<SystemElement>
 }
 
-public protocol AccessibilityBundle : class {
+public protocol AccessibilityBundle: class {
     /// Return controller representing the application
     func load(processIdentifier: ProcessIdentifier) throws -> AnyController
+    /// 
     init()
 }
