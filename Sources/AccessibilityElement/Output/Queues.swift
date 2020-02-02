@@ -12,17 +12,22 @@ fileprivate protocol WorkImplementation {
                execute workItem: DispatchWorkItem)
 }
 
+public protocol CancellableItem {
+    var isCancelled: Bool { get }
+}
+
+extension DispatchWorkItem: CancellableItem {}
+
 public class CancellableQueue {
     public func async(qos: DispatchQoS = .`default`,
                       flags: DispatchWorkItemFlags = [],
-                      execute work: @escaping (DispatchWorkItem) -> Void) {
-        var itemForClosure: DispatchWorkItem? = nil
+                      execute work: @escaping (CancellableItem) -> Void) {
+        var cancellable: Unmanaged<DispatchWorkItem>!
         let item = DispatchWorkItem(qos: qos,
-                                flags: flags) {
-            work(itemForClosure!)
-            itemForClosure = nil
+                                    flags: flags) {
+            work(cancellable.takeUnretainedValue())
         }
-        itemForClosure = item
+        cancellable = Unmanaged.passUnretained(item)
         itemsQueue.sync {
             items.append(item)
         }
@@ -37,7 +42,7 @@ public class CancellableQueue {
             }
             self.items.remove(at: index)
         }
-        self.work.async(qos: qos,
+        scheduler.async(qos: qos,
                         flags: flags,
                         execute: item)
     }
@@ -50,12 +55,12 @@ public class CancellableQueue {
                 options: Options = .serial) {
         switch options {
         case .serial:
-            work = SerialWorkImplementation(label: label,
-                                            qos: qos)
+            scheduler = SerialWorkImplementation(label: label,
+                                                 qos: qos)
         case .concurrent(let count):
-            work = ConcurrentWorkImplementation(label: label,
-                                                qos: qos,
-                                                count: count)
+            scheduler = ConcurrentWorkImplementation(label: label,
+                                                     qos: qos,
+                                                     count: count)
         }
     }
     public func cancelAll() {
@@ -64,12 +69,14 @@ public class CancellableQueue {
             items.removeAll()
         }
     }
-    private let work: WorkImplementation
+    private let scheduler: WorkImplementation
     private let itemsQueue = DispatchQueue(label: "Work.Items")
     private var items = [DispatchWorkItem]()
-    private struct ConcurrentWorkImplementation : WorkImplementation {
+    private struct ConcurrentWorkImplementation: WorkImplementation {
         private let queue: BoundedQueue
-        init(label: String, qos: DispatchQoS, count: Int) {
+        init(label: String,
+             qos: DispatchQoS,
+             count: Int) {
             queue = BoundedQueue(label: label,
                                  qos: qos,
                                  count: count,
@@ -86,9 +93,10 @@ public class CancellableQueue {
             }
         }
     }
-    private struct SerialWorkImplementation : WorkImplementation {
+    private struct SerialWorkImplementation: WorkImplementation {
         private let queue: DispatchQueue
-        init(label: String, qos: DispatchQoS) {
+        init(label: String,
+             qos: DispatchQoS) {
             queue = DispatchQueue(label: label,
                                   qos: qos,
                                   attributes: [],

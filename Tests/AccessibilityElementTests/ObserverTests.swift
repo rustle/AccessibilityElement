@@ -7,7 +7,9 @@
 import XCTest
 @testable import AccessibilityElement
 
-class MockObserverProviding : ObserverProviding {
+class MockObserverProviding: ObserverProviding {
+    struct MockToken: ObserverToken {
+    }
     static func provider() -> ((ProcessIdentifier) throws -> MockObserverProviding) {
         return { _ in
             MockObserverProviding()
@@ -18,12 +20,16 @@ class MockObserverProviding : ObserverProviding {
     init() {
         
     }
-    func add(element: AnyElement, notification: NSAccessibility.Notification, handler: @escaping (AnyElement, NSAccessibility.Notification, [String : Any]?) -> Void) throws -> Int {
+    func add(element: AnyElement,
+             notification: NSAccessibility.Notification,
+             handler: @escaping (AnyElement, NSAccessibility.Notification, [String : Any]?) -> Void) throws -> ObserverToken {
         self.handler = handler as (MockElement, NSAccessibility.Notification, [String : Any]?) -> Void
-        return 2
+        return MockToken()
     }
     
-    func remove(element: AnyElement, notification: NSAccessibility.Notification, identifier: Int) throws {
+    func remove(element: AnyElement,
+                notification: NSAccessibility.Notification,
+                token: ObserverToken) throws {
         self.handler = nil
     }
     func fire(element: MockElement,

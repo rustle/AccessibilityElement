@@ -7,27 +7,26 @@
 import Cocoa
 
 public class Output {
-    public struct Options : OptionSet, Codable {
+    public struct Options: OptionSet, Codable {
         public let rawValue: Int
         public static let interrupt = Options(rawValue: 1 << 0)
         public static let punctuation = Options(rawValue: 1 << 1)
-        public static let abbreviations = Options(rawValue: 1 << 2)
         public init(rawValue: Int) {
             self.rawValue = rawValue
         }
     }
-    public struct Job : Codable {
+    public struct Job: Codable {
         public var options: Options
         public var identifier: String
-        public enum Payload : Codable {
-            private enum PayloadType : Int, Codable {
+        public enum Payload: Codable {
+            private enum PayloadType: Int, Codable {
                 case pauseSpeech
                 case continueSpeech
                 case cancelSpeech
                 case speech
                 case sound
             }
-            private enum PayloadCodingKeys : String, CodingKey {
+            private enum PayloadCodingKeys: String, CodingKey {
                 case type = "a"
                 case speech = "b"
                 case options = "c"
@@ -101,7 +100,7 @@ public class Output {
                                      attributes: [],
                                      autoreleaseFrequency: .workItem,
                                      target: .global())
-    private class NamedOutputQueue : NSObject, NSSpeechSynthesizerDelegate {
+    private class NamedOutputQueue: NSObject, NSSpeechSynthesizerDelegate {
         private let synthesizer = NSSpeechSynthesizer()
         private let identifier: String
         private let queue: CancellableQueue
@@ -122,9 +121,9 @@ public class Output {
                 queue.cancelAll()
                 synthesizer.stopSpeaking()
             }
-            queue.async { workItem in
+            queue.async {
                 for payload in job.payloads {
-                    if workItem.isCancelled {
+                    if $0.isCancelled {
                         break
                     }
                     switch payload {
@@ -179,9 +178,6 @@ public class Output {
         }
         private func substitutions(options: Options) -> [Substitutions] {
             var substitutions = [Substitutions]()
-            if options.contains(.abbreviations) {
-                substitutions.append(AbbreviationExpansion())
-            }
             if options.contains(.punctuation) {
                 substitutions.append(PunctuationExpansion())
             }

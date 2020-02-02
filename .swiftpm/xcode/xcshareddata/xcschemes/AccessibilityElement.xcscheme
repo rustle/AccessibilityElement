@@ -14,10 +14,24 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AccessibilityElement::AccessibilityElement"
-               BuildableName = "AccessibilityElement.framework"
+               BlueprintIdentifier = "AccessibilityElement"
+               BuildableName = "AccessibilityElement"
                BlueprintName = "AccessibilityElement"
-               ReferencedContainer = "container:AccessibilityElement.xcodeproj">
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AccessibilityElementTests"
+               BuildableName = "AccessibilityElementTests"
+               BlueprintName = "AccessibilityElementTests"
+               ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +46,10 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AccessibilityElement::AccessibilityElementTests"
-               BuildableName = "AccessibilityElementTests.xctest"
+               BlueprintIdentifier = "AccessibilityElementTests"
+               BuildableName = "AccessibilityElementTests"
                BlueprintName = "AccessibilityElementTests"
-               ReferencedContainer = "container:AccessibilityElement.xcodeproj">
+               ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,6 +71,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "AccessibilityElement"
+            BuildableName = "AccessibilityElement"
+            BlueprintName = "AccessibilityElement"
+            ReferencedContainer = "container:">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

@@ -13,7 +13,8 @@ let package = Package(
             targets: ["AccessibilityElement"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/rustle/SwiftScanner.git", from: "1.0.3+"),
+        .package(url: "https://github.com/rustle/SwiftScanner.git",
+                 from: "1.0.3+"),
     ],
     targets: [
         .target(

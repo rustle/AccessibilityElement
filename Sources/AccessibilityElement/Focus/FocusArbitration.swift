@@ -98,6 +98,7 @@ public final class FocusArbitrator: ObservableObject {
         queue.cancelAll()
         queue.async { workItem in
             os_log(.info, log: FocusArbitrator.log, "Updating focus")
+
             for provider in self.focusProviders {
                 do {
                     if workItem.isCancelled {

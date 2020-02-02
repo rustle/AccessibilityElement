@@ -53,20 +53,20 @@ public class Tap {
         case active
         case passive
     }
-    private let tap: CFMachPort
+    private var tap: CFMachPort! = nil
     public enum Error : Swift.Error {
         case couldNotCreateTap
     }
     public var enabled: Bool {
         get {
-            return CGEvent.tapIsEnabled(tap: tap)
+            CGEvent.tapIsEnabled(tap: tap)
         }
         set {
             CGEvent.tapEnable(tap: tap,
                               enable: newValue)
         }
     }
-    private let userInfo: CallbackContext<TapHandler>
+    fileprivate let handler: TapHandler
     public init(placement: Placement = .head,
                 configuration: Configuration = .passive,
                 eventsOfInterest: CGEventMask,
@@ -85,23 +85,21 @@ public class Tap {
         case .passive:
             options = .listenOnly
         }
-        let userInfo = CallbackContext(handler)
+        self.handler = handler
         guard let tap = CGEvent.tapCreate(tap: .cghidEventTap,
                                           place: cgPlacement,
                                           options: options,
                                           eventsOfInterest: eventsOfInterest,
                                           callback: callback,
-                                          userInfo: userInfo.unsafeReference) else {
+                                          userInfo: Unmanaged.passUnretained(self).toOpaque()) else {
             throw Tap.Error.couldNotCreateTap
         }
         self.tap = tap
-        self.userInfo = userInfo
-    }
-    deinit {
-        
     }
     public func runLoopSource(order: Int) -> CFRunLoopSource {
-        return CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
+        CFMachPortCreateRunLoopSource(kCFAllocatorDefault,
+                                      tap,
+                                      0)
     }
 }
 
@@ -112,11 +110,11 @@ private func callback(_ proxy: CGEventTapProxy,
     guard let info = info else {
         return Unmanaged.passUnretained(event)
     }
-    let handler = info.assumingMemoryBound(to: TapHandler.self).pointee
+    let tap = Unmanaged<Tap>.fromOpaque(info).takeUnretainedValue()
     var tapEvent = Tap.Event(proxy: proxy,
                              eventType: eventType,
                              cgEvent: event)
-    handler(&tapEvent)
+    tap.handler(&tapEvent)
     guard let outEvent = tapEvent.cgEvent else {
         return nil
     }

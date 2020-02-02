@@ -7,7 +7,7 @@
 import Cocoa
 
 public class CompoundSound {
-    private class Delegate : NSObject, NSSoundDelegate {
+    private class Delegate: NSObject, NSSoundDelegate {
         var didFinish: ((NSSound, Bool) -> Void)?
         public func sound(_ sound: NSSound,
                           didFinishPlaying flag: Bool) {
@@ -41,7 +41,7 @@ public class CompoundSound {
         set {
             volumeQueue.sync {
                 _volume = newValue
-                queue.async { item in
+                queue.async { _ in
                     for sound in self.available {
                         sound.volume = newValue
                     }
@@ -90,8 +90,8 @@ public class CompoundSound {
         guard cadence > 0.0 else {
             throw CompoundSound.Error.invalidCadence(cadence)
         }
-        queue.async { workItem in
-            if workItem.isCancelled {
+        queue.async {
+            if $0.isCancelled {
                 return
             }
             var sounds: [NSSound]
@@ -102,10 +102,11 @@ public class CompoundSound {
                 sounds = Array(self.available[0..<count])
                 self.available.removeSubrange(0..<count)
             }
-            if workItem.isCancelled {
+            if $0.isCancelled {
                 self.available.append(contentsOf: sounds)
                 return
             }
+            sounds.reserveCapacity(count)
             if sounds.count < count {
                 for _ in sounds.count..<count {
                     let copy = sound.copy() as! NSSound
@@ -114,15 +115,15 @@ public class CompoundSound {
                 }
             }
             self.inUse.append(contentsOf: sounds)
-            if workItem.isCancelled {
+            if $0.isCancelled {
                 self.available.append(contentsOf: self.inUse)
-                self.inUse.removeAll()
+                self.inUse.removeAll(keepingCapacity: true)
                 return
             }
             for sound in sounds {
-                if workItem.isCancelled {
+                if $0.isCancelled {
                     self.available.append(contentsOf: self.inUse)
-                    self.inUse.removeAll()
+                    self.inUse.removeAll(keepingCapacity: true)
                     break
                 }
                 sound.play()
