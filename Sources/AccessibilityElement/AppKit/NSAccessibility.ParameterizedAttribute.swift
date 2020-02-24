@@ -11,3 +11,5 @@ public extension NSAccessibility.ParameterizedAttribute {
     static let stringForTextMarkerRange = NSAccessibility.ParameterizedAttribute(rawValue: "AXStringForTextMarkerRange")
     static let attributedStringForTextMarkerRange = NSAccessibility.ParameterizedAttribute(rawValue: "AXAttributedStringForTextMarkerRange")
 }
+
+extension NSAccessibility.ParameterizedAttribute: Codable {}
