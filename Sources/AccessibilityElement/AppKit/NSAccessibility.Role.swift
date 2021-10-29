@@ -6,7 +6,10 @@
 
 import Cocoa
 
-public extension NSAccessibility.Role {}
+public extension NSAccessibility.Role {
+    /// Role value representing container for web content.
+    static let webArea: NSAccessibility.Role = "AXWebArea"
+}
 
 extension NSAccessibility.Role: Codable {}
 

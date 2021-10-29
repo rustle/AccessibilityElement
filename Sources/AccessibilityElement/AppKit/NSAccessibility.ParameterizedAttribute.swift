@@ -6,7 +6,11 @@
 
 import Cocoa
 
-public extension NSAccessibility.ParameterizedAttribute {}
+public extension NSAccessibility.ParameterizedAttribute {
+    static let textMarkerRangeForUnorderedTextMarkers: NSAccessibility.ParameterizedAttribute = "AXTextMarkerRangeForUnorderedTextMarkers"
+    static let stringForTextMarkerRange: NSAccessibility.ParameterizedAttribute = "AXStringForTextMarkerRange"
+    static let attributedStringForTextMarkerRange: NSAccessibility.ParameterizedAttribute = "AXAttributedStringForTextMarkerRange"
+}
 
 extension NSAccessibility.ParameterizedAttribute: Codable {}
 
