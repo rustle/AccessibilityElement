@@ -1,11 +1,11 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.6
 
 import PackageDescription
 
 let package = Package(
     name: "AccessibilityElement",
     platforms: [
-        .macOS(.v10_15),
+        .macOS(.v12),
     ],
     products: [
         .library(
@@ -13,13 +13,11 @@ let package = Package(
             targets: ["AccessibilityElement"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/rustle/SwiftScanner.git",
-                 from: "1.0.3+"),
     ],
     targets: [
         .target(
             name: "AccessibilityElement",
-            dependencies: ["SwiftScanner"]),
+            dependencies: []),
         .testTarget(
             name: "AccessibilityElementTests",
             dependencies: ["AccessibilityElement"]),
