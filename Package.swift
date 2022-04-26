@@ -13,11 +13,16 @@ let package = Package(
             targets: ["AccessibilityElement"]),
     ],
     dependencies: [
+        .package(
+            url: "https://github.com/rustle/AX.git",
+            from: "0.1.1"),
     ],
     targets: [
         .target(
             name: "AccessibilityElement",
-            dependencies: []),
+            dependencies: [
+                "AX",
+            ]),
         .testTarget(
             name: "AccessibilityElementTests",
             dependencies: ["AccessibilityElement"]),
