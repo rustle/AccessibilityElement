@@ -11,6 +11,9 @@ let package = Package(
         .library(
             name: "AccessibilityElement",
             targets: ["AccessibilityElement"]),
+        .executable(
+            name: "SystemObserverExample",
+            targets: ["SystemObserverExample"]),
     ],
     dependencies: [
         .package(
@@ -23,6 +26,9 @@ let package = Package(
             dependencies: [
                 "AX",
             ]),
+        .executableTarget(
+            name: "SystemObserverExample",
+            dependencies: ["AccessibilityElement"]),
         .testTarget(
             name: "AccessibilityElementTests",
             dependencies: ["AccessibilityElement"]),
