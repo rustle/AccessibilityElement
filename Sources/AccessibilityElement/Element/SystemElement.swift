@@ -31,6 +31,11 @@ public struct SystemElement: Element {
     public func value() throws -> Any {
         try element.value(attribute: .value)
     }
+
+    public func windows() throws -> [SystemElement] {
+        let windows: [UIElement] = try element.value(attribute: .windows)
+        return windows.map(SystemElement.init(element:))
+    }
     
     public var processIdentifier: pid_t {
         get throws {
