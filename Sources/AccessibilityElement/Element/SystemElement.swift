@@ -53,3 +53,17 @@ extension SystemElement: Hashable {
         hasher.combine(element)
     }
 }
+
+extension SystemElement: CustomStringConvertible, CustomDebugStringConvertible {
+    public var description: String {
+        element.description
+    }
+
+    public var debugDescription: String {
+        element.debugDescription
+    }
+
+    public var debugInfo: [String:Any] {
+        element.debugInfo
+    }
+}
