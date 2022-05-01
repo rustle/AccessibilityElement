@@ -43,3 +43,13 @@ public struct SystemElement: Element {
         self.element = element
     }
 }
+
+extension SystemElement: Hashable {
+    public static func ==(lhs: SystemElement,
+                          rhs: SystemElement) -> Bool {
+        lhs.element == rhs.element
+    }
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(element)
+    }
+}
