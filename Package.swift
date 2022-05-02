@@ -18,7 +18,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/rustle/AX.git",
-            from: "0.1.1"),
+            from: "0.1.2"),
     ],
     targets: [
         .target(
