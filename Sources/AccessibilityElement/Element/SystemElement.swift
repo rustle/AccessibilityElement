@@ -36,7 +36,11 @@ public struct SystemElement: Element {
         let windows: [UIElement] = try element.value(attribute: .windows)
         return windows.map(SystemElement.init(element:))
     }
-    
+
+    public func mainWindow() throws -> Self {
+        try element.value(attribute: .mainWindow)
+    }
+
     public var processIdentifier: pid_t {
         get throws {
             try element.pid

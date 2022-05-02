@@ -26,4 +26,6 @@ public protocol Element: AnyElement {
     static func application(processIdentifier: pid_t) throws -> Self
     ///
     func windows() throws -> [Self]
+    ///
+    func mainWindow() throws -> Self
 }
