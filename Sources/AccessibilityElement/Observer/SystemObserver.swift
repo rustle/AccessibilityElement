@@ -119,8 +119,12 @@ fileprivate func observer_callback(_ observer: AXObserver,
         return
     }
     withExtendedLifetime(observer) {
-        token.handler(SystemElement(element: uiElement as UIElement),
-                      ObserverUserInfoRepackager.repackage(dictionary: info))
+        let handler = token.handler
+        Task.detached {
+            await handler(SystemElement(element: uiElement as UIElement),
+                          ObserverUserInfoRepackager.repackage(dictionary: info))
+            
+        }
     }
 }
 

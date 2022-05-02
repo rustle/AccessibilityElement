@@ -9,7 +9,7 @@ import Cocoa
 public protocol Observer {
     associatedtype ObserverElement: Element
     associatedtype ObserverToken: Hashable
-    typealias ObserverHandler = (ObserverElement, [String:Any]) -> Void
+    typealias ObserverHandler = (ObserverElement, [String:Any]) async -> Void
 
     func start() async throws
 
