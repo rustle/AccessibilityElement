@@ -11,6 +11,7 @@ public struct SystemElement: Element {
     public static func systemWide() throws -> SystemElement {
         .init(element: UIElement.systemWide())
     }
+
     public static func application(processIdentifier: pid_t) throws -> SystemElement {
         .init(element: UIElement.application(pid: processIdentifier))
     }
@@ -18,16 +19,16 @@ public struct SystemElement: Element {
     public func role() throws -> NSAccessibility.Role {
         try element.value(attribute: .role)
     }
-    
+
     public func roleDescription() throws -> String {
         let description: String = try element.value(attribute: .roleDescription)
         return description
     }
-    
+
     public func subrole() throws -> NSAccessibility.Subrole {
         NSAccessibility.Subrole(rawValue: try element.value(attribute: .subrole))
     }
-    
+
     public func value() throws -> Any {
         try element.value(attribute: .value)
     }

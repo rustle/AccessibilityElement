@@ -6,7 +6,7 @@
 
 import Cocoa
 
-public protocol AnyElement {
+public protocol Element {
     /// String that defines the element’s role in the app.(not localized)
     func role() throws -> NSAccessibility.Role
     /// Localized string that describes the element’s role in the app
@@ -17,13 +17,6 @@ public protocol AnyElement {
     func value() throws -> Any
     ///
     var processIdentifier: pid_t { get throws }
-}
-
-public protocol Element: AnyElement {
-    ///
-    static func systemWide() throws -> Self
-    ///
-    static func application(processIdentifier: pid_t) throws -> Self
     ///
     func windows() throws -> [Self]
     ///
