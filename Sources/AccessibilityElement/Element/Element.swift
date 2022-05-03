@@ -28,4 +28,14 @@ public protocol Element: AnyElement {
     func windows() throws -> [Self]
     ///
     func mainWindow() throws -> Self
+    ///
+    func parent() throws -> Self
+    ///
+    func children() throws -> [Self]
+    ///
+    func childrenInNavigationOrder() throws -> [Self]
+    ///
+    func visibleChildren() throws -> [Self]
+    ///
+    func selectedChildren() throws -> [Self]
 }

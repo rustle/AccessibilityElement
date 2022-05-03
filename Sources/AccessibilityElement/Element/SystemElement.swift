@@ -41,6 +41,26 @@ public struct SystemElement: Element {
         try element.value(attribute: .mainWindow)
     }
 
+    public func parent() throws -> Self {
+        try element.value(attribute: .parent)
+    }
+
+    public func children() throws -> [Self] {
+        try element.value(attribute: .children)
+    }
+
+    public func childrenInNavigationOrder() throws -> [Self] {
+        try element.value(attribute: "AXChildrenInNavigationOrder")
+    }
+
+    public func visibleChildren() throws -> [Self] {
+        try element.value(attribute: .visibleChildren)
+    }
+
+    public func selectedChildren() throws -> [Self] {
+        try element.value(attribute: .selectedChildren)
+    }
+
     public var processIdentifier: pid_t {
         get throws {
             try element.pid
