@@ -7,44 +7,46 @@
 import AX
 import Cocoa
 
-@ObserverRunLoopActor
 public final class SystemObserver: Observer {
     public typealias ObserverElement = SystemElement
     public typealias ObserverToken = SystemObserverToken
 
     // MARK: Init
 
-    public let pid: pid_t
-    public init(pid: pid_t) throws {
-        self.pid = pid
+    public let processIdentifier: pid_t
+    public init(processIdentifier: pid_t) throws {
+        self.processIdentifier = processIdentifier
     }
 
     // MARK: Schedule
 
-    private var observer: AX.Observer!
-    private var tokens: [NSAccessibility.Notification:[UUID:SystemObserverToken]] = [:]
+    private var observer: AX.Observer?
+    private var tokens: [NSAccessibility.Notification:[UUID:UnsafeMutablePointer<SystemObserverToken?>]] = [:]
+    private var handlers: [NSAccessibility.Notification:[UUID:ObserverHandler]] = [:]
+    private var retiredTokens = [UnsafeMutablePointer<SystemObserverToken?>]()
 
     public final class SystemObserverToken: Hashable {
-        public static func == (lhs: SystemObserverToken,
-                               rhs: SystemObserverToken) -> Bool {
+        public static func == (
+            lhs: SystemObserverToken,
+            rhs: SystemObserverToken
+        ) -> Bool {
             lhs.uuid == rhs.uuid
         }
-        fileprivate let uuid = UUID()
         fileprivate weak var observer: SystemObserver?
-        fileprivate let element: SystemElement
         fileprivate let notification: NSAccessibility.Notification
-        fileprivate let handler: ObserverHandler
+        fileprivate let uuid = UUID()
+        fileprivate let element: SystemElement
         public func hash(into hasher: inout Hasher) {
             hasher.combine(uuid)
         }
-        fileprivate init(observer: SystemObserver,
-                         element: SystemElement,
-                         notification: NSAccessibility.Notification,
-                         handler: @escaping ObserverHandler) {
+        fileprivate init(
+            observer: SystemObserver,
+            notification: NSAccessibility.Notification,
+            element: SystemElement
+        ) {
             self.observer = observer
-            self.element = element
             self.notification = notification
-            self.handler = handler
+            self.element = element
         }
         deinit {
             guard let observer = observer else {
@@ -54,77 +56,121 @@ public final class SystemObserver: Observer {
             let notification = self.notification
             let uuid = self.uuid
             Task.detached {
-                try await observer.remove(element: element.element,
-                                          notification: notification,
-                                          uuid: uuid)
+                try await observer.remove(
+                    element: element.element,
+                    notification: notification,
+                    uuid: uuid
+                )
             }
         }
     }
 
+    @ObserverRunLoopActor
     public func start() async throws {
-        if self.observer == nil {
-            self.observer = try AX.Observer(pid: self.pid,
-                                            callback: observer_callback)
-        }
-        self.observer
-            .schedule(on: .current)
+        guard observer == nil else { return }
+        let observer = try AX.Observer(
+            pid: self.processIdentifier,
+            callback: observer_callback
+        )
+        self.observer = observer
+        observer.schedule()
     }
 
-    public func add(element: ObserverElement,
-                    notification: NSAccessibility.Notification,
-                    handler: @escaping ObserverHandler) async throws -> ObserverToken {
+    @ObserverRunLoopActor
+    public func stop() async throws {
+        guard let observer = observer else { return }
+        observer.unschedule()
+        self.observer = nil
+    }
+
+    @ObserverRunLoopActor
+    public func add(
+        element: ObserverElement,
+        notification: NSAccessibility.Notification,
+        handler: @escaping ObserverHandler
+    ) async throws -> ObserverToken {
         guard let observer = self.observer else {
             throw ObserverError.failure
         }
-        let unsafeToken = UnsafeMutablePointer<SystemObserverToken>.allocate(capacity: 1)
-        unsafeToken.initialize(to: SystemObserverToken(observer: self,
-                                                       element: element,
-                                                       notification: notification,
-                                                       handler: handler))
-        try observer.add(element: element.element,
-                         notification: notification,
-                         context: unsafeToken)
-        let token = unsafeToken.pointee
-        tokens[notification, default: [:]][token.uuid] = token
+        let token = SystemObserverToken(
+            observer: self,
+            notification: notification,
+            element: element
+        )
+        let unsafeToken = UnsafeMutablePointer<SystemObserverToken?>.allocate(capacity: 1)
+        unsafeToken.initialize(to: token)
+        try observer.add(
+            element: element.element,
+            notification: notification,
+            context: unsafeToken
+        )
+        tokens[notification, default: [:]][token.uuid] = unsafeToken
+        handlers[notification, default: [:]][token.uuid] = handler
         return token
     }
 
+    @ObserverRunLoopActor
     public func remove(token: ObserverToken) async throws {
-        try await remove(element: token.element.element,
-                         notification: token.notification,
-                         uuid: token.uuid)
+        try await remove(
+            element: token.element.element,
+            notification: token.notification,
+            uuid: token.uuid
+        )
     }
 
-    fileprivate func remove(element: UIElement,
-                            notification: NSAccessibility.Notification,
-                            uuid: UUID) async throws {
+    @ObserverRunLoopActor
+    fileprivate func remove(
+        element: UIElement,
+        notification: NSAccessibility.Notification,
+        uuid: UUID
+    ) async throws {
         guard let observer = self.observer else {
             throw ObserverError.failure
         }
-        try observer.remove(element: element,
-                            notification: notification)
-        tokens[notification]?.removeValue(forKey: uuid)
+        try observer.remove(
+            element: element,
+            notification: notification
+        )
+        if let unsafeToken = tokens[notification]?.removeValue(forKey: uuid) {
+            unsafeToken.pointee = nil
+            retiredTokens.append(unsafeToken)
+        }
+        handlers[notification]?.removeValue(forKey: uuid)
+    }
+
+    @ObserverRunLoopActor
+    fileprivate func handle(
+        element: UIElement,
+        notification: NSAccessibility.Notification,
+        uuid: UUID,
+        info: [String : Any]
+    ) async {
+        guard observer != nil else { return }
+        guard let handler = handlers[notification]?[uuid] else { return }
+        await handler(
+            SystemElement(element: element),
+            info
+        )
     }
 }
 
-fileprivate func observer_callback(_ observer: AXObserver,
-                                   _ uiElement: AXUIElement,
-                                   _ name: CFString,
-                                   _ info: CFDictionary?,
-                                   _ refCon: UnsafeMutableRawPointer?) {
-    guard
-        let token = refCon?.assumingMemoryBound(to: SystemObserver.SystemObserverToken.self).pointee,
-        let observer = token.observer
-    else {
-        return
-    }
-    withExtendedLifetime(observer) {
-        let handler = token.handler
-        Task.detached {
-            await handler(SystemElement(element: uiElement as UIElement),
-                          ObserverUserInfoRepackager.repackage(dictionary: info))
-            
-        }
+fileprivate func observer_callback(
+    _ observer: AXObserver,
+    _ uiElement: AXUIElement,
+    _ name: CFString,
+    _ info: CFDictionary?,
+    _ refCon: UnsafeMutableRawPointer?
+) {
+    guard let unsafeToken = refCon else { return }
+    guard let token = unsafeToken.assumingMemoryBound(to: Optional<SystemObserver.SystemObserverToken>.self).pointee else { return }
+    guard let observer = token.observer else { return }
+    Task.detached {
+        await observer.handle(
+            element: uiElement as UIElement,
+            notification: token.notification,
+            uuid: token.uuid,
+            info: ObserverUserInfoRepackager.repackage(dictionary: info)
+        )
     }
 }
 

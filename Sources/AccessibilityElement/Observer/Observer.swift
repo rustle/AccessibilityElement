@@ -12,6 +12,7 @@ public protocol Observer {
     typealias ObserverHandler = (ObserverElement, [String:Any]) async -> Void
 
     func start() async throws
+    func stop() async throws
 
     func add(element: ObserverElement,
              notification: NSAccessibility.Notification,
