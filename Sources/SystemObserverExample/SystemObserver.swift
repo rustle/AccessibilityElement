@@ -15,10 +15,12 @@ func setupSystemObserver() async throws -> (SystemObserver, SystemObserver.Obser
         exit(1)
     }
     let element = try SystemElement.application(processIdentifier: finder.processIdentifier)
-    let observer = try await SystemObserver(pid: finder.processIdentifier)
+    let observer = try SystemObserver(processIdentifier: finder.processIdentifier)
     try await observer.start()
-    let token = try await observer.add(element: element,
-                           notification: .focusedUIElementChanged) { element, userInfo in
+    let token = try await observer.add(
+        element: element,
+        notification: .focusedUIElementChanged
+    ) { element, userInfo in
         print(element)
         print(userInfo)
     }
