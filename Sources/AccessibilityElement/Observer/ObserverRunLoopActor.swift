@@ -65,7 +65,7 @@ private final class RunLoopExecutor: Thread, SerialExecutor, @unchecked Sendable
     func asUnownedSerialExecutor() -> UnownedSerialExecutor {
         UnownedSerialExecutor(ordinary: self)
     }
-    @objc private func enqueueOnRunLoop(_ job: Job ) {
+    @objc private func enqueueOnRunLoop(_ job: Job) {
         job.runSynchronously(on: asUnownedSerialExecutor())
     }
 }
