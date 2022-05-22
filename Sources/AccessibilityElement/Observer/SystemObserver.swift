@@ -6,7 +6,6 @@
 
 import AX
 import Cocoa
-import ObjectiveC
 
 public final class SystemObserver: Observer {
     public typealias ObserverElement = SystemElement
@@ -22,9 +21,9 @@ public final class SystemObserver: Observer {
     // MARK: Schedule
 
     private var observer: AX.Observer?
-    private var tokens: [NSAccessibility.Notification:[UUID:UnsafeMutablePointer<SystemObserverToken?>]] = [:]
+    private var tokens: [NSAccessibility.Notification:[UUID:UnsafeMutablePointer<AnyObject?>]] = [:]
     private var handlers: [NSAccessibility.Notification:[UUID:ObserverHandler]] = [:]
-    private var retiredTokens = [UnsafeMutablePointer<SystemObserverToken?>]()
+    private var retiredTokens = [UnsafeMutablePointer<AnyObject?>]()
 
     public final class SystemObserverToken: Hashable {
         public static func == (
@@ -100,19 +99,16 @@ public final class SystemObserver: Observer {
             notification: notification,
             element: element
         )
-        let weakToken = UnsafeMutablePointer<SystemObserverToken?>.allocate(capacity: 1)
-        objc_storeWeak(
-            AutoreleasingUnsafeMutablePointer(weakToken),
-            token
-        )
+        let context = UnsafeMutablePointer<AnyObject?>.allocate(capacity: 1)
+        context.unsafe_storeWeak(object: token)
         try throwsAXObserverError {
             try observer.add(
                 element: element.element,
                 notification: notification,
-                context: weakToken
+                context: context
             )
         }
-        tokens[notification, default: [:]][token.uuid] = weakToken
+        tokens[notification, default: [:]][token.uuid] = context
         handlers[notification, default: [:]][token.uuid] = handler
         return token
     }
@@ -135,12 +131,9 @@ public final class SystemObserver: Observer {
         guard let observer = self.observer else {
             throw ObserverError.failure
         }
-        if let weakToken = tokens[notification]?.removeValue(forKey: uuid) {
-            objc_storeWeak(
-                AutoreleasingUnsafeMutablePointer(weakToken),
-                nil
-            )
-            retiredTokens.append(weakToken)
+        if let context = tokens[notification]?.removeValue(forKey: uuid) {
+            context.unsafe_storeWeak(object: nil as SystemObserverToken?)
+            retiredTokens.append(context)
         }
         handlers[notification]?.removeValue(forKey: uuid)
         try throwsAXObserverError {
@@ -182,11 +175,14 @@ fileprivate func observer_callback(
     _ uiElement: AXUIElement,
     _ name: CFString,
     _ info: CFDictionary?,
-    _ refCon: UnsafeMutableRawPointer?
+    _ context: UnsafeMutableRawPointer?
 ) {
-    guard let weakToken = refCon?.assumingMemoryBound(to: AnyObject?.self) else { return }
-    guard let token = objc_loadWeak(AutoreleasingUnsafeMutablePointer(weakToken)) as? SystemObserver.SystemObserverToken else { return }
-    guard let observer = token.observer else { return }
+    guard
+        let token = context?.unsafe_loadWeak(SystemObserver.SystemObserverToken.self),
+        let observer = token.observer
+    else {
+        return
+    }
     Task.detached {
         await observer.handle(
             element: uiElement as UIElement,
