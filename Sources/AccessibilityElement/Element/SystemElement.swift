@@ -42,6 +42,10 @@ public struct SystemElement: Element {
         .init(element: try element.value(attribute: .mainWindow) as UIElement)
     }
 
+    public func focusedUIElement() throws -> SystemElement {
+        .init(element: try element.value(attribute: .focusedUIElement) as UIElement)
+    }
+
     public func parent() throws -> SystemElement {
         .init(element: try element.value(attribute: .parent) as UIElement)
     }
