@@ -34,32 +34,36 @@ public struct SystemElement: Element {
     }
 
     public func windows() throws -> [SystemElement] {
-        let windows: [UIElement] = try element.value(attribute: .windows)
-        return windows.map(SystemElement.init(element:))
+        (try element.value(attribute: .windows) as [UIElement])
+            .map(SystemElement.init(element:))
     }
 
-    public func mainWindow() throws -> Self {
-        try element.value(attribute: .mainWindow)
+    public func mainWindow() throws -> SystemElement {
+        .init(element: try element.value(attribute: .mainWindow) as UIElement)
     }
 
-    public func parent() throws -> Self {
-        try element.value(attribute: .parent)
+    public func parent() throws -> SystemElement {
+        .init(element: try element.value(attribute: .parent) as UIElement)
     }
 
-    public func children() throws -> [Self] {
-        try element.value(attribute: .children)
+    public func children() throws -> [SystemElement] {
+        (try element.value(attribute: .children) as [UIElement])
+            .map(SystemElement.init(element:))
     }
 
-    public func childrenInNavigationOrder() throws -> [Self] {
-        try element.value(attribute: "AXChildrenInNavigationOrder")
+    public func childrenInNavigationOrder() throws -> [SystemElement] {
+        (try element.value(attribute: "AXChildrenInNavigationOrder") as [UIElement])
+            .map(SystemElement.init(element:))
     }
 
-    public func visibleChildren() throws -> [Self] {
-        try element.value(attribute: .visibleChildren)
+    public func visibleChildren() throws -> [SystemElement] {
+        (try element.value(attribute: .visibleChildren) as [UIElement])
+            .map(SystemElement.init(element:))
     }
 
-    public func selectedChildren() throws -> [Self] {
-        try element.value(attribute: .selectedChildren)
+    public func selectedChildren() throws -> [SystemElement] {
+        (try element.value(attribute: .selectedChildren) as [UIElement])
+            .map(SystemElement.init(element:))
     }
 
     public var processIdentifier: pid_t {
