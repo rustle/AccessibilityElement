@@ -33,6 +33,16 @@ public protocol Element: CustomStringConvertible, CustomDebugStringConvertible {
     func visibleChildren() throws -> [Self]
     ///
     func selectedChildren() throws -> [Self]
+    ///
+    func rows() throws -> [Self]
+    ///
+    func columns() throws -> [Self]
+    ///
+    func selectedRows() throws -> [Self]
+    ///
+    func selectedColumns() throws -> [Self]
+    ///
+    func selectedCells() throws -> [Self]
 }
 
 extension Element {

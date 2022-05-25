@@ -28,6 +28,11 @@ public struct AnyElement: Element {
     private let _childrenInNavigationOrder: () throws -> [AnyElement]
     private let _visibleChildren: () throws -> [AnyElement]
     private let _selectedChildren: () throws -> [AnyElement]
+    private let _rows: () throws -> [AnyElement]
+    private let _columns: () throws -> [AnyElement]
+    private let _selectedRows: () throws -> [AnyElement]
+    private let _selectedColumns: () throws -> [AnyElement]
+    private let _selectedCells: () throws -> [AnyElement]
 
     public init<E: Element>(element: E) {
         if E.self == AnyElement.self {
@@ -70,6 +75,31 @@ public struct AnyElement: Element {
             _selectedChildren = {
                 try element
                     .selectedChildren()
+                    .map(AnyElement.init)
+            }
+            _rows = {
+                try element
+                    .rows()
+                    .map(AnyElement.init)
+            }
+            _columns = {
+                try element
+                    .columns()
+                    .map(AnyElement.init)
+            }
+            _selectedRows = {
+                try element
+                    .selectedRows()
+                    .map(AnyElement.init)
+            }
+            _selectedColumns = {
+                try element
+                    .selectedColumns()
+                    .map(AnyElement.init)
+            }
+            _selectedCells = {
+                try element
+                    .selectedCells()
                     .map(AnyElement.init)
             }
         }
@@ -127,5 +157,25 @@ public struct AnyElement: Element {
 
     public func selectedChildren() throws -> [AnyElement] {
         try _selectedChildren()
+    }
+
+    public func rows() throws -> [AnyElement] {
+        try _rows()
+    }
+
+    public func columns() throws -> [AnyElement] {
+        try _columns()
+    }
+
+    public func selectedRows() throws -> [AnyElement] {
+        try _selectedRows()
+    }
+
+    public func selectedColumns() throws -> [AnyElement] {
+        try _selectedColumns()
+    }
+
+    public func selectedCells() throws -> [AnyElement] {
+        try _selectedCells()
     }
 }

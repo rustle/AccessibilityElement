@@ -70,6 +70,31 @@ public struct SystemElement: Element {
             .map(SystemElement.init(element:))
     }
 
+    public func rows() throws -> [SystemElement] {
+        (try element.value(attribute: .rows) as [UIElement])
+            .map(SystemElement.init(element:))
+    }
+
+    public func columns() throws -> [SystemElement] {
+        (try element.value(attribute: .columns) as [UIElement])
+            .map(SystemElement.init(element:))
+    }
+
+    public func selectedRows() throws -> [SystemElement] {
+        (try element.value(attribute: .selectedRows) as [UIElement])
+            .map(SystemElement.init(element:))
+    }
+
+    public func selectedColumns() throws -> [SystemElement] {
+        (try element.value(attribute: .selectedColumns) as [UIElement])
+            .map(SystemElement.init(element:))
+    }
+
+    public func selectedCells() throws -> [SystemElement] {
+        (try element.value(attribute: .selectedCells) as [UIElement])
+            .map(SystemElement.init(element:))
+    }
+
     public var processIdentifier: pid_t {
         get throws {
             try element.pid
