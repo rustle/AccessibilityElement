@@ -22,6 +22,7 @@ public struct AnyElement: Element {
     private let _processIdentifier: () throws -> pid_t
     private let _windows: () throws -> [AnyElement]
     private let _mainWindow: () throws -> AnyElement
+    private let _focusedWindow: () throws -> AnyElement
     private let _focusedUIElement: () throws -> AnyElement
     private let _parent: () throws -> AnyElement
     private let _children: () throws -> [AnyElement]
@@ -50,6 +51,9 @@ public struct AnyElement: Element {
             }
             _mainWindow = {
                 AnyElement(element: try element.mainWindow())
+            }
+            _focusedWindow = {
+                AnyElement(element: try element.focusedWindow())
             }
             _focusedUIElement = {
                 AnyElement(element: try element.focusedUIElement())
@@ -133,6 +137,10 @@ public struct AnyElement: Element {
 
     public func mainWindow() throws -> AnyElement {
         try _mainWindow()
+    }
+
+    public func focusedWindow() throws -> AnyElement {
+        try _focusedWindow()
     }
 
     public func focusedUIElement() throws -> AnyElement {

@@ -22,6 +22,8 @@ public protocol Element: CustomStringConvertible, CustomDebugStringConvertible {
     ///
     func mainWindow() throws -> Self
     ///
+    func focusedWindow() throws -> Self
+    ///
     func focusedUIElement() throws -> Self
     ///
     func parent() throws -> Self
