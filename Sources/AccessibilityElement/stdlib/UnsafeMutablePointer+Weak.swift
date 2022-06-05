@@ -1,5 +1,5 @@
 //
-//  Weak.swift
+//  UnsafeMutablePointer+Weak.swift
 //
 //  Copyright © 2017-2022 Doug Russell. All rights reserved.
 //
