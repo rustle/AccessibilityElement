@@ -11,6 +11,30 @@ public final class SystemObserver: Observer {
     public typealias ObserverElement = SystemElement
     public typealias ObserverToken = SystemObserverToken
 
+    fileprivate class CallbackContext {
+        private(set) weak var token: ObserverToken?
+        init(token: ObserverToken) {
+            self.token = token
+        }
+        fileprivate func handle(
+            observer: AXObserver,
+            uiElement: AXUIElement,
+            name: CFString,
+            info: CFDictionary?
+        ) {
+            guard let token = token else { return }
+            guard let systemObserver = token.observer else { return }
+            Task.detached {
+                await systemObserver.handle(
+                    element: uiElement as UIElement,
+                    notification: token.notification,
+                    uuid: token.uuid,
+                    info: ObserverUserInfoRepackager.repackage(dictionary: info)
+                )
+            }
+        }
+    }
+
     // MARK: Init
 
     public let processIdentifier: pid_t
@@ -21,9 +45,9 @@ public final class SystemObserver: Observer {
     // MARK: Schedule
 
     private var observer: AX.Observer?
-    private var tokens: [NSAccessibility.Notification:[UUID:UnsafeMutablePointer<AnyObject?>]] = [:]
+    private var tokens: [NSAccessibility.Notification:[UUID:Unmanaged<CallbackContext>]] = [:]
     private var handlers: [NSAccessibility.Notification:[UUID:ObserverHandler]] = [:]
-    private var retiredTokens = [UnsafeMutablePointer<AnyObject?>]()
+    private var retiredTokens = [Unmanaged<CallbackContext>]()
 
     public final class SystemObserverToken: Hashable {
         public static func == (
@@ -99,8 +123,8 @@ public final class SystemObserver: Observer {
             notification: notification,
             element: element
         )
-        let context = UnsafeMutablePointer<AnyObject?>.allocate(capacity: 1)
-        context.unsafe_storeWeak(object: token)
+        let unmanagedToken = Unmanaged.passRetained(CallbackContext(token: token))
+        let context = unmanagedToken.toOpaque()
         try throwsAXObserverError {
             try observer.add(
                 element: element.element,
@@ -108,7 +132,7 @@ public final class SystemObserver: Observer {
                 context: context
             )
         }
-        tokens[notification, default: [:]][token.uuid] = context
+        tokens[notification, default: [:]][token.uuid] = unmanagedToken
         handlers[notification, default: [:]][token.uuid] = handler
         return token
     }
@@ -131,9 +155,8 @@ public final class SystemObserver: Observer {
         guard let observer = self.observer else {
             throw ObserverError.failure
         }
-        if let context = tokens[notification]?.removeValue(forKey: uuid) {
-            context.unsafe_storeWeak(object: nil as SystemObserverToken?)
-            retiredTokens.append(context)
+        if let unmanagedToken = tokens[notification]?.removeValue(forKey: uuid) {
+            retiredTokens.append(unmanagedToken)
         }
         handlers[notification]?.removeValue(forKey: uuid)
         try throwsAXObserverError {
@@ -151,6 +174,13 @@ public final class SystemObserver: Observer {
         uuid: UUID,
         info: [String : Any]
     ) async {
+        let tokensForCleanup = retiredTokens
+        retiredTokens.removeAll()
+        defer {
+            for unmanagedToken in tokensForCleanup {
+                unmanagedToken.release()
+            }
+        }
         guard observer != nil else { return }
         guard let handler = handlers[notification]?[uuid] else { return }
         await handler(
@@ -177,20 +207,17 @@ fileprivate func observer_callback(
     _ info: CFDictionary?,
     _ context: UnsafeMutableRawPointer?
 ) {
-    guard
-        let token = context?.unsafe_loadWeak(SystemObserver.SystemObserverToken.self),
-        let observer = token.observer
-    else {
-        return
-    }
-    Task.detached {
-        await observer.handle(
-            element: uiElement as UIElement,
-            notification: token.notification,
-            uuid: token.uuid,
-            info: ObserverUserInfoRepackager.repackage(dictionary: info)
+    guard let context = context else { return }
+    let token = Unmanaged<SystemObserver.CallbackContext>
+        .fromOpaque(context)
+        .takeUnretainedValue()
+    token
+        .handle(
+            observer: observer,
+            uiElement: uiElement,
+            name: name,
+            info: info
         )
-    }
 }
 
 fileprivate struct ObserverUserInfoRepackager {
