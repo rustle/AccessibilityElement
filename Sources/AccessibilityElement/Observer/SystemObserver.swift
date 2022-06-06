@@ -162,7 +162,7 @@ public final class SystemObserver: Observer {
     private func throwsAXObserverError<T>(_ work: () throws -> T) rethrows -> T {
         do {
             return try work()
-        } catch let error as AX.Error {
+        } catch let error as AX.AXError {
             throw ObserverError(axError: error.error)
         } catch {
             throw error
