@@ -60,7 +60,7 @@ public struct SystemElement: Element {
     }
 
     public func childrenInNavigationOrder() throws -> [SystemElement] {
-        (try element.value(attribute: "AXChildrenInNavigationOrder") as [UIElement])
+        (try element.value(attribute: .childrenInNavigationOrder) as [UIElement])
             .map(SystemElement.init(element:))
     }
 
