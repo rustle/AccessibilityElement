@@ -174,13 +174,6 @@ public final class SystemObserver: Observer {
         uuid: UUID,
         info: [String : Any]
     ) async {
-        let tokensForCleanup = retiredTokens
-        retiredTokens.removeAll()
-        defer {
-            for unmanagedToken in tokensForCleanup {
-                unmanagedToken.release()
-            }
-        }
         guard observer != nil else { return }
         guard let handler = handlers[notification]?[uuid] else { return }
         await handler(
@@ -280,3 +273,26 @@ fileprivate struct ObserverUserInfoRepackager {
         return _repackage(dictionary: dictionary)
     }
 }
+
+/**
+ # What's up with retiredTokens?
+
+ FB10280342: AXObserverCreateWithInfoCallback, AXObserverAddNotification, and AXObserverRemoveNotification APIs need cleanup callbacks
+
+ Assuming the follow idiomatic AX API Observer setup:
+
+     1. `AXObserver` is created
+     2. Observer is scheduled on a runloop
+     3. Any notification is observed via `AXObserverAddNotification` with a `refCon`
+     4. That notification is then later removed
+
+ In any concurrent settings where any of these interactions may happen on a runloop other than the one the observer is scheduled on *OR* if the memory pointed by refCon may be freed on a different runloop/queue/thread then there is no safe point at which the memory that is pointed to by the `refcon` argument can be reclaimed.
+
+ The race here is that when remove `AXObserverRemoveNotification` is called it can't be guaranteed that a callback hasn't already been enqueued from another runloop/queue/thread and could still fire at an undefined point in the future when the relevant runloop is resumed.
+
+ VoiceOver and other 1st party Assistive Technologies use the existing APIs significantly and work around this by using objc_weakStore/objc_weakLoad. This greatly limits architectural choices, inhibits testing, and makes interacting safely with Swift difficult.
+
+ Consulting with the Swift forums, the recommendation, (which I strongly agree with) is an API that definitively signals that cleanup is safe. This could take several forms, but I think the following would be be addititive, non-ABI breaking, and straight forward to implement.
+
+ Another approach might be to send an event to the existing callback using a convention that indicates cleanup is now appropriate and safe, but this is very likely to introduce compatibility issues with existing applications.
+ */
