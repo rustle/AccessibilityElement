@@ -11,6 +11,9 @@ let package = Package(
         .library(
             name: "AccessibilityElement",
             targets: ["AccessibilityElement"]),
+        .library(
+            name: "AccessibilityElementMocks",
+            targets: ["AccessibilityElementMocks"]),
         .executable(
             name: "SystemObserverExample",
             targets: ["SystemObserverExample"]),
@@ -25,6 +28,11 @@ let package = Package(
             name: "AccessibilityElement",
             dependencies: [
                 "AX",
+            ]),
+        .target(
+            name: "AccessibilityElementMocks",
+            dependencies: [
+                "AccessibilityElement",
             ]),
         .executableTarget(
             name: "SystemObserverExample",
