@@ -28,6 +28,9 @@ let package = Package(
         .package(
             url: "https://github.com/apple/swift-collections.git",
             .upToNextMajor(from: "1.0.3")),
+        .package(
+            url: "https://github.com/reddavis/Asynchrone",
+            from: "0.21.0"),
     ],
     targets: [
         .target(
@@ -40,6 +43,7 @@ let package = Package(
                 .product(
                     name: "Collections",
                     package: "swift-collections"),
+                "Asynchrone",
             ]),
         .target(
             name: "AccessibilityElementMocks",
