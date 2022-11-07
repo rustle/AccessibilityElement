@@ -1,4 +1,4 @@
-// swift-tools-version:5.6
+// swift-tools-version:5.7
 
 import PackageDescription
 
@@ -21,7 +21,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/rustle/AX.git",
-            from: "0.1.7"),
+            from: "0.1.8"),
     ],
     targets: [
         .target(
