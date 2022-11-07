@@ -33,10 +33,12 @@ fileprivate func run() -> Never {
     }
 }
 
-let observerTask = Task.detached(priority: .userInitiated) {
-    try await setupSystemObserver()
+Task(priority: .userInitiated) {
+    let host = SystemObserverHost()
+    let stream = try await host.start()
+    for try await notification in stream {
+        debugPrint(notification)
+    }
 }
 
-withExtendedLifetime(observerTask) { _ in
-    run()
-}
+run()
