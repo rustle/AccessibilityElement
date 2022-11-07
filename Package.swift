@@ -25,6 +25,9 @@ let package = Package(
         .package(
             url: "https://github.com/apple/swift-atomics.git",
             .upToNextMajor(from: "1.0.0")),
+        .package(
+            url: "https://github.com/apple/swift-collections.git",
+            .upToNextMajor(from: "1.0.3")),
     ],
     targets: [
         .target(
@@ -34,6 +37,9 @@ let package = Package(
                 .product(
                     name: "Atomics",
                     package: "swift-atomics"),
+                .product(
+                    name: "Collections",
+                    package: "swift-collections"),
             ]),
         .target(
             name: "AccessibilityElementMocks",
