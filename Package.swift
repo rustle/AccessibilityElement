@@ -22,12 +22,18 @@ let package = Package(
         .package(
             url: "https://github.com/rustle/AX.git",
             from: "0.1.8"),
+        .package(
+            url: "https://github.com/apple/swift-atomics.git",
+            .upToNextMajor(from: "1.0.0")),
     ],
     targets: [
         .target(
             name: "AccessibilityElement",
             dependencies: [
                 "AX",
+                .product(
+                    name: "Atomics",
+                    package: "swift-atomics"),
             ]),
         .target(
             name: "AccessibilityElementMocks",
