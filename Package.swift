@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "AccessibilityElement",
     platforms: [
-        .macOS(.v12),
+        .macOS(.v13),
     ],
     products: [
         .library(

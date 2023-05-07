@@ -8,6 +8,7 @@ import Asynchrone
 import Atomics
 import AX
 import Cocoa
+import os
 
 public final class SystemObserver: Observer, @unchecked Sendable {
     // MARK: Types
@@ -65,13 +66,13 @@ public final class SystemObserver: Observer, @unchecked Sendable {
 
     // MARK: State
 
-    private let state: ManagedCriticalState<State> = .init(.init())
+    private let state: OSAllocatedUnfairLock<State> = .init(initialState: .init())
 
     // MARK: Schedule
 
     @ObserverRunLoopActor
     public func start() async throws {
-        try state.withCriticalRegion { state in
+        try state.withLock { state in
             guard state.observer == nil else { return }
             let observer = try throwsAXObserverError {
                 try AX.Observer(
@@ -103,7 +104,7 @@ public final class SystemObserver: Observer, @unchecked Sendable {
 
     @ObserverRunLoopActor
     public func stop() throws {
-        let oldState = state.withCriticalRegion { state in
+        let oldState = state.withLock { state in
             if let observer = state.observer {
                 ObserverLookup.shared
                     .setObserver(
@@ -124,7 +125,7 @@ public final class SystemObserver: Observer, @unchecked Sendable {
         element: ObserverElement,
         notification: NSAccessibility.Notification
     ) async throws -> ObserverAsyncSequence {
-        try state.withCriticalRegion { state in
+        try state.withLock { state in
             guard let observer = state.observer else {
                 throw ObserverError.failure
             }
@@ -161,7 +162,7 @@ public final class SystemObserver: Observer, @unchecked Sendable {
         element: UIElement,
         notification: NSAccessibility.Notification
     ) throws {
-        try state.withCriticalRegion { state in
+        try state.withLock { state in
             guard state.contextTokenMap.removeValue(forKey: context) != nil else { return }
             guard let observer = state.observer else { return }
             try throwsAXObserverError {
@@ -174,7 +175,7 @@ public final class SystemObserver: Observer, @unchecked Sendable {
     }
 
     fileprivate func handle(payload: ObserverCallbackPayload) {
-        let token = state.withCriticalRegion { state in
+        let token = state.withLock { state in
             state.contextTokenMap[payload.context]
         }
         guard let token else { return }
@@ -197,8 +198,10 @@ public final class SystemObserver: Observer, @unchecked Sendable {
         info: [String : Any],
         context: Int
     ) {
-        guard let continuation = state.withCriticalRegion({ $0.callback?.continuation }) else { return }
-        continuation.yield(
+        let continuation = state.withLock {
+            $0.callback?.continuation
+        }
+        continuation?.yield(
             .init(
                 element: element,
                 notification: notification,
