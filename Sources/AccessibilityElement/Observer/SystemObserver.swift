@@ -212,7 +212,7 @@ public final class SystemObserver: Observer, @unchecked Sendable {
         do {
             return try work()
         } catch let error as AX.AXError {
-            throw ObserverError(axError: error.error)
+            throw ObserverError(error: error)
         } catch {
             throw error
         }

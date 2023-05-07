@@ -47,7 +47,9 @@ public struct SystemElement: Element {
     }
 
     public func focusedUIElement() throws -> SystemElement {
-        .init(element: try element.value(attribute: .focusedUIElement) as UIElement)
+        try throwsAXError {
+            .init(element: try element.value(attribute: .focusedUIElement) as UIElement)
+        }
     }
 
     public func parent() throws -> SystemElement {
@@ -108,6 +110,16 @@ public struct SystemElement: Element {
     let element: UIElement
     init(element: UIElement) {
         self.element = element
+    }
+
+    private func throwsAXError<T>(_ work: () throws -> T) rethrows -> T {
+        do {
+            return try work()
+        } catch let error as AX.AXError {
+            throw ElementError(error: error)
+        } catch {
+            throw error
+        }
     }
 }
 
