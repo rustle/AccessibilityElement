@@ -4,7 +4,7 @@
 //  Copyright © 2017-2021 Doug Russell. All rights reserved.
 //
 
-import Cocoa
+import AppKit
 
 public struct AnyElement: Element {
     public static func systemWide() throws -> AnyElement {

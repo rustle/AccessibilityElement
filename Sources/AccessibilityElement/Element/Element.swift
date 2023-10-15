@@ -4,7 +4,7 @@
 //  Copyright © 2017-2021 Doug Russell. All rights reserved.
 //
 
-import Cocoa
+import AppKit
 
 public protocol Element: CustomStringConvertible, CustomDebugStringConvertible {
     /// String that defines the element’s role in the app.(not localized)

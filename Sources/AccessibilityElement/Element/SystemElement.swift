@@ -4,8 +4,8 @@
 //  Copyright © 2017-2021 Doug Russell. All rights reserved.
 //
 
+import AppKit
 import AX
-import Cocoa
 
 public struct SystemElement: Element {
     public static func systemWide() throws -> SystemElement {

@@ -4,8 +4,8 @@
 //  Copyright © 2017-2022 Doug Russell. All rights reserved.
 //
 
+import AppKit
 import Asynchrone
-import Cocoa
 
 public protocol Observer {
     associatedtype ObserverElement: Element

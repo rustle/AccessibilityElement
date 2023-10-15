@@ -4,8 +4,8 @@
 //  Copyright © 2017-2022 Doug Russell. All rights reserved.
 //
 
+import AppKit
 import AX
-import Cocoa
 
 @globalActor
 actor ObserverRunLoopActor: GlobalActor {

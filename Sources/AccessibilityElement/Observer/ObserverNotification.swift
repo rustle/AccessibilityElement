@@ -4,7 +4,7 @@
 //  Copyright © 2017-2022 Doug Russell. All rights reserved.
 //
 
-import Cocoa
+import AppKit
 
 public struct ObserverNotification<ObserverElement: Element> {
     public let observedElement: ObserverElement

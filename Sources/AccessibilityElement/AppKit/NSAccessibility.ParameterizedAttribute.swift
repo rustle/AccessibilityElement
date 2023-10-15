@@ -4,7 +4,7 @@
 //  Copyright © 2018-2021 Doug Russell. All rights reserved.
 //
 
-import Cocoa
+import AppKit
 
 public extension NSAccessibility.ParameterizedAttribute {
     static let textMarkerRangeForUnorderedTextMarkers: NSAccessibility.ParameterizedAttribute = "AXTextMarkerRangeForUnorderedTextMarkers"
