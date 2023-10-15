@@ -75,7 +75,7 @@ public final class SystemObserver: Observer, @unchecked Sendable {
     public func start() async throws {
         try state.withLock { state in
             guard state.observer == nil else { return }
-            let observer = try throwsAXObserverError {
+            let observer = try promoteAXObserverErrorToObserverErrorOnThrow {
                 try AX.Observer(
                     pid: processIdentifier,
                     callback: observer_callback
@@ -136,7 +136,7 @@ public final class SystemObserver: Observer, @unchecked Sendable {
                 element: element,
                 notification: notification
             )
-            try throwsAXObserverError {
+            try promoteAXObserverErrorToObserverErrorOnThrow {
                 try observer.add(
                     element: element.element,
                     notification: notification,
@@ -166,7 +166,7 @@ public final class SystemObserver: Observer, @unchecked Sendable {
         try state.withLock { state in
             guard state.contextTokenMap.removeValue(forKey: context) != nil else { return }
             guard let observer = state.observer else { return }
-            try throwsAXObserverError {
+            try promoteAXObserverErrorToObserverErrorOnThrow {
                 try observer.remove(
                     element: element,
                     notification: notification
@@ -210,16 +210,6 @@ public final class SystemObserver: Observer, @unchecked Sendable {
                 context: context
             )
         )
-    }
-
-    private func throwsAXObserverError<T>(_ work: () throws -> T) rethrows -> T {
-        do {
-            return try work()
-        } catch let error as AX.AXError {
-            throw ObserverError(error: error)
-        } catch {
-            throw error
-        }
     }
 }
 

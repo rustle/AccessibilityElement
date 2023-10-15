@@ -180,3 +180,13 @@ public enum ObserverError: Error {
         }
     }
 }
+
+func promoteAXObserverErrorToObserverErrorOnThrow<T>(_ work: () throws -> T) rethrows -> T {
+    do {
+        return try work()
+    } catch let error as AX.AXError {
+        throw ObserverError(error: error)
+    } catch {
+        throw error
+    }
+}
