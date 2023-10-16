@@ -7,62 +7,52 @@
 import AppKit
 import AX
 
-@globalActor
-actor ObserverRunLoopActor: GlobalActor {
-    typealias ActorType = ObserverRunLoopActor
-    static let shared: ActorType = ObserverRunLoopActor()
-    init() {
-        let executor = RunLoopExecutor()
-        self.executor = executor
-        unownedExecutor = executor.asUnownedSerialExecutor()
-        executor.start()
-    }
-    nonisolated let executor: SerialExecutor
-    nonisolated let unownedExecutor: UnownedSerialExecutor
-}
-
-private final class RunLoopExecutor: Thread, SerialExecutor, @unchecked Sendable {
-    override init() {
+public final class RunLoopExecutor: Thread, SerialExecutor, @unchecked Sendable {
+    public override init() {
         super.init()
-        name = "AccessibilityElement.SystemObserver"
+        name = "AccessibilityElement.RunLoopExecutor"
         qualityOfService = .userInitiated
     }
-    override func main() {
+    public override func main() {
         autoreleasepool {
             // Toss something on the run loop so it doesn't return right away
-            Timer.scheduledTimer(timeInterval: Date.distantFuture.timeIntervalSince1970,
-                                 target: self,
-                                 selector: #selector(nop),
-                                 userInfo: nil,
-                                 repeats: true)
+            Timer.scheduledTimer(
+                timeInterval: Date.distantFuture.timeIntervalSince1970,
+                target: self,
+                selector: #selector(nop),
+                userInfo: nil,
+                repeats: true
+            )
             while true {
                 autoreleasepool {
                     _ = RunLoop.current
-                        .run(mode: .default,
-                             before: Date(timeIntervalSinceNow: 1.0))
+                        .run(
+                            mode: .default,
+                            before: Date(timeIntervalSinceNow: 1.0)
+                        )
                 }
             }
         }
     }
-    @objc func nop() {}
-    // Stick UnownedJob inside a reference type
+    @objc private func nop() {}
+    // Stick Job inside an ObjC type
     private class Job: NSObject {
         private let unownedJob: UnownedJob
-        init(unownedJob: UnownedJob) {
-            self.unownedJob = unownedJob
+        init(job: consuming ExecutorJob) {
+            self.unownedJob = UnownedJob(job)
         }
         func runSynchronously(on unownedExecutor: UnownedSerialExecutor) {
-            unownedJob._runSynchronously(on: unownedExecutor)
+            unownedJob.runSynchronously(on: unownedExecutor)
         }
     }
-    func enqueue(_ job: UnownedJob) {
+    public func enqueue(_ job: consuming ExecutorJob) {
         perform(#selector(enqueueOnRunLoop),
                 on: self,
-                with: Job(unownedJob: job),
+                with: Job(job: job),
                 waitUntilDone: false,
                 modes: [RunLoop.Mode.default.rawValue])
     }
-    func asUnownedSerialExecutor() -> UnownedSerialExecutor {
+    public func asUnownedSerialExecutor() -> UnownedSerialExecutor {
         UnownedSerialExecutor(ordinary: self)
     }
     @objc private func enqueueOnRunLoop(_ job: Job) {

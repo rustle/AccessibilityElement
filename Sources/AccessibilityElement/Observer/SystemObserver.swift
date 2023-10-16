@@ -11,7 +11,7 @@ import AX
 import Cocoa
 import os
 
-public final class SystemObserver: Observer, @unchecked Sendable {
+public actor SystemObserver: Observer {
     // MARK: Types
 
     fileprivate final class Token: Hashable {
@@ -62,8 +62,17 @@ public final class SystemObserver: Observer, @unchecked Sendable {
 
     public let processIdentifier: pid_t
     public init(processIdentifier: pid_t) throws {
+        let executor = RunLoopExecutor()
+        self.executor = executor
+        unownedExecutor = executor.asUnownedSerialExecutor()
+        executor.start()
         self.processIdentifier = processIdentifier
     }
+
+    // MARK: Executor
+
+    private nonisolated let executor: any SerialExecutor
+    public nonisolated let unownedExecutor: UnownedSerialExecutor
 
     // MARK: State
 
@@ -71,9 +80,8 @@ public final class SystemObserver: Observer, @unchecked Sendable {
 
     // MARK: Schedule
 
-    @ObserverRunLoopActor
     public func start() async throws {
-        try state.withLock { state in
+        try state.withLockUnchecked { state in
             guard state.observer == nil else { return }
             let observer = try promoteAXObserverErrorToObserverErrorOnThrow {
                 try AX.Observer(
@@ -91,7 +99,7 @@ public final class SystemObserver: Observer, @unchecked Sendable {
                 for await payload in streamer.stream {
                     guard !Task.isCancelled else { break }
                     guard let self else { break }
-                    self.handle(payload: payload)
+                    await self.handle(payload: payload)
                 }
             }
             state = .init(
@@ -103,7 +111,6 @@ public final class SystemObserver: Observer, @unchecked Sendable {
         }
     }
 
-    @ObserverRunLoopActor
     public func stop() throws {
         let oldState = state.withLock { state in
             if let observer = state.observer {
@@ -126,7 +133,7 @@ public final class SystemObserver: Observer, @unchecked Sendable {
         element: ObserverElement,
         notification: NSAccessibility.Notification
     ) async throws -> ObserverAsyncSequence {
-        try state.withLock { state in
+        try state.withLockUnchecked { state in
             guard let observer = state.observer else {
                 throw ObserverError.failure
             }
@@ -146,13 +153,15 @@ public final class SystemObserver: Observer, @unchecked Sendable {
             state.contextTokenMap[context] = token
             token.callback.continuation.onTermination = { [weak self] _ in
                 guard let self else { return }
-                do {
-                    try self.remove(
-                        context: context,
-                        element: element.element,
-                        notification: notification
-                    )
-                } catch {}
+                Task {
+                    do {
+                        try await self.remove(
+                            context: context,
+                            element: element.element,
+                            notification: notification
+                        )
+                    } catch {}
+                }
             }
             return token.callback.stream.shared()
         }
@@ -193,7 +202,7 @@ public final class SystemObserver: Observer, @unchecked Sendable {
             )
     }
 
-    fileprivate func yield(
+    nonisolated fileprivate func yield(
         element: SystemElement,
         notification: NSAccessibility.Notification,
         info: [String : Any],
