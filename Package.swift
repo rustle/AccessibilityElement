@@ -21,7 +21,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/rustle/AX.git",
-            from: "0.1.9"),
+            from: "0.1.10"),
         .package(
             url: "https://github.com/apple/swift-atomics.git",
             .upToNextMajor(from: "1.0.0")),
