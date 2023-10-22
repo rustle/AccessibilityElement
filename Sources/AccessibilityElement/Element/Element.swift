@@ -16,6 +16,10 @@ public protocol Element: CustomStringConvertible, CustomDebugStringConvertible {
     ///
     func value() throws -> Any
     ///
+    func title() throws -> String
+    ///
+    func titleUIElement() throws -> Self
+    ///
     var processIdentifier: pid_t { get throws }
     ///
     func windows() throws -> [Self]
@@ -67,7 +71,7 @@ extension Element {
 
     public var debugDescription: String {
         var description = [String]()
-        description.reserveCapacity(4)
+        description.reserveCapacity(5)
         description.append(String(describing: self)) // 1
         func append(_ prefix: String,
                     _ attribute: () throws -> Any) {
@@ -79,6 +83,7 @@ extension Element {
         }
         append("Role:", self.role) // 2
         append("Subrole:", self.subrole) // 3
+        append("Title:", self.title) // 4
         append("Value:", self.value) // 4
         return "<Element \(description.joined(separator: " "))>"
     }

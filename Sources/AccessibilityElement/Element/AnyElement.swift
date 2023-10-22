@@ -19,6 +19,8 @@ public struct AnyElement: Element {
     private let _roleDescription: () throws -> String
     private let _subrole: () throws -> NSAccessibility.Subrole
     private let _value: () throws -> Any
+    private let _title: () throws -> String
+    private let _titleUIElement: () throws -> AnyElement
     private let _processIdentifier: () throws -> pid_t
     private let _windows: () throws -> [AnyElement]
     private let _mainWindow: () throws -> AnyElement
@@ -43,6 +45,10 @@ public struct AnyElement: Element {
             _roleDescription = element.roleDescription
             _subrole = element.subrole
             _value = element.value
+            _title = element.title
+            _titleUIElement = {
+                AnyElement(element: try element.titleUIElement())
+            }
             _processIdentifier = { try element.processIdentifier }
             _windows = {
                 try element
@@ -123,6 +129,14 @@ public struct AnyElement: Element {
 
     public func value() throws -> Any {
         try _value()
+    }
+    
+    public func title() throws -> String {
+        try _title()
+    }
+
+    public func titleUIElement() throws -> AnyElement {
+        try _titleUIElement()
     }
 
     public var processIdentifier: pid_t {

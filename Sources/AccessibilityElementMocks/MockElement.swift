@@ -23,7 +23,15 @@ public struct MockElement: Element {
     public func value() throws -> Any {
         try get(.value)
     }
-    
+
+    public func title() throws -> String {
+        try get(.title)
+    }
+
+    public func titleUIElement() throws -> MockElement {
+        try get(.titleUIElement)
+    }
+
     public var processIdentifier: pid_t {
         get throws {
             _pid

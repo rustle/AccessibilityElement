@@ -32,6 +32,16 @@ public struct SystemElement: Element {
     public func value() throws -> Any {
         try element.value(attribute: .value)
     }
+    
+    public func title() throws -> String {
+        let title: String = try element.value(attribute: .title)
+        return title
+    }
+
+    public func titleUIElement() throws -> SystemElement {
+        let titleUIElement: SystemElement = try element.value(attribute: .titleUIElement)
+        return titleUIElement
+    }
 
     public func windows() throws -> [SystemElement] {
         (try element.value(attribute: .windows) as [UIElement])
