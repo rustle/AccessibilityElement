@@ -17,98 +17,143 @@ public struct SystemElement: Element {
     }
 
     public func role() throws -> NSAccessibility.Role {
-        try element.value(attribute: .role)
-    }
-
-    public func roleDescription() throws -> String {
-        let description: String = try element.value(attribute: .roleDescription)
-        return description
-    }
-
-    public func subrole() throws -> NSAccessibility.Subrole {
-        NSAccessibility.Subrole(rawValue: try element.value(attribute: .subrole))
-    }
-
-    public func value() throws -> Any {
-        try element.value(attribute: .value)
-    }
-    
-    public func title() throws -> String {
-        let title: String = try element.value(attribute: .title)
-        return title
-    }
-
-    public func titleUIElement() throws -> SystemElement {
-        let titleUIElement: SystemElement = try element.value(attribute: .titleUIElement)
-        return titleUIElement
-    }
-
-    public func windows() throws -> [SystemElement] {
-        (try element.value(attribute: .windows) as [UIElement])
-            .map(SystemElement.init(element:))
-    }
-
-    public func mainWindow() throws -> SystemElement {
-        .init(element: try element.value(attribute: .mainWindow) as UIElement)
-    }
-
-    public func focusedWindow() throws -> SystemElement {
-        .init(element: try element.value(attribute: .focusedWindow) as UIElement)
-    }
-
-    public func focusedUIElement() throws -> SystemElement {
         try throwsAXError {
-            .init(element: try element.value(attribute: .focusedUIElement) as UIElement)
+            try element.value(attribute: .role)
         }
     }
 
+    public func roleDescription() throws -> String {
+        try throwsAXError {
+            try element.value(attribute: .roleDescription)
+        }
+    }
+
+    public func subrole() throws -> NSAccessibility.Subrole {
+        NSAccessibility.Subrole(rawValue:
+            try throwsAXError({
+                try element.value(attribute: .subrole)
+            })
+        )
+    }
+
+    public func value() throws -> Any {
+        try throwsAXError {
+            try element.value(attribute: .value)
+        }
+    }
+    
+    public func title() throws -> String {
+        try throwsAXError {
+            try element.value(attribute: .title)
+        }
+    }
+
+    public func titleUIElement() throws -> SystemElement {
+        try throwsAXError {
+            try element.value(attribute: .titleUIElement)
+        }
+    }
+
+    public func windows() throws -> [SystemElement] {
+        try throwsAXError {
+            (try element.value(attribute: .windows) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
+    }
+
+    public func mainWindow() throws -> SystemElement {
+        .init(element:
+            try throwsAXError({
+                try element.value(attribute: .mainWindow)
+            })
+        )
+    }
+
+    public func focusedWindow() throws -> SystemElement {
+        .init(element:
+            try throwsAXError({
+                try element.value(attribute: .focusedWindow)
+            })
+        )
+    }
+
+    public func focusedUIElement() throws -> SystemElement {
+        .init(element:
+            try throwsAXError({
+                try element.value(attribute: .focusedUIElement)
+            })
+        )
+    }
+
     public func parent() throws -> SystemElement {
-        .init(element: try element.value(attribute: .parent) as UIElement)
+        .init(element:
+            try throwsAXError({
+                try element.value(attribute: .parent)
+            })
+        )
     }
 
     public func children() throws -> [SystemElement] {
-        (try element.value(attribute: .children) as [UIElement])
-            .map(SystemElement.init(element:))
+        try throwsAXError {
+            (try element.value(attribute: .children) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
     }
 
     public func childrenInNavigationOrder() throws -> [SystemElement] {
-        (try element.value(attribute: .childrenInNavigationOrder) as [UIElement])
-            .map(SystemElement.init(element:))
+        try throwsAXError {
+            (try element.value(attribute: .childrenInNavigationOrder) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
     }
 
     public func visibleChildren() throws -> [SystemElement] {
-        (try element.value(attribute: .visibleChildren) as [UIElement])
-            .map(SystemElement.init(element:))
+        try throwsAXError {
+            (try element.value(attribute: .visibleChildren) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
     }
 
     public func selectedChildren() throws -> [SystemElement] {
-        (try element.value(attribute: .selectedChildren) as [UIElement])
-            .map(SystemElement.init(element:))
+        try throwsAXError {
+            (try element.value(attribute: .selectedChildren) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
     }
 
     public func rows() throws -> [SystemElement] {
-        (try element.value(attribute: .rows) as [UIElement])
-            .map(SystemElement.init(element:))
+        try throwsAXError {
+            (try element.value(attribute: .rows) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
     }
 
     public func columns() throws -> [SystemElement] {
-        (try element.value(attribute: .columns) as [UIElement])
-            .map(SystemElement.init(element:))
+        try throwsAXError {
+            (try element.value(attribute: .columns) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
     }
 
     public func selectedRows() throws -> [SystemElement] {
-        (try element.value(attribute: .selectedRows) as [UIElement])
-            .map(SystemElement.init(element:))
+        try throwsAXError {
+            (try element.value(attribute: .selectedRows) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
     }
 
     public func selectedColumns() throws -> [SystemElement] {
-        (try element.value(attribute: .selectedColumns) as [UIElement])
-            .map(SystemElement.init(element:))
+        try throwsAXError {
+            (try element.value(attribute: .selectedColumns) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
     }
 
     public func selectedCells() throws -> [SystemElement] {
-        (try element.value(attribute: .selectedCells) as [UIElement])
-            .map(SystemElement.init(element:))
+        try throwsAXError {
+            (try element.value(attribute: .selectedCells) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
     }
 
     public var processIdentifier: pid_t {
@@ -118,12 +163,16 @@ public struct SystemElement: Element {
     }
 
     public func enhancedUserInterface() throws -> Bool {
-        (try element.value(attribute: .enhancedUserInterface) as Bool)
+        try throwsAXError {
+            (try element.value(attribute: .enhancedUserInterface) as Bool)
+        }
     }
 
     public func setEnhancedUserInterface(_ enhancedUserInterface: Bool) throws {
-        try element.set(attribute: .enhancedUserInterface,
-                        value: enhancedUserInterface as CFBoolean)
+        try throwsAXError {
+            try element.set(attribute: .enhancedUserInterface,
+                            value: enhancedUserInterface as CFBoolean)
+        }
     }
 
     let element: UIElement
