@@ -11,7 +11,7 @@ import AX
 import Cocoa
 import os
 
-public actor SystemObserver: Observer {
+public actor SystemObserver: Observer, Sendable {
     // MARK: Types
 
     fileprivate final class Token: Hashable {
@@ -42,10 +42,10 @@ public actor SystemObserver: Observer {
         }
     }
 
-    fileprivate struct ObserverCallbackPayload {
+    fileprivate struct ObserverCallbackPayload: Sendable {
         let element: ObserverElement
         let notification: NSAccessibility.Notification
-        let info: [String : Any]
+        let info: [String: Sendable]
         let context: Int
     }
 
@@ -76,7 +76,7 @@ public actor SystemObserver: Observer {
 
     // MARK: State
 
-    private let state: OSAllocatedUnfairLock<State> = .init(initialState: .init())
+    private let state: OSAllocatedUnfairLock<State> = .init(uncheckedState: .init())
 
     // MARK: Schedule
 
@@ -112,7 +112,7 @@ public actor SystemObserver: Observer {
     }
 
     public func stop() throws {
-        let oldState = state.withLock { state in
+        let oldState = state.withLockUnchecked { state in
             if let observer = state.observer {
                 ObserverLookup.shared
                     .setObserver(
@@ -172,7 +172,7 @@ public actor SystemObserver: Observer {
         element: UIElement,
         notification: NSAccessibility.Notification
     ) throws {
-        try state.withLock { state in
+        try state.withLockUnchecked { state in
             guard state.contextTokenMap.removeValue(forKey: context) != nil else { return }
             guard let observer = state.observer else { return }
             try promoteAXObserverErrorToObserverErrorOnThrow {
@@ -185,7 +185,7 @@ public actor SystemObserver: Observer {
     }
 
     fileprivate func handle(payload: ObserverCallbackPayload) {
-        let token = state.withLock { state in
+        let token = state.withLockUnchecked { state in
             state.contextTokenMap[payload.context]
         }
         guard let token else { return }
@@ -205,7 +205,7 @@ public actor SystemObserver: Observer {
     nonisolated fileprivate func yield(
         element: SystemElement,
         notification: NSAccessibility.Notification,
-        info: [String : Any],
+        info: [String: Sendable],
         context: Int
     ) {
         let continuation = state.withLock {

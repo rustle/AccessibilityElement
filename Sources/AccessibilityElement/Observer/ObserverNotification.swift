@@ -1,14 +1,14 @@
 //
 //  ObserverNotification.swift
 //
-//  Copyright © 2017-2022 Doug Russell. All rights reserved.
+//  Copyright © 2017-2023 Doug Russell. All rights reserved.
 //
 
 import AppKit
 
-public struct ObserverNotification<ObserverElement: Element> {
+public struct ObserverNotification<ObserverElement: Element>: Sendable {
     public let observedElement: ObserverElement
     public let element: ObserverElement
     public let name: NSAccessibility.Notification
-    public let info: [String : Any]
+    public let info: [String: Sendable]
 }

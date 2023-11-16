@@ -11,7 +11,7 @@ struct SystemObserverUserInfoRepackager {
     private static func _repackage(element: UIElement) -> SystemElement {
         SystemElement(element: element)
     }
-    private static func _repackage(array: [Any]) -> [Any] {
+    private static func _repackage(array: [Sendable]) -> [Sendable] {
         do {
             return try array.map { value in
                 return try _repackage(value: value)
@@ -20,16 +20,16 @@ struct SystemObserverUserInfoRepackager {
             return []
         }
     }
-    private static func _repackage(dictionary: [String:Any]) -> [String:Any] {
+    private static func _repackage(dictionary: [String:Sendable]) -> [String:Sendable] {
         do {
             return try dictionary.reduce(into: [:]) { result, pair in
-                result[pair.key] = try _repackage(value: pair.value as CFTypeRef)
+                result[pair.key] = try _repackage(value: pair.value)
             }
         } catch {
             return [:]
         }
     }
-    private static func _repackage(value: Any) throws -> Any {
+    private static func _repackage(value: Sendable) throws -> Sendable {
         let typeID = CFGetTypeID(value as CFTypeRef)
         switch typeID {
         case AXUIElementGetTypeID():
@@ -50,18 +50,18 @@ struct SystemObserverUserInfoRepackager {
         switch value {
         case let array as [String]:
             return _repackage(array: array)
-        case let dictionary as [String:Any]:
+        case let dictionary as [String:Sendable]:
             return _repackage(dictionary: dictionary)
         case let string as String:
             return string
-        case let attributeString as NSAttributedString:
+        case let attributeString as AttributedString:
             return attributeString
         default:
             throw AccessibilityError.typeMismatch
         }
     }
-    static func repackage(dictionary: CFDictionary?) -> [String : Any] {
-        guard let dictionary = dictionary as? [String:Any] else {
+    static func repackage(dictionary: CFDictionary?) -> [String:Sendable] {
+        guard let dictionary = dictionary as? [String:Sendable] else {
             return [:]
         }
         return _repackage(dictionary: dictionary)

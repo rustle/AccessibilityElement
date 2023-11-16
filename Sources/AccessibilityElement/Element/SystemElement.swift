@@ -117,6 +117,15 @@ public struct SystemElement: Element {
         }
     }
 
+    public func enhancedUserInterface() throws -> Bool {
+        (try element.value(attribute: .enhancedUserInterface) as Bool)
+    }
+
+    public func setEnhancedUserInterface(_ enhancedUserInterface: Bool) throws {
+        try element.set(attribute: .enhancedUserInterface,
+                        value: enhancedUserInterface as CFBoolean)
+    }
+
     let element: UIElement
     init(element: UIElement) {
         self.element = element

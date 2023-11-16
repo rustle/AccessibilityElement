@@ -6,7 +6,7 @@
 
 import AppKit
 
-public struct AnyElement: Element {
+public struct AnyElement: Element, Sendable {
     public static func systemWide() throws -> AnyElement {
         fatalError()
     }
@@ -15,27 +15,29 @@ public struct AnyElement: Element {
         fatalError()
     }
 
-    private let _role: () throws -> NSAccessibility.Role
-    private let _roleDescription: () throws -> String
-    private let _subrole: () throws -> NSAccessibility.Subrole
-    private let _value: () throws -> Any
-    private let _title: () throws -> String
-    private let _titleUIElement: () throws -> AnyElement
-    private let _processIdentifier: () throws -> pid_t
-    private let _windows: () throws -> [AnyElement]
-    private let _mainWindow: () throws -> AnyElement
-    private let _focusedWindow: () throws -> AnyElement
-    private let _focusedUIElement: () throws -> AnyElement
-    private let _parent: () throws -> AnyElement
-    private let _children: () throws -> [AnyElement]
-    private let _childrenInNavigationOrder: () throws -> [AnyElement]
-    private let _visibleChildren: () throws -> [AnyElement]
-    private let _selectedChildren: () throws -> [AnyElement]
-    private let _rows: () throws -> [AnyElement]
-    private let _columns: () throws -> [AnyElement]
-    private let _selectedRows: () throws -> [AnyElement]
-    private let _selectedColumns: () throws -> [AnyElement]
-    private let _selectedCells: () throws -> [AnyElement]
+    private let _role: @Sendable () throws -> NSAccessibility.Role
+    private let _roleDescription: @Sendable () throws -> String
+    private let _subrole: @Sendable () throws -> NSAccessibility.Subrole
+    private let _value: @Sendable () throws -> Any
+    private let _title: @Sendable () throws -> String
+    private let _titleUIElement: @Sendable () throws -> AnyElement
+    private let _processIdentifier: @Sendable () throws -> pid_t
+    private let _windows: @Sendable () throws -> [AnyElement]
+    private let _mainWindow: @Sendable () throws -> AnyElement
+    private let _focusedWindow: @Sendable () throws -> AnyElement
+    private let _focusedUIElement: @Sendable () throws -> AnyElement
+    private let _parent: @Sendable () throws -> AnyElement
+    private let _children: @Sendable () throws -> [AnyElement]
+    private let _childrenInNavigationOrder: @Sendable () throws -> [AnyElement]
+    private let _visibleChildren: @Sendable () throws -> [AnyElement]
+    private let _selectedChildren: @Sendable () throws -> [AnyElement]
+    private let _rows: @Sendable () throws -> [AnyElement]
+    private let _columns: @Sendable () throws -> [AnyElement]
+    private let _selectedRows: @Sendable () throws -> [AnyElement]
+    private let _selectedColumns: @Sendable () throws -> [AnyElement]
+    private let _selectedCells: @Sendable () throws -> [AnyElement]
+    private let _enhancedUserInterface: @Sendable () throws -> Bool
+    private let _setEnhancedUserInterface: @Sendable (Bool) throws -> Void
 
     public init<E: Element>(element: E) {
         if E.self == AnyElement.self {
@@ -112,6 +114,8 @@ public struct AnyElement: Element {
                     .selectedCells()
                     .map(AnyElement.init)
             }
+            _enhancedUserInterface = element.enhancedUserInterface
+            _setEnhancedUserInterface = element.setEnhancedUserInterface
         }
     }
 
@@ -199,5 +203,13 @@ public struct AnyElement: Element {
 
     public func selectedCells() throws -> [AnyElement] {
         try _selectedCells()
+    }
+
+    public func enhancedUserInterface() throws -> Bool {
+        try _enhancedUserInterface()
+    }
+
+    public func setEnhancedUserInterface(_ enhancedUserInterface: Bool) throws {
+        try _setEnhancedUserInterface(enhancedUserInterface)
     }
 }

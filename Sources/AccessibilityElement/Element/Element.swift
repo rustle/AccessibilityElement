@@ -6,49 +6,75 @@
 
 import AppKit
 
-public protocol Element: CustomStringConvertible, CustomDebugStringConvertible {
-    /// String that defines the element’s role in the app.(not localized)
+public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringConvertible {
+    /// String that defines the element’s role in the app. (not localized)
+    @Sendable
     func role() throws -> NSAccessibility.Role
     /// Localized string that describes the element’s role in the app
+    @Sendable
     func roleDescription() throws -> String
     ///
+    @Sendable
     func subrole() throws -> NSAccessibility.Subrole
     ///
+    @Sendable
     func value() throws -> Any
     ///
+    @Sendable
     func title() throws -> String
     ///
+    @Sendable
     func titleUIElement() throws -> Self
     ///
     var processIdentifier: pid_t { get throws }
     ///
+    @Sendable
     func windows() throws -> [Self]
     ///
+    @Sendable
     func mainWindow() throws -> Self
     ///
+    @Sendable
     func focusedWindow() throws -> Self
     ///
+    @Sendable
     func focusedUIElement() throws -> Self
     ///
+    @Sendable
     func parent() throws -> Self
     ///
+    @Sendable
     func children() throws -> [Self]
     ///
+    @Sendable
     func childrenInNavigationOrder() throws -> [Self]
     ///
+    @Sendable
     func visibleChildren() throws -> [Self]
     ///
+    @Sendable
     func selectedChildren() throws -> [Self]
     ///
+    @Sendable
     func rows() throws -> [Self]
     ///
+    @Sendable
     func columns() throws -> [Self]
     ///
+    @Sendable
     func selectedRows() throws -> [Self]
     ///
+    @Sendable
     func selectedColumns() throws -> [Self]
     ///
+    @Sendable
     func selectedCells() throws -> [Self]
+    ///
+    @Sendable
+    func enhancedUserInterface() throws -> Bool
+    ///
+    @Sendable
+    func setEnhancedUserInterface(_ enhancedUserInterface: Bool) throws
 }
 
 extension Element {

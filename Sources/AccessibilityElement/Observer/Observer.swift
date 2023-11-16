@@ -7,7 +7,7 @@
 import AppKit
 import Asynchrone
 
-public protocol Observer {
+public protocol Observer: Sendable {
     associatedtype ObserverElement: Element
     typealias ObserverAsyncSequence = SharedAsyncSequence<AsyncStream<ObserverNotification<ObserverElement>>>
 

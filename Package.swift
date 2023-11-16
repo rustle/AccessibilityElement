@@ -44,6 +44,9 @@ let package = Package(
                     name: "Collections",
                     package: "swift-collections"),
                 "Asynchrone",
+            ],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
             ]),
         .target(
             name: "AccessibilityElementMocks",
