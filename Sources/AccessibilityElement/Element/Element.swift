@@ -106,6 +106,9 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     /// The RTF data describing the specified range of characters.
     @Sendable
     func rtf(for range: Range<Int>) throws -> Data
+    ///
+    @Sendable
+    func attributedString(for range: Range<Int>) throws -> NSAttributedString
 }
 
 extension Element {

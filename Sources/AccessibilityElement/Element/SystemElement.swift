@@ -272,6 +272,15 @@ public struct SystemElement: Element {
         }
     }
 
+    public func attributedString(for range: Range<Int>) throws -> NSAttributedString {
+        try throwsAXError {
+            try element.value(
+                attribute: .attributedStringForRange,
+                parameter: Value.range(range).value
+            )
+        }
+    }
+
     let element: UIElement
     init(element: UIElement) {
         self.element = element
