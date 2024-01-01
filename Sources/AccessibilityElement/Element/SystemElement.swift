@@ -215,6 +215,15 @@ public struct SystemElement: Element {
         }
     }
 
+    public func string(for range: Range<Int>) throws -> String {
+        try throwsAXError {
+            try element.value(
+                attribute: .stringForRange,
+                parameter: Value.range(range).value
+            )
+        }
+    }
+
     let element: UIElement
     init(element: UIElement) {
         self.element = element
