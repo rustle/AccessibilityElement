@@ -249,6 +249,19 @@ public struct SystemElement: Element {
             )
         }
     }
+    
+    public func bounds(for range: Range<Int>) throws -> NSRect {
+        try throwsAXError {
+            let value = try Value(value: element.value(
+                attribute: .boundsForRange,
+                parameter: Value.range(range).value
+            ))
+            guard case let .rect(rect) = value else {
+                throw ElementError.noValue
+            }
+            return rect
+        }
+    }
 
     let element: UIElement
     init(element: UIElement) {

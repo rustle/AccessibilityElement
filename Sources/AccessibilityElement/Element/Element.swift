@@ -99,6 +99,10 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     /// The string specified by the range.
     @Sendable
     func string(for range: Range<Int>) throws -> String
+    /// The rectangle enclosing the specified range of characters.
+    /// If the range crosses a line boundary, the returned rectangle will fully enclose all the lines of characters.
+    @Sendable
+    func bounds(for range: Range<Int>) throws -> NSRect
 }
 
 extension Element {
