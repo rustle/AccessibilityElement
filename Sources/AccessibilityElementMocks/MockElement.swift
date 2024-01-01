@@ -138,6 +138,10 @@ public final class MockElement: Element, @unchecked Sendable {
     public func bounds(for range: Range<Int>) throws -> NSRect {
         throw ElementError.noValue
     }
+    
+    public func rtf(for range: Range<Int>) throws -> Data {
+        throw ElementError.noValue
+    }
 
     private func `get`<V: Sendable>(_ attribute: NSAccessibility.Attribute) throws -> V {
         guard let value = storage.withLockUnchecked({ $0[attribute] }) else {

@@ -263,6 +263,15 @@ public struct SystemElement: Element {
         }
     }
 
+    public func rtf(for range: Range<Int>) throws -> Data {
+        try throwsAXError {
+            try element.value(
+                attribute: .rtfForRange,
+                parameter: Value.range(range).value
+            )
+        }
+    }
+
     let element: UIElement
     init(element: UIElement) {
         self.element = element

@@ -103,6 +103,9 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     /// If the range crosses a line boundary, the returned rectangle will fully enclose all the lines of characters.
     @Sendable
     func bounds(for range: Range<Int>) throws -> NSRect
+    /// The RTF data describing the specified range of characters.
+    @Sendable
+    func rtf(for range: Range<Int>) throws -> Data
 }
 
 extension Element {
