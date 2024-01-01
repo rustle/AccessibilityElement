@@ -215,6 +215,19 @@ public struct SystemElement: Element {
         }
     }
 
+    public func range(forIndex index: Int) throws -> Range<Int> {
+        try throwsAXError {
+            let value = try Value(value: element.value(
+                attribute: .rangeForIndex,
+                parameter: index as NSNumber
+            ))
+            guard case let .range(range) = value else {
+                throw ElementError.noValue
+            }
+            return range
+        }
+    }
+
     public func range(forPosition position: Int) throws -> Range<Int> {
         try throwsAXError {
             let value = try Value(value: element.value(

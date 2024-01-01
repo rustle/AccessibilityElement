@@ -123,6 +123,10 @@ public final class MockElement: Element, @unchecked Sendable {
         throw ElementError.noValue
     }
 
+    public func range(forIndex index: Int) throws -> Range<Int> {
+        throw ElementError.noValue
+    }
+
     public func range(forPosition position: Int) throws -> Range<Int> {
         throw ElementError.noValue
     }
