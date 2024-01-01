@@ -293,6 +293,18 @@ public struct SystemElement: Element {
             return range
         }
     }
+    
+    public func cell(
+        column: Int,
+        row: Int
+    ) throws -> SystemElement {
+        try throwsAXError {
+            try element.value(
+                attribute: .cellForColumnAndRow,
+                parameter: [column as NSNumber, row as NSNumber]
+            )
+        }
+    }
 
     let element: UIElement
     init(element: UIElement) {
