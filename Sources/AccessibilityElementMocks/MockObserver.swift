@@ -5,7 +5,7 @@
 //
 
 import AccessibilityElement
-import Cocoa
+import AppKit
 
 public struct MockObserver: Observer {
     public typealias ObserverElement = MockElement
