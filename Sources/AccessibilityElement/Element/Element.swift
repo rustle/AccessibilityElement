@@ -87,6 +87,9 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     ///
     @Sendable
     func line(for index: Int) throws -> Int
+    ///
+    @Sendable
+    func range(for line: Int) throws -> Range<Int>
 }
 
 extension Element {
