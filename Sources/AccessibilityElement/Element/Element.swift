@@ -109,6 +109,9 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     ///
     @Sendable
     func attributedString(for range: Range<Int>) throws -> NSAttributedString
+    /// The full range of characters, including the specified character, which have the same style.
+    @Sendable
+    func styleRange(for index: Int) throws -> Range<Int>
 }
 
 extension Element {

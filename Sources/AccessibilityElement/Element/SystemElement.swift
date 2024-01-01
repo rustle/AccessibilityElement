@@ -281,6 +281,19 @@ public struct SystemElement: Element {
         }
     }
 
+    public func styleRange(for index: Int) throws -> Range<Int> {
+        try throwsAXError {
+            let value = try Value(value: element.value(
+                attribute: .styleRangeForIndex,
+                parameter: index as NSNumber
+            ))
+            guard case let .range(range) = value else {
+                throw ElementError.noValue
+            }
+            return range
+        }
+    }
+
     let element: UIElement
     init(element: UIElement) {
         self.element = element
