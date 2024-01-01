@@ -175,6 +175,24 @@ public struct SystemElement: Element {
         }
     }
 
+    public func actions() throws -> [NSAccessibility.Action] {
+        try throwsAXError {
+            try element.actions()
+        }
+    }
+
+    public func description(action: NSAccessibility.Action) throws -> String {
+        try throwsAXError {
+            try element.description(action: action)
+        }
+    }
+
+    public func perform(action: NSAccessibility.Action) throws {
+        try throwsAXError {
+            try element.perform(action: action)
+        }
+    }
+
     let element: UIElement
     init(element: UIElement) {
         self.element = element

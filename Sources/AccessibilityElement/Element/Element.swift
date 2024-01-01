@@ -75,6 +75,15 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     ///
     @Sendable
     func setEnhancedUserInterface(_ enhancedUserInterface: Bool) throws
+    ///
+    @Sendable
+    func actions() throws -> [NSAccessibility.Action]
+    ///
+    @Sendable
+    func description(action: NSAccessibility.Action) throws -> String
+    ///
+    @Sendable
+    func perform(action: NSAccessibility.Action) throws
 }
 
 extension Element {

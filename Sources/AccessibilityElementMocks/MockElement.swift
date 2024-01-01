@@ -103,6 +103,17 @@ public final class MockElement: Element, @unchecked Sendable {
         try set(enhancedUserInterface,
                 for: .enhancedUserInterface)
     }
+    
+    public func actions() throws -> [NSAccessibility.Action] {
+        []
+    }
+
+    public func description(action: NSAccessibility.Action) throws -> String {
+        ""
+    }
+
+    public func perform(action: NSAccessibility.Action) throws {
+    }
 
     private func `get`<V: Sendable>(_ attribute: NSAccessibility.Attribute) throws -> V {
         guard let value = storage.withLockUnchecked({ $0[attribute] }) else {

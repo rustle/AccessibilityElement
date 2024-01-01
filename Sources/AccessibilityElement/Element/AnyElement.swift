@@ -38,6 +38,9 @@ public struct AnyElement: Element, Sendable {
     private let _selectedCells: @Sendable () throws -> [AnyElement]
     private let _enhancedUserInterface: @Sendable () throws -> Bool
     private let _setEnhancedUserInterface: @Sendable (Bool) throws -> Void
+    private let _actions: @Sendable () throws -> [NSAccessibility.Action]
+    private let _actionDescription: @Sendable (NSAccessibility.Action) throws -> String
+    private let _actionPerform: @Sendable (NSAccessibility.Action) throws -> Void
 
     public init<E: Element>(element: E) {
         if E.self == AnyElement.self {
@@ -116,6 +119,9 @@ public struct AnyElement: Element, Sendable {
             }
             _enhancedUserInterface = element.enhancedUserInterface
             _setEnhancedUserInterface = element.setEnhancedUserInterface
+            _actions = element.actions
+            _actionDescription = element.description(action:)
+            _actionPerform = element.perform(action:)
         }
     }
 
@@ -211,5 +217,17 @@ public struct AnyElement: Element, Sendable {
 
     public func setEnhancedUserInterface(_ enhancedUserInterface: Bool) throws {
         try _setEnhancedUserInterface(enhancedUserInterface)
+    }
+
+    public func actions() throws -> [NSAccessibility.Action] {
+        try _actions()
+    }
+
+    public func description(action: NSAccessibility.Action) throws -> String {
+        try _actionDescription(action)
+    }
+
+    public func perform(action: NSAccessibility.Action) throws {
+        try _actionPerform(action)
     }
 }
