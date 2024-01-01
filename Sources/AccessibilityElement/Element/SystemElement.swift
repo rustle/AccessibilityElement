@@ -193,11 +193,20 @@ public struct SystemElement: Element {
         }
     }
 
-    public func line(for index: Int) throws -> Int {
+    public func line(forIndex index: Int) throws -> Int {
         try throwsAXError {
             try element.value(
                 attribute: .lineForIndex,
                 parameter: index as NSNumber
+            )
+        }
+    }
+
+    public func line(forTextMarker textMarker: TextMarker) throws -> Int {
+        try throwsAXError {
+            try element.value(
+                attribute: .lineForTextMarker,
+                parameter: textMarker.textMarker
             )
         }
     }

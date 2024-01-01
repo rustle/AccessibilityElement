@@ -6,6 +6,7 @@
 
 import AccessibilityElement
 import AppKit
+import AX
 import os
 
 public final class MockElement: Element, @unchecked Sendable {
@@ -114,8 +115,12 @@ public final class MockElement: Element, @unchecked Sendable {
 
     public func perform(action: NSAccessibility.Action) throws {
     }
-    
-    public func line(for index: Int) throws -> Int {
+
+    public func line(forIndex index: Int) throws -> Int {
+        throw ElementError.noValue
+    }
+
+    public func line(forTextMarker textMarker: TextMarker) throws -> Int {
         throw ElementError.noValue
     }
 

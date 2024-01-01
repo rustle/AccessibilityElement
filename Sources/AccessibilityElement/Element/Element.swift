@@ -5,6 +5,7 @@
 //
 
 import AppKit
+import AX
 
 public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringConvertible {
     /// String that defines the element’s role in the app. (not localized)
@@ -86,7 +87,10 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     func perform(action: NSAccessibility.Action) throws
     /// The line number of the specified character.
     @Sendable
-    func line(for index: Int) throws -> Int
+    func line(forIndex index: Int) throws -> Int
+    /// The line number of the specified marker.
+    @Sendable
+    func line(forTextMarker textMarker: TextMarker) throws -> Int
     /// The range of characters corresponding to the specified line number.
     @Sendable
     func range(forLine line: Int) throws -> Range<Int>
