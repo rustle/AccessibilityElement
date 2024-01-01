@@ -202,11 +202,24 @@ public struct SystemElement: Element {
         }
     }
 
-    public func range(for line: Int) throws -> Range<Int> {
+    public func range(forLine line: Int) throws -> Range<Int> {
         try throwsAXError {
             let value = try Value(value: element.value(
                 attribute: .rangeForLine,
                 parameter: line as NSNumber
+            ))
+            guard case let .range(range) = value else {
+                throw ElementError.noValue
+            }
+            return range
+        }
+    }
+
+    public func range(forPosition position: Int) throws -> Range<Int> {
+        try throwsAXError {
+            let value = try Value(value: element.value(
+                attribute: .rangeForPosition,
+                parameter: position as NSNumber
             ))
             guard case let .range(range) = value else {
                 throw ElementError.noValue

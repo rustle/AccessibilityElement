@@ -89,7 +89,10 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     func line(for index: Int) throws -> Int
     ///
     @Sendable
-    func range(for line: Int) throws -> Range<Int>
+    func range(forLine line: Int) throws -> Range<Int>
+    ///
+    @Sendable
+    func range(forPosition position: Int) throws -> Range<Int>
     ///
     @Sendable
     func string(for range: Range<Int>) throws -> String

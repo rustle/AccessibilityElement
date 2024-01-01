@@ -118,11 +118,15 @@ public final class MockElement: Element, @unchecked Sendable {
     public func line(for index: Int) throws -> Int {
         throw ElementError.noValue
     }
-    
-    public func range(for line: Int) throws -> Range<Int> {
+
+    public func range(forLine line: Int) throws -> Range<Int> {
         throw ElementError.noValue
     }
-    
+
+    public func range(forPosition position: Int) throws -> Range<Int> {
+        throw ElementError.noValue
+    }
+
     public func string(for range: Range<Int>) throws -> String {
         throw ElementError.noValue
     }
