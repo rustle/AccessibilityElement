@@ -84,6 +84,9 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     ///
     @Sendable
     func perform(action: NSAccessibility.Action) throws
+    ///
+    @Sendable
+    func line(for index: Int) throws -> Int
 }
 
 extension Element {

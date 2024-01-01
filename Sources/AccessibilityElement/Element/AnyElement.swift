@@ -41,6 +41,7 @@ public struct AnyElement: Element, Sendable {
     private let _actions: @Sendable () throws -> [NSAccessibility.Action]
     private let _actionDescription: @Sendable (NSAccessibility.Action) throws -> String
     private let _actionPerform: @Sendable (NSAccessibility.Action) throws -> Void
+    private let _lineForIndex: @Sendable (Int) throws -> Int
 
     public init<E: Element>(element: E) {
         if E.self == AnyElement.self {
@@ -122,6 +123,7 @@ public struct AnyElement: Element, Sendable {
             _actions = element.actions
             _actionDescription = element.description(action:)
             _actionPerform = element.perform(action:)
+            _lineForIndex = element.line(for:)
         }
     }
 
@@ -229,5 +231,9 @@ public struct AnyElement: Element, Sendable {
 
     public func perform(action: NSAccessibility.Action) throws {
         try _actionPerform(action)
+    }
+    
+    public func line(for index: Int) throws -> Int {
+        try _lineForIndex(index);
     }
 }

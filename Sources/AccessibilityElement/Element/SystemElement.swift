@@ -193,6 +193,15 @@ public struct SystemElement: Element {
         }
     }
 
+    public func line(for index: Int) throws -> Int {
+        try throwsAXError {
+            try element.value(
+                attribute: .lineForIndex,
+                parameter: index as NSNumber
+            )
+        }
+    }
+
     let element: UIElement
     init(element: UIElement) {
         self.element = element
