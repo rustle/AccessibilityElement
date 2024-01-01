@@ -84,19 +84,19 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     ///
     @Sendable
     func perform(action: NSAccessibility.Action) throws
-    ///
+    /// The line number of the specified character.
     @Sendable
     func line(for index: Int) throws -> Int
-    ///
+    /// The range of characters corresponding to the specified line number.
     @Sendable
     func range(forLine line: Int) throws -> Range<Int>
-    ///
+    /// The full range of characters, including the specified character, which compose a single glyph.
     @Sendable
     func range(forIndex index: Int) throws -> Range<Int>
-    ///
+    /// The range of characters composing the glyph at the specified point.
     @Sendable
     func range(forPosition position: Int) throws -> Range<Int>
-    ///
+    /// The string specified by the range.
     @Sendable
     func string(for range: Range<Int>) throws -> String
 }
