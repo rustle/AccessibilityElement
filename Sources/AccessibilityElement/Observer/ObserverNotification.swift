@@ -10,5 +10,5 @@ public struct ObserverNotification<ObserverElement: Element>: Sendable {
     public let observedElement: ObserverElement
     public let element: ObserverElement
     public let name: NSAccessibility.Notification
-    public let info: [String: Sendable]
+    public let info: [String: ObserverElementInfoValue]
 }
