@@ -11,9 +11,9 @@ public extension NSAccessibility.Role {
     static let webArea: NSAccessibility.Role = "AXWebArea"
 }
 
-extension NSAccessibility.Role: Codable {}
+extension NSAccessibility.Role: @retroactive Codable {}
 
-extension NSAccessibility.Role: ExpressibleByStringLiteral {
+extension NSAccessibility.Role: @retroactive ExpressibleByStringLiteral {
     public typealias StringLiteralType = String
     public init(stringLiteral: String) {
         self.init(rawValue: stringLiteral)

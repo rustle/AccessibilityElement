@@ -1,78 +1,114 @@
 //
 //  SystemObserver.swift
 //
-//  Copyright © 2017-2022 Doug Russell. All rights reserved.
+//  Copyright © 2017-2026 Doug Russell. All rights reserved.
 //
 
 import AppKit
 import Asynchrone
-import Atomics
 import AX
-import Cocoa
 import os
+
+// MARK: - Global token lookup
+
+// The refCon passed to AXObserverAddNotification is a UInt key bit-cast to
+// UnsafeMutableRawPointer. It is NOT a pointer to heap memory — there is
+// nothing to free. Stale callbacks (delivered after AXObserverRemoveNotification
+// or after unschedule) simply miss in the table and return safely.
+private struct TokenLookupState {
+    var table: [UInt: SystemObserver.Token] = [:]
+    var nextKey: UInt = 0
+}
+
+private let tokenLookup = OSAllocatedUnfairLock<TokenLookupState>(
+    uncheckedState: .init()
+)
+
+private func lookupToken(key: UInt) -> SystemObserver.Token? {
+    tokenLookup.withLockUnchecked { state in
+        state.table[key]
+    }
+}
+
+private func unregisterToken(key: UInt) {
+    tokenLookup.withLockUnchecked { state in
+        _ = state.table.removeValue(forKey: key)
+    }
+}
+
+// MARK: - SystemObserver
 
 public actor SystemObserver: Observer, Sendable {
     // MARK: Types
 
-    fileprivate final class Token: Hashable {
-        static func == (
-            lhs: Token,
-            rhs: Token
-        ) -> Bool {
-            lhs.context == rhs.context
+    // Token represents a single active notification subscription.
+    // Its integer key is registered in the global tokenLookup table and passed
+    // as the refCon to AXObserverAddNotification. The key is unregistered in
+    // remove(token:) or stop() before the token is freed.
+    fileprivate final class Token: Hashable, @unchecked Sendable {
+        static func == (lhs: Token, rhs: Token) -> Bool {
+            lhs === rhs
         }
-        let context: Int
+
         let element: SystemElement
         let notification: NSAccessibility.Notification
-        let callback: AsyncStreamer<ObserverNotification<ObserverElement>> = .init()
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(context)
-        }
+        let stream: AsyncThrowingStream<ObserverNotification<ObserverElement>, any Error>
+        let continuation: AsyncThrowingStream<ObserverNotification<ObserverElement>, any Error>.Continuation
+        // Integer key registered in the global lookup table.
+        // Passed as refCon bit-pattern; never a heap pointer.
+        let key: UInt
+
         init(
-            context: Int,
             element: SystemElement,
-            notification: NSAccessibility.Notification
+            notification: NSAccessibility.Notification,
+            key: UInt
         ) {
-            self.context = context
             self.element = element
             self.notification = notification
+            let (stream, continuation) = AsyncThrowingStream<ObserverNotification<ObserverElement>, any Error>.makeStream()
+            self.stream = stream
+            self.continuation = continuation
+            self.key = key
         }
-        deinit {
-            callback.continuation.finish()
-        }
-    }
 
-    fileprivate struct ObserverCallbackPayload: Sendable {
-        let element: ObserverElement
-        let notification: NSAccessibility.Notification
-        let info: [String: Sendable]
-        let context: Int
+        deinit {
+            continuation.finish()
+        }
+
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(ObjectIdentifier(self))
+        }
+
+        func yield(
+            element: SystemElement,
+            notification: NSAccessibility.Notification,
+            info: [String: ObserverElementInfoValue]
+        ) {
+            continuation.yield(
+                .init(
+                    observedElement: self.element,
+                    element: element,
+                    name: notification,
+                    info: info
+                )
+            )
+        }
     }
 
     public typealias ObserverElement = SystemElement
 
-    // MARK: Contexts
+    // MARK: Actor/Executor
 
-    private static let contextGenerator = ManagedAtomic<Int32>(1)
-    private static func next() -> Int {
-        Int(contextGenerator.wrappingIncrementThenLoad(ordering: .relaxed))
-    }
+    public nonisolated let unownedExecutor: UnownedSerialExecutor
 
     // MARK: Init
 
     public let processIdentifier: pid_t
-    public init(processIdentifier: pid_t) throws {
-        let executor = RunLoopExecutor()
-        self.executor = executor
+
+    public init(processIdentifier: pid_t, executor: RunLoopExecutor) throws {
         unownedExecutor = executor.asUnownedSerialExecutor()
-        executor.start()
         self.processIdentifier = processIdentifier
     }
-
-    // MARK: Executor
-
-    private nonisolated let executor: any SerialExecutor
-    public nonisolated let unownedExecutor: UnownedSerialExecutor
 
     // MARK: State
 
@@ -89,170 +125,101 @@ public actor SystemObserver: Observer, Sendable {
                     callback: observer_callback
                 )
             }
-            ObserverLookup.shared
-                .setObserver(
-                    self,
-                    for: observer.observer
-                )
-            let streamer = AsyncStreamer<ObserverCallbackPayload>()
-            let task = Task(priority: .userInitiated) { [weak self] in
-                for await payload in streamer.stream {
-                    guard !Task.isCancelled else { break }
-                    guard let self else { break }
-                    await self.handle(payload: payload)
-                }
-            }
-            state = .init(
-                observer: observer,
-                callback: streamer,
-                callbackTask: task
-            )
+            state = .init(observer: observer)
             observer.schedule()
         }
     }
 
     public func stop() throws {
         let oldState = state.withLockUnchecked { state in
-            if let observer = state.observer {
-                ObserverLookup.shared
-                    .setObserver(
-                        self,
-                        for: observer.observer
-                    )
-            }
-            let oldState = state
+            let old = state
             state = .init()
-            return oldState
+            return old
         }
         oldState.observer?.unschedule()
-        oldState.callback?.continuation.finish()
-        oldState.callbackTask?.cancel()
+        for token in oldState.tokens {
+            unregisterToken(key: token.key)
+        }
     }
 
     public func stream(
-        element: ObserverElement,
+        element: SystemElement,
         notification: NSAccessibility.Notification
-    ) async throws -> ObserverAsyncSequence {
+    ) async throws -> any AsyncThrowingSendableSequence<ObserverNotification<SystemElement>> {
         try state.withLockUnchecked { state in
             guard let observer = state.observer else {
                 throw ObserverError.failure
             }
-            let context = Self.next()
+            // Allocate a key first so Token.init can receive it as a let.
+            let key = tokenLookup.withLockUnchecked { s -> UInt in
+                let k = s.nextKey
+                s.nextKey &+= 1
+                return k
+            }
             let token = Token(
-                context: context,
-                element: element,
-                notification: notification
-            )
-            try promoteAXObserverErrorToObserverErrorOnThrow {
-                try observer.add(
-                    element: element.element,
-                    notification: notification,
-                    context: UnsafeMutableRawPointer(bitPattern: context)
-                )
-            }
-            state.contextTokenMap[context] = token
-            token.callback.continuation.onTermination = { [weak self] _ in
-                guard let self else { return }
-                Task {
-                    do {
-                        try await self.remove(
-                            context: context,
-                            element: element.element,
-                            notification: notification
-                        )
-                    } catch {}
-                }
-            }
-            return token.callback.stream.shared()
-        }
-    }
-
-    private func remove(
-        context: Int,
-        element: UIElement,
-        notification: NSAccessibility.Notification
-    ) throws {
-        try state.withLockUnchecked { state in
-            guard state.contextTokenMap.removeValue(forKey: context) != nil else { return }
-            guard let observer = state.observer else { return }
-            try promoteAXObserverErrorToObserverErrorOnThrow {
-                try observer.remove(
-                    element: element,
-                    notification: notification
-                )
-            }
-        }
-    }
-
-    fileprivate func handle(payload: ObserverCallbackPayload) {
-        let token = state.withLockUnchecked { state in
-            state.contextTokenMap[payload.context]
-        }
-        guard let token else { return }
-        token
-            .callback
-            .continuation
-            .yield(
-                .init(
-                    observedElement: token.element,
-                    element: payload.element,
-                    name: token.notification,
-                    info: payload.info
-                )
-            )
-    }
-
-    nonisolated fileprivate func yield(
-        element: SystemElement,
-        notification: NSAccessibility.Notification,
-        info: [String: Sendable],
-        context: Int
-    ) {
-        let continuation = state.withLock {
-            $0.callback?.continuation
-        }
-        continuation?.yield(
-            .init(
                 element: element,
                 notification: notification,
-                info: info,
-                context: context
+                key: key
             )
-        )
+            // Store the token in the lookup table. The key (a UInt bit-cast to
+            // UnsafeMutableRawPointer) is passed as the refCon — not heap memory.
+            tokenLookup.withLockUnchecked { s in
+                s.table[key] = token
+            }
+            do {
+                try promoteAXObserverErrorToObserverErrorOnThrow {
+                    try observer.add(
+                        element: element.element,
+                        notification: notification,
+                        context: UnsafeMutableRawPointer(bitPattern: key)
+                    )
+                }
+            } catch {
+                // Registration failed — remove the key we already inserted.
+                unregisterToken(key: key)
+                throw error
+            }
+            state.tokens.insert(token)
+            token.continuation.onTermination = { @Sendable [weak self, weak token] _ in
+                guard let self, let token else { return }
+                Task {
+                    await self.remove(token: token)
+                }
+            }
+            return token.stream
+        }
+    }
+
+    private func remove(token: Token) {
+        state.withLockUnchecked { state in
+            guard state.tokens.contains(token) else { return }
+            unregisterToken(key: token.key)
+            if let observer = state.observer {
+                try? promoteAXObserverErrorToObserverErrorOnThrow {
+                    try observer.remove(
+                        element: token.element.element,
+                        notification: token.notification
+                    )
+                }
+            }
+            state.tokens.remove(token)
+        }
     }
 }
 
 extension SystemObserver {
     fileprivate struct State {
         var observer: AX.Observer?
-        var callback: AsyncStreamer<ObserverCallbackPayload>?
-        var callbackTask: Task<(), Never>?
-        var contextTokenMap: [Int:Token] = [:]
+        var tokens: Set<Token> = []
     }
 }
 
-fileprivate final class ObserverLookup {
-    fileprivate static let shared = ObserverLookup()
-    private let observers = NSMapTable<AXObserver, SystemObserver>.weakToWeakObjects()
-    private init() {}
-    func get(context: AXObserver) -> SystemObserver? {
-        observers
-            .object(forKey: context)
-    }
-    func setObserver(
-        _ systemObserver: SystemObserver,
-        for context: AXObserver
-    ) {
-        observers.setObject(
-            systemObserver,
-            forKey: context
-        )
-    }
-    func removeObserver(for context: AXObserver) {
-        observers.removeObject(forKey: context)
-    }
-}
+// MARK: Callback
 
+// observer_callback fires on the CFRunLoop the AXObserver was scheduled on.
+// The refCon is a UInt key bit-cast to UnsafeMutableRawPointer — not a heap
+// pointer. lookupToken(key:) returns nil for any key that has been unregistered,
+// making stale callbacks (queued before unschedule/remove) safely no-ops.
 func observer_callback(
     _ observer: AXObserver,
     _ uiElement: AXUIElement,
@@ -261,11 +228,11 @@ func observer_callback(
     _ refCon: UnsafeMutableRawPointer?
 ) {
     guard let refCon else { return }
-    guard let systemObserver = ObserverLookup.shared.get(context: observer) else { return }
-    systemObserver.yield(
+    let key = UInt(bitPattern: refCon)
+    guard let token = lookupToken(key: key) else { return }
+    token.yield(
         element: SystemElement(element: uiElement as UIElement),
         notification: name as NSAccessibility.Notification,
-        info: SystemObserverUserInfoRepackager.repackage(dictionary: info),
-        context: Int(bitPattern: refCon)
+        info: SystemObserverUserInfoRepackager.repackage(dictionary: info)
     )
 }

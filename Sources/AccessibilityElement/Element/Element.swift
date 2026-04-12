@@ -1,7 +1,7 @@
 //
 //  Element.swift
 //
-//  Copyright © 2017-2021 Doug Russell. All rights reserved.
+//  Copyright © 2017-2026 Doug Russell. All rights reserved.
 //
 
 import AppKit
@@ -19,7 +19,7 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     func subrole() throws -> NSAccessibility.Subrole
     ///
     @Sendable
-    func value() throws -> Any
+    func value() throws -> any Sendable
     ///
     @Sendable
     func title() throws -> String
@@ -141,7 +141,9 @@ extension Element {
         append("Subrole:", self.subrole) // 3
         return "<Element \(description.joined(separator: " "))>"
     }
+}
 
+extension Element {
     public var debugDescription: String {
         var description = [String]()
         description.reserveCapacity(5)

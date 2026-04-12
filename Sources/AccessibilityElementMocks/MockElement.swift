@@ -1,7 +1,7 @@
 //
 //  MockElement.swift
 //
-//  Copyright © 2017-2022 Doug Russell. All rights reserved.
+//  Copyright © 2017-2026 Doug Russell. All rights reserved.
 //
 
 import AccessibilityElement
@@ -22,7 +22,7 @@ public final class MockElement: Element, @unchecked Sendable {
         try get(.subrole)
     }
 
-    public func value() throws -> Any {
+    public func value() throws -> any Sendable {
         try get(.value)
     }
 

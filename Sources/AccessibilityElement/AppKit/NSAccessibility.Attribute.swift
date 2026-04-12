@@ -30,9 +30,9 @@ public extension NSAccessibility.Attribute {
     static let childrenInNavigationOrder: NSAccessibility.Attribute = "AXChildrenInNavigationOrder"
 }
 
-extension NSAccessibility.Attribute: Codable {}
+extension NSAccessibility.Attribute: @retroactive Codable {}
 
-extension NSAccessibility.Attribute: ExpressibleByStringLiteral {
+extension NSAccessibility.Attribute: @retroactive ExpressibleByStringLiteral {
     public typealias StringLiteralType = String
     public init(stringLiteral: String) {
         self.init(rawValue: stringLiteral)

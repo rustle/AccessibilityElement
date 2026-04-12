@@ -1,36 +1,35 @@
-// swift-tools-version:5.9
+// swift-tools-version:6.2
 
 import PackageDescription
 
 let package = Package(
     name: "AccessibilityElement",
     platforms: [
-        .macOS(.v14),
+        .macOS(.v15),
     ],
     products: [
         .library(
             name: "AccessibilityElement",
-            targets: ["AccessibilityElement"]),
+            targets: ["AccessibilityElement"]
+        ),
         .library(
             name: "AccessibilityElementMocks",
-            targets: ["AccessibilityElementMocks"]),
+            targets: ["AccessibilityElementMocks"]
+        ),
         .executable(
             name: "SystemObserverExample",
-            targets: ["SystemObserverExample"]),
+            targets: ["SystemObserverExample"]
+        ),
     ],
     dependencies: [
         .package(
             url: "https://github.com/rustle/AX.git",
-            from: "0.1.12"),
+            .upToNextMajor(from: "0.2.0")
+        ),
         .package(
             url: "https://github.com/apple/swift-atomics.git",
-            .upToNextMajor(from: "1.0.0")),
-        .package(
-            url: "https://github.com/apple/swift-collections.git",
-            .upToNextMajor(from: "1.0.3")),
-        .package(
-            url: "https://github.com/reddavis/Asynchrone",
-            from: "0.21.0"),
+            .upToNextMajor(from: "1.2.0")
+        ),
     ],
     targets: [
         .target(
@@ -39,26 +38,25 @@ let package = Package(
                 "AX",
                 .product(
                     name: "Atomics",
-                    package: "swift-atomics"),
-                .product(
-                    name: "Collections",
-                    package: "swift-collections"),
-                "Asynchrone",
-            ],
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
-            ]),
+                    package: "swift-atomics"
+                ),
+            ]
+        ),
         .target(
             name: "AccessibilityElementMocks",
             dependencies: [
                 "AccessibilityElement",
+                .product(name: "Atomics",
+                         package: "swift-atomics"),
             ]),
         .executableTarget(
             name: "SystemObserverExample",
-            dependencies: ["AccessibilityElement"]),
+            dependencies: ["AccessibilityElement"]
+        ),
         .testTarget(
             name: "AccessibilityElementTests",
-            dependencies: ["AccessibilityElement"]),
+            dependencies: ["AccessibilityElement"]
+        ),
     ],
-    swiftLanguageVersions: [.v5]
+    swiftLanguageModes: [.v6]
 )

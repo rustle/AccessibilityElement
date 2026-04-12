@@ -1,7 +1,7 @@
 //
 //  MockObserver.swift
 //
-//  Copyright © 2017-2022 Doug Russell. All rights reserved.
+//  Copyright © 2017-2026 Doug Russell. All rights reserved.
 //
 
 import AccessibilityElement
@@ -14,11 +14,8 @@ public struct MockObserver: Observer {
     public func stream(
         element: MockElement,
         notification: NSAccessibility.Notification
-    ) async throws -> ObserverAsyncSequence {
-        let stream = AsyncStream<ObserverNotification<ObserverElement>> { _ in
-            
-        }
-        return stream.shared()
+    ) async throws -> any AsyncThrowingSendableSequence<ObserverNotification<MockElement>> {
+        AsyncThrowingStream<ObserverNotification<MockElement>, any Error> { _ in }
     }
 
 }

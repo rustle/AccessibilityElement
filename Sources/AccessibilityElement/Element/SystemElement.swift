@@ -1,13 +1,13 @@
 //
 //  SystemElement.swift
 //
-//  Copyright © 2017-2021 Doug Russell. All rights reserved.
+//  Copyright © 2017-2026 Doug Russell. All rights reserved.
 //
 
 import AppKit
 import AX
 
-public struct SystemElement: Element {
+public struct SystemElement: Element, Sendable {
     public static func systemWide() throws -> SystemElement {
         .init(element: UIElement.systemWide())
     }
@@ -36,7 +36,7 @@ public struct SystemElement: Element {
         )
     }
 
-    public func value() throws -> Any {
+    public func value() throws -> any Sendable {
         try throwsAXError {
             try element.value(attribute: .value)
         }
@@ -350,7 +350,7 @@ extension SystemElement: CustomStringConvertible, CustomDebugStringConvertible {
         element.debugDescription
     }
 
-    public var debugInfo: [String:Any] {
+    public var debugInfo: [String:any Sendable] {
         element.debugInfo
     }
 }

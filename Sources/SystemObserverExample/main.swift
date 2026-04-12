@@ -1,7 +1,7 @@
 //
 //  SystemObserverExample.swift
 //
-//  Copyright © 2017-2022 Doug Russell. All rights reserved.
+//  Copyright © 2017-2026 Doug Russell. All rights reserved.
 //
 
 import AccessibilityElement

@@ -13,9 +13,9 @@ public extension NSAccessibility.ParameterizedAttribute {
     static let lineForTextMarker: NSAccessibility.ParameterizedAttribute = "AXLineTextMarkerRangeForTextMarker"
 }
 
-extension NSAccessibility.ParameterizedAttribute: Codable {}
+extension NSAccessibility.ParameterizedAttribute: @retroactive Codable {}
 
-extension NSAccessibility.ParameterizedAttribute: ExpressibleByStringLiteral {
+extension NSAccessibility.ParameterizedAttribute: @retroactive ExpressibleByStringLiteral {
     public typealias StringLiteralType = String
     public init(stringLiteral: String) {
         self.init(rawValue: stringLiteral)

@@ -1,7 +1,7 @@
 //
 //  ApplicationObserver.swift
 //
-//  Copyright © 2017-2022 Doug Russell. All rights reserved.
+//  Copyright © 2017-2026 Doug Russell. All rights reserved.
 //
 
 import AppKit
@@ -11,7 +11,7 @@ public actor ApplicationObserver<ObserverType: Observer>: Observer where Observe
     public typealias ObserverElement = ObserverType.ObserverElement
 
     private let observer: ObserverType
-    private var streams: [Key:ObserverAsyncSequence] = [:]
+    private var streams: [Key:any AsyncThrowingSendableSequence<ObserverNotification<ObserverElement>>] = [:]
 
     public init(observer: ObserverType) {
         self.observer = observer
@@ -28,7 +28,7 @@ public actor ApplicationObserver<ObserverType: Observer>: Observer where Observe
     public func stream(
         element: ObserverType.ObserverElement,
         notification: NSAccessibility.Notification
-    ) async throws -> ObserverAsyncSequence {
+    ) async throws -> any AsyncThrowingSendableSequence<ObserverNotification<ObserverElement>> {
         let key = Key(
             element: element,
             notification: notification

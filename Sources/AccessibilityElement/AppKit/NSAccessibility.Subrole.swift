@@ -8,9 +8,9 @@ import AppKit
 
 public extension NSAccessibility.Subrole {}
 
-extension NSAccessibility.Subrole: Codable {}
+extension NSAccessibility.Subrole: @retroactive Codable {}
 
-extension NSAccessibility.Subrole: ExpressibleByStringLiteral {
+extension NSAccessibility.Subrole: @retroactive ExpressibleByStringLiteral {
     public typealias StringLiteralType = String
     public init(stringLiteral: String) {
         self.init(rawValue: stringLiteral)
