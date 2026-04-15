@@ -8,6 +8,7 @@ import AX
 
 public enum ObserverElementInfoValue: Sendable {
     case int(Int)
+    case double(Double)
     case bool(Bool)
     case string(String)
     case attributedString(ObserverElementInfoAttributedString)
@@ -20,6 +21,8 @@ public enum ObserverElementInfoValue: Sendable {
     func value() -> Any {
         switch self {
         case let .int(value):
+            value
+        case let .double(value):
             value
         case let .bool(value):
             value

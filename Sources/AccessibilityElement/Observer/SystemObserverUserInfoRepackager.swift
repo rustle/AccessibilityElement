@@ -29,7 +29,12 @@ struct SystemObserverUserInfoRepackager {
         case AXValueGetTypeID():
             return .axValue(try AX.Value(value: (value as! AXValue)))
         case CFNumberGetTypeID():
-            return .int((value as! NSNumber).intValue)
+            let number = value as! CFNumber
+            if CFNumberIsFloatType(number) {
+                return .double((number as NSNumber).doubleValue)
+            } else {
+                return .int((number as NSNumber).intValue)
+            }
         case CFBooleanGetTypeID():
             return .bool((value as! NSNumber).boolValue)
         case AXTextMarkerGetTypeID():
