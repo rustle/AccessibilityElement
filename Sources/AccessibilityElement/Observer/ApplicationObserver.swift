@@ -5,7 +5,6 @@
 //
 
 import AppKit
-import Asynchrone
 
 public actor ApplicationObserver<ObserverType: Observer>: Observer where ObserverType.ObserverElement: Hashable {
     public typealias ObserverElement = ObserverType.ObserverElement

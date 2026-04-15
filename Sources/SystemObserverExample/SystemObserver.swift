@@ -4,7 +4,6 @@
 //  Copyright © 2017-2026 Doug Russell. All rights reserved.
 //
 
-import Asynchrone
 import AccessibilityElement
 import Cocoa
 
