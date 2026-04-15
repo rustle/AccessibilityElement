@@ -22,7 +22,7 @@ public final class MockElement: Element, @unchecked Sendable {
         try get(.subrole)
     }
 
-    public func value() throws -> any Sendable {
+    public func value() throws -> Any {
         try get(.value)
     }
 
@@ -195,7 +195,7 @@ public final class MockElement: Element, @unchecked Sendable {
         throw ElementError.noValue
     }
 
-    private func `get`<V: Sendable>(_ attribute: NSAccessibility.Attribute) throws -> V {
+    private func `get`<V>(_ attribute: NSAccessibility.Attribute) throws -> V {
         guard let value = storage.withLockUnchecked({ $0[attribute] }) else {
             throw ElementError.noValue
         }
@@ -205,15 +205,15 @@ public final class MockElement: Element, @unchecked Sendable {
         return checkedValue
     }
 
-    private func `set`<V: Sendable>(_ value: V,
-                                    for attribute: NSAccessibility.Attribute) throws {
+    private func `set`<V>(_ value: V,
+                          for attribute: NSAccessibility.Attribute) throws {
         storage.withLockUnchecked {
             $0[attribute] = value
         }
     }
 
     private let _pid: pid_t
-    private var storage: OSAllocatedUnfairLock<[NSAccessibility.Attribute:Sendable]>
+    private var storage: OSAllocatedUnfairLock<[NSAccessibility.Attribute:Any]>
     public init(
         pid: pid_t = 0,
         storage: [NSAccessibility.Attribute:Sendable]

@@ -21,7 +21,7 @@ public struct AnyElement: Element {
     private let _role: @Sendable () throws -> NSAccessibility.Role
     private let _roleDescription: @Sendable () throws -> String
     private let _subrole: @Sendable () throws -> NSAccessibility.Subrole
-    private let _value: @Sendable () throws -> any Sendable
+    private let _value: @Sendable () throws -> Any
     private let _title: @Sendable () throws -> String
     private let _titleUIElement: @Sendable () throws -> AnyElement
     private let _processIdentifier: @Sendable () throws -> pid_t
@@ -132,7 +132,7 @@ public struct AnyElement: Element {
         try _subrole()
     }
 
-    public func value() throws -> any Sendable {
+    public func value() throws -> Any {
         try _value()
     }
 

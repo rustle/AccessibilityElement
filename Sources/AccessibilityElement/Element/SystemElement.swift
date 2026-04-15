@@ -36,7 +36,7 @@ public struct SystemElement: Element, Sendable {
         )
     }
 
-    public func value() throws -> any Sendable {
+    public func value() throws -> Any {
         try throwsAXError {
             try element.value(attribute: .value)
         }

@@ -19,7 +19,7 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     func subrole() throws -> NSAccessibility.Subrole
     ///
     @Sendable
-    func value() throws -> any Sendable
+    func value() throws -> Any
     ///
     @Sendable
     func title() throws -> String
