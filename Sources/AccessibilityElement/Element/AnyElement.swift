@@ -55,6 +55,14 @@ public struct AnyElement: Element {
     private let _attributedStringForRange: @Sendable (Range<Int>) throws -> NSAttributedString
     private let _styleRangeForIndex: @Sendable (Int) throws -> Range<Int>
     private let _cellForColumnRow: @Sendable (Int, Int) throws -> SystemElement
+    private let _insertionPointLineNumber: @Sendable () throws -> Int
+    private let _sharedCharacterRange: @Sendable () throws -> Range<Int>
+    private let _sharedTextUIElements: @Sendable () throws -> [AnyElement]
+    private let _visibleCharacterRange: @Sendable () throws -> Range<Int>
+    private let _numberOfCharacters: @Sendable () throws -> Int
+    private let _selectedText: @Sendable () throws -> String
+    private let _selectedTextRange: @Sendable () throws -> Range<Int>
+    private let _selectedTextRanges: @Sendable () throws -> [Range<Int>]
 
     // MARK: - Initializer
 
@@ -99,6 +107,14 @@ public struct AnyElement: Element {
             _attributedStringForRange = element.attributedString(for:)
             _styleRangeForIndex = element.styleRange(for:)
             _cellForColumnRow = element.cell(column:row:)
+            _insertionPointLineNumber = element.insertionPointLineNumber
+            _sharedCharacterRange = element.sharedCharacterRange
+            _sharedTextUIElements = { try element.sharedTextUIElements().map(AnyElement.init) }
+            _visibleCharacterRange = element.visibleCharacterRange
+            _numberOfCharacters = element.numberOfCharacters
+            _selectedText = element.selectedText
+            _selectedTextRange = element.selectedTextRange
+            _selectedTextRanges = element.selectedTextRanges
         }
     }
 
@@ -252,5 +268,37 @@ public struct AnyElement: Element {
 
     public func cell(column: Int, row: Int) throws -> SystemElement {
         try _cellForColumnRow(column, row)
+    }
+
+    public func insertionPointLineNumber() throws -> Int {
+        try _insertionPointLineNumber()
+    }
+
+    public func sharedCharacterRange() throws -> Range<Int> {
+        try _sharedCharacterRange()
+    }
+
+    public func sharedTextUIElements() throws -> [AnyElement] {
+        try _sharedTextUIElements()
+    }
+
+    public func visibleCharacterRange() throws -> Range<Int> {
+        try _visibleCharacterRange()
+    }
+
+    public func numberOfCharacters() throws -> Int {
+        try _numberOfCharacters()
+    }
+
+    public func selectedText() throws -> String {
+        try _selectedText()
+    }
+
+    public func selectedTextRange() throws -> Range<Int> {
+        try _selectedTextRange()
+    }
+
+    public func selectedTextRanges() throws -> [Range<Int>] {
+        try _selectedTextRanges()
     }
 }

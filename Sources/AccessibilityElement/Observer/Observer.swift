@@ -5,7 +5,6 @@
 //
 
 import AppKit
-import Asynchrone
 
 public typealias AsyncThrowingSendableSequence<V: Sendable> = AsyncSequence<V, any Error> & Sendable
 

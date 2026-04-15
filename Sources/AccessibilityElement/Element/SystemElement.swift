@@ -315,6 +315,66 @@ public struct SystemElement: Element, Sendable {
         }
     }
 
+    public func insertionPointLineNumber() throws -> Int {
+        try throwsAXError {
+            try element.value(attribute: .insertionPointLineNumber)
+        }
+    }
+
+    public func sharedCharacterRange() throws -> Range<Int> {
+        try throwsAXError {
+            let value = try Value(value: element.value(attribute: .sharedCharacterRange))
+            guard case let .range(range) = value else { throw ElementError.noValue }
+            return range
+        }
+    }
+
+    public func sharedTextUIElements() throws -> [SystemElement] {
+        try throwsAXError {
+            (try element.value(attribute: .sharedTextUIElements) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
+    }
+
+    public func visibleCharacterRange() throws -> Range<Int> {
+        try throwsAXError {
+            let value = try Value(value: element.value(attribute: .visibleCharacterRange))
+            guard case let .range(range) = value else { throw ElementError.noValue }
+            return range
+        }
+    }
+
+    public func numberOfCharacters() throws -> Int {
+        try throwsAXError {
+            try element.value(attribute: .numberOfCharacters)
+        }
+    }
+
+    public func selectedText() throws -> String {
+        try throwsAXError {
+            try element.value(attribute: .selectedText)
+        }
+    }
+
+    public func selectedTextRange() throws -> Range<Int> {
+        try throwsAXError {
+            let value = try Value(value: element.value(attribute: .selectedTextRange))
+            guard case let .range(range) = value else { throw ElementError.noValue }
+            return range
+        }
+    }
+
+    public func selectedTextRanges() throws -> [Range<Int>] {
+        try throwsAXError {
+            let axValues: [AXValue] = try element.value(attribute: .selectedTextRanges)
+            return try axValues.map { axValue in
+                let value = try Value(value: axValue)
+                guard case let .range(range) = value else { throw ElementError.noValue }
+                return range
+            }
+        }
+    }
+
     let element: UIElement
     init(element: UIElement) {
         self.element = element

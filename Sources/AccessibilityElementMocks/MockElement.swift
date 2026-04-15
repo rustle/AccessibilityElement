@@ -163,6 +163,38 @@ public final class MockElement: Element, @unchecked Sendable {
         throw ElementError.noValue
     }
 
+    public func insertionPointLineNumber() throws -> Int {
+        try get(.insertionPointLineNumber)
+    }
+
+    public func sharedCharacterRange() throws -> Range<Int> {
+        throw ElementError.noValue
+    }
+
+    public func sharedTextUIElements() throws -> [MockElement] {
+        throw ElementError.noValue
+    }
+
+    public func visibleCharacterRange() throws -> Range<Int> {
+        throw ElementError.noValue
+    }
+
+    public func numberOfCharacters() throws -> Int {
+        try get(.numberOfCharacters)
+    }
+
+    public func selectedText() throws -> String {
+        try get(.selectedText)
+    }
+
+    public func selectedTextRange() throws -> Range<Int> {
+        throw ElementError.noValue
+    }
+
+    public func selectedTextRanges() throws -> [Range<Int>] {
+        throw ElementError.noValue
+    }
+
     private func `get`<V: Sendable>(_ attribute: NSAccessibility.Attribute) throws -> V {
         guard let value = storage.withLockUnchecked({ $0[attribute] }) else {
             throw ElementError.noValue

@@ -116,12 +116,36 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     /// The full range of characters, including the specified character, which have the same style.
     @Sendable
     func styleRange(for index: Int) throws -> Range<Int>
-    /// 
+    ///
     @Sendable
     func cell(
         column: Int,
         row: Int
     ) throws -> SystemElement
+    ///
+    @Sendable
+    func insertionPointLineNumber() throws -> Int
+    ///
+    @Sendable
+    func sharedCharacterRange() throws -> Range<Int>
+    ///
+    @Sendable
+    func sharedTextUIElements() throws -> [Self]
+    ///
+    @Sendable
+    func visibleCharacterRange() throws -> Range<Int>
+    ///
+    @Sendable
+    func numberOfCharacters() throws -> Int
+    ///
+    @Sendable
+    func selectedText() throws -> String
+    ///
+    @Sendable
+    func selectedTextRange() throws -> Range<Int>
+    ///
+    @Sendable
+    func selectedTextRanges() throws -> [Range<Int>]
 }
 
 extension Element {
