@@ -104,7 +104,8 @@ public actor SystemObserver: Observer, Sendable {
 
     public let processIdentifier: pid_t
 
-    public init(processIdentifier: pid_t, executor: RunLoopExecutor) throws {
+    public init(processIdentifier: pid_t,
+                executor: RunLoopExecutor) throws {
         unownedExecutor = executor.asUnownedSerialExecutor()
         self.processIdentifier = processIdentifier
     }
