@@ -146,6 +146,12 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     /// The ranges of all currently selected text.
     @Sendable
     func selectedTextRanges() throws -> [Range<Int>]
+    /// The on-screen rectangle of the element, in screen coordinates.
+    @Sendable
+    func frame() throws -> NSRect
+    /// Set the element's on-screen position.
+    @Sendable
+    func setPosition(_ position: CGPoint) throws
 }
 
 extension Element {

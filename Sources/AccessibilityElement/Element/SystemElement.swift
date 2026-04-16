@@ -375,6 +375,22 @@ public struct SystemElement: Element, Sendable {
         }
     }
 
+    public func frame() throws -> NSRect {
+        try throwsAXError {
+            let value = try Value(value: element.value(attribute: .frame))
+            guard case let .rect(rect) = value else {
+                throw ElementError.noValue
+            }
+            return rect
+        }
+    }
+
+    public func setPosition(_ position: CGPoint) throws {
+        try throwsAXError {
+            try element.set(attribute: .position, value: Value.point(position).value)
+        }
+    }
+
     let element: UIElement
     init(element: UIElement) {
         self.element = element
