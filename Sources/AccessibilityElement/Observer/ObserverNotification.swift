@@ -11,4 +11,16 @@ public struct ObserverNotification<ObserverElement: Element>: Sendable {
     public let element: ObserverElement
     public let name: NSAccessibility.Notification
     public let info: [String: ObserverElementInfoValue]
+
+    public init(
+        observedElement: ObserverElement,
+        element: ObserverElement,
+        name: NSAccessibility.Notification,
+        info: [String: ObserverElementInfoValue]
+    ) {
+        self.observedElement = observedElement
+        self.element = element
+        self.name = name
+        self.info = info
+    }
 }
