@@ -9,7 +9,23 @@ import AppKit
 import AX
 import os
 
-public final class MockElement: Element, @unchecked Sendable {
+public final class MockElement: Element, Hashable, @unchecked Sendable {
+    public static func == (
+        lhs: MockElement,
+        rhs: MockElement
+    ) -> Bool {
+        lhs === rhs
+    }
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
+    }
+
+    // Handler closures for parameterized methods that can't be served by attribute
+    // storage alone. Set these before the element is used concurrently.
+    public var lineForIndexHandler: (@Sendable (Int) throws -> Int)?
+    public var rangeForLineHandler: (@Sendable (Int) throws -> Range<Int>)?
+    public var stringForHandler: (@Sendable (Range<Int>) throws -> String)?
+
     public func role() throws -> NSAccessibility.Role {
         try get(.role)
     }
@@ -101,8 +117,8 @@ public final class MockElement: Element, @unchecked Sendable {
     }
 
     public func setEnhancedUserInterface(_ enhancedUserInterface: Bool) throws {
-        try set(enhancedUserInterface,
-                for: .enhancedUserInterface)
+        set(enhancedUserInterface,
+            for: .enhancedUserInterface)
     }
     
     public func actions() throws -> [NSAccessibility.Action] {
@@ -117,7 +133,10 @@ public final class MockElement: Element, @unchecked Sendable {
     }
 
     public func line(forIndex index: Int) throws -> Int {
-        throw ElementError.noValue
+        guard let handler = lineForIndexHandler else {
+            throw ElementError.noValue
+        }
+        return try handler(index)
     }
 
     public func line(forTextMarker textMarker: TextMarker) throws -> Int {
@@ -125,7 +144,10 @@ public final class MockElement: Element, @unchecked Sendable {
     }
 
     public func range(forLine line: Int) throws -> Range<Int> {
-        throw ElementError.noValue
+        guard let handler = rangeForLineHandler else {
+            throw ElementError.noValue
+        }
+        return try handler(line)
     }
 
     public func range(forIndex index: Int) throws -> Range<Int> {
@@ -137,7 +159,10 @@ public final class MockElement: Element, @unchecked Sendable {
     }
 
     public func string(for range: Range<Int>) throws -> String {
-        throw ElementError.noValue
+        guard let handler = stringForHandler else {
+            throw ElementError.noValue
+        }
+        return try handler(range)
     }
     
     public func bounds(for range: Range<Int>) throws -> NSRect {
@@ -188,7 +213,7 @@ public final class MockElement: Element, @unchecked Sendable {
     }
 
     public func selectedTextRange() throws -> Range<Int> {
-        throw ElementError.noValue
+        try get(.selectedTextRange)
     }
 
     public func selectedTextRanges() throws -> [Range<Int>] {
@@ -203,6 +228,12 @@ public final class MockElement: Element, @unchecked Sendable {
         throw ElementError.noValue
     }
 
+    public func set<V: Sendable>(_ value: V, for attribute: NSAccessibility.Attribute) {
+        storage.withLock {
+            $0[attribute] = value
+        }
+    }
+
     private func `get`<V>(_ attribute: NSAccessibility.Attribute) throws -> V {
         guard let value = storage.withLockUnchecked({ $0[attribute] }) else {
             throw ElementError.noValue
@@ -211,13 +242,6 @@ public final class MockElement: Element, @unchecked Sendable {
             throw AccessibilityError.typeMismatch
         }
         return checkedValue
-    }
-
-    private func `set`<V>(_ value: V,
-                          for attribute: NSAccessibility.Attribute) throws {
-        storage.withLockUnchecked {
-            $0[attribute] = value
-        }
     }
 
     private let _pid: pid_t
