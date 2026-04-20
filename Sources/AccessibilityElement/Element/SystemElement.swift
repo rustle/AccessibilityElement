@@ -391,6 +391,12 @@ public struct SystemElement: Element, Sendable {
         }
     }
 
+    public func setVisibleCharacterRange(_ range: Range<Int>) throws {
+        try throwsAXError {
+            try element.set(attribute: .visibleCharacterRange, value: Value.range(range).value)
+        }
+    }
+
     let element: UIElement
     init(element: UIElement) {
         self.element = element

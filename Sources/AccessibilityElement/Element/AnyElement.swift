@@ -65,6 +65,7 @@ public struct AnyElement: Element {
     private let _selectedTextRanges: @Sendable () throws -> [Range<Int>]
     private let _frame: @Sendable () throws -> NSRect
     private let _setPosition: @Sendable (CGPoint) throws -> Void
+    private let _setVisibleCharacterRange: @Sendable (Range<Int>) throws -> Void
 
     // MARK: - Initializer
 
@@ -119,6 +120,7 @@ public struct AnyElement: Element {
             _selectedTextRanges = element.selectedTextRanges
             _frame = element.frame
             _setPosition = element.setPosition
+            _setVisibleCharacterRange = element.setVisibleCharacterRange
         }
     }
 
@@ -312,5 +314,9 @@ public struct AnyElement: Element {
 
     public func setPosition(_ position: CGPoint) throws {
         try _setPosition(position)
+    }
+
+    public func setVisibleCharacterRange(_ range: Range<Int>) throws {
+        try _setVisibleCharacterRange(range)
     }
 }

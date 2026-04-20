@@ -25,6 +25,9 @@ public final class MockElement: Element, Hashable, @unchecked Sendable {
     public var lineForIndexHandler: (@Sendable (Int) throws -> Int)?
     public var rangeForLineHandler: (@Sendable (Int) throws -> Range<Int>)?
     public var stringForHandler: (@Sendable (Range<Int>) throws -> String)?
+    public var boundsForHandler: (@Sendable (Range<Int>) throws -> NSRect)?
+    public var setPositionHandler: (@Sendable (CGPoint) throws -> Void)?
+    public var setVisibleCharacterRangeHandler: (@Sendable (Range<Int>) throws -> Void)?
 
     public func role() throws -> NSAccessibility.Role {
         try get(.role)
@@ -166,7 +169,8 @@ public final class MockElement: Element, Hashable, @unchecked Sendable {
     }
     
     public func bounds(for range: Range<Int>) throws -> NSRect {
-        throw ElementError.noValue
+        guard let handler = boundsForHandler else { throw ElementError.noValue }
+        return try handler(range)
     }
     
     public func rtf(for range: Range<Int>) throws -> Data {
@@ -221,11 +225,17 @@ public final class MockElement: Element, Hashable, @unchecked Sendable {
     }
 
     public func frame() throws -> NSRect {
-        throw ElementError.noValue
+        try get(.frame)
     }
 
     public func setPosition(_ position: CGPoint) throws {
-        throw ElementError.noValue
+        guard let handler = setPositionHandler else { throw ElementError.noValue }
+        try handler(position)
+    }
+
+    public func setVisibleCharacterRange(_ range: Range<Int>) throws {
+        guard let handler = setVisibleCharacterRangeHandler else { throw ElementError.noValue }
+        try handler(range)
     }
 
     public func set<V: Sendable>(_ value: V, for attribute: NSAccessibility.Attribute) {

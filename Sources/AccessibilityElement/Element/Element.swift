@@ -152,6 +152,9 @@ public protocol Element: Sendable, CustomStringConvertible, CustomDebugStringCon
     /// Set the element's on-screen position.
     @Sendable
     func setPosition(_ position: CGPoint) throws
+    /// Scroll the element so that the specified character range is visible.
+    @Sendable
+    func setVisibleCharacterRange(_ range: Range<Int>) throws
 }
 
 extension Element {
