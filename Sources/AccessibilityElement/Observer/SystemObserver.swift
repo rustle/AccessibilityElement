@@ -6,6 +6,7 @@
 
 import AppKit
 import AX
+import RunLoopExecutor
 import os
 
 // MARK: - Global token lookup

@@ -6,6 +6,7 @@
 
 import AccessibilityElement
 import Cocoa
+import RunLoopExecutor
 
 actor SystemObserverHost {
     var observer: SystemObserver?
