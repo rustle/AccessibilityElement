@@ -681,6 +681,64 @@ public final class MockElement: Element, Hashable, Sendable {
         try getAttribute(.preventKeyboardDOMEventDispatch)
     }
 
+    // MARK: - MathML
+
+    public func mathBase() throws -> Self {
+        try getAttribute(.mathBase)
+    }
+    
+    public func mathFencedOpen() throws -> String {
+        try getAttribute(.mathFencedOpen)
+    }
+    
+    public func mathFencedClose() throws -> String {
+        try getAttribute(.mathFencedClose)
+    }
+    
+    public func mathFractionNumerator() throws -> Self {
+        try getAttribute(.mathFractionNumerator)
+    }
+    
+    public func mathFractionDenominator() throws -> Self {
+        try getAttribute(.mathFractionDenominator)
+    }
+    
+    public func mathLineThickness() throws -> Double {
+        try getAttribute(.mathLineThickness)
+    }
+    
+    public func mathOver() throws -> Self {
+        try getAttribute(.mathOver)
+    }
+    
+    public func mathUnder() throws -> Self {
+        try getAttribute(.mathUnder)
+    }
+    
+    public func mathPostscripts() throws -> [MockElement] {
+        try getAttribute(.mathPostscripts)
+    }
+    
+    public func mathPrescripts() throws -> [MockElement] {
+        try getAttribute(.mathPrescripts)
+    }
+    
+    public func mathRootIndex() throws -> Self {
+        try getAttribute(.mathRootIndex)
+    }
+    
+    public func mathRootRadicand() throws -> Self {
+        try getAttribute(.mathRootRadicand)
+    }
+    
+    public func mathSubscript() throws -> Self {
+        try getAttribute(.mathSubscript)
+    }
+    
+    public func mathSuperscript() throws -> Self {
+        try getAttribute(.mathSuperscript)
+    }
+
     // MARK: - Storage
 
     public func setAttribute<V: Sendable>(_ value: V, for attribute: NSAccessibility.Attribute) throws {
