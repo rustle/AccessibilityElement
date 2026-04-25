@@ -148,6 +148,18 @@ public final class MockElement: Element, Hashable, Sendable {
         try getAttribute(.index)
     }
 
+    // MARK: - Hierarchy (Web)
+
+    public func focusableAncestor() throws -> MockElement {
+        throw ElementError.noValue
+    }
+    public func editableAncestor() throws -> MockElement {
+        throw ElementError.noValue
+    }
+    public func highestEditableAncestor() throws -> MockElement {
+        throw ElementError.noValue
+    }
+
     // MARK: - Actions
 
     public func actions() throws -> [NSAccessibility.Action] {
@@ -240,6 +252,111 @@ public final class MockElement: Element, Hashable, Sendable {
     }
     public func endTextMarker() throws -> TextMarker {
         try getAttribute(.endTextMarker)
+    }
+    public func nextTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func previousTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func nextWordEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func previousWordStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func nextLineEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func previousLineStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func nextSentenceEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func previousSentenceStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func nextParagraphEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func previousParagraphStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func lineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func leftWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func rightWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func leftLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func rightLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func sentenceTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func paragraphTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func styleTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func lineNumber(for textMarker: TextMarker) throws -> Int {
+        throw ElementError.noValue
+    }
+    public func index(for textMarker: TextMarker) throws -> Int {
+        throw ElementError.noValue
+    }
+    public func element(for textMarker: TextMarker) throws -> MockElement {
+        throw ElementError.noValue
+    }
+    public func string(for textMarkerRange: TextMarkerRange) throws -> String {
+        throw ElementError.noValue
+    }
+    public func attributedString(for textMarkerRange: TextMarkerRange) throws -> NSAttributedString {
+        throw ElementError.noValue
+    }
+    public func bounds(for textMarkerRange: TextMarkerRange) throws -> NSRect {
+        throw ElementError.noValue
+    }
+    public func length(for textMarkerRange: TextMarkerRange) throws -> Int {
+        throw ElementError.noValue
+    }
+    public func textMarker(forIndex index: Int) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func textMarkerRange(forLine line: Int) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func textMarker(forPosition position: CGPoint) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func startTextMarker(forBounds bounds: NSRect) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func endTextMarker(forBounds bounds: NSRect) throws -> TextMarker {
+        throw ElementError.noValue
+    }
+    public func textMarkerRange(for element: MockElement) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func textMarkerRange(forUnordered textMarkers: [TextMarker]) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func textMarkerRange(forOrdered textMarkers: [TextMarker]) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func isNullTextMarker(_ textMarker: TextMarker) throws -> Bool {
+        throw ElementError.noValue
+    }
+    public func isValidTextMarker(_ textMarker: TextMarker) throws -> Bool {
+        throw ElementError.noValue
     }
 
     // MARK: - Table/Outline/Grid/List/Collection

@@ -57,6 +57,10 @@ public struct AnyElement: Element {
     private let _window: @Sendable () throws -> AnyElement
     private let _topLevelUIElement: @Sendable () throws -> AnyElement
     private let _index: @Sendable () throws -> Int
+    // Hierarchy (Web)
+    private let _focusableAncestor: @Sendable () throws -> AnyElement
+    private let _editableAncestor: @Sendable () throws -> AnyElement
+    private let _highestEditableAncestor: @Sendable () throws -> AnyElement
     // Actions
     private let _actions: @Sendable () throws -> [NSAccessibility.Action]
     private let _descriptionAction: @Sendable (NSAccessibility.Action) throws -> String
@@ -84,6 +88,44 @@ public struct AnyElement: Element {
     private let _selectedTextRanges: @Sendable () throws -> [Range<Int>]
     // Text (TextMarker Indexed)
     private let _lineForTextMarker: @Sendable (TextMarker) throws -> Int
+    private let _selectedTextMarkerRange: @Sendable () throws -> TextMarkerRange
+    private let _startTextMarker: @Sendable () throws -> TextMarker
+    private let _endTextMarker: @Sendable () throws -> TextMarker
+    private let _nextTextMarker: @Sendable (TextMarker) throws -> TextMarker
+    private let _previousTextMarker: @Sendable (TextMarker) throws -> TextMarker
+    private let _nextWordEndTextMarker: @Sendable (TextMarker) throws -> TextMarker
+    private let _previousWordStartTextMarker: @Sendable (TextMarker) throws -> TextMarker
+    private let _nextLineEndTextMarker: @Sendable (TextMarker) throws -> TextMarker
+    private let _previousLineStartTextMarker: @Sendable (TextMarker) throws -> TextMarker
+    private let _nextSentenceEndTextMarker: @Sendable (TextMarker) throws -> TextMarker
+    private let _previousSentenceStartTextMarker: @Sendable (TextMarker) throws -> TextMarker
+    private let _nextParagraphEndTextMarker: @Sendable (TextMarker) throws -> TextMarker
+    private let _previousParagraphStartTextMarker: @Sendable (TextMarker) throws -> TextMarker
+    private let _lineTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
+    private let _leftWordTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
+    private let _rightWordTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
+    private let _leftLineTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
+    private let _rightLineTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
+    private let _sentenceTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
+    private let _paragraphTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
+    private let _styleTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
+    private let _lineNumberForTextMarker: @Sendable (TextMarker) throws -> Int
+    private let _indexForTextMarker: @Sendable (TextMarker) throws -> Int
+    private let _elementForTextMarker: @Sendable (TextMarker) throws -> AnyElement
+    private let _stringForTextMarkerRange: @Sendable (TextMarkerRange) throws -> String
+    private let _attributedStringForTextMarkerRange: @Sendable (TextMarkerRange) throws -> NSAttributedString
+    private let _boundsForTextMarkerRange: @Sendable (TextMarkerRange) throws -> NSRect
+    private let _lengthForTextMarkerRange: @Sendable (TextMarkerRange) throws -> Int
+    private let _textMarkerForIndex: @Sendable (Int) throws -> TextMarker
+    private let _textMarkerRangeForLine: @Sendable (Int) throws -> TextMarkerRange
+    private let _textMarkerForPosition: @Sendable (CGPoint) throws -> TextMarker
+    private let _startTextMarkerForBounds: @Sendable (NSRect) throws -> TextMarker
+    private let _endTextMarkerForBounds: @Sendable (NSRect) throws -> TextMarker
+    private let _textMarkerRangeForUnordered: @Sendable ([TextMarker]) throws -> TextMarkerRange
+    private let _textMarkerRangeForOrdered: @Sendable ([TextMarker]) throws -> TextMarkerRange
+    // Text marker validation
+    private let _isNullTextMarker: @Sendable (TextMarker) throws -> Bool
+    private let _isValidTextMarker: @Sendable (TextMarker) throws -> Bool
     // Table/Outline/Grid/List/Collection
     private let _cellForColumnRow: @Sendable (Int, Int) throws -> SystemElement
     private let _rows: @Sendable () throws -> [AnyElement]
@@ -259,6 +301,10 @@ public struct AnyElement: Element {
             _window = { AnyElement(element: try element.window()) }
             _topLevelUIElement = { AnyElement(element: try element.topLevelUIElement()) }
             _index = element.index
+            // Hierarchy (Web)
+            _focusableAncestor = { AnyElement(element: try element.focusableAncestor()) }
+            _editableAncestor = { AnyElement(element: try element.editableAncestor()) }
+            _highestEditableAncestor = { AnyElement(element: try element.highestEditableAncestor()) }
             // Actions
             _actions = element.actions
             _descriptionAction = element.description(action:)
@@ -286,6 +332,44 @@ public struct AnyElement: Element {
             _selectedTextRanges = element.selectedTextRanges
             // Text (TextMarker Indexed)
             _lineForTextMarker = element.line(forTextMarker:)
+            _selectedTextMarkerRange = element.selectedTextMarkerRange
+            _startTextMarker = element.startTextMarker
+            _endTextMarker = element.endTextMarker
+            _nextTextMarker = element.nextTextMarker(for:)
+            _previousTextMarker = element.previousTextMarker(for:)
+            _nextWordEndTextMarker = element.nextWordEndTextMarker(for:)
+            _previousWordStartTextMarker = element.previousWordStartTextMarker(for:)
+            _nextLineEndTextMarker = element.nextLineEndTextMarker(for:)
+            _previousLineStartTextMarker = element.previousLineStartTextMarker(for:)
+            _nextSentenceEndTextMarker = element.nextSentenceEndTextMarker(for:)
+            _previousSentenceStartTextMarker = element.previousSentenceStartTextMarker(for:)
+            _nextParagraphEndTextMarker = element.nextParagraphEndTextMarker(for:)
+            _previousParagraphStartTextMarker = element.previousParagraphStartTextMarker(for:)
+            _lineTextMarkerRange = element.lineTextMarkerRange(for:)
+            _leftWordTextMarkerRange = element.leftWordTextMarkerRange(for:)
+            _rightWordTextMarkerRange = element.rightWordTextMarkerRange(for:)
+            _leftLineTextMarkerRange = element.leftLineTextMarkerRange(for:)
+            _rightLineTextMarkerRange = element.rightLineTextMarkerRange(for:)
+            _sentenceTextMarkerRange = element.sentenceTextMarkerRange(for:)
+            _paragraphTextMarkerRange = element.paragraphTextMarkerRange(for:)
+            _styleTextMarkerRange = element.styleTextMarkerRange(for:)
+            _lineNumberForTextMarker = element.lineNumber(for:)
+            _indexForTextMarker = element.index(for:)
+            _elementForTextMarker = { AnyElement(element: try element.element(for: $0)) }
+            _stringForTextMarkerRange = element.string(for:)
+            _attributedStringForTextMarkerRange = element.attributedString(for:)
+            _boundsForTextMarkerRange = element.bounds(for:)
+            _lengthForTextMarkerRange = element.length(for:)
+            _textMarkerForIndex = element.textMarker(forIndex:)
+            _textMarkerRangeForLine = element.textMarkerRange(forLine:)
+            _textMarkerForPosition = element.textMarker(forPosition:)
+            _startTextMarkerForBounds = element.startTextMarker(forBounds:)
+            _endTextMarkerForBounds = element.endTextMarker(forBounds:)
+            _textMarkerRangeForUnordered = element.textMarkerRange(forUnordered:)
+            _textMarkerRangeForOrdered = element.textMarkerRange(forOrdered:)
+            // Text marker validation
+            _isNullTextMarker = element.isNullTextMarker(_:)
+            _isValidTextMarker = element.isValidTextMarker(_:)
             // Table/Outline/Grid/List/Collection
             _cellForColumnRow = element.cell(column:row:)
             _rows = { try element.rows().map(AnyElement.init) }
@@ -592,6 +676,18 @@ public struct AnyElement: Element {
         try _index()
     }
 
+    // MARK: - Hierarchy (Web)
+
+    public func focusableAncestor() throws -> AnyElement {
+        try _focusableAncestor()
+    }
+    public func editableAncestor() throws -> AnyElement {
+        try _editableAncestor()
+    }
+    public func highestEditableAncestor() throws -> AnyElement {
+        try _highestEditableAncestor()
+    }
+
     // MARK: - Actions
 
     public func actions() throws -> [NSAccessibility.Action] {
@@ -671,6 +767,123 @@ public struct AnyElement: Element {
 
     public func line(forTextMarker textMarker: TextMarker) throws -> Int {
         try _lineForTextMarker(textMarker)
+    }
+    public func selectedTextMarkerRange() throws -> TextMarkerRange {
+        try _selectedTextMarkerRange()
+    }
+    public func startTextMarker() throws -> TextMarker {
+        try _startTextMarker()
+    }
+    public func endTextMarker() throws -> TextMarker {
+        try _endTextMarker()
+    }
+    public func nextTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try _nextTextMarker(textMarker)
+    }
+    public func previousTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try _previousTextMarker(textMarker)
+    }
+    public func nextWordEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try _nextWordEndTextMarker(textMarker)
+    }
+    public func previousWordStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try _previousWordStartTextMarker(textMarker)
+    }
+    public func nextLineEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try _nextLineEndTextMarker(textMarker)
+    }
+    public func previousLineStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try _previousLineStartTextMarker(textMarker)
+    }
+    public func nextSentenceEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try _nextSentenceEndTextMarker(textMarker)
+    }
+    public func previousSentenceStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try _previousSentenceStartTextMarker(textMarker)
+    }
+    public func nextParagraphEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try _nextParagraphEndTextMarker(textMarker)
+    }
+    public func previousParagraphStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try _previousParagraphStartTextMarker(textMarker)
+    }
+    public func lineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try _lineTextMarkerRange(textMarker)
+    }
+    public func leftWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try _leftWordTextMarkerRange(textMarker)
+    }
+    public func rightWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try _rightWordTextMarkerRange(textMarker)
+    }
+    public func leftLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try _leftLineTextMarkerRange(textMarker)
+    }
+    public func rightLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try _rightLineTextMarkerRange(textMarker)
+    }
+    public func sentenceTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try _sentenceTextMarkerRange(textMarker)
+    }
+    public func paragraphTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try _paragraphTextMarkerRange(textMarker)
+    }
+    public func styleTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try _styleTextMarkerRange(textMarker)
+    }
+    public func lineNumber(for textMarker: TextMarker) throws -> Int {
+        try _lineNumberForTextMarker(textMarker)
+    }
+    public func index(for textMarker: TextMarker) throws -> Int {
+        try _indexForTextMarker(textMarker)
+    }
+    public func element(for textMarker: TextMarker) throws -> AnyElement {
+        try _elementForTextMarker(textMarker)
+    }
+    public func string(for textMarkerRange: TextMarkerRange) throws -> String {
+        try _stringForTextMarkerRange(textMarkerRange)
+    }
+    public func attributedString(for textMarkerRange: TextMarkerRange) throws -> NSAttributedString {
+        try _attributedStringForTextMarkerRange(textMarkerRange)
+    }
+    public func bounds(for textMarkerRange: TextMarkerRange) throws -> NSRect {
+        try _boundsForTextMarkerRange(textMarkerRange)
+    }
+    public func length(for textMarkerRange: TextMarkerRange) throws -> Int {
+        try _lengthForTextMarkerRange(textMarkerRange)
+    }
+    public func textMarker(forIndex index: Int) throws -> TextMarker {
+        try _textMarkerForIndex(index)
+    }
+    public func textMarkerRange(forLine line: Int) throws -> TextMarkerRange {
+        try _textMarkerRangeForLine(line)
+    }
+    public func textMarker(forPosition position: CGPoint) throws -> TextMarker {
+        try _textMarkerForPosition(position)
+    }
+    public func startTextMarker(forBounds bounds: NSRect) throws -> TextMarker {
+        try _startTextMarkerForBounds(bounds)
+    }
+    public func endTextMarker(forBounds bounds: NSRect) throws -> TextMarker {
+        try _endTextMarkerForBounds(bounds)
+    }
+    public func textMarkerRange(for element: AnyElement) throws -> TextMarkerRange {
+        throw ElementError.noValue
+    }
+    public func textMarkerRange(forUnordered textMarkers: [TextMarker]) throws -> TextMarkerRange {
+        try _textMarkerRangeForUnordered(textMarkers)
+    }
+    public func textMarkerRange(forOrdered textMarkers: [TextMarker]) throws -> TextMarkerRange {
+        try _textMarkerRangeForOrdered(textMarkers)
+    }
+
+    // MARK: - Text marker validation
+
+    public func isNullTextMarker(_ textMarker: TextMarker) throws -> Bool {
+        try _isNullTextMarker(textMarker)
+    }
+    public func isValidTextMarker(_ textMarker: TextMarker) throws -> Bool {
+        try _isValidTextMarker(textMarker)
     }
 
     // MARK: - Table/Outline/Grid/List/Collection

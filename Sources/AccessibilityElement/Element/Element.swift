@@ -87,6 +87,15 @@ public protocol Element: Sendable, CustomDebugStringConvertible {
     func topLevelUIElement() throws -> Self
     /// The index of the element within its parent.
     func index() throws -> Int
+    
+    // MARK: - Hierarchy (Web)
+
+    /// The nearest focusable ancestor of this element.
+    func focusableAncestor() throws -> Self
+    /// The nearest editable ancestor of this element.
+    func editableAncestor() throws -> Self
+    /// The highest editable ancestor of this element.
+    func highestEditableAncestor() throws -> Self
 
     // MARK: - Actions
 
@@ -146,6 +155,85 @@ public protocol Element: Sendable, CustomDebugStringConvertible {
 
     /// The line number of the specified marker.
     func line(forTextMarker textMarker: TextMarker) throws -> Int
+    /// The selected text range as a TextMarkerRange (web area / descendants).
+    func selectedTextMarkerRange() throws -> TextMarkerRange
+    /// The first position in the web area as a TextMarker.
+    func startTextMarker() throws -> TextMarker
+    /// The last position in the web area as a TextMarker.
+    func endTextMarker() throws -> TextMarker
+    ///
+    func nextTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    ///
+    func previousTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    ///
+    func nextWordEndTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    ///
+    func previousWordStartTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    ///
+    func nextLineEndTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    ///
+    func previousLineStartTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    ///
+    func nextSentenceEndTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    ///
+    func previousSentenceStartTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    ///
+    func nextParagraphEndTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    ///
+    func previousParagraphStartTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    /// The TextMarkerRange of the line containing the given TextMarker.
+    func lineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    ///
+    func leftWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    ///
+    func rightWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    ///
+    func leftLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    ///
+    func rightLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    ///
+    func sentenceTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    ///
+    func paragraphTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    ///
+    func styleTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    /// The Int line number for a given TextMarker.
+    func lineNumber(for textMarker: TextMarker) throws -> Int
+    /// The Int character index for a given TextMarker.
+    func index(for textMarker: TextMarker) throws -> Int
+    /// The element at the position of a given TextMarker.
+    func element(for textMarker: TextMarker) throws -> Self
+    ///
+    func string(for textMarkerRange: TextMarkerRange) throws -> String
+    ///
+    func attributedString(for textMarkerRange: TextMarkerRange) throws -> NSAttributedString
+    ///
+    func bounds(for textMarkerRange: TextMarkerRange) throws -> NSRect
+    ///
+    func length(for textMarkerRange: TextMarkerRange) throws -> Int
+    /// The TextMarker for the given character index.
+    func textMarker(forIndex index: Int) throws -> TextMarker
+    /// The TextMarkerRange for the given line number.
+    func textMarkerRange(forLine line: Int) throws -> TextMarkerRange
+    /// The TextMarker at the given screen position.
+    func textMarker(forPosition position: CGPoint) throws -> TextMarker
+    /// The TextMarkerRange for the start of the element intersecting the given rect.
+    func startTextMarker(forBounds bounds: NSRect) throws -> TextMarker
+    /// The TextMarkerRange for the end of the element intersecting the given rect.
+    func endTextMarker(forBounds bounds: NSRect) throws -> TextMarker
+    /// The TextMarkerRange covering the full extent of the given element.
+    func textMarkerRange(for element: Self) throws -> TextMarkerRange
+    /// TextMarkerRange from an unordered pair of TextMarkers.
+    func textMarkerRange(forUnordered textMarkers: [TextMarker]) throws -> TextMarkerRange
+    /// TextMarkerRange from an ordered [start, end] pair of TextMarkers.
+    func textMarkerRange(forOrdered textMarkers: [TextMarker]) throws -> TextMarkerRange
+
+    // MARK: - Text marker validation
+
+    ///
+    func isNullTextMarker(_ textMarker: TextMarker) throws -> Bool
+    ///
+    func isValidTextMarker(_ textMarker: TextMarker) throws -> Bool
 
     // MARK: - Table/Outline/Grid/List/Collection
 

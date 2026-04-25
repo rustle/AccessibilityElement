@@ -209,6 +209,24 @@ public struct SystemElement: Element, Sendable {
         }
     }
 
+    // MARK: - Hierarchy (Web)
+
+    public func focusableAncestor() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .focusableAncestor)
+        })
+    }
+    public func editableAncestor() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .editableAncestor)
+        })
+    }
+    public func highestEditableAncestor() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .highestEditableAncestor)
+        })
+    }
+
     // MARK: - Actions
 
     public func actions() throws -> [NSAccessibility.Action] {
@@ -412,6 +430,86 @@ public struct SystemElement: Element, Sendable {
             TextMarker(textMarker: try element.value(attribute: .endTextMarker))
         }
     }
+    public func nextTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .nextTextMarkerForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func previousTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .previousTextMarkerForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func nextWordEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .nextWordEndTextMarkerForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func previousWordStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .previousWordStartTextMarkerForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func nextLineEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .nextLineEndTextMarkerForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func previousLineStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .previousLineStartTextMarkerForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func nextSentenceEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .nextSentenceEndTextMarkerForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func previousSentenceStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .previousSentenceStartTextMarkerForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func nextParagraphEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .nextParagraphEndTextMarkerForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func previousParagraphStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .previousParagraphStartTextMarkerForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
     public func lineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
@@ -419,6 +517,86 @@ public struct SystemElement: Element, Sendable {
                 parameter: textMarker.textMarker
             ))
         }
+    }
+    public func leftWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try throwsAXError {
+            TextMarkerRange(textMarkerRange: try element.value(
+                attribute: .leftWordTextMarkerRangeForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func rightWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try throwsAXError {
+            TextMarkerRange(textMarkerRange: try element.value(
+                attribute: .rightWordTextMarkerRangeForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func leftLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try throwsAXError {
+            TextMarkerRange(textMarkerRange: try element.value(
+                attribute: .leftLineTextMarkerRangeForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func rightLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try throwsAXError {
+            TextMarkerRange(textMarkerRange: try element.value(
+                attribute: .rightLineTextMarkerRangeForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func sentenceTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try throwsAXError {
+            TextMarkerRange(textMarkerRange: try element.value(
+                attribute: .sentenceTextMarkerRangeForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func paragraphTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try throwsAXError {
+            TextMarkerRange(textMarkerRange: try element.value(
+                attribute: .paragraphTextMarkerRangeForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func styleTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+        try throwsAXError {
+            TextMarkerRange(textMarkerRange: try element.value(
+                attribute: .styleTextMarkerRangeForTextMarker,
+                parameter: textMarker.textMarker
+            ))
+        }
+    }
+    public func lineNumber(for textMarker: TextMarker) throws -> Int {
+        try throwsAXError {
+            try element.value(
+                attribute: .lineNumberForTextMarker,
+                parameter: textMarker.textMarker
+            )
+        }
+    }
+    public func index(for textMarker: TextMarker) throws -> Int {
+        try throwsAXError {
+            try element.value(
+                attribute: .indexForTextMarker,
+                parameter: textMarker.textMarker
+            )
+        }
+    }
+    public func element(for textMarker: TextMarker) throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(
+                attribute: .uiElementForTextMarker,
+                parameter: textMarker.textMarker
+            )
+        })
     }
     public func string(for textMarkerRange: TextMarkerRange) throws -> String {
         try throwsAXError {
@@ -436,12 +614,105 @@ public struct SystemElement: Element, Sendable {
             )
         }
     }
+    public func bounds(for textMarkerRange: TextMarkerRange) throws -> NSRect {
+        try throwsAXError {
+            let value = try Value(value: element.value(
+                attribute: .boundsForTextMarkerRange,
+                parameter: textMarkerRange.textMarkerRange
+            ))
+            guard case let .rect(rect) = value else { throw ElementError.noValue }
+            return rect
+        }
+    }
+    public func length(for textMarkerRange: TextMarkerRange) throws -> Int {
+        try throwsAXError {
+            try element.value(
+                attribute: .lengthForTextMarkerRange,
+                parameter: textMarkerRange.textMarkerRange
+            )
+        }
+    }
+    public func textMarker(forIndex index: Int) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .textMarkerForIndex,
+                parameter: index as NSNumber
+            ))
+        }
+    }
+    public func textMarkerRange(forLine line: Int) throws -> TextMarkerRange {
+        try throwsAXError {
+            TextMarkerRange(textMarkerRange: try element.value(
+                attribute: .textMarkerRangeForLine,
+                parameter: line as NSNumber
+            ))
+        }
+    }
+    public func textMarker(forPosition position: CGPoint) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .textMarkerForPosition,
+                parameter: Value.point(position).value
+            ))
+        }
+    }
+    public func startTextMarker(forBounds bounds: NSRect) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .startTextMarkerForBounds,
+                parameter: Value.rect(bounds).value
+            ))
+        }
+    }
+    public func endTextMarker(forBounds bounds: NSRect) throws -> TextMarker {
+        try throwsAXError {
+            TextMarker(textMarker: try element.value(
+                attribute: .endTextMarkerForBounds,
+                parameter: Value.rect(bounds).value
+            ))
+        }
+    }
+    public func textMarkerRange(for systemElement: SystemElement) throws -> TextMarkerRange {
+        try throwsAXError {
+            TextMarkerRange(textMarkerRange: try element.value(
+                attribute: .textMarkerRangeForUIElement,
+                parameter: systemElement.element
+            ))
+        }
+    }
     public func textMarkerRange(forUnordered textMarkers: [TextMarker]) throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .textMarkerRangeForUnorderedTextMarkers,
                 parameter: textMarkers.map(\.textMarker) as NSArray
             ))
+        }
+    }
+    public func textMarkerRange(forOrdered textMarkers: [TextMarker]) throws -> TextMarkerRange {
+        try throwsAXError {
+            TextMarkerRange(textMarkerRange: try element.value(
+                attribute: .textMarkerRangeForOrderedTextMarkers,
+                parameter: textMarkers.map(\.textMarker) as NSArray
+            ))
+        }
+    }
+
+    // MARK: - Text marker validation
+
+    public func isNullTextMarker(_ textMarker: TextMarker) throws -> Bool {
+        try throwsAXError {
+            try element.value(
+                attribute: .textMarkerIsNull,
+                parameter: textMarker.textMarker
+            )
+        }
+    }
+    public func isValidTextMarker(_ textMarker: TextMarker) throws -> Bool {
+        try throwsAXError {
+            try element.value(
+                attribute: .textMarkerIsValid,
+                parameter: textMarker.textMarker
+            )
         }
     }
 
