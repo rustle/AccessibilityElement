@@ -216,6 +216,11 @@ public struct AnyElement: Element {
     private let _isRequired: @Sendable () throws -> Bool
     private let _containsProtectedContent: @Sendable () throws -> Bool
     private let _activationPoint: @Sendable () throws -> CGPoint
+    // Web
+    private let _isLoaded: @Sendable () throws -> Bool
+    private let _loadingProgress: @Sendable () throws -> Double
+    private let _layoutCount: @Sendable () throws -> Int
+    private let _preventKeyboardDOMEventDispatch: @Sendable () throws -> Bool
 
     // MARK: - Initializer
 
@@ -556,6 +561,11 @@ public struct AnyElement: Element {
             _isRequired = element.isRequired
             _containsProtectedContent = element.containsProtectedContent
             _activationPoint = element.activationPoint
+            // Web
+            _isLoaded = element.isLoaded
+            _loadingProgress = element.loadingProgress
+            _layoutCount = element.layoutCount
+            _preventKeyboardDOMEventDispatch = element.preventKeyboardDOMEventDispatch
         }
     }
 
@@ -1154,5 +1164,20 @@ public struct AnyElement: Element {
     }
     public func activationPoint() throws -> CGPoint {
         try _activationPoint()
+    }
+
+    // MARK: - Web
+
+    public func isLoaded() throws -> Bool {
+        try _isLoaded()
+    }
+    public func loadingProgress() throws -> Double {
+        try _loadingProgress()
+    }
+    public func layoutCount() throws -> Int {
+        try _layoutCount()
+    }
+    public func preventKeyboardDOMEventDispatch() throws -> Bool {
+        try _preventKeyboardDOMEventDispatch()
     }
 }

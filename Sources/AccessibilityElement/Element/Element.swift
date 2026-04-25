@@ -425,6 +425,17 @@ public protocol Element: Sendable, CustomDebugStringConvertible {
     func containsProtectedContent() throws -> Bool
     /// The point that activates the element, in screen coordinates.
     func activationPoint() throws -> CGPoint
+
+    // MARK: - Web
+
+    /// Whether the web area has finished loading.
+    func isLoaded() throws -> Bool
+    /// Loading progress of the web area (0.0–1.0).
+    func loadingProgress() throws -> Double
+    /// Number of layout passes the web area has completed.
+    func layoutCount() throws -> Int
+    /// Whether keyboard events should be dispatched to the DOM rather than the AT.
+    func preventKeyboardDOMEventDispatch() throws -> Bool
 }
 
 extension Element {

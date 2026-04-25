@@ -1166,6 +1166,29 @@ public struct SystemElement: Element, Sendable {
         }
     }
 
+    // MARK: - Web
+
+    public func isLoaded() throws -> Bool {
+        try throwsAXError {
+            try element.value(attribute: .loaded)
+        }
+    }
+    public func loadingProgress() throws -> Double {
+        try throwsAXError {
+            try element.value(attribute: .loadingProgress)
+        }
+    }
+    public func layoutCount() throws -> Int {
+        try throwsAXError {
+            try element.value(attribute: .layoutCount)
+        }
+    }
+    public func preventKeyboardDOMEventDispatch() throws -> Bool {
+        try throwsAXError {
+            try element.value(attribute: .preventKeyboardDOMEventDispatch)
+        }
+    }
+
     // MARK: - Private
 
     let element: UIElement

@@ -666,6 +666,21 @@ public final class MockElement: Element, Hashable, Sendable {
         try getAttribute(.activationPoint)
     }
 
+    // MARK: - Web
+
+    public func isLoaded() throws -> Bool {
+        try getAttribute(.loaded)
+    }
+    public func loadingProgress() throws -> Double {
+        try getAttribute(.loadingProgress)
+    }
+    public func layoutCount() throws -> Int {
+        try getAttribute(.layoutCount)
+    }
+    public func preventKeyboardDOMEventDispatch() throws -> Bool {
+        try getAttribute(.preventKeyboardDOMEventDispatch)
+    }
+
     // MARK: - Storage
 
     public func setAttribute<V: Sendable>(_ value: V, for attribute: NSAccessibility.Attribute) throws {

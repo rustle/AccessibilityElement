@@ -26,6 +26,11 @@ public extension NSAccessibility.Attribute {
     /// Attribute representing last position in web area (or containing web area).
     /// Appropriate for use with a web area element or it's descendants.
     static let endTextMarker: NSAccessibility.Attribute = "AXEndTextMarker"
+    // MARK: Web area
+    static let loaded: NSAccessibility.Attribute = "AXLoaded"
+    static let loadingProgress: NSAccessibility.Attribute = "AXLoadingProgress"
+    static let layoutCount: NSAccessibility.Attribute = "AXLayoutCount"
+    static let preventKeyboardDOMEventDispatch: NSAccessibility.Attribute = "AXPreventKeyboardDOMEventDispatch"
     // MARK: Ancestor navigation
     static let focusableAncestor: NSAccessibility.Attribute = "AXFocusableAncestor"
     static let editableAncestor: NSAccessibility.Attribute = "AXEditableAncestor"
