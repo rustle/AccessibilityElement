@@ -47,9 +47,13 @@ public struct AnyElement: Element {
     // Hierarchy
     private let _parent: @Sendable () throws -> AnyElement
     private let _children: @Sendable () throws -> [AnyElement]
+    private let _childrenView: @Sendable () -> ArrayAttributeView<AnyElement>
     private let _childrenInNavigationOrder: @Sendable () throws -> [AnyElement]
+    private let _childrenInNavigationOrderView: @Sendable () -> ArrayAttributeView<AnyElement>
     private let _visibleChildren: @Sendable () throws -> [AnyElement]
+    private let _visibleChildrenView: @Sendable () -> ArrayAttributeView<AnyElement>
     private let _selectedChildren: @Sendable () throws -> [AnyElement]
+    private let _selectedChildrenView: @Sendable () -> ArrayAttributeView<AnyElement>
     private let _window: @Sendable () throws -> AnyElement
     private let _topLevelUIElement: @Sendable () throws -> AnyElement
     private let _index: @Sendable () throws -> Int
@@ -83,16 +87,27 @@ public struct AnyElement: Element {
     // Table/Outline/Grid/List/Collection
     private let _cellForColumnRow: @Sendable (Int, Int) throws -> SystemElement
     private let _rows: @Sendable () throws -> [AnyElement]
+    private let _rowsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _columns: @Sendable () throws -> [AnyElement]
+    private let _columnsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _selectedRows: @Sendable () throws -> [AnyElement]
+    private let _selectedRowsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _selectedColumns: @Sendable () throws -> [AnyElement]
+    private let _selectedColumnsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _selectedCells: @Sendable () throws -> [AnyElement]
+    private let _selectedCellsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _visibleRows: @Sendable () throws -> [AnyElement]
+    private let _visibleRowsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _visibleColumns: @Sendable () throws -> [AnyElement]
+    private let _visibleColumnsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _visibleCells: @Sendable () throws -> [AnyElement]
+    private let _visibleCellsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _rowHeaderUIElements: @Sendable () throws -> [AnyElement]
+    private let _rowHeaderUIElementsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _columnHeaderUIElements: @Sendable () throws -> [AnyElement]
+    private let _columnHeaderUIElementsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _columnTitles: @Sendable () throws -> [AnyElement]
+    private let _columnTitlesView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _sortDirection: @Sendable () throws -> String
     private let _rowCount: @Sendable () throws -> Int
     private let _columnCount: @Sendable () throws -> Int
@@ -194,9 +209,53 @@ public struct AnyElement: Element {
             // Hierarchy
             _parent = { AnyElement(element: try element.parent()) }
             _children = { try element.children().map(AnyElement.init) }
+            _childrenView = {
+                let v = element.childrenView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _childrenInNavigationOrder = { try element.childrenInNavigationOrder().map(AnyElement.init) }
+            _childrenInNavigationOrderView = {
+                let v = element.childrenInNavigationOrderView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _visibleChildren = { try element.visibleChildren().map(AnyElement.init) }
+            _visibleChildrenView = {
+                let v = element.visibleChildrenView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _selectedChildren = { try element.selectedChildren().map(AnyElement.init) }
+            _selectedChildrenView = {
+                let v = element.selectedChildrenView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _window = { AnyElement(element: try element.window()) }
             _topLevelUIElement = { AnyElement(element: try element.topLevelUIElement()) }
             _index = element.index
@@ -230,16 +289,123 @@ public struct AnyElement: Element {
             // Table/Outline/Grid/List/Collection
             _cellForColumnRow = element.cell(column:row:)
             _rows = { try element.rows().map(AnyElement.init) }
+            _rowsView = {
+                let v = try element.rowsView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _columns = { try element.columns().map(AnyElement.init) }
+            _columnsView = {
+                let v = try element.columnsView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _selectedRows = { try element.selectedRows().map(AnyElement.init) }
+            _selectedRowsView = {
+                let v = try element.selectedRowsView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _selectedColumns = { try element.selectedColumns().map(AnyElement.init) }
+            _selectedColumnsView = {
+                let v = try element.selectedColumnsView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _selectedCells = { try element.selectedCells().map(AnyElement.init) }
+            _selectedCellsView = {
+                let v = try element.selectedCellsView()
+                return ArrayAttributeView(count: v.count, elements: { i, n in try v.elements(index: i, maxCount: n).map(AnyElement.init) })
+            }
             _visibleRows = { try element.visibleRows().map(AnyElement.init) }
+            _visibleRowsView = {
+                let v = try element.visibleRowsView()
+                return ArrayAttributeView(count: v.count, elements: { i, n in try v.elements(index: i, maxCount: n).map(AnyElement.init) })
+            }
             _visibleColumns = { try element.visibleColumns().map(AnyElement.init) }
+            _visibleColumnsView = {
+                let v = try element.visibleColumnsView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _visibleCells = { try element.visibleCells().map(AnyElement.init) }
+            _visibleCellsView = {
+                let v = try element.visibleCellsView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _rowHeaderUIElements = { try element.rowHeaderUIElements().map(AnyElement.init) }
+            _rowHeaderUIElementsView = {
+                let v = try element.rowHeaderUIElementsView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _columnHeaderUIElements = { try element.columnHeaderUIElements().map(AnyElement.init) }
+            _columnHeaderUIElementsView = {
+                let v = try element.columnHeaderUIElementsView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _columnTitles = { try element.columnTitles().map(AnyElement.init) }
+            _columnTitlesView = {
+                let v = try element.columnTitlesView()
+                return ArrayAttributeView(
+                    count: v.count,
+                    elements: { i, n in
+                        try v.elements(index: i,
+                                       maxCount: n)
+                            .map(AnyElement.init)
+                    }
+                )
+            }
             _sortDirection = element.sortDirection
             _rowCount = element.rowCount
             _columnCount = element.columnCount
@@ -404,6 +570,18 @@ public struct AnyElement: Element {
     public func selectedChildren() throws -> [AnyElement] {
         try _selectedChildren()
     }
+    public func childrenView() -> ArrayAttributeView<AnyElement> {
+        _childrenView()
+    }
+    public func childrenInNavigationOrderView() -> ArrayAttributeView<AnyElement> {
+        _childrenInNavigationOrderView()
+    }
+    public func visibleChildrenView() -> ArrayAttributeView<AnyElement> {
+        _visibleChildrenView()
+    }
+    public func selectedChildrenView() -> ArrayAttributeView<AnyElement> {
+        _selectedChildrenView()
+    }
     public func window() throws -> AnyElement {
         try _window()
     }
@@ -532,6 +710,39 @@ public struct AnyElement: Element {
     }
     public func columnTitles() throws -> [AnyElement] {
         try _columnTitles()
+    }
+    public func rowsView() throws -> ArrayAttributeView<AnyElement> {
+        try _rowsView()
+    }
+    public func columnsView() throws -> ArrayAttributeView<AnyElement> {
+        try _columnsView()
+    }
+    public func selectedRowsView() throws -> ArrayAttributeView<AnyElement> {
+        try _selectedRowsView()
+    }
+    public func selectedColumnsView() throws -> ArrayAttributeView<AnyElement> {
+        try _selectedColumnsView()
+    }
+    public func selectedCellsView() throws -> ArrayAttributeView<AnyElement> {
+        try _selectedCellsView()
+    }
+    public func visibleRowsView() throws -> ArrayAttributeView<AnyElement> {
+        try _visibleRowsView()
+    }
+    public func visibleColumnsView() throws -> ArrayAttributeView<AnyElement> {
+        try _visibleColumnsView()
+    }
+    public func visibleCellsView() throws -> ArrayAttributeView<AnyElement> {
+        try _visibleCellsView()
+    }
+    public func rowHeaderUIElementsView() throws -> ArrayAttributeView<AnyElement> {
+        try _rowHeaderUIElementsView()
+    }
+    public func columnHeaderUIElementsView() throws -> ArrayAttributeView<AnyElement> {
+        try _columnHeaderUIElementsView()
+    }
+    public func columnTitlesView() throws -> ArrayAttributeView<AnyElement> {
+        try _columnTitlesView()
     }
     public func sortDirection() throws -> String {
         try _sortDirection()

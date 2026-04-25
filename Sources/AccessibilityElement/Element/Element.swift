@@ -67,12 +67,20 @@ public protocol Element: Sendable, CustomDebugStringConvertible {
     func parent() throws -> Self
     /// The elements contained by this element.
     func children() throws -> [Self]
+    /// Lazy view of the elements contained by this element.
+    func childrenView() -> ArrayAttributeView<Self>
     /// The child elements ordered for navigation.
     func childrenInNavigationOrder() throws -> [Self]
+    /// Lazy view of the elements children ordered for navigation.
+    func childrenInNavigationOrderView() -> ArrayAttributeView<Self>
     /// The child elements that are currently visible.
     func visibleChildren() throws -> [Self]
+    /// Lazy view of the child elements that are currently visible.
+    func visibleChildrenView() -> ArrayAttributeView<Self>
     /// The child elements that are currently selected.
     func selectedChildren() throws -> [Self]
+    /// Lazy view of the child elements that are currently selected.
+    func selectedChildrenView() -> ArrayAttributeView<Self>
     /// The window containing this element.
     func window() throws -> Self
     /// The top-level UI element containing this element.
@@ -148,26 +156,48 @@ public protocol Element: Sendable, CustomDebugStringConvertible {
     ) throws -> SystemElement
     /// The rows of a table or outline.
     func rows() throws -> [Self]
+    /// Lazy view of the rows a table or outline
+    func rowsView() throws -> ArrayAttributeView<Self>
     /// The columns of a table.
     func columns() throws -> [Self]
+    /// Lazy view of the columns of a table.
+    func columnsView() throws -> ArrayAttributeView<Self>
     /// The rows that are currently selected.
     func selectedRows() throws -> [Self]
+    /// Lazy view of the
+    func selectedRowsView() throws -> ArrayAttributeView<Self>
     /// The columns that are currently selected.
     func selectedColumns() throws -> [Self]
+    /// Lazy view of the columns that are currently selected.
+    func selectedColumnsView() throws -> ArrayAttributeView<Self>
     /// The cells that are currently selected.
     func selectedCells() throws -> [Self]
+    /// Lazy view of the cells that are currently selected.
+    func selectedCellsView() throws -> ArrayAttributeView<Self>
     /// The visible rows of a table or outline.
     func visibleRows() throws -> [Self]
+    /// Lazy view of the visible rows of a table or outline.
+    func visibleRowsView() throws -> ArrayAttributeView<Self>
     /// The visible columns of a table.
     func visibleColumns() throws -> [Self]
+    /// Lazy view of the visible columns of a table.
+    func visibleColumnsView() throws -> ArrayAttributeView<Self>
     /// The visible cells of a cell-based table.
     func visibleCells() throws -> [Self]
+    /// Lazy view of the visible cells of a cell-based table.
+    func visibleCellsView() throws -> ArrayAttributeView<Self>
     /// The row header elements of a cell-based table.
     func rowHeaderUIElements() throws -> [Self]
+    /// Lazy view of the row header elements of a cell-based table.
+    func rowHeaderUIElementsView() throws -> ArrayAttributeView<Self>
     /// The column header elements of a cell-based table.
     func columnHeaderUIElements() throws -> [Self]
+    /// Lazy view of the column header elements of a cell-based table.
+    func columnHeaderUIElementsView() throws -> ArrayAttributeView<Self>
     /// The column title elements of a table.
     func columnTitles() throws -> [Self]
+    /// Lazy view of the column title elements of a table.
+    func columnTitlesView() throws -> ArrayAttributeView<Self>
     /// The sort direction of a column.
     func sortDirection() throws -> String
     /// The number of rows in the table.
@@ -351,13 +381,25 @@ extension Element {
     public func children() throws -> [Self] {
         throw ElementError.noValue
     }
+    public func childrenView() throws -> ArrayAttributeView<Self> {
+        throw ElementError.noValue
+    }
     public func childrenInNavigationOrder() throws -> [Self] {
+        throw ElementError.noValue
+    }
+    public func childrenInNavigationOrderView() throws -> ArrayAttributeView<Self> {
         throw ElementError.noValue
     }
     public func visibleChildren() throws -> [Self] {
         throw ElementError.noValue
     }
+    public func visibleChildrenView() throws -> ArrayAttributeView<Self> {
+        throw ElementError.noValue
+    }
     public func selectedChildren() throws -> [Self] {
+        throw ElementError.noValue
+    }
+    public func selectedChildrenView() throws -> ArrayAttributeView<Self> {
         throw ElementError.noValue
     }
     public func window() throws -> Self {
@@ -445,19 +487,37 @@ extension Element {
     public func visibleRows() throws -> [Self] {
         throw ElementError.noValue
     }
+    public func visibleRowsView() throws -> ArrayAttributeView<Self> {
+        throw ElementError.noValue
+    }
     public func visibleColumns() throws -> [Self] {
+        throw ElementError.noValue
+    }
+    public func visibleColumnsView() throws -> ArrayAttributeView<Self> {
         throw ElementError.noValue
     }
     public func visibleCells() throws -> [Self] {
         throw ElementError.noValue
     }
+    public func visibleCellsView() throws -> ArrayAttributeView<Self> {
+        throw ElementError.noValue
+    }
     public func rowHeaderUIElements() throws -> [Self] {
+        throw ElementError.noValue
+    }
+    public func rowHeaderUIElementsView() throws -> ArrayAttributeView<Self> {
         throw ElementError.noValue
     }
     public func columnHeaderUIElements() throws -> [Self] {
         throw ElementError.noValue
     }
+    public func columnHeaderUIElementsView() throws -> ArrayAttributeView<Self> {
+        throw ElementError.noValue
+    }
     public func columnTitles() throws -> [Self] {
+        throw ElementError.noValue
+    }
+    public func columnTitlesView() throws -> ArrayAttributeView<Self> {
         throw ElementError.noValue
     }
     public func sortDirection() throws -> String {

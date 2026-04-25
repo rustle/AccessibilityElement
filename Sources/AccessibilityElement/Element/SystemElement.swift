@@ -163,11 +163,17 @@ public struct SystemElement: Element, Sendable {
                 .map(SystemElement.init(element:))
         }
     }
+    public func childrenView() -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .children)
+    }
     public func childrenInNavigationOrder() throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .childrenInNavigationOrderAttribute) as [UIElement])
                 .map(SystemElement.init(element:))
         }
+    }
+    public func childrenInNavigationOrderView() -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .childrenInNavigationOrderAttribute)
     }
     public func visibleChildren() throws -> [SystemElement] {
         try throwsAXError {
@@ -175,11 +181,17 @@ public struct SystemElement: Element, Sendable {
                 .map(SystemElement.init(element:))
         }
     }
+    public func visibleChildrenView() -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .visibleChildren)
+    }
     public func selectedChildren() throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .selectedChildren) as [UIElement])
                 .map(SystemElement.init(element:))
         }
+    }
+    public func selectedChildrenView() -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .selectedChildren)
     }
     public func window() throws -> SystemElement {
         .init(element: try throwsAXError {
@@ -452,11 +464,17 @@ public struct SystemElement: Element, Sendable {
                 .map(SystemElement.init(element:))
         }
     }
+    public func rowsView() throws -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .rows)
+    }
     public func columns() throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .columns) as [UIElement])
                 .map(SystemElement.init(element:))
         }
+    }
+    public func columnsView() throws -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .columns)
     }
     public func selectedRows() throws -> [SystemElement] {
         try throwsAXError {
@@ -464,11 +482,17 @@ public struct SystemElement: Element, Sendable {
                 .map(SystemElement.init(element:))
         }
     }
+    public func selectedRowsView() throws -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .selectedRows)
+    }
     public func selectedColumns() throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .selectedColumns) as [UIElement])
                 .map(SystemElement.init(element:))
         }
+    }
+    public func selectedColumnsView() throws -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .selectedColumns)
     }
     public func selectedCells() throws -> [SystemElement] {
         try throwsAXError {
@@ -476,11 +500,17 @@ public struct SystemElement: Element, Sendable {
                 .map(SystemElement.init(element:))
         }
     }
+    public func selectedCellsView() throws -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .selectedCells)
+    }
     public func visibleRows() throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .visibleRows) as [UIElement])
                 .map(SystemElement.init(element:))
         }
+    }
+    public func visibleRowsView() throws -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .visibleRows)
     }
     public func visibleColumns() throws -> [SystemElement] {
         try throwsAXError {
@@ -488,11 +518,17 @@ public struct SystemElement: Element, Sendable {
                 .map(SystemElement.init(element:))
         }
     }
+    public func visibleColumnsView() throws -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .visibleColumns)
+    }
     public func visibleCells() throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .visibleCells) as [UIElement])
                 .map(SystemElement.init(element:))
         }
+    }
+    public func visibleCellsView() throws -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .visibleCells)
     }
     public func rowHeaderUIElements() throws -> [SystemElement] {
         try throwsAXError {
@@ -500,17 +536,26 @@ public struct SystemElement: Element, Sendable {
                 .map(SystemElement.init(element:))
         }
     }
+    public func rowHeaderUIElementsView() throws -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .rowHeaderUIElements)
+    }
     public func columnHeaderUIElements() throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .columnHeaderUIElements) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
+    public func columnHeaderUIElementsView() throws -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .columnHeaderUIElements)
+    }
     public func columnTitles() throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .columnTitles) as [UIElement])
                 .map(SystemElement.init(element:))
         }
+    }
+    public func columnTitlesView() throws -> ArrayAttributeView<SystemElement> {
+        arrayAttributeView(attribute: .columnTitles)
     }
     public func sortDirection() throws -> String {
         try throwsAXError {
@@ -855,6 +900,26 @@ public struct SystemElement: Element, Sendable {
     let element: UIElement
     init(element: UIElement) {
         self.element = element
+    }
+    
+    private func arrayAttributeView(attribute: NSAccessibility.Attribute) -> ArrayAttributeView<SystemElement> {
+        ArrayAttributeView(
+            count: {
+                try throwsAXError {
+                    try element.count(attribute: attribute)
+                }
+            },
+            elements: { index, maxCount in
+                try throwsAXError {
+                    let values = try element.values(
+                        attribute: attribute,
+                        index: index,
+                        maxCount: maxCount
+                    ) as [UIElement]
+                    return values.map(SystemElement.init(element:))
+                }
+            }
+        )
     }
 
     private func throwsAXError<T>(_ work: () throws -> T) rethrows -> T {

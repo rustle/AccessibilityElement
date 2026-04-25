@@ -114,6 +114,30 @@ public final class MockElement: Element, Hashable, Sendable {
     public func selectedChildren() throws -> [MockElement] {
         try getAttribute(.selectedChildren)
     }
+    public func childrenView() -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.children().count },
+            elements: { i, n in let a = try self.children(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func childrenInNavigationOrderView() -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.childrenInNavigationOrder().count },
+            elements: { i, n in let a = try self.childrenInNavigationOrder(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func visibleChildrenView() -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.visibleChildren().count },
+            elements: { i, n in let a = try self.visibleChildren(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func selectedChildrenView() -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.selectedChildren().count },
+            elements: { i, n in let a = try self.selectedChildren(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
     public func window() throws -> MockElement {
         try getAttribute(.window)
     }
@@ -258,6 +282,72 @@ public final class MockElement: Element, Hashable, Sendable {
     }
     public func columnTitles() throws -> [MockElement] {
         try getAttribute(.columnTitles)
+    }
+    public func rowsView() throws -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.rows().count },
+            elements: { i, n in let a = try self.rows(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func columnsView() throws -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.columns().count },
+            elements: { i, n in let a = try self.columns(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func selectedRowsView() throws -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.selectedRows().count },
+            elements: { i, n in let a = try self.selectedRows(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func selectedColumnsView() throws -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.selectedColumns().count },
+            elements: { i, n in let a = try self.selectedColumns(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func selectedCellsView() throws -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.selectedCells().count },
+            elements: { i, n in let a = try self.selectedCells(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func visibleRowsView() throws -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.visibleRows().count },
+            elements: { i, n in let a = try self.visibleRows(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func visibleColumnsView() throws -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.visibleColumns().count },
+            elements: { i, n in let a = try self.visibleColumns(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func visibleCellsView() throws -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.visibleCells().count },
+            elements: { i, n in let a = try self.visibleCells(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func rowHeaderUIElementsView() throws -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.rowHeaderUIElements().count },
+            elements: { i, n in let a = try self.rowHeaderUIElements(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func columnHeaderUIElementsView() throws -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.columnHeaderUIElements().count },
+            elements: { i, n in let a = try self.columnHeaderUIElements(); return Array(a[i..<min(i + n, a.count)]) }
+        )
+    }
+    public func columnTitlesView() throws -> ArrayAttributeView<MockElement> {
+        ArrayAttributeView(
+            count: { try self.columnTitles().count },
+            elements: { i, n in let a = try self.columnTitles(); return Array(a[i..<min(i + n, a.count)]) }
+        )
     }
     public func sortDirection() throws -> String {
         try getAttribute(.sortDirection)
