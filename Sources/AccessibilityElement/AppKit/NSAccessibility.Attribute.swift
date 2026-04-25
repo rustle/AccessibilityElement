@@ -35,6 +35,21 @@ public extension NSAccessibility.Attribute {
     static let focusableAncestor: NSAccessibility.Attribute = "AXFocusableAncestor"
     static let editableAncestor: NSAccessibility.Attribute = "AXEditableAncestor"
     static let highestEditableAncestor: NSAccessibility.Attribute = "AXHighestEditableAncestor"
+    // MARK: MathML
+    static let mathBase: NSAccessibility.Attribute = "AXMathBase"
+    static let mathFencedOpen: NSAccessibility.Attribute = "AXMathFencedOpen"
+    static let mathFencedClose: NSAccessibility.Attribute = "AXMathFencedClose"
+    static let mathFractionNumerator: NSAccessibility.Attribute = "AXMathFractionNumerator"
+    static let mathFractionDenominator: NSAccessibility.Attribute = "AXMathFractionDenominator"
+    static let mathLineThickness: NSAccessibility.Attribute = "AXMathLineThickness"
+    static let mathOver: NSAccessibility.Attribute = "AXMathOver"
+    static let mathUnder: NSAccessibility.Attribute = "AXMathUnder"
+    static let mathPostscripts: NSAccessibility.Attribute = "AXMathPostscripts"
+    static let mathPrescripts: NSAccessibility.Attribute = "AXMathPrescripts"
+    static let mathRootIndex: NSAccessibility.Attribute = "AXMathRootIndex"
+    static let mathRootRadicand: NSAccessibility.Attribute = "AXMathRootRadicand"
+    static let mathSubscript: NSAccessibility.Attribute = "AXMathSubscript"
+    static let mathSuperscript: NSAccessibility.Attribute = "AXMathSuperscript"
 }
 
 extension NSAccessibility.Attribute: @retroactive Codable {}

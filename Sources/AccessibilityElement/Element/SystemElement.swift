@@ -1189,6 +1189,81 @@ public struct SystemElement: Element, Sendable {
         }
     }
 
+    // MARK: - MathML
+
+    public func mathBase() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .mathBase)
+        })
+    }
+    public func mathFencedOpen() throws -> String {
+        try throwsAXError {
+            try element.value(attribute: .mathFencedOpen)
+        }
+    }
+    public func mathFencedClose() throws -> String {
+        try throwsAXError {
+            try element.value(attribute: .mathFencedClose)
+        }
+    }
+    public func mathFractionNumerator() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .mathFractionNumerator)
+        })
+    }
+    public func mathFractionDenominator() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .mathFractionDenominator)
+        })
+    }
+    public func mathLineThickness() throws -> Double {
+        try throwsAXError {
+            try element.value(attribute: .mathLineThickness)
+        }
+    }
+    public func mathOver() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .mathOver)
+        })
+    }
+    public func mathUnder() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .mathUnder)
+        })
+    }
+    public func mathPostscripts() throws -> [SystemElement] {
+        try throwsAXError {
+            (try element.value(attribute: .mathPostscripts) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
+    }
+    public func mathPrescripts() throws -> [SystemElement] {
+        try throwsAXError {
+            (try element.value(attribute: .mathPrescripts) as [UIElement])
+                .map(SystemElement.init(element:))
+        }
+    }
+    public func mathRootIndex() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .mathRootIndex)
+        })
+    }
+    public func mathRootRadicand() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .mathRootRadicand)
+        })
+    }
+    public func mathSubscript() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .mathSubscript)
+        })
+    }
+    public func mathSuperscript() throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .mathSuperscript)
+        })
+    }
+
     // MARK: - Private
 
     let element: UIElement

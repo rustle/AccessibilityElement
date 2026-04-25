@@ -436,6 +436,23 @@ public protocol Element: Sendable, CustomDebugStringConvertible {
     func layoutCount() throws -> Int
     /// Whether keyboard events should be dispatched to the DOM rather than the AT.
     func preventKeyboardDOMEventDispatch() throws -> Bool
+
+    // MARK: - MathML
+
+    func mathBase() throws -> Self
+    func mathFencedOpen() throws -> String
+    func mathFencedClose() throws -> String
+    func mathFractionNumerator() throws -> Self
+    func mathFractionDenominator() throws -> Self
+    func mathLineThickness() throws -> Double
+    func mathOver() throws -> Self
+    func mathUnder() throws -> Self
+    func mathPostscripts() throws -> [Self]
+    func mathPrescripts() throws -> [Self]
+    func mathRootIndex() throws -> Self
+    func mathRootRadicand() throws -> Self
+    func mathSubscript() throws -> Self
+    func mathSuperscript() throws -> Self
 }
 
 extension Element {

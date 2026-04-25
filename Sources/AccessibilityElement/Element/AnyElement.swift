@@ -221,6 +221,21 @@ public struct AnyElement: Element {
     private let _loadingProgress: @Sendable () throws -> Double
     private let _layoutCount: @Sendable () throws -> Int
     private let _preventKeyboardDOMEventDispatch: @Sendable () throws -> Bool
+    // MathML
+    private let _mathBase: @Sendable () throws -> AnyElement
+    private let _mathFencedOpen: @Sendable () throws -> String
+    private let _mathFencedClose: @Sendable () throws -> String
+    private let _mathFractionNumerator: @Sendable () throws -> AnyElement
+    private let _mathFractionDenominator: @Sendable () throws -> AnyElement
+    private let _mathLineThickness: @Sendable () throws -> Double
+    private let _mathOver: @Sendable () throws -> AnyElement
+    private let _mathUnder: @Sendable () throws -> AnyElement
+    private let _mathPostscripts: @Sendable () throws -> [AnyElement]
+    private let _mathPrescripts: @Sendable () throws -> [AnyElement]
+    private let _mathRootIndex: @Sendable () throws -> AnyElement
+    private let _mathRootRadicand: @Sendable () throws -> AnyElement
+    private let _mathSubscript: @Sendable () throws -> AnyElement
+    private let _mathSuperscript: @Sendable () throws -> AnyElement
 
     // MARK: - Initializer
 
@@ -566,6 +581,21 @@ public struct AnyElement: Element {
             _loadingProgress = element.loadingProgress
             _layoutCount = element.layoutCount
             _preventKeyboardDOMEventDispatch = element.preventKeyboardDOMEventDispatch
+            // MathML
+            _mathBase = { AnyElement(element: try element.mathBase()) }
+            _mathFencedOpen = element.mathFencedOpen
+            _mathFencedClose = element.mathFencedClose
+            _mathFractionNumerator = { AnyElement(element: try element.mathFractionNumerator()) }
+            _mathFractionDenominator = { AnyElement(element: try element.mathFractionDenominator()) }
+            _mathLineThickness = element.mathLineThickness
+            _mathOver = { AnyElement(element: try element.mathOver()) }
+            _mathUnder = { AnyElement(element: try element.mathUnder()) }
+            _mathPostscripts = { try element.mathPostscripts().map(AnyElement.init) }
+            _mathPrescripts = { try element.mathPrescripts().map(AnyElement.init) }
+            _mathRootIndex = { AnyElement(element: try element.mathRootIndex()) }
+            _mathRootRadicand = { AnyElement(element: try element.mathRootRadicand()) }
+            _mathSubscript = { AnyElement(element: try element.mathSubscript()) }
+            _mathSuperscript = { AnyElement(element: try element.mathSuperscript()) }
         }
     }
 
@@ -1179,5 +1209,50 @@ public struct AnyElement: Element {
     }
     public func preventKeyboardDOMEventDispatch() throws -> Bool {
         try _preventKeyboardDOMEventDispatch()
+    }
+
+    // MARK: - MathML
+
+    public func mathBase() throws -> AnyElement {
+        try _mathBase()
+    }
+    public func mathFencedOpen() throws -> String {
+        try _mathFencedOpen()
+    }
+    public func mathFencedClose() throws -> String {
+        try _mathFencedClose()
+    }
+    public func mathFractionNumerator() throws -> AnyElement {
+        try _mathFractionNumerator()
+    }
+    public func mathFractionDenominator() throws -> AnyElement {
+        try _mathFractionDenominator()
+    }
+    public func mathLineThickness() throws -> Double {
+        try _mathLineThickness()
+    }
+    public func mathOver() throws -> AnyElement {
+        try _mathOver()
+    }
+    public func mathUnder() throws -> AnyElement {
+        try _mathUnder()
+    }
+    public func mathPostscripts() throws -> [AnyElement] {
+        try _mathPostscripts()
+    }
+    public func mathPrescripts() throws -> [AnyElement] {
+        try _mathPrescripts()
+    }
+    public func mathRootIndex() throws -> AnyElement {
+        try _mathRootIndex()
+    }
+    public func mathRootRadicand() throws -> AnyElement {
+        try _mathRootRadicand()
+    }
+    public func mathSubscript() throws -> AnyElement {
+        try _mathSubscript()
+    }
+    public func mathSuperscript() throws -> AnyElement {
+        try _mathSuperscript()
     }
 }
