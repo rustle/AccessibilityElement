@@ -26,8 +26,6 @@ public extension NSAccessibility.Attribute {
     /// Attribute representing last position in web area (or containing web area).
     /// Appropriate for use with a web area element or it's descendants.
     static let endTextMarker: NSAccessibility.Attribute = "AXEndTextMarker"
-    ///
-    static let childrenInNavigationOrder: NSAccessibility.Attribute = "AXChildrenInNavigationOrder"
 }
 
 extension NSAccessibility.Attribute: @retroactive Codable {}

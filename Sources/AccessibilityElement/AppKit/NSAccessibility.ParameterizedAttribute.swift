@@ -7,9 +7,13 @@
 import AppKit
 
 public extension NSAccessibility.ParameterizedAttribute {
+    ///
     static let textMarkerRangeForUnorderedTextMarkers: NSAccessibility.ParameterizedAttribute = "AXTextMarkerRangeForUnorderedTextMarkers"
+    ///
     static let stringForTextMarkerRange: NSAccessibility.ParameterizedAttribute = "AXStringForTextMarkerRange"
+    ///
     static let attributedStringForTextMarkerRange: NSAccessibility.ParameterizedAttribute = "AXAttributedStringForTextMarkerRange"
+    /// Returns the TextMarkerRange for the line containing the given TextMarker.
     static let lineForTextMarker: NSAccessibility.ParameterizedAttribute = "AXLineTextMarkerRangeForTextMarker"
 }
 
