@@ -17,71 +17,71 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
     }
 
     public var processIdentifier: pid_t {
-        get throws {
+        get async throws {
             try element.pid
         }
     }
 
     // MARK: - General
 
-    public func role() throws -> NSAccessibility.Role {
+    public func role() async throws -> NSAccessibility.Role {
         try throwsAXError {
             try element.value(attribute: .role)
         }
     }
-    public func roleDescription() throws -> String {
+    public func roleDescription() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .roleDescription)
         }
     }
-    public func subrole() throws -> NSAccessibility.Subrole {
+    public func subrole() async throws -> NSAccessibility.Subrole {
         NSAccessibility.Subrole(rawValue:
             try throwsAXError({
                 try element.value(attribute: .subrole)
             })
         )
     }
-    public func value() throws -> Any {
+    public func value() async throws -> Any {
         try throwsAXError {
             try element.value(attribute: .value)
         }
     }
-    public func valueDescription() throws -> String {
+    public func valueDescription() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .valueDescription)
         }
     }
-    public func title() throws -> String {
+    public func title() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .title)
         }
     }
-    public func titleUIElement() throws -> SystemElement {
+    public func titleUIElement() async throws -> SystemElement {
         try throwsAXError {
             try element.value(attribute: .titleUIElement)
         }
     }
-    public func description() throws -> String {
+    public func description() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .description)
         }
     }
-    public func help() throws -> String {
+    public func help() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .help)
         }
     }
-    public func isEnabled() throws -> Bool {
+    public func isEnabled() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .enabled)
         }
     }
-    public func isFocused() throws -> Bool {
+    public func isFocused() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .focused)
         }
     }
-    public func isSelected() throws -> Bool {
+    public func isSelected() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .selected)
         }
@@ -89,60 +89,60 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Application Attributes
 
-    public func windows() throws -> [SystemElement] {
+    public func windows() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .windows) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func mainWindow() throws -> SystemElement {
+    public func mainWindow() async throws -> SystemElement {
         .init(element:
             try throwsAXError({
                 try element.value(attribute: .mainWindow)
             })
         )
     }
-    public func focusedWindow() throws -> SystemElement {
+    public func focusedWindow() async throws -> SystemElement {
         .init(element:
             try throwsAXError({
                 try element.value(attribute: .focusedWindow)
             })
         )
     }
-    public func focusedUIElement() throws -> SystemElement {
+    public func focusedUIElement() async throws -> SystemElement {
         .init(element:
             try throwsAXError({
                 try element.value(attribute: .focusedUIElement)
             })
         )
     }
-    public func enhancedUserInterface() throws -> Bool {
+    public func enhancedUserInterface() async throws -> Bool {
         try throwsAXError {
             (try element.value(attribute: .enhancedUserInterface) as Bool)
         }
     }
-    public func setEnhancedUserInterface(_ enhancedUserInterface: Bool) throws {
+    public func setEnhancedUserInterface(_ enhancedUserInterface: Bool) async throws {
         try throwsAXError {
             try element.set(attribute: .enhancedUserInterface,
                             value: enhancedUserInterface as CFBoolean)
         }
     }
-    public func isFrontmost() throws -> Bool {
+    public func isFrontmost() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .frontmost)
         }
     }
-    public func isHidden() throws -> Bool {
+    public func isHidden() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .hidden)
         }
     }
-    public func menuBar() throws -> SystemElement {
+    public func menuBar() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .menuBar)
         })
     }
-    public func extrasMenuBar() throws -> SystemElement {
+    public func extrasMenuBar() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .extrasMenuBar)
         })
@@ -150,14 +150,14 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Hierarchy
 
-    public func parent() throws -> SystemElement {
+    public func parent() async throws -> SystemElement {
         .init(element:
             try throwsAXError({
                 try element.value(attribute: .parent)
             })
         )
     }
-    public func children() throws -> [SystemElement] {
+    public func children() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .children) as [UIElement])
                 .map(SystemElement.init(element:))
@@ -166,7 +166,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
     public func childrenView() -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .children)
     }
-    public func childrenInNavigationOrder() throws -> [SystemElement] {
+    public func childrenInNavigationOrder() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .childrenInNavigationOrderAttribute) as [UIElement])
                 .map(SystemElement.init(element:))
@@ -175,7 +175,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
     public func childrenInNavigationOrderView() -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .childrenInNavigationOrderAttribute)
     }
-    public func visibleChildren() throws -> [SystemElement] {
+    public func visibleChildren() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .visibleChildren) as [UIElement])
                 .map(SystemElement.init(element:))
@@ -184,7 +184,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
     public func visibleChildrenView() -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .visibleChildren)
     }
-    public func selectedChildren() throws -> [SystemElement] {
+    public func selectedChildren() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .selectedChildren) as [UIElement])
                 .map(SystemElement.init(element:))
@@ -193,17 +193,17 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
     public func selectedChildrenView() -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .selectedChildren)
     }
-    public func window() throws -> SystemElement {
+    public func window() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .window)
         })
     }
-    public func topLevelUIElement() throws -> SystemElement {
+    public func topLevelUIElement() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .topLevelUIElement)
         })
     }
-    public func index() throws -> Int {
+    public func index() async throws -> Int {
         try throwsAXError {
             try element.value(attribute: .index)
         }
@@ -211,17 +211,17 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Hierarchy (Web)
 
-    public func focusableAncestor() throws -> SystemElement {
+    public func focusableAncestor() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .focusableAncestor)
         })
     }
-    public func editableAncestor() throws -> SystemElement {
+    public func editableAncestor() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .editableAncestor)
         })
     }
-    public func highestEditableAncestor() throws -> SystemElement {
+    public func highestEditableAncestor() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .highestEditableAncestor)
         })
@@ -229,17 +229,17 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Actions
 
-    public func actions() throws -> [NSAccessibility.Action] {
+    public func actions() async throws -> [NSAccessibility.Action] {
         try throwsAXError {
             try element.actions()
         }
     }
-    public func description(action: NSAccessibility.Action) throws -> String {
+    public func description(action: NSAccessibility.Action) async throws -> String {
         try throwsAXError {
             try element.description(action: action)
         }
     }
-    public func perform(action: NSAccessibility.Action) throws {
+    public func perform(action: NSAccessibility.Action) async throws {
         try throwsAXError {
             try element.perform(action: action)
         }
@@ -247,7 +247,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Text
 
-    public func placeholderValue() throws -> String {
+    public func placeholderValue() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .placeholderValue)
         }
@@ -255,7 +255,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Text (Integer Indexed)
 
-    public func line(forIndex index: Int) throws -> Int {
+    public func line(forIndex index: Int) async throws -> Int {
         try throwsAXError {
             try element.value(
                 attribute: .lineForIndex,
@@ -263,7 +263,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func range(forLine line: Int) throws -> Range<Int> {
+    public func range(forLine line: Int) async throws -> Range<Int> {
         try throwsAXError {
             let value = try Value(value: element.value(
                 attribute: .rangeForLine,
@@ -275,7 +275,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             return range
         }
     }
-    public func range(forIndex index: Int) throws -> Range<Int> {
+    public func range(forIndex index: Int) async throws -> Range<Int> {
         try throwsAXError {
             let value = try Value(value: element.value(
                 attribute: .rangeForIndex,
@@ -287,7 +287,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             return range
         }
     }
-    public func range(forPosition position: Int) throws -> Range<Int> {
+    public func range(forPosition position: Int) async throws -> Range<Int> {
         try throwsAXError {
             let value = try Value(value: element.value(
                 attribute: .rangeForPosition,
@@ -299,7 +299,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             return range
         }
     }
-    public func string(for range: Range<Int>) throws -> String {
+    public func string(for range: Range<Int>) async throws -> String {
         try throwsAXError {
             try element.value(
                 attribute: .stringForRange,
@@ -307,7 +307,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func bounds(for range: Range<Int>) throws -> NSRect {
+    public func bounds(for range: Range<Int>) async throws -> NSRect {
         try throwsAXError {
             let value = try Value(value: element.value(
                 attribute: .boundsForRange,
@@ -319,7 +319,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             return rect
         }
     }
-    public func rtf(for range: Range<Int>) throws -> Data {
+    public func rtf(for range: Range<Int>) async throws -> Data {
         try throwsAXError {
             try element.value(
                 attribute: .rtfForRange,
@@ -327,7 +327,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func attributedString(for range: Range<Int>) throws -> NSAttributedString {
+    public func attributedString(for range: Range<Int>) async throws -> NSAttributedString {
         try throwsAXError {
             try element.value(
                 attribute: .attributedStringForRange,
@@ -335,7 +335,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func styleRange(for index: Int) throws -> Range<Int> {
+    public func styleRange(for index: Int) async throws -> Range<Int> {
         try throwsAXError {
             let value = try Value(value: element.value(
                 attribute: .styleRangeForIndex,
@@ -347,54 +347,54 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             return range
         }
     }
-    public func insertionPointLineNumber() throws -> Int {
+    public func insertionPointLineNumber() async throws -> Int {
         try throwsAXError {
             try element.value(attribute: .insertionPointLineNumber)
         }
     }
-    public func sharedCharacterRange() throws -> Range<Int> {
+    public func sharedCharacterRange() async throws -> Range<Int> {
         try throwsAXError {
             let value = try Value(value: element.value(attribute: .sharedCharacterRange))
             guard case let .range(range) = value else { throw ElementError.noValue }
             return range
         }
     }
-    public func sharedTextUIElements() throws -> [SystemElement] {
+    public func sharedTextUIElements() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .sharedTextUIElements) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func visibleCharacterRange() throws -> Range<Int> {
+    public func visibleCharacterRange() async throws -> Range<Int> {
         try throwsAXError {
             let value = try Value(value: element.value(attribute: .visibleCharacterRange))
             guard case let .range(range) = value else { throw ElementError.noValue }
             return range
         }
     }
-    public func setVisibleCharacterRange(_ range: Range<Int>) throws {
+    public func setVisibleCharacterRange(_ range: Range<Int>) async throws {
         try throwsAXError {
             try element.set(attribute: .visibleCharacterRange, value: Value.range(range).value)
         }
     }
-    public func numberOfCharacters() throws -> Int {
+    public func numberOfCharacters() async throws -> Int {
         try throwsAXError {
             try element.value(attribute: .numberOfCharacters)
         }
     }
-    public func selectedText() throws -> String {
+    public func selectedText() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .selectedText)
         }
     }
-    public func selectedTextRange() throws -> Range<Int> {
+    public func selectedTextRange() async throws -> Range<Int> {
         try throwsAXError {
             let value = try Value(value: element.value(attribute: .selectedTextRange))
             guard case let .range(range) = value else { throw ElementError.noValue }
             return range
         }
     }
-    public func selectedTextRanges() throws -> [Range<Int>] {
+    public func selectedTextRanges() async throws -> [Range<Int>] {
         try throwsAXError {
             let axValues: [AXValue] = try element.value(attribute: .selectedTextRanges)
             return try axValues.map { axValue in
@@ -407,7 +407,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Text (TextMarker Indexed)
 
-    public func line(forTextMarker textMarker: TextMarker) throws -> Int {
+    public func line(forTextMarker textMarker: TextMarker) async throws -> Int {
         try throwsAXError {
             try element.value(
                 attribute: .lineForTextMarker,
@@ -415,22 +415,22 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func selectedTextMarkerRange() throws -> TextMarkerRange {
+    public func selectedTextMarkerRange() async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(attribute: .selectedTextMarkerRange))
         }
     }
-    public func startTextMarker() throws -> TextMarker {
+    public func startTextMarker() async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(attribute: .startTextMarker))
         }
     }
-    public func endTextMarker() throws -> TextMarker {
+    public func endTextMarker() async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(attribute: .endTextMarker))
         }
     }
-    public func nextTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+    public func nextTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .nextTextMarkerForTextMarker,
@@ -438,7 +438,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func previousTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+    public func previousTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .previousTextMarkerForTextMarker,
@@ -446,7 +446,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func nextWordEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+    public func nextWordEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .nextWordEndTextMarkerForTextMarker,
@@ -454,7 +454,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func previousWordStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+    public func previousWordStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .previousWordStartTextMarkerForTextMarker,
@@ -462,7 +462,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func nextLineEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+    public func nextLineEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .nextLineEndTextMarkerForTextMarker,
@@ -470,7 +470,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func previousLineStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+    public func previousLineStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .previousLineStartTextMarkerForTextMarker,
@@ -478,7 +478,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func nextSentenceEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+    public func nextSentenceEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .nextSentenceEndTextMarkerForTextMarker,
@@ -486,7 +486,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func previousSentenceStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+    public func previousSentenceStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .previousSentenceStartTextMarkerForTextMarker,
@@ -494,7 +494,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func nextParagraphEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+    public func nextParagraphEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .nextParagraphEndTextMarkerForTextMarker,
@@ -502,7 +502,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func previousParagraphStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
+    public func previousParagraphStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .previousParagraphStartTextMarkerForTextMarker,
@@ -510,7 +510,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func lineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+    public func lineTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .lineForTextMarker,
@@ -518,7 +518,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func leftWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+    public func leftWordTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .leftWordTextMarkerRangeForTextMarker,
@@ -526,7 +526,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func rightWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+    public func rightWordTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .rightWordTextMarkerRangeForTextMarker,
@@ -534,7 +534,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func leftLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+    public func leftLineTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .leftLineTextMarkerRangeForTextMarker,
@@ -542,7 +542,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func rightLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+    public func rightLineTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .rightLineTextMarkerRangeForTextMarker,
@@ -550,7 +550,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func sentenceTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+    public func sentenceTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .sentenceTextMarkerRangeForTextMarker,
@@ -558,7 +558,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func paragraphTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+    public func paragraphTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .paragraphTextMarkerRangeForTextMarker,
@@ -566,7 +566,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func styleTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
+    public func styleTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .styleTextMarkerRangeForTextMarker,
@@ -574,7 +574,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func lineNumber(for textMarker: TextMarker) throws -> Int {
+    public func lineNumber(for textMarker: TextMarker) async throws -> Int {
         try throwsAXError {
             try element.value(
                 attribute: .lineNumberForTextMarker,
@@ -582,7 +582,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func index(for textMarker: TextMarker) throws -> Int {
+    public func index(for textMarker: TextMarker) async throws -> Int {
         try throwsAXError {
             try element.value(
                 attribute: .indexForTextMarker,
@@ -590,7 +590,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func element(for textMarker: TextMarker) throws -> SystemElement {
+    public func element(for textMarker: TextMarker) async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(
                 attribute: .uiElementForTextMarker,
@@ -598,7 +598,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         })
     }
-    public func string(for textMarkerRange: TextMarkerRange) throws -> String {
+    public func string(for textMarkerRange: TextMarkerRange) async throws -> String {
         try throwsAXError {
             try element.value(
                 attribute: .stringForTextMarkerRange,
@@ -606,7 +606,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func attributedString(for textMarkerRange: TextMarkerRange) throws -> NSAttributedString {
+    public func attributedString(for textMarkerRange: TextMarkerRange) async throws -> NSAttributedString {
         try throwsAXError {
             try element.value(
                 attribute: .attributedStringForTextMarkerRange,
@@ -614,7 +614,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func bounds(for textMarkerRange: TextMarkerRange) throws -> NSRect {
+    public func bounds(for textMarkerRange: TextMarkerRange) async throws -> NSRect {
         try throwsAXError {
             let value = try Value(value: element.value(
                 attribute: .boundsForTextMarkerRange,
@@ -624,7 +624,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             return rect
         }
     }
-    public func length(for textMarkerRange: TextMarkerRange) throws -> Int {
+    public func length(for textMarkerRange: TextMarkerRange) async throws -> Int {
         try throwsAXError {
             try element.value(
                 attribute: .lengthForTextMarkerRange,
@@ -632,7 +632,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func textMarker(forIndex index: Int) throws -> TextMarker {
+    public func textMarker(forIndex index: Int) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .textMarkerForIndex,
@@ -640,7 +640,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func textMarkerRange(forLine line: Int) throws -> TextMarkerRange {
+    public func textMarkerRange(forLine line: Int) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .textMarkerRangeForLine,
@@ -648,7 +648,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func textMarker(forPosition position: CGPoint) throws -> TextMarker {
+    public func textMarker(forPosition position: CGPoint) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .textMarkerForPosition,
@@ -656,7 +656,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func startTextMarker(forBounds bounds: NSRect) throws -> TextMarker {
+    public func startTextMarker(forBounds bounds: NSRect) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .startTextMarkerForBounds,
@@ -664,7 +664,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func endTextMarker(forBounds bounds: NSRect) throws -> TextMarker {
+    public func endTextMarker(forBounds bounds: NSRect) async throws -> TextMarker {
         try throwsAXError {
             TextMarker(textMarker: try element.value(
                 attribute: .endTextMarkerForBounds,
@@ -672,7 +672,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func textMarkerRange(for systemElement: SystemElement) throws -> TextMarkerRange {
+    public func textMarkerRange(for systemElement: SystemElement) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .textMarkerRangeForUIElement,
@@ -680,7 +680,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func textMarkerRange(forUnordered textMarkers: [TextMarker]) throws -> TextMarkerRange {
+    public func textMarkerRange(forUnordered textMarkers: [TextMarker]) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .textMarkerRangeForUnorderedTextMarkers,
@@ -688,7 +688,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             ))
         }
     }
-    public func textMarkerRange(forOrdered textMarkers: [TextMarker]) throws -> TextMarkerRange {
+    public func textMarkerRange(forOrdered textMarkers: [TextMarker]) async throws -> TextMarkerRange {
         try throwsAXError {
             TextMarkerRange(textMarkerRange: try element.value(
                 attribute: .textMarkerRangeForOrderedTextMarkers,
@@ -699,7 +699,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Text marker validation
 
-    public func isNullTextMarker(_ textMarker: TextMarker) throws -> Bool {
+    public func isNullTextMarker(_ textMarker: TextMarker) async throws -> Bool {
         try throwsAXError {
             try element.value(
                 attribute: .textMarkerIsNull,
@@ -707,7 +707,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func isValidTextMarker(_ textMarker: TextMarker) throws -> Bool {
+    public func isValidTextMarker(_ textMarker: TextMarker) async throws -> Bool {
         try throwsAXError {
             try element.value(
                 attribute: .textMarkerIsValid,
@@ -721,7 +721,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
     public func cell(
         column: Int,
         row: Int
-    ) throws -> SystemElement {
+    ) async throws -> SystemElement {
         try throwsAXError {
             try element.value(
                 attribute: .cellForColumnAndRow,
@@ -729,133 +729,133 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             )
         }
     }
-    public func rows() throws -> [SystemElement] {
+    public func rows() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .rows) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func rowsView() throws -> ArrayAttributeView<SystemElement> {
+    public func rowsView() async throws -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .rows)
     }
-    public func columns() throws -> [SystemElement] {
+    public func columns() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .columns) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func columnsView() throws -> ArrayAttributeView<SystemElement> {
+    public func columnsView() async throws -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .columns)
     }
-    public func selectedRows() throws -> [SystemElement] {
+    public func selectedRows() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .selectedRows) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func selectedRowsView() throws -> ArrayAttributeView<SystemElement> {
+    public func selectedRowsView() async throws -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .selectedRows)
     }
-    public func selectedColumns() throws -> [SystemElement] {
+    public func selectedColumns() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .selectedColumns) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func selectedColumnsView() throws -> ArrayAttributeView<SystemElement> {
+    public func selectedColumnsView() async throws -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .selectedColumns)
     }
-    public func selectedCells() throws -> [SystemElement] {
+    public func selectedCells() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .selectedCells) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func selectedCellsView() throws -> ArrayAttributeView<SystemElement> {
+    public func selectedCellsView() async throws -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .selectedCells)
     }
-    public func visibleRows() throws -> [SystemElement] {
+    public func visibleRows() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .visibleRows) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func visibleRowsView() throws -> ArrayAttributeView<SystemElement> {
+    public func visibleRowsView() async throws -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .visibleRows)
     }
-    public func visibleColumns() throws -> [SystemElement] {
+    public func visibleColumns() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .visibleColumns) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func visibleColumnsView() throws -> ArrayAttributeView<SystemElement> {
+    public func visibleColumnsView() async throws -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .visibleColumns)
     }
-    public func visibleCells() throws -> [SystemElement] {
+    public func visibleCells() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .visibleCells) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func visibleCellsView() throws -> ArrayAttributeView<SystemElement> {
+    public func visibleCellsView() async throws -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .visibleCells)
     }
-    public func rowHeaderUIElements() throws -> [SystemElement] {
+    public func rowHeaderUIElements() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .rowHeaderUIElements) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func rowHeaderUIElementsView() throws -> ArrayAttributeView<SystemElement> {
+    public func rowHeaderUIElementsView() async throws -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .rowHeaderUIElements)
     }
-    public func columnHeaderUIElements() throws -> [SystemElement] {
+    public func columnHeaderUIElements() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .columnHeaderUIElements) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func columnHeaderUIElementsView() throws -> ArrayAttributeView<SystemElement> {
+    public func columnHeaderUIElementsView() async throws -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .columnHeaderUIElements)
     }
-    public func columnTitles() throws -> [SystemElement] {
+    public func columnTitles() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .columnTitles) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func columnTitlesView() throws -> ArrayAttributeView<SystemElement> {
+    public func columnTitlesView() async throws -> ArrayAttributeView<SystemElement> {
         arrayAttributeView(attribute: .columnTitles)
     }
-    public func sortDirection() throws -> String {
+    public func sortDirection() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .sortDirection)
         }
     }
-    public func rowCount() throws -> Int {
+    public func rowCount() async throws -> Int {
         try throwsAXError {
             try element.value(attribute: .rowCount)
         }
     }
-    public func columnCount() throws -> Int {
+    public func columnCount() async throws -> Int {
         try throwsAXError {
             try element.value(attribute: .columnCount)
         }
     }
-    public func isOrderedByRow() throws -> Bool {
+    public func isOrderedByRow() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .orderedByRow)
         }
     }
-    public func rowIndexRange() throws -> Range<Int> {
+    public func rowIndexRange() async throws -> Range<Int> {
         try throwsAXError {
             let value = try Value(value: element.value(attribute: .rowIndexRange))
             guard case let .range(range) = value else { throw ElementError.noValue }
             return range
         }
     }
-    public func columnIndexRange() throws -> Range<Int> {
+    public func columnIndexRange() async throws -> Range<Int> {
         try throwsAXError {
             let value = try Value(value: element.value(attribute: .columnIndexRange))
             guard case let .range(range) = value else { throw ElementError.noValue }
@@ -865,7 +865,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Layout
 
-    public func frame() throws -> NSRect {
+    public func frame() async throws -> NSRect {
         try throwsAXError {
             let value = try Value(value: element.value(attribute: .frame))
             guard case let .rect(rect) = value else {
@@ -874,7 +874,7 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             return rect
         }
     }
-    public func setPosition(_ position: CGPoint) throws {
+    public func setPosition(_ position: CGPoint) async throws {
         try throwsAXError {
             try element.set(attribute: .position, value: Value.point(position).value)
         }
@@ -882,13 +882,13 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Linked Elements
 
-    public func linkedUIElements() throws -> [SystemElement] {
+    public func linkedUIElements() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .linkedUIElements) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func servesAsTitleForUIElements() throws -> [SystemElement] {
+    public func servesAsTitleForUIElements() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .servesAsTitleForUIElements) as [UIElement])
                 .map(SystemElement.init(element:))
@@ -897,39 +897,39 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Slider
 
-    public func minValue() throws -> Any {
+    public func minValue() async throws -> Any {
         try throwsAXError {
             try element.value(attribute: .minValue)
         }
     }
-    public func maxValue() throws -> Any {
+    public func maxValue() async throws -> Any {
         try throwsAXError {
             try element.value(attribute: .maxValue)
         }
     }
-    public func warningValue() throws -> Any {
+    public func warningValue() async throws -> Any {
         try throwsAXError {
             try element.value(attribute: .warningValue)
         }
     }
-    public func criticalValue() throws -> Any {
+    public func criticalValue() async throws -> Any {
         try throwsAXError {
             try element.value(attribute: .criticalValue)
         }
     }
-    public func allowedValues() throws -> [Double] {
+    public func allowedValues() async throws -> [Double] {
         try throwsAXError {
             (try element.value(attribute: .allowedValues) as [NSNumber])
                 .map(\.doubleValue)
         }
     }
-    public func labelUIElements() throws -> [SystemElement] {
+    public func labelUIElements() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .labelUIElements) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func labelValue() throws -> Double {
+    public func labelValue() async throws -> Double {
         try throwsAXError {
             try element.value(attribute: .labelValue)
         }
@@ -937,62 +937,62 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Window
 
-    public func isMain() throws -> Bool {
+    public func isMain() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .main)
         }
     }
-    public func isMinimized() throws -> Bool {
+    public func isMinimized() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .minimized)
         }
     }
-    public func isModal() throws -> Bool {
+    public func isModal() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .modal)
         }
     }
-    public func closeButton() throws -> SystemElement {
+    public func closeButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .closeButton)
         })
     }
-    public func zoomButton() throws -> SystemElement {
+    public func zoomButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .zoomButton)
         })
     }
-    public func minimizeButton() throws -> SystemElement {
+    public func minimizeButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .minimizeButton)
         })
     }
-    public func toolbarButton() throws -> SystemElement {
+    public func toolbarButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .toolbarButton)
         })
     }
-    public func fullScreenButton() throws -> SystemElement {
+    public func fullScreenButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .fullScreenButton)
         })
     }
-    public func defaultButton() throws -> SystemElement {
+    public func defaultButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .defaultButton)
         })
     }
-    public func cancelButton() throws -> SystemElement {
+    public func cancelButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .cancelButton)
         })
     }
-    public func proxy() throws -> SystemElement {
+    public func proxy() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .proxy)
         })
     }
-    public func growArea() throws -> SystemElement {
+    public func growArea() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .growArea)
         })
@@ -1000,76 +1000,76 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Container / scroll UI
 
-    public func header() throws -> SystemElement {
+    public func header() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .header)
         })
     }
-    public func tabs() throws -> [SystemElement] {
+    public func tabs() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .tabs) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func splitters() throws -> [SystemElement] {
+    public func splitters() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .splitters) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func horizontalScrollBar() throws -> SystemElement {
+    public func horizontalScrollBar() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .horizontalScrollBar)
         })
     }
-    public func verticalScrollBar() throws -> SystemElement {
+    public func verticalScrollBar() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .verticalScrollBar)
         })
     }
-    public func overflowButton() throws -> SystemElement {
+    public func overflowButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .overflowButton)
         })
     }
-    public func incrementButton() throws -> SystemElement {
+    public func incrementButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .incrementButton)
         })
     }
-    public func decrementButton() throws -> SystemElement {
+    public func decrementButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .decrementButton)
         })
     }
-    public func previousContents() throws -> [SystemElement] {
+    public func previousContents() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .previousContents) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func nextContents() throws -> [SystemElement] {
+    public func nextContents() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .nextContents) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func shownMenu() throws -> SystemElement {
+    public func shownMenu() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .shownMenu)
         })
     }
-    public func searchButton() throws -> SystemElement {
+    public func searchButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .searchButton)
         })
     }
-    public func searchMenu() throws -> SystemElement {
+    public func searchMenu() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .searchMenu)
         })
     }
-    public func clearButton() throws -> SystemElement {
+    public func clearButton() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .clearButton)
         })
@@ -1077,23 +1077,23 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Outline / tree
 
-    public func isDisclosing() throws -> Bool {
+    public func isDisclosing() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .disclosing)
         }
     }
-    public func disclosedRows() throws -> [SystemElement] {
+    public func disclosedRows() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .disclosedRows) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func disclosedByRow() throws -> SystemElement {
+    public func disclosedByRow() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .disclosedByRow)
         })
     }
-    public func disclosureLevel() throws -> Int {
+    public func disclosureLevel() async throws -> Int {
         try throwsAXError {
             try element.value(attribute: .disclosureLevel)
         }
@@ -1101,64 +1101,64 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Misc
 
-    public func identifier() throws -> String {
+    public func identifier() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .identifier)
         }
     }
-    public func url() throws -> URL {
+    public func url() async throws -> URL {
         try throwsAXError {
             try element.value(attribute: .url)
         }
     }
-    public func document() throws -> String {
+    public func document() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .document)
         }
     }
-    public func filename() throws -> String {
+    public func filename() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .filename)
         }
     }
-    public func orientation() throws -> String {
+    public func orientation() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .orientation)
         }
     }
-    public func contents() throws -> [SystemElement] {
+    public func contents() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .contents) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func sharedFocusElements() throws -> [SystemElement] {
+    public func sharedFocusElements() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .sharedFocusElements) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func isExpanded() throws -> Bool {
+    public func isExpanded() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .expanded)
         }
     }
-    public func isEdited() throws -> Bool {
+    public func isEdited() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .edited)
         }
     }
-    public func isRequired() throws -> Bool {
+    public func isRequired() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .required)
         }
     }
-    public func containsProtectedContent() throws -> Bool {
+    public func containsProtectedContent() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .containsProtectedContent)
         }
     }
-    public func activationPoint() throws -> CGPoint {
+    public func activationPoint() async throws -> CGPoint {
         try throwsAXError {
             let value = try Value(value: element.value(attribute: .activationPoint))
             guard case let .point(point) = value else { throw ElementError.noValue }
@@ -1168,22 +1168,22 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - Web
 
-    public func isLoaded() throws -> Bool {
+    public func isLoaded() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .loaded)
         }
     }
-    public func loadingProgress() throws -> Double {
+    public func loadingProgress() async throws -> Double {
         try throwsAXError {
             try element.value(attribute: .loadingProgress)
         }
     }
-    public func layoutCount() throws -> Int {
+    public func layoutCount() async throws -> Int {
         try throwsAXError {
             try element.value(attribute: .layoutCount)
         }
     }
-    public func preventKeyboardDOMEventDispatch() throws -> Bool {
+    public func preventKeyboardDOMEventDispatch() async throws -> Bool {
         try throwsAXError {
             try element.value(attribute: .preventKeyboardDOMEventDispatch)
         }
@@ -1191,74 +1191,74 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
 
     // MARK: - MathML
 
-    public func mathBase() throws -> SystemElement {
+    public func mathBase() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .mathBase)
         })
     }
-    public func mathFencedOpen() throws -> String {
+    public func mathFencedOpen() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .mathFencedOpen)
         }
     }
-    public func mathFencedClose() throws -> String {
+    public func mathFencedClose() async throws -> String {
         try throwsAXError {
             try element.value(attribute: .mathFencedClose)
         }
     }
-    public func mathFractionNumerator() throws -> SystemElement {
+    public func mathFractionNumerator() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .mathFractionNumerator)
         })
     }
-    public func mathFractionDenominator() throws -> SystemElement {
+    public func mathFractionDenominator() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .mathFractionDenominator)
         })
     }
-    public func mathLineThickness() throws -> Double {
+    public func mathLineThickness() async throws -> Double {
         try throwsAXError {
             try element.value(attribute: .mathLineThickness)
         }
     }
-    public func mathOver() throws -> SystemElement {
+    public func mathOver() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .mathOver)
         })
     }
-    public func mathUnder() throws -> SystemElement {
+    public func mathUnder() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .mathUnder)
         })
     }
-    public func mathPostscripts() throws -> [SystemElement] {
+    public func mathPostscripts() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .mathPostscripts) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func mathPrescripts() throws -> [SystemElement] {
+    public func mathPrescripts() async throws -> [SystemElement] {
         try throwsAXError {
             (try element.value(attribute: .mathPrescripts) as [UIElement])
                 .map(SystemElement.init(element:))
         }
     }
-    public func mathRootIndex() throws -> SystemElement {
+    public func mathRootIndex() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .mathRootIndex)
         })
     }
-    public func mathRootRadicand() throws -> SystemElement {
+    public func mathRootRadicand() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .mathRootRadicand)
         })
     }
-    public func mathSubscript() throws -> SystemElement {
+    public func mathSubscript() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .mathSubscript)
         })
     }
-    public func mathSuperscript() throws -> SystemElement {
+    public func mathSuperscript() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .mathSuperscript)
         })
@@ -1313,15 +1313,15 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
             }
         )
     }
+}
 
-    private func throwsAXError<T>(_ work: () throws -> T) rethrows -> T {
-        do {
-            return try work()
-        } catch let error as AX.AXError {
-            throw ElementError(error: error)
-        } catch {
-            throw error
-        }
+private func throwsAXError<T>(_ work: () throws -> T) rethrows -> T {
+    do {
+        return try work()
+    } catch let error as AX.AXError {
+        throw ElementError(error: error)
+    } catch {
+        throw error
     }
 }
 
@@ -1338,5 +1338,25 @@ extension SystemElement: Hashable {
 extension SystemElement {
     public var debugInfo: [String:any Sendable] {
         element.debugInfo
+    }
+}
+
+extension SystemElement {
+    public var debugDescription: String {
+        var description = [String]()
+        description.reserveCapacity(3)
+        func append(_ prefix: String,
+                    _ attribute: () throws -> Any) {
+            guard let value = try? attribute() else {
+                return
+            }
+            description.append(prefix)
+            description.append(String(describing: value))
+        }
+        // TODO: Use Role and Subrole to pick other attributes to grab
+        append("Role:", { try element.value(attribute: .role) }) // 1
+        append("Subrole:", { try element.value(attribute: .subrole) }) // 2
+        append("Title:", { try element.value(attribute: .title) }) // 3
+        return "<SystemElement \(description.joined(separator: " "))>"
     }
 }

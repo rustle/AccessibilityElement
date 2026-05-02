@@ -12,27 +12,27 @@ import AppKit
 /// allowing efficient subrange access for attributes with large numbers of values
 /// (e.g. a table with thousands of rows).
 public struct ArrayAttributeView<ElementType: Element>: Sendable {
-    private let _count: @Sendable () throws -> Int
-    private let _elements: @Sendable (Int, Int) throws -> [ElementType]
+    private let _count: @Sendable () async throws -> Int
+    private let _elements: @Sendable (Int, Int) async throws -> [ElementType]
 
     public init(
-        count: @escaping @Sendable () throws -> Int,
-        elements: @escaping @Sendable (Int, Int) throws -> [ElementType]
+        count: @escaping @Sendable () async throws -> Int,
+        elements: @escaping @Sendable (Int, Int) async throws -> [ElementType]
     ) {
         self._count = count
         self._elements = elements
     }
 
     /// The total number of values for this attribute.
-    public func count() throws -> Int {
-        try _count()
+    public func count() async throws -> Int {
+        try await _count()
     }
 
     /// Returns up to `maxCount` elements starting at `index`.
     public func elements(
         index: Int,
         maxCount: Int
-    ) throws -> [ElementType] {
-        try _elements(index, maxCount)
+    ) async throws -> [ElementType] {
+        try await _elements(index, maxCount)
     }
 }

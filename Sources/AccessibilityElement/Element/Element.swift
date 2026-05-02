@@ -9,231 +9,231 @@ import AX
 
 public protocol Element: Sendable, CustomDebugStringConvertible {
     /// The process identifier of the application that owns this element.
-    var processIdentifier: pid_t { get throws }
-    
+    var processIdentifier: pid_t { get async throws }
+
     // MARK: - General
 
     /// The element's role. Non-localized string that identifies the type of element. (e.g. radioButton)
-    func role() throws -> NSAccessibility.Role
+    func role() async throws -> NSAccessibility.Role
     /// Localized string that describes the element's role. (e.g. "radio button")
-    func roleDescription() throws -> String
+    func roleDescription() async throws -> String
     /// The element's subrole. Non-localized string that further categorizes the element's role. (e.g. closeButton)
-    func subrole() throws -> NSAccessibility.Subrole
+    func subrole() async throws -> NSAccessibility.Subrole
     /// The element's value.
-    func value() throws -> Any
+    func value() async throws -> Any
     /// Text description of the element's value.
-    func valueDescription() throws -> String
+    func valueDescription() async throws -> String
     /// Visible text displayed for the element. (e.g. a push button's label)
-    func title() throws -> String
+    func title() async throws -> String
     /// The UI element that serves as the title for this element.
-    func titleUIElement() throws -> Self
+    func titleUIElement() async throws -> Self
     /// Element description.
-    func description() throws -> String
+    func description() async throws -> String
     /// Help text / tooltip for the element.
-    func help() throws -> String
+    func help() async throws -> String
     /// Whether the element responds to user interaction.
-    func isEnabled() throws -> Bool
+    func isEnabled() async throws -> Bool
     /// Whether the element currently has keyboard focus.
-    func isFocused() throws -> Bool
+    func isFocused() async throws -> Bool
     /// Whether the element is currently selected.
-    func isSelected() throws -> Bool
+    func isSelected() async throws -> Bool
 
     // MARK: - Application Attributes
 
     /// The application's windows.
-    func windows() throws -> [Self]
+    func windows() async throws -> [Self]
     /// The application's main window.
-    func mainWindow() throws -> Self
+    func mainWindow() async throws -> Self
     /// The application's key window.
-    func focusedWindow() throws -> Self
+    func focusedWindow() async throws -> Self
     /// The currently focused UI element.
-    func focusedUIElement() throws -> Self
+    func focusedUIElement() async throws -> Self
     /// Whether the enhanced user interface is enabled. Only valid on an application element.
-    func enhancedUserInterface() throws -> Bool
+    func enhancedUserInterface() async throws -> Bool
     /// Enable or disable the enhanced user interface. Only valid on an application element.
-    func setEnhancedUserInterface(_ enhancedUserInterface: Bool) throws
+    func setEnhancedUserInterface(_ enhancedUserInterface: Bool) async throws
     /// Whether the application is currently frontmost.
-    func isFrontmost() throws -> Bool
+    func isFrontmost() async throws -> Bool
     /// Whether the application is hidden.
-    func isHidden() throws -> Bool
+    func isHidden() async throws -> Bool
     /// The menu bar element of the application.
-    func menuBar() throws -> Self
+    func menuBar() async throws -> Self
     /// The extras menu bar element of the application.
-    func extrasMenuBar() throws -> Self
+    func extrasMenuBar() async throws -> Self
 
     // MARK: - Hierarchy
 
     /// The element that contains this element.
-    func parent() throws -> Self
+    func parent() async throws -> Self
     /// The elements contained by this element.
-    func children() throws -> [Self]
+    func children() async throws -> [Self]
     /// Lazy view of the elements contained by this element.
     func childrenView() -> ArrayAttributeView<Self>
     /// The child elements ordered for navigation.
-    func childrenInNavigationOrder() throws -> [Self]
+    func childrenInNavigationOrder() async throws -> [Self]
     /// Lazy view of the elements children ordered for navigation.
     func childrenInNavigationOrderView() -> ArrayAttributeView<Self>
     /// The child elements that are currently visible.
-    func visibleChildren() throws -> [Self]
+    func visibleChildren() async throws -> [Self]
     /// Lazy view of the child elements that are currently visible.
     func visibleChildrenView() -> ArrayAttributeView<Self>
     /// The child elements that are currently selected.
-    func selectedChildren() throws -> [Self]
+    func selectedChildren() async throws -> [Self]
     /// Lazy view of the child elements that are currently selected.
     func selectedChildrenView() -> ArrayAttributeView<Self>
     /// The window containing this element.
-    func window() throws -> Self
+    func window() async throws -> Self
     /// The top-level UI element containing this element.
-    func topLevelUIElement() throws -> Self
+    func topLevelUIElement() async throws -> Self
     /// The index of the element within its parent.
-    func index() throws -> Int
-    
+    func index() async throws -> Int
+
     // MARK: - Hierarchy (Web)
 
     /// The nearest focusable ancestor of this element.
-    func focusableAncestor() throws -> Self
+    func focusableAncestor() async throws -> Self
     /// The nearest editable ancestor of this element.
-    func editableAncestor() throws -> Self
+    func editableAncestor() async throws -> Self
     /// The highest editable ancestor of this element.
-    func highestEditableAncestor() throws -> Self
+    func highestEditableAncestor() async throws -> Self
 
     // MARK: - Actions
 
     /// The actions the element supports.
-    func actions() throws -> [NSAccessibility.Action]
+    func actions() async throws -> [NSAccessibility.Action]
     /// A localized description of the specified action.
-    func description(action: NSAccessibility.Action) throws -> String
+    func description(action: NSAccessibility.Action) async throws -> String
     /// Perform the specified action.
-    func perform(action: NSAccessibility.Action) throws
+    func perform(action: NSAccessibility.Action) async throws
 
     // MARK: - Text
 
     /// Placeholder text shown when the control has no value.
-    func placeholderValue() throws -> String
+    func placeholderValue() async throws -> String
 
     // MARK: - Text (Integer Indexed)
 
     /// The line number of the specified character.
-    func line(forIndex index: Int) throws -> Int
+    func line(forIndex index: Int) async throws -> Int
     /// The range of characters corresponding to the specified line number.
-    func range(forLine line: Int) throws -> Range<Int>
+    func range(forLine line: Int) async throws -> Range<Int>
     /// The full range of characters, including the specified character, which compose a single glyph.
-    func range(forIndex index: Int) throws -> Range<Int>
+    func range(forIndex index: Int) async throws -> Range<Int>
     /// The range of characters composing the glyph at the specified point.
-    func range(forPosition position: Int) throws -> Range<Int>
+    func range(forPosition position: Int) async throws -> Range<Int>
     /// The string specified by the range.
-    func string(for range: Range<Int>) throws -> String
+    func string(for range: Range<Int>) async throws -> String
     /// The rectangle enclosing the specified range of characters.
     /// If the range crosses a line boundary, the returned rectangle will fully enclose all the lines of characters.
-    func bounds(for range: Range<Int>) throws -> NSRect
+    func bounds(for range: Range<Int>) async throws -> NSRect
     /// The RTF data describing the specified range of characters.
-    func rtf(for range: Range<Int>) throws -> Data
+    func rtf(for range: Range<Int>) async throws -> Data
     /// The attributed string for the specified range. Does not use attributes from AppKit/AttributedString.h.
-    func attributedString(for range: Range<Int>) throws -> NSAttributedString
+    func attributedString(for range: Range<Int>) async throws -> NSAttributedString
     /// The full range of characters, including the specified character, which have the same style.
-    func styleRange(for index: Int) throws -> Range<Int>
+    func styleRange(for index: Int) async throws -> Range<Int>
     /// The line number that contains the insertion point (caret).
-    func insertionPointLineNumber() throws -> Int
+    func insertionPointLineNumber() async throws -> Int
     /// The portion of shared text storage that belongs to this element.
-    func sharedCharacterRange() throws -> Range<Int>
+    func sharedCharacterRange() async throws -> Range<Int>
     /// Text elements that share the same text storage as this element.
-    func sharedTextUIElements() throws -> [Self]
+    func sharedTextUIElements() async throws -> [Self]
     /// The range of characters currently visible in the element.
-    func visibleCharacterRange() throws -> Range<Int>
+    func visibleCharacterRange() async throws -> Range<Int>
     /// Scroll the element so that the specified character range is visible.
-    func setVisibleCharacterRange(_ range: Range<Int>) throws
+    func setVisibleCharacterRange(_ range: Range<Int>) async throws
     /// The total number of characters in the element.
-    func numberOfCharacters() throws -> Int
+    func numberOfCharacters() async throws -> Int
     /// The currently selected text.
-    func selectedText() throws -> String
+    func selectedText() async throws -> String
     /// The range of the currently selected text.
-    func selectedTextRange() throws -> Range<Int>
+    func selectedTextRange() async throws -> Range<Int>
     /// The ranges of all currently selected text.
-    func selectedTextRanges() throws -> [Range<Int>]
+    func selectedTextRanges() async throws -> [Range<Int>]
 
     // MARK: - Text (TextMarker Indexed)
 
     /// The line number of the specified marker.
-    func line(forTextMarker textMarker: TextMarker) throws -> Int
+    func line(forTextMarker textMarker: TextMarker) async throws -> Int
     /// The selected text range as a TextMarkerRange (web area / descendants).
-    func selectedTextMarkerRange() throws -> TextMarkerRange
+    func selectedTextMarkerRange() async throws -> TextMarkerRange
     /// The first position in the web area as a TextMarker.
-    func startTextMarker() throws -> TextMarker
+    func startTextMarker() async throws -> TextMarker
     /// The last position in the web area as a TextMarker.
-    func endTextMarker() throws -> TextMarker
+    func endTextMarker() async throws -> TextMarker
     ///
-    func nextTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    func nextTextMarker(for textMarker: TextMarker) async throws -> TextMarker
     ///
-    func previousTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    func previousTextMarker(for textMarker: TextMarker) async throws -> TextMarker
     ///
-    func nextWordEndTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    func nextWordEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker
     ///
-    func previousWordStartTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    func previousWordStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker
     ///
-    func nextLineEndTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    func nextLineEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker
     ///
-    func previousLineStartTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    func previousLineStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker
     ///
-    func nextSentenceEndTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    func nextSentenceEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker
     ///
-    func previousSentenceStartTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    func previousSentenceStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker
     ///
-    func nextParagraphEndTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    func nextParagraphEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker
     ///
-    func previousParagraphStartTextMarker(for textMarker: TextMarker) throws -> TextMarker
+    func previousParagraphStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker
     /// The TextMarkerRange of the line containing the given TextMarker.
-    func lineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    func lineTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange
     ///
-    func leftWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    func leftWordTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange
     ///
-    func rightWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    func rightWordTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange
     ///
-    func leftLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    func leftLineTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange
     ///
-    func rightLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    func rightLineTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange
     ///
-    func sentenceTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    func sentenceTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange
     ///
-    func paragraphTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    func paragraphTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange
     ///
-    func styleTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange
+    func styleTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange
     /// The Int line number for a given TextMarker.
-    func lineNumber(for textMarker: TextMarker) throws -> Int
+    func lineNumber(for textMarker: TextMarker) async throws -> Int
     /// The Int character index for a given TextMarker.
-    func index(for textMarker: TextMarker) throws -> Int
+    func index(for textMarker: TextMarker) async throws -> Int
     /// The element at the position of a given TextMarker.
-    func element(for textMarker: TextMarker) throws -> Self
+    func element(for textMarker: TextMarker) async throws -> Self
     ///
-    func string(for textMarkerRange: TextMarkerRange) throws -> String
+    func string(for textMarkerRange: TextMarkerRange) async throws -> String
     ///
-    func attributedString(for textMarkerRange: TextMarkerRange) throws -> NSAttributedString
+    func attributedString(for textMarkerRange: TextMarkerRange) async throws -> NSAttributedString
     ///
-    func bounds(for textMarkerRange: TextMarkerRange) throws -> NSRect
+    func bounds(for textMarkerRange: TextMarkerRange) async throws -> NSRect
     ///
-    func length(for textMarkerRange: TextMarkerRange) throws -> Int
+    func length(for textMarkerRange: TextMarkerRange) async throws -> Int
     /// The TextMarker for the given character index.
-    func textMarker(forIndex index: Int) throws -> TextMarker
+    func textMarker(forIndex index: Int) async throws -> TextMarker
     /// The TextMarkerRange for the given line number.
-    func textMarkerRange(forLine line: Int) throws -> TextMarkerRange
+    func textMarkerRange(forLine line: Int) async throws -> TextMarkerRange
     /// The TextMarker at the given screen position.
-    func textMarker(forPosition position: CGPoint) throws -> TextMarker
+    func textMarker(forPosition position: CGPoint) async throws -> TextMarker
     /// The TextMarkerRange for the start of the element intersecting the given rect.
-    func startTextMarker(forBounds bounds: NSRect) throws -> TextMarker
+    func startTextMarker(forBounds bounds: NSRect) async throws -> TextMarker
     /// The TextMarkerRange for the end of the element intersecting the given rect.
-    func endTextMarker(forBounds bounds: NSRect) throws -> TextMarker
+    func endTextMarker(forBounds bounds: NSRect) async throws -> TextMarker
     /// The TextMarkerRange covering the full extent of the given element.
-    func textMarkerRange(for element: Self) throws -> TextMarkerRange
+    func textMarkerRange(for element: Self) async throws -> TextMarkerRange
     /// TextMarkerRange from an unordered pair of TextMarkers.
-    func textMarkerRange(forUnordered textMarkers: [TextMarker]) throws -> TextMarkerRange
+    func textMarkerRange(forUnordered textMarkers: [TextMarker]) async throws -> TextMarkerRange
     /// TextMarkerRange from an ordered [start, end] pair of TextMarkers.
-    func textMarkerRange(forOrdered textMarkers: [TextMarker]) throws -> TextMarkerRange
+    func textMarkerRange(forOrdered textMarkers: [TextMarker]) async throws -> TextMarkerRange
 
     // MARK: - Text marker validation
 
     ///
-    func isNullTextMarker(_ textMarker: TextMarker) throws -> Bool
+    func isNullTextMarker(_ textMarker: TextMarker) async throws -> Bool
     ///
-    func isValidTextMarker(_ textMarker: TextMarker) throws -> Bool
+    func isValidTextMarker(_ textMarker: TextMarker) async throws -> Bool
 
     // MARK: - Table/Outline/Grid/List/Collection
 
@@ -241,608 +241,582 @@ public protocol Element: Sendable, CustomDebugStringConvertible {
     func cell(
         column: Int,
         row: Int
-    ) throws -> Self
+    ) async throws -> Self
     /// The rows of a table or outline.
-    func rows() throws -> [Self]
+    func rows() async throws -> [Self]
     /// Lazy view of the rows a table or outline
-    func rowsView() throws -> ArrayAttributeView<Self>
+    func rowsView() async throws -> ArrayAttributeView<Self>
     /// The columns of a table.
-    func columns() throws -> [Self]
+    func columns() async throws -> [Self]
     /// Lazy view of the columns of a table.
-    func columnsView() throws -> ArrayAttributeView<Self>
+    func columnsView() async throws -> ArrayAttributeView<Self>
     /// The rows that are currently selected.
-    func selectedRows() throws -> [Self]
+    func selectedRows() async throws -> [Self]
     /// Lazy view of the
-    func selectedRowsView() throws -> ArrayAttributeView<Self>
+    func selectedRowsView() async throws -> ArrayAttributeView<Self>
     /// The columns that are currently selected.
-    func selectedColumns() throws -> [Self]
+    func selectedColumns() async throws -> [Self]
     /// Lazy view of the columns that are currently selected.
-    func selectedColumnsView() throws -> ArrayAttributeView<Self>
+    func selectedColumnsView() async throws -> ArrayAttributeView<Self>
     /// The cells that are currently selected.
-    func selectedCells() throws -> [Self]
+    func selectedCells() async throws -> [Self]
     /// Lazy view of the cells that are currently selected.
-    func selectedCellsView() throws -> ArrayAttributeView<Self>
+    func selectedCellsView() async throws -> ArrayAttributeView<Self>
     /// The visible rows of a table or outline.
-    func visibleRows() throws -> [Self]
+    func visibleRows() async throws -> [Self]
     /// Lazy view of the visible rows of a table or outline.
-    func visibleRowsView() throws -> ArrayAttributeView<Self>
+    func visibleRowsView() async throws -> ArrayAttributeView<Self>
     /// The visible columns of a table.
-    func visibleColumns() throws -> [Self]
+    func visibleColumns() async throws -> [Self]
     /// Lazy view of the visible columns of a table.
-    func visibleColumnsView() throws -> ArrayAttributeView<Self>
+    func visibleColumnsView() async throws -> ArrayAttributeView<Self>
     /// The visible cells of a cell-based table.
-    func visibleCells() throws -> [Self]
+    func visibleCells() async throws -> [Self]
     /// Lazy view of the visible cells of a cell-based table.
-    func visibleCellsView() throws -> ArrayAttributeView<Self>
+    func visibleCellsView() async throws -> ArrayAttributeView<Self>
     /// The row header elements of a cell-based table.
-    func rowHeaderUIElements() throws -> [Self]
+    func rowHeaderUIElements() async throws -> [Self]
     /// Lazy view of the row header elements of a cell-based table.
-    func rowHeaderUIElementsView() throws -> ArrayAttributeView<Self>
+    func rowHeaderUIElementsView() async throws -> ArrayAttributeView<Self>
     /// The column header elements of a cell-based table.
-    func columnHeaderUIElements() throws -> [Self]
+    func columnHeaderUIElements() async throws -> [Self]
     /// Lazy view of the column header elements of a cell-based table.
-    func columnHeaderUIElementsView() throws -> ArrayAttributeView<Self>
+    func columnHeaderUIElementsView() async throws -> ArrayAttributeView<Self>
     /// The column title elements of a table.
-    func columnTitles() throws -> [Self]
+    func columnTitles() async throws -> [Self]
     /// Lazy view of the column title elements of a table.
-    func columnTitlesView() throws -> ArrayAttributeView<Self>
+    func columnTitlesView() async throws -> ArrayAttributeView<Self>
     /// The sort direction of a column.
-    func sortDirection() throws -> String
+    func sortDirection() async throws -> String
     /// The number of rows in the table.
-    func rowCount() throws -> Int
+    func rowCount() async throws -> Int
     /// The number of columns in the table.
-    func columnCount() throws -> Int
+    func columnCount() async throws -> Int
     /// Whether the table is ordered by row rather than column.
-    func isOrderedByRow() throws -> Bool
+    func isOrderedByRow() async throws -> Bool
     /// The row location and span of a cell, as an index range.
-    func rowIndexRange() throws -> Range<Int>
+    func rowIndexRange() async throws -> Range<Int>
     /// The column location and span of a cell, as an index range.
-    func columnIndexRange() throws -> Range<Int>
+    func columnIndexRange() async throws -> Range<Int>
 
     // MARK: - Layout
 
     /// The on-screen rectangle of the element, in screen coordinates.
-    func frame() throws -> NSRect
+    func frame() async throws -> NSRect
     /// Set the element's on-screen position.
-    func setPosition(_ position: CGPoint) throws
+    func setPosition(_ position: CGPoint) async throws
 
     // MARK: - Linked Elements
 
     /// UI elements linked to this element.
-    func linkedUIElements() throws -> [Self]
+    func linkedUIElements() async throws -> [Self]
     /// UI elements for which this element serves as a title.
-    func servesAsTitleForUIElements() throws -> [Self]
+    func servesAsTitleForUIElements() async throws -> [Self]
 
     // MARK: - Slider
 
     /// The minimum value the element can take.
-    func minValue() throws -> Any
+    func minValue() async throws -> Any
     /// The maximum value the element can take.
-    func maxValue() throws -> Any
+    func maxValue() async throws -> Any
     /// The warning threshold value of a level indicator.
-    func warningValue() throws -> Any
+    func warningValue() async throws -> Any
     /// The critical threshold value of a level indicator.
-    func criticalValue() throws -> Any
+    func criticalValue() async throws -> Any
     /// The set of discrete values a slider allows.
-    func allowedValues() throws -> [Double]
+    func allowedValues() async throws -> [Double]
     /// The label UI elements associated with a slider.
-    func labelUIElements() throws -> [Self]
+    func labelUIElements() async throws -> [Self]
     /// The value of a label UI element on a slider.
-    func labelValue() throws -> Double
+    func labelValue() async throws -> Double
 
     // MARK: - Window
 
     /// Whether this is the application's main window.
-    func isMain() throws -> Bool
+    func isMain() async throws -> Bool
     /// Whether the window is minimized.
-    func isMinimized() throws -> Bool
+    func isMinimized() async throws -> Bool
     /// Whether the window is modal.
-    func isModal() throws -> Bool
+    func isModal() async throws -> Bool
     /// The close button of the window.
-    func closeButton() throws -> Self
+    func closeButton() async throws -> Self
     /// The zoom button of the window.
-    func zoomButton() throws -> Self
+    func zoomButton() async throws -> Self
     /// The minimize button of the window.
-    func minimizeButton() throws -> Self
+    func minimizeButton() async throws -> Self
     /// The toolbar button of the window.
-    func toolbarButton() throws -> Self
+    func toolbarButton() async throws -> Self
     /// The full-screen button of the window.
-    func fullScreenButton() throws -> Self
+    func fullScreenButton() async throws -> Self
     /// The default button of the window.
-    func defaultButton() throws -> Self
+    func defaultButton() async throws -> Self
     /// The cancel button of the window.
-    func cancelButton() throws -> Self
+    func cancelButton() async throws -> Self
     /// The proxy icon element in the title bar.
-    func proxy() throws -> Self
+    func proxy() async throws -> Self
     /// The grow area (resize handle) of the window.
-    func growArea() throws -> Self
+    func growArea() async throws -> Self
 
     // MARK: - Container / scroll UI
 
     /// The header element (e.g. column header in a table).
-    func header() throws -> Self
+    func header() async throws -> Self
     /// The tab elements of a tab group.
-    func tabs() throws -> [Self]
+    func tabs() async throws -> [Self]
     /// The splitter elements of a split view.
-    func splitters() throws -> [Self]
+    func splitters() async throws -> [Self]
     /// The horizontal scroll bar.
-    func horizontalScrollBar() throws -> Self
+    func horizontalScrollBar() async throws -> Self
     /// The vertical scroll bar.
-    func verticalScrollBar() throws -> Self
+    func verticalScrollBar() async throws -> Self
     /// The overflow button (e.g. of a toolbar).
-    func overflowButton() throws -> Self
+    func overflowButton() async throws -> Self
     /// The increment button of a stepper or scroll bar.
-    func incrementButton() throws -> Self
+    func incrementButton() async throws -> Self
     /// The decrement button of a stepper or scroll bar.
-    func decrementButton() throws -> Self
+    func decrementButton() async throws -> Self
     /// The preceding sibling content elements.
-    func previousContents() throws -> [Self]
+    func previousContents() async throws -> [Self]
     /// The following sibling content elements.
-    func nextContents() throws -> [Self]
+    func nextContents() async throws -> [Self]
     /// The menu currently shown by this element.
-    func shownMenu() throws -> Self
+    func shownMenu() async throws -> Self
     /// The search button of a search field.
-    func searchButton() throws -> Self
+    func searchButton() async throws -> Self
     /// The search menu of a search field.
-    func searchMenu() throws -> Self
+    func searchMenu() async throws -> Self
     /// The clear button of a search field.
-    func clearButton() throws -> Self
+    func clearButton() async throws -> Self
 
     // MARK: - Outline / tree
 
     /// Whether the outline row is currently disclosing its children.
-    func isDisclosing() throws -> Bool
+    func isDisclosing() async throws -> Bool
     /// The rows disclosed by this outline row.
-    func disclosedRows() throws -> [Self]
+    func disclosedRows() async throws -> [Self]
     /// The outline row that discloses this row.
-    func disclosedByRow() throws -> Self
+    func disclosedByRow() async throws -> Self
     /// The indentation level of this outline row.
-    func disclosureLevel() throws -> Int
+    func disclosureLevel() async throws -> Int
 
     // MARK: - Misc
 
     /// Application-defined identifier string.
-    func identifier() throws -> String
+    func identifier() async throws -> String
     /// The URL associated with the element.
-    func url() throws -> URL
+    func url() async throws -> URL
     /// The URL of the open document, as a string.
-    func document() throws -> String
+    func document() async throws -> String
     /// The filename associated with the element.
-    func filename() throws -> String
+    func filename() async throws -> String
     /// The orientation of the element.
-    func orientation() throws -> String
+    func orientation() async throws -> String
     /// The main child elements of the element.
-    func contents() throws -> [Self]
+    func contents() async throws -> [Self]
     /// Elements that share keyboard focus with this element.
-    func sharedFocusElements() throws -> [Self]
+    func sharedFocusElements() async throws -> [Self]
     /// Whether the element is expanded (e.g. a disclosure triangle or combo box).
-    func isExpanded() throws -> Bool
+    func isExpanded() async throws -> Bool
     /// Whether the element has unsaved changes.
-    func isEdited() throws -> Bool
+    func isEdited() async throws -> Bool
     /// Whether a form field is required to have content.
-    func isRequired() throws -> Bool
+    func isRequired() async throws -> Bool
     /// Whether the element contains protected (non-readable) content.
-    func containsProtectedContent() throws -> Bool
+    func containsProtectedContent() async throws -> Bool
     /// The point that activates the element, in screen coordinates.
-    func activationPoint() throws -> CGPoint
+    func activationPoint() async throws -> CGPoint
 
     // MARK: - Web
 
     /// Whether the web area has finished loading.
-    func isLoaded() throws -> Bool
+    func isLoaded() async throws -> Bool
     /// Loading progress of the web area (0.0–1.0).
-    func loadingProgress() throws -> Double
+    func loadingProgress() async throws -> Double
     /// Number of layout passes the web area has completed.
-    func layoutCount() throws -> Int
+    func layoutCount() async throws -> Int
     /// Whether keyboard events should be dispatched to the DOM rather than the AT.
-    func preventKeyboardDOMEventDispatch() throws -> Bool
+    func preventKeyboardDOMEventDispatch() async throws -> Bool
 
     // MARK: - MathML
 
-    func mathBase() throws -> Self
-    func mathFencedOpen() throws -> String
-    func mathFencedClose() throws -> String
-    func mathFractionNumerator() throws -> Self
-    func mathFractionDenominator() throws -> Self
-    func mathLineThickness() throws -> Double
-    func mathOver() throws -> Self
-    func mathUnder() throws -> Self
-    func mathPostscripts() throws -> [Self]
-    func mathPrescripts() throws -> [Self]
-    func mathRootIndex() throws -> Self
-    func mathRootRadicand() throws -> Self
-    func mathSubscript() throws -> Self
-    func mathSuperscript() throws -> Self
+    func mathBase() async throws -> Self
+    func mathFencedOpen() async throws -> String
+    func mathFencedClose() async throws -> String
+    func mathFractionNumerator() async throws -> Self
+    func mathFractionDenominator() async throws -> Self
+    func mathLineThickness() async throws -> Double
+    func mathOver() async throws -> Self
+    func mathUnder() async throws -> Self
+    func mathPostscripts() async throws -> [Self]
+    func mathPrescripts() async throws -> [Self]
+    func mathRootIndex() async throws -> Self
+    func mathRootRadicand() async throws -> Self
+    func mathSubscript() async throws -> Self
+    func mathSuperscript() async throws -> Self
 }
 
 extension Element {
     // MARK: - General
-    
-    public func description() throws -> String {
+
+    public func description() async throws -> String {
         throw ElementError.noValue
     }
-    public func help() throws -> String {
+    public func help() async throws -> String {
         throw ElementError.noValue
     }
-    public func isEnabled() throws -> Bool {
+    public func isEnabled() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func isFocused() throws -> Bool {
+    public func isFocused() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func isSelected() throws -> Bool {
+    public func isSelected() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func valueDescription() throws -> String {
+    public func valueDescription() async throws -> String {
         throw ElementError.noValue
     }
-    
+
     // MARK: - Application Attributes
-    
-    public func isFrontmost() throws -> Bool {
+
+    public func isFrontmost() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func isHidden() throws -> Bool {
+    public func isHidden() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func menuBar() throws -> Self {
+    public func menuBar() async throws -> Self {
         throw ElementError.noValue
     }
-    public func extrasMenuBar() throws -> Self {
+    public func extrasMenuBar() async throws -> Self {
         throw ElementError.noValue
     }
-    
+
     // MARK: - Hierarchy
-    
-    public func children() throws -> [Self] {
+
+    public func children() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func childrenView() throws -> ArrayAttributeView<Self> {
+    public func childrenInNavigationOrder() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func childrenInNavigationOrder() throws -> [Self] {
+    public func visibleChildren() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func childrenInNavigationOrderView() throws -> ArrayAttributeView<Self> {
+    public func selectedChildren() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func visibleChildren() throws -> [Self] {
+    public func window() async throws -> Self {
         throw ElementError.noValue
     }
-    public func visibleChildrenView() throws -> ArrayAttributeView<Self> {
+    public func topLevelUIElement() async throws -> Self {
         throw ElementError.noValue
     }
-    public func selectedChildren() throws -> [Self] {
-        throw ElementError.noValue
-    }
-    public func selectedChildrenView() throws -> ArrayAttributeView<Self> {
-        throw ElementError.noValue
-    }
-    public func window() throws -> Self {
-        throw ElementError.noValue
-    }
-    public func topLevelUIElement() throws -> Self {
-        throw ElementError.noValue
-    }
-    public func index() throws -> Int {
+    public func index() async throws -> Int {
         throw ElementError.noValue
     }
 
     // MARK: - Text
 
-    public func placeholderValue() throws -> String {
+    public func placeholderValue() async throws -> String {
         throw ElementError.noValue
     }
 
     // MARK: - Text (Integer Indexed)
-    
-    func line(forIndex index: Int) throws -> Int {
+
+    func line(forIndex index: Int) async throws -> Int {
         throw ElementError.noValue
     }
-    func range(forLine line: Int) throws -> Range<Int> {
+    func range(forLine line: Int) async throws -> Range<Int> {
         throw ElementError.noValue
     }
-    func range(forIndex index: Int) throws -> Range<Int> {
+    func range(forIndex index: Int) async throws -> Range<Int> {
         throw ElementError.noValue
     }
-    func range(forPosition position: Int) throws -> Range<Int> {
+    func range(forPosition position: Int) async throws -> Range<Int> {
         throw ElementError.noValue
     }
-    func string(for range: Range<Int>) throws -> String {
+    func string(for range: Range<Int>) async throws -> String {
         throw ElementError.noValue
     }
-    func bounds(for range: Range<Int>) throws -> NSRect {
+    func bounds(for range: Range<Int>) async throws -> NSRect {
         throw ElementError.noValue
     }
-    func rtf(for range: Range<Int>) throws -> Data {
+    func rtf(for range: Range<Int>) async throws -> Data {
         throw ElementError.noValue
     }
-    func attributedString(for range: Range<Int>) throws -> NSAttributedString {
+    func attributedString(for range: Range<Int>) async throws -> NSAttributedString {
         throw ElementError.noValue
     }
-    func styleRange(for index: Int) throws -> Range<Int> {
+    func styleRange(for index: Int) async throws -> Range<Int> {
         throw ElementError.noValue
     }
-    func insertionPointLineNumber() throws -> Int {
+    func insertionPointLineNumber() async throws -> Int {
         throw ElementError.noValue
     }
-    func sharedCharacterRange() throws -> Range<Int> {
+    func sharedCharacterRange() async throws -> Range<Int> {
         throw ElementError.noValue
     }
-    func sharedTextUIElements() throws -> [Self] {
+    func sharedTextUIElements() async throws -> [Self] {
         throw ElementError.noValue
     }
-    func visibleCharacterRange() throws -> Range<Int> {
+    func visibleCharacterRange() async throws -> Range<Int> {
         throw ElementError.noValue
     }
-    func setVisibleCharacterRange(_ range: Range<Int>) throws {
+    func setVisibleCharacterRange(_ range: Range<Int>) async throws {
         throw ElementError.noValue
     }
-    func numberOfCharacters() throws -> Int {
+    func numberOfCharacters() async throws -> Int {
         throw ElementError.noValue
     }
-    func selectedText() throws -> String {
+    func selectedText() async throws -> String {
         throw ElementError.noValue
     }
-    func selectedTextRange() throws -> Range<Int> {
+    func selectedTextRange() async throws -> Range<Int> {
         throw ElementError.noValue
     }
-    func selectedTextRanges() throws -> [Range<Int>] {
+    func selectedTextRanges() async throws -> [Range<Int>] {
         throw ElementError.noValue
     }
 
     // MARK: - Text (TextMarker Indexed)
 
     /// The line number of the specified marker.
-    func line(forTextMarker textMarker: TextMarker) throws -> Int {
+    func line(forTextMarker textMarker: TextMarker) async throws -> Int {
         throw ElementError.noValue
     }
 
     // MARK: - Table/Outline/Grid/List/Collection
 
-    public func visibleRows() throws -> [Self] {
+    public func visibleRows() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func visibleRowsView() throws -> ArrayAttributeView<Self> {
+    public func visibleRowsView() async throws -> ArrayAttributeView<Self> {
         throw ElementError.noValue
     }
-    public func visibleColumns() throws -> [Self] {
+    public func visibleColumns() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func visibleColumnsView() throws -> ArrayAttributeView<Self> {
+    public func visibleColumnsView() async throws -> ArrayAttributeView<Self> {
         throw ElementError.noValue
     }
-    public func visibleCells() throws -> [Self] {
+    public func visibleCells() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func visibleCellsView() throws -> ArrayAttributeView<Self> {
+    public func visibleCellsView() async throws -> ArrayAttributeView<Self> {
         throw ElementError.noValue
     }
-    public func rowHeaderUIElements() throws -> [Self] {
+    public func rowHeaderUIElements() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func rowHeaderUIElementsView() throws -> ArrayAttributeView<Self> {
+    public func rowHeaderUIElementsView() async throws -> ArrayAttributeView<Self> {
         throw ElementError.noValue
     }
-    public func columnHeaderUIElements() throws -> [Self] {
+    public func columnHeaderUIElements() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func columnHeaderUIElementsView() throws -> ArrayAttributeView<Self> {
+    public func columnHeaderUIElementsView() async throws -> ArrayAttributeView<Self> {
         throw ElementError.noValue
     }
-    public func columnTitles() throws -> [Self] {
+    public func columnTitles() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func columnTitlesView() throws -> ArrayAttributeView<Self> {
+    public func columnTitlesView() async throws -> ArrayAttributeView<Self> {
         throw ElementError.noValue
     }
-    public func sortDirection() throws -> String {
+    public func sortDirection() async throws -> String {
         throw ElementError.noValue
     }
-    public func rowCount() throws -> Int {
+    public func rowCount() async throws -> Int {
         throw ElementError.noValue
     }
-    public func columnCount() throws -> Int {
+    public func columnCount() async throws -> Int {
         throw ElementError.noValue
     }
-    public func isOrderedByRow() throws -> Bool {
+    public func isOrderedByRow() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func rowIndexRange() throws -> Range<Int> {
+    public func rowIndexRange() async throws -> Range<Int> {
         throw ElementError.noValue
     }
-    public func columnIndexRange() throws -> Range<Int> {
+    public func columnIndexRange() async throws -> Range<Int> {
         throw ElementError.noValue
     }
 
     // MARK: - Linked Elements
 
-    public func linkedUIElements() throws -> [Self] {
+    public func linkedUIElements() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func servesAsTitleForUIElements() throws -> [Self] {
+    public func servesAsTitleForUIElements() async throws -> [Self] {
         throw ElementError.noValue
     }
 
     // MARK: - Slider
 
-    public func minValue() throws -> Any {
+    public func minValue() async throws -> Any {
         throw ElementError.noValue
     }
-    public func maxValue() throws -> Any {
+    public func maxValue() async throws -> Any {
         throw ElementError.noValue
     }
-    public func warningValue() throws -> Any {
+    public func warningValue() async throws -> Any {
         throw ElementError.noValue
     }
-    public func criticalValue() throws -> Any {
+    public func criticalValue() async throws -> Any {
         throw ElementError.noValue
     }
-    public func allowedValues() throws -> [Double] {
+    public func allowedValues() async throws -> [Double] {
         throw ElementError.noValue
     }
-    public func labelUIElements() throws -> [Self] {
+    public func labelUIElements() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func labelValue() throws -> Double {
+    public func labelValue() async throws -> Double {
         throw ElementError.noValue
     }
 
     // MARK: - Window
 
-    public func isMain() throws -> Bool {
+    public func isMain() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func isMinimized() throws -> Bool {
+    public func isMinimized() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func isModal() throws -> Bool {
+    public func isModal() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func closeButton() throws -> Self {
+    public func closeButton() async throws -> Self {
         throw ElementError.noValue
     }
-    public func zoomButton() throws -> Self {
+    public func zoomButton() async throws -> Self {
         throw ElementError.noValue
     }
-    public func minimizeButton() throws -> Self {
+    public func minimizeButton() async throws -> Self {
         throw ElementError.noValue
     }
-    public func toolbarButton() throws -> Self {
+    public func toolbarButton() async throws -> Self {
         throw ElementError.noValue
     }
-    public func fullScreenButton() throws -> Self {
+    public func fullScreenButton() async throws -> Self {
         throw ElementError.noValue
     }
-    public func defaultButton() throws -> Self {
+    public func defaultButton() async throws -> Self {
         throw ElementError.noValue
     }
-    public func cancelButton() throws -> Self {
+    public func cancelButton() async throws -> Self {
         throw ElementError.noValue
     }
-    public func proxy() throws -> Self {
+    public func proxy() async throws -> Self {
         throw ElementError.noValue
     }
-    public func growArea() throws -> Self {
+    public func growArea() async throws -> Self {
         throw ElementError.noValue
     }
 
     // MARK: - Container / scroll UI
 
-    public func header() throws -> Self {
+    public func header() async throws -> Self {
         throw ElementError.noValue
     }
-    public func tabs() throws -> [Self] {
+    public func tabs() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func splitters() throws -> [Self] {
+    public func splitters() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func horizontalScrollBar() throws -> Self {
+    public func horizontalScrollBar() async throws -> Self {
         throw ElementError.noValue
     }
-    public func verticalScrollBar() throws -> Self {
+    public func verticalScrollBar() async throws -> Self {
         throw ElementError.noValue
     }
-    public func overflowButton() throws -> Self {
+    public func overflowButton() async throws -> Self {
         throw ElementError.noValue
     }
-    public func incrementButton() throws -> Self {
+    public func incrementButton() async throws -> Self {
         throw ElementError.noValue
     }
-    public func decrementButton() throws -> Self {
+    public func decrementButton() async throws -> Self {
         throw ElementError.noValue
     }
-    public func previousContents() throws -> [Self] {
+    public func previousContents() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func nextContents() throws -> [Self] {
+    public func nextContents() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func shownMenu() throws -> Self {
+    public func shownMenu() async throws -> Self {
         throw ElementError.noValue
     }
-    public func searchButton() throws -> Self {
+    public func searchButton() async throws -> Self {
         throw ElementError.noValue
     }
-    public func searchMenu() throws -> Self {
+    public func searchMenu() async throws -> Self {
         throw ElementError.noValue
     }
-    public func clearButton() throws -> Self {
+    public func clearButton() async throws -> Self {
         throw ElementError.noValue
     }
 
     // MARK: - Outline / tree
 
-    public func isDisclosing() throws -> Bool {
+    public func isDisclosing() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func disclosedRows() throws -> [Self] {
+    public func disclosedRows() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func disclosedByRow() throws -> Self {
+    public func disclosedByRow() async throws -> Self {
         throw ElementError.noValue
     }
-    public func disclosureLevel() throws -> Int {
+    public func disclosureLevel() async throws -> Int {
         throw ElementError.noValue
     }
 
     // MARK: - Misc
 
-    public func identifier() throws -> String {
+    public func identifier() async throws -> String {
         throw ElementError.noValue
     }
-    public func url() throws -> URL {
+    public func url() async throws -> URL {
         throw ElementError.noValue
     }
-    public func document() throws -> String {
+    public func document() async throws -> String {
         throw ElementError.noValue
     }
-    public func filename() throws -> String {
+    public func filename() async throws -> String {
         throw ElementError.noValue
     }
-    public func orientation() throws -> String {
+    public func orientation() async throws -> String {
         throw ElementError.noValue
     }
-    public func contents() throws -> [Self] {
+    public func contents() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func sharedFocusElements() throws -> [Self] {
+    public func sharedFocusElements() async throws -> [Self] {
         throw ElementError.noValue
     }
-    public func isExpanded() throws -> Bool {
+    public func isExpanded() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func isEdited() throws -> Bool {
+    public func isEdited() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func isRequired() throws -> Bool {
+    public func isRequired() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func containsProtectedContent() throws -> Bool {
+    public func containsProtectedContent() async throws -> Bool {
         throw ElementError.noValue
     }
-    public func activationPoint() throws -> CGPoint {
+    public func activationPoint() async throws -> CGPoint {
         throw ElementError.noValue
     }
 }
 
 extension Element {
     public var debugDescription: String {
-        var description = [String]()
-        description.reserveCapacity(4)
-        func append(_ prefix: String,
-                    _ attribute: () throws -> Any) {
-            guard let value = try? attribute() else {
-                return
-            }
-            description.append(prefix)
-            description.append(String(describing: value))
-        }
-        append("Role:", self.role) // 1
-        append("Subrole:", self.subrole) // 2
-        append("Title:", self.title) // 3
-        append("Value:", self.value) // 4
-        return "<Element \(description.joined(separator: " "))>"
+        "<Element>"
     }
 }

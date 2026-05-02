@@ -18,224 +18,224 @@ public struct AnyElement: Element {
 
     // MARK: - Private Closures
 
-    private let _processIdentifier: @Sendable () throws -> pid_t
+    private let _processIdentifier: @Sendable () async throws -> pid_t
 
     // General
-    private let _role: @Sendable () throws -> NSAccessibility.Role
-    private let _roleDescription: @Sendable () throws -> String
-    private let _subrole: @Sendable () throws -> NSAccessibility.Subrole
-    private let _value: @Sendable () throws -> Any
-    private let _valueDescription: @Sendable () throws -> String
-    private let _title: @Sendable () throws -> String
-    private let _titleUIElement: @Sendable () throws -> AnyElement
-    private let _description: @Sendable () throws -> String
-    private let _help: @Sendable () throws -> String
-    private let _isEnabled: @Sendable () throws -> Bool
-    private let _isFocused: @Sendable () throws -> Bool
-    private let _isSelected: @Sendable () throws -> Bool
+    private let _role: @Sendable () async throws -> NSAccessibility.Role
+    private let _roleDescription: @Sendable () async throws -> String
+    private let _subrole: @Sendable () async throws -> NSAccessibility.Subrole
+    private let _value: @Sendable () async throws -> Any
+    private let _valueDescription: @Sendable () async throws -> String
+    private let _title: @Sendable () async throws -> String
+    private let _titleUIElement: @Sendable () async throws -> AnyElement
+    private let _description: @Sendable () async throws -> String
+    private let _help: @Sendable () async throws -> String
+    private let _isEnabled: @Sendable () async throws -> Bool
+    private let _isFocused: @Sendable () async throws -> Bool
+    private let _isSelected: @Sendable () async throws -> Bool
     // Application Attributes
-    private let _windows: @Sendable () throws -> [AnyElement]
-    private let _mainWindow: @Sendable () throws -> AnyElement
-    private let _focusedWindow: @Sendable () throws -> AnyElement
-    private let _focusedUIElement: @Sendable () throws -> AnyElement
-    private let _enhancedUserInterface: @Sendable () throws -> Bool
-    private let _setEnhancedUserInterface: @Sendable (Bool) throws -> Void
-    private let _isFrontmost: @Sendable () throws -> Bool
-    private let _isHidden: @Sendable () throws -> Bool
-    private let _menuBar: @Sendable () throws -> AnyElement
-    private let _extrasMenuBar: @Sendable () throws -> AnyElement
+    private let _windows: @Sendable () async throws -> [AnyElement]
+    private let _mainWindow: @Sendable () async throws -> AnyElement
+    private let _focusedWindow: @Sendable () async throws -> AnyElement
+    private let _focusedUIElement: @Sendable () async throws -> AnyElement
+    private let _enhancedUserInterface: @Sendable () async throws -> Bool
+    private let _setEnhancedUserInterface: @Sendable (Bool) async throws -> Void
+    private let _isFrontmost: @Sendable () async throws -> Bool
+    private let _isHidden: @Sendable () async throws -> Bool
+    private let _menuBar: @Sendable () async throws -> AnyElement
+    private let _extrasMenuBar: @Sendable () async throws -> AnyElement
     // Hierarchy
-    private let _parent: @Sendable () throws -> AnyElement
-    private let _children: @Sendable () throws -> [AnyElement]
+    private let _parent: @Sendable () async throws -> AnyElement
+    private let _children: @Sendable () async throws -> [AnyElement]
     private let _childrenView: @Sendable () -> ArrayAttributeView<AnyElement>
-    private let _childrenInNavigationOrder: @Sendable () throws -> [AnyElement]
+    private let _childrenInNavigationOrder: @Sendable () async throws -> [AnyElement]
     private let _childrenInNavigationOrderView: @Sendable () -> ArrayAttributeView<AnyElement>
-    private let _visibleChildren: @Sendable () throws -> [AnyElement]
+    private let _visibleChildren: @Sendable () async throws -> [AnyElement]
     private let _visibleChildrenView: @Sendable () -> ArrayAttributeView<AnyElement>
-    private let _selectedChildren: @Sendable () throws -> [AnyElement]
+    private let _selectedChildren: @Sendable () async throws -> [AnyElement]
     private let _selectedChildrenView: @Sendable () -> ArrayAttributeView<AnyElement>
-    private let _window: @Sendable () throws -> AnyElement
-    private let _topLevelUIElement: @Sendable () throws -> AnyElement
-    private let _index: @Sendable () throws -> Int
+    private let _window: @Sendable () async throws -> AnyElement
+    private let _topLevelUIElement: @Sendable () async throws -> AnyElement
+    private let _index: @Sendable () async throws -> Int
     // Hierarchy (Web)
-    private let _focusableAncestor: @Sendable () throws -> AnyElement
-    private let _editableAncestor: @Sendable () throws -> AnyElement
-    private let _highestEditableAncestor: @Sendable () throws -> AnyElement
+    private let _focusableAncestor: @Sendable () async throws -> AnyElement
+    private let _editableAncestor: @Sendable () async throws -> AnyElement
+    private let _highestEditableAncestor: @Sendable () async throws -> AnyElement
     // Actions
-    private let _actions: @Sendable () throws -> [NSAccessibility.Action]
-    private let _descriptionAction: @Sendable (NSAccessibility.Action) throws -> String
-    private let _performAction: @Sendable (NSAccessibility.Action) throws -> Void
+    private let _actions: @Sendable () async throws -> [NSAccessibility.Action]
+    private let _descriptionAction: @Sendable (NSAccessibility.Action) async throws -> String
+    private let _performAction: @Sendable (NSAccessibility.Action) async throws -> Void
     // Text
-    private let _placeholderValue: @Sendable () throws -> String
+    private let _placeholderValue: @Sendable () async throws -> String
     // Text (Integer Indexed)
-    private let _lineForIndex: @Sendable (Int) throws -> Int
-    private let _rangeForLine: @Sendable (Int) throws -> Range<Int>
-    private let _rangeForIndex: @Sendable (Int) throws -> Range<Int>
-    private let _rangeForPosition: @Sendable (Int) throws -> Range<Int>
-    private let _stringForRange: @Sendable (Range<Int>) throws -> String
-    private let _boundsForRange: @Sendable (Range<Int>) throws -> NSRect
-    private let _rtfForRange: @Sendable (Range<Int>) throws -> Data
-    private let _attributedStringForRange: @Sendable (Range<Int>) throws -> NSAttributedString
-    private let _styleRangeForIndex: @Sendable (Int) throws -> Range<Int>
-    private let _insertionPointLineNumber: @Sendable () throws -> Int
-    private let _sharedCharacterRange: @Sendable () throws -> Range<Int>
-    private let _sharedTextUIElements: @Sendable () throws -> [AnyElement]
-    private let _visibleCharacterRange: @Sendable () throws -> Range<Int>
-    private let _setVisibleCharacterRange: @Sendable (Range<Int>) throws -> Void
-    private let _numberOfCharacters: @Sendable () throws -> Int
-    private let _selectedText: @Sendable () throws -> String
-    private let _selectedTextRange: @Sendable () throws -> Range<Int>
-    private let _selectedTextRanges: @Sendable () throws -> [Range<Int>]
+    private let _lineForIndex: @Sendable (Int) async throws -> Int
+    private let _rangeForLine: @Sendable (Int) async throws -> Range<Int>
+    private let _rangeForIndex: @Sendable (Int) async throws -> Range<Int>
+    private let _rangeForPosition: @Sendable (Int) async throws -> Range<Int>
+    private let _stringForRange: @Sendable (Range<Int>) async throws -> String
+    private let _boundsForRange: @Sendable (Range<Int>) async throws -> NSRect
+    private let _rtfForRange: @Sendable (Range<Int>) async throws -> Data
+    private let _attributedStringForRange: @Sendable (Range<Int>) async throws -> NSAttributedString
+    private let _styleRangeForIndex: @Sendable (Int) async throws -> Range<Int>
+    private let _insertionPointLineNumber: @Sendable () async throws -> Int
+    private let _sharedCharacterRange: @Sendable () async throws -> Range<Int>
+    private let _sharedTextUIElements: @Sendable () async throws -> [AnyElement]
+    private let _visibleCharacterRange: @Sendable () async throws -> Range<Int>
+    private let _setVisibleCharacterRange: @Sendable (Range<Int>) async throws -> Void
+    private let _numberOfCharacters: @Sendable () async throws -> Int
+    private let _selectedText: @Sendable () async throws -> String
+    private let _selectedTextRange: @Sendable () async throws -> Range<Int>
+    private let _selectedTextRanges: @Sendable () async throws -> [Range<Int>]
     // Text (TextMarker Indexed)
-    private let _lineForTextMarker: @Sendable (TextMarker) throws -> Int
-    private let _selectedTextMarkerRange: @Sendable () throws -> TextMarkerRange
-    private let _startTextMarker: @Sendable () throws -> TextMarker
-    private let _endTextMarker: @Sendable () throws -> TextMarker
-    private let _nextTextMarker: @Sendable (TextMarker) throws -> TextMarker
-    private let _previousTextMarker: @Sendable (TextMarker) throws -> TextMarker
-    private let _nextWordEndTextMarker: @Sendable (TextMarker) throws -> TextMarker
-    private let _previousWordStartTextMarker: @Sendable (TextMarker) throws -> TextMarker
-    private let _nextLineEndTextMarker: @Sendable (TextMarker) throws -> TextMarker
-    private let _previousLineStartTextMarker: @Sendable (TextMarker) throws -> TextMarker
-    private let _nextSentenceEndTextMarker: @Sendable (TextMarker) throws -> TextMarker
-    private let _previousSentenceStartTextMarker: @Sendable (TextMarker) throws -> TextMarker
-    private let _nextParagraphEndTextMarker: @Sendable (TextMarker) throws -> TextMarker
-    private let _previousParagraphStartTextMarker: @Sendable (TextMarker) throws -> TextMarker
-    private let _lineTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
-    private let _leftWordTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
-    private let _rightWordTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
-    private let _leftLineTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
-    private let _rightLineTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
-    private let _sentenceTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
-    private let _paragraphTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
-    private let _styleTextMarkerRange: @Sendable (TextMarker) throws -> TextMarkerRange
-    private let _lineNumberForTextMarker: @Sendable (TextMarker) throws -> Int
-    private let _indexForTextMarker: @Sendable (TextMarker) throws -> Int
-    private let _elementForTextMarker: @Sendable (TextMarker) throws -> AnyElement
-    private let _stringForTextMarkerRange: @Sendable (TextMarkerRange) throws -> String
-    private let _attributedStringForTextMarkerRange: @Sendable (TextMarkerRange) throws -> NSAttributedString
-    private let _boundsForTextMarkerRange: @Sendable (TextMarkerRange) throws -> NSRect
-    private let _lengthForTextMarkerRange: @Sendable (TextMarkerRange) throws -> Int
-    private let _textMarkerForIndex: @Sendable (Int) throws -> TextMarker
-    private let _textMarkerRangeForLine: @Sendable (Int) throws -> TextMarkerRange
-    private let _textMarkerForPosition: @Sendable (CGPoint) throws -> TextMarker
-    private let _startTextMarkerForBounds: @Sendable (NSRect) throws -> TextMarker
-    private let _endTextMarkerForBounds: @Sendable (NSRect) throws -> TextMarker
-    private let _textMarkerRangeForUnordered: @Sendable ([TextMarker]) throws -> TextMarkerRange
-    private let _textMarkerRangeForOrdered: @Sendable ([TextMarker]) throws -> TextMarkerRange
+    private let _lineForTextMarker: @Sendable (TextMarker) async throws -> Int
+    private let _selectedTextMarkerRange: @Sendable () async throws -> TextMarkerRange
+    private let _startTextMarker: @Sendable () async throws -> TextMarker
+    private let _endTextMarker: @Sendable () async throws -> TextMarker
+    private let _nextTextMarker: @Sendable (TextMarker) async throws -> TextMarker
+    private let _previousTextMarker: @Sendable (TextMarker) async throws -> TextMarker
+    private let _nextWordEndTextMarker: @Sendable (TextMarker) async throws -> TextMarker
+    private let _previousWordStartTextMarker: @Sendable (TextMarker) async throws -> TextMarker
+    private let _nextLineEndTextMarker: @Sendable (TextMarker) async throws -> TextMarker
+    private let _previousLineStartTextMarker: @Sendable (TextMarker) async throws -> TextMarker
+    private let _nextSentenceEndTextMarker: @Sendable (TextMarker) async throws -> TextMarker
+    private let _previousSentenceStartTextMarker: @Sendable (TextMarker) async throws -> TextMarker
+    private let _nextParagraphEndTextMarker: @Sendable (TextMarker) async throws -> TextMarker
+    private let _previousParagraphStartTextMarker: @Sendable (TextMarker) async throws -> TextMarker
+    private let _lineTextMarkerRange: @Sendable (TextMarker) async throws -> TextMarkerRange
+    private let _leftWordTextMarkerRange: @Sendable (TextMarker) async throws -> TextMarkerRange
+    private let _rightWordTextMarkerRange: @Sendable (TextMarker) async throws -> TextMarkerRange
+    private let _leftLineTextMarkerRange: @Sendable (TextMarker) async throws -> TextMarkerRange
+    private let _rightLineTextMarkerRange: @Sendable (TextMarker) async throws -> TextMarkerRange
+    private let _sentenceTextMarkerRange: @Sendable (TextMarker) async throws -> TextMarkerRange
+    private let _paragraphTextMarkerRange: @Sendable (TextMarker) async throws -> TextMarkerRange
+    private let _styleTextMarkerRange: @Sendable (TextMarker) async throws -> TextMarkerRange
+    private let _lineNumberForTextMarker: @Sendable (TextMarker) async throws -> Int
+    private let _indexForTextMarker: @Sendable (TextMarker) async throws -> Int
+    private let _elementForTextMarker: @Sendable (TextMarker) async throws -> AnyElement
+    private let _stringForTextMarkerRange: @Sendable (TextMarkerRange) async throws -> String
+    private let _attributedStringForTextMarkerRange: @Sendable (TextMarkerRange) async throws -> NSAttributedString
+    private let _boundsForTextMarkerRange: @Sendable (TextMarkerRange) async throws -> NSRect
+    private let _lengthForTextMarkerRange: @Sendable (TextMarkerRange) async throws -> Int
+    private let _textMarkerForIndex: @Sendable (Int) async throws -> TextMarker
+    private let _textMarkerRangeForLine: @Sendable (Int) async throws -> TextMarkerRange
+    private let _textMarkerForPosition: @Sendable (CGPoint) async throws -> TextMarker
+    private let _startTextMarkerForBounds: @Sendable (NSRect) async throws -> TextMarker
+    private let _endTextMarkerForBounds: @Sendable (NSRect) async throws -> TextMarker
+    private let _textMarkerRangeForUnordered: @Sendable ([TextMarker]) async throws -> TextMarkerRange
+    private let _textMarkerRangeForOrdered: @Sendable ([TextMarker]) async throws -> TextMarkerRange
     // Text marker validation
-    private let _isNullTextMarker: @Sendable (TextMarker) throws -> Bool
-    private let _isValidTextMarker: @Sendable (TextMarker) throws -> Bool
+    private let _isNullTextMarker: @Sendable (TextMarker) async throws -> Bool
+    private let _isValidTextMarker: @Sendable (TextMarker) async throws -> Bool
     // Table/Outline/Grid/List/Collection
-    private let _cellForColumnRow: @Sendable (Int, Int) throws -> AnyElement
-    private let _rows: @Sendable () throws -> [AnyElement]
-    private let _rowsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
-    private let _columns: @Sendable () throws -> [AnyElement]
-    private let _columnsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
-    private let _selectedRows: @Sendable () throws -> [AnyElement]
-    private let _selectedRowsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
-    private let _selectedColumns: @Sendable () throws -> [AnyElement]
-    private let _selectedColumnsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
-    private let _selectedCells: @Sendable () throws -> [AnyElement]
-    private let _selectedCellsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
-    private let _visibleRows: @Sendable () throws -> [AnyElement]
-    private let _visibleRowsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
-    private let _visibleColumns: @Sendable () throws -> [AnyElement]
-    private let _visibleColumnsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
-    private let _visibleCells: @Sendable () throws -> [AnyElement]
-    private let _visibleCellsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
-    private let _rowHeaderUIElements: @Sendable () throws -> [AnyElement]
-    private let _rowHeaderUIElementsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
-    private let _columnHeaderUIElements: @Sendable () throws -> [AnyElement]
-    private let _columnHeaderUIElementsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
-    private let _columnTitles: @Sendable () throws -> [AnyElement]
-    private let _columnTitlesView: @Sendable () throws -> ArrayAttributeView<AnyElement>
-    private let _sortDirection: @Sendable () throws -> String
-    private let _rowCount: @Sendable () throws -> Int
-    private let _columnCount: @Sendable () throws -> Int
-    private let _isOrderedByRow: @Sendable () throws -> Bool
-    private let _rowIndexRange: @Sendable () throws -> Range<Int>
-    private let _columnIndexRange: @Sendable () throws -> Range<Int>
+    private let _cellForColumnRow: @Sendable (Int, Int) async throws -> AnyElement
+    private let _rows: @Sendable () async throws -> [AnyElement]
+    private let _rowsView: @Sendable () async throws -> ArrayAttributeView<AnyElement>
+    private let _columns: @Sendable () async throws -> [AnyElement]
+    private let _columnsView: @Sendable () async throws -> ArrayAttributeView<AnyElement>
+    private let _selectedRows: @Sendable () async throws -> [AnyElement]
+    private let _selectedRowsView: @Sendable () async throws -> ArrayAttributeView<AnyElement>
+    private let _selectedColumns: @Sendable () async throws -> [AnyElement]
+    private let _selectedColumnsView: @Sendable () async throws -> ArrayAttributeView<AnyElement>
+    private let _selectedCells: @Sendable () async throws -> [AnyElement]
+    private let _selectedCellsView: @Sendable () async throws -> ArrayAttributeView<AnyElement>
+    private let _visibleRows: @Sendable () async throws -> [AnyElement]
+    private let _visibleRowsView: @Sendable () async throws -> ArrayAttributeView<AnyElement>
+    private let _visibleColumns: @Sendable () async throws -> [AnyElement]
+    private let _visibleColumnsView: @Sendable () async throws -> ArrayAttributeView<AnyElement>
+    private let _visibleCells: @Sendable () async throws -> [AnyElement]
+    private let _visibleCellsView: @Sendable () async throws -> ArrayAttributeView<AnyElement>
+    private let _rowHeaderUIElements: @Sendable () async throws -> [AnyElement]
+    private let _rowHeaderUIElementsView: @Sendable () async throws -> ArrayAttributeView<AnyElement>
+    private let _columnHeaderUIElements: @Sendable () async throws -> [AnyElement]
+    private let _columnHeaderUIElementsView: @Sendable () async throws -> ArrayAttributeView<AnyElement>
+    private let _columnTitles: @Sendable () async throws -> [AnyElement]
+    private let _columnTitlesView: @Sendable () async throws -> ArrayAttributeView<AnyElement>
+    private let _sortDirection: @Sendable () async throws -> String
+    private let _rowCount: @Sendable () async throws -> Int
+    private let _columnCount: @Sendable () async throws -> Int
+    private let _isOrderedByRow: @Sendable () async throws -> Bool
+    private let _rowIndexRange: @Sendable () async throws -> Range<Int>
+    private let _columnIndexRange: @Sendable () async throws -> Range<Int>
     // Layout
-    private let _frame: @Sendable () throws -> NSRect
-    private let _setPosition: @Sendable (CGPoint) throws -> Void
+    private let _frame: @Sendable () async throws -> NSRect
+    private let _setPosition: @Sendable (CGPoint) async throws -> Void
     // Linked Elements
-    private let _linkedUIElements: @Sendable () throws -> [AnyElement]
-    private let _servesAsTitleForUIElements: @Sendable () throws -> [AnyElement]
+    private let _linkedUIElements: @Sendable () async throws -> [AnyElement]
+    private let _servesAsTitleForUIElements: @Sendable () async throws -> [AnyElement]
     // Slider
-    private let _minValue: @Sendable () throws -> Any
-    private let _maxValue: @Sendable () throws -> Any
-    private let _warningValue: @Sendable () throws -> Any
-    private let _criticalValue: @Sendable () throws -> Any
-    private let _allowedValues: @Sendable () throws -> [Double]
-    private let _labelUIElements: @Sendable () throws -> [AnyElement]
-    private let _labelValue: @Sendable () throws -> Double
+    private let _minValue: @Sendable () async throws -> Any
+    private let _maxValue: @Sendable () async throws -> Any
+    private let _warningValue: @Sendable () async throws -> Any
+    private let _criticalValue: @Sendable () async throws -> Any
+    private let _allowedValues: @Sendable () async throws -> [Double]
+    private let _labelUIElements: @Sendable () async throws -> [AnyElement]
+    private let _labelValue: @Sendable () async throws -> Double
     // Window
-    private let _isMain: @Sendable () throws -> Bool
-    private let _isMinimized: @Sendable () throws -> Bool
-    private let _isModal: @Sendable () throws -> Bool
-    private let _closeButton: @Sendable () throws -> AnyElement
-    private let _zoomButton: @Sendable () throws -> AnyElement
-    private let _minimizeButton: @Sendable () throws -> AnyElement
-    private let _toolbarButton: @Sendable () throws -> AnyElement
-    private let _fullScreenButton: @Sendable () throws -> AnyElement
-    private let _defaultButton: @Sendable () throws -> AnyElement
-    private let _cancelButton: @Sendable () throws -> AnyElement
-    private let _proxy: @Sendable () throws -> AnyElement
-    private let _growArea: @Sendable () throws -> AnyElement
+    private let _isMain: @Sendable () async throws -> Bool
+    private let _isMinimized: @Sendable () async throws -> Bool
+    private let _isModal: @Sendable () async throws -> Bool
+    private let _closeButton: @Sendable () async throws -> AnyElement
+    private let _zoomButton: @Sendable () async throws -> AnyElement
+    private let _minimizeButton: @Sendable () async throws -> AnyElement
+    private let _toolbarButton: @Sendable () async throws -> AnyElement
+    private let _fullScreenButton: @Sendable () async throws -> AnyElement
+    private let _defaultButton: @Sendable () async throws -> AnyElement
+    private let _cancelButton: @Sendable () async throws -> AnyElement
+    private let _proxy: @Sendable () async throws -> AnyElement
+    private let _growArea: @Sendable () async throws -> AnyElement
     // Container / scroll UI
-    private let _header: @Sendable () throws -> AnyElement
-    private let _tabs: @Sendable () throws -> [AnyElement]
-    private let _splitters: @Sendable () throws -> [AnyElement]
-    private let _horizontalScrollBar: @Sendable () throws -> AnyElement
-    private let _verticalScrollBar: @Sendable () throws -> AnyElement
-    private let _overflowButton: @Sendable () throws -> AnyElement
-    private let _incrementButton: @Sendable () throws -> AnyElement
-    private let _decrementButton: @Sendable () throws -> AnyElement
-    private let _previousContents: @Sendable () throws -> [AnyElement]
-    private let _nextContents: @Sendable () throws -> [AnyElement]
-    private let _shownMenu: @Sendable () throws -> AnyElement
-    private let _searchButton: @Sendable () throws -> AnyElement
-    private let _searchMenu: @Sendable () throws -> AnyElement
-    private let _clearButton: @Sendable () throws -> AnyElement
+    private let _header: @Sendable () async throws -> AnyElement
+    private let _tabs: @Sendable () async throws -> [AnyElement]
+    private let _splitters: @Sendable () async throws -> [AnyElement]
+    private let _horizontalScrollBar: @Sendable () async throws -> AnyElement
+    private let _verticalScrollBar: @Sendable () async throws -> AnyElement
+    private let _overflowButton: @Sendable () async throws -> AnyElement
+    private let _incrementButton: @Sendable () async throws -> AnyElement
+    private let _decrementButton: @Sendable () async throws -> AnyElement
+    private let _previousContents: @Sendable () async throws -> [AnyElement]
+    private let _nextContents: @Sendable () async throws -> [AnyElement]
+    private let _shownMenu: @Sendable () async throws -> AnyElement
+    private let _searchButton: @Sendable () async throws -> AnyElement
+    private let _searchMenu: @Sendable () async throws -> AnyElement
+    private let _clearButton: @Sendable () async throws -> AnyElement
     // Outline / tree
-    private let _isDisclosing: @Sendable () throws -> Bool
-    private let _disclosedRows: @Sendable () throws -> [AnyElement]
-    private let _disclosedByRow: @Sendable () throws -> AnyElement
-    private let _disclosureLevel: @Sendable () throws -> Int
+    private let _isDisclosing: @Sendable () async throws -> Bool
+    private let _disclosedRows: @Sendable () async throws -> [AnyElement]
+    private let _disclosedByRow: @Sendable () async throws -> AnyElement
+    private let _disclosureLevel: @Sendable () async throws -> Int
     // Misc
-    private let _identifier: @Sendable () throws -> String
-    private let _url: @Sendable () throws -> URL
-    private let _document: @Sendable () throws -> String
-    private let _filename: @Sendable () throws -> String
-    private let _orientation: @Sendable () throws -> String
-    private let _contents: @Sendable () throws -> [AnyElement]
-    private let _sharedFocusElements: @Sendable () throws -> [AnyElement]
-    private let _isExpanded: @Sendable () throws -> Bool
-    private let _isEdited: @Sendable () throws -> Bool
-    private let _isRequired: @Sendable () throws -> Bool
-    private let _containsProtectedContent: @Sendable () throws -> Bool
-    private let _activationPoint: @Sendable () throws -> CGPoint
+    private let _identifier: @Sendable () async throws -> String
+    private let _url: @Sendable () async throws -> URL
+    private let _document: @Sendable () async throws -> String
+    private let _filename: @Sendable () async throws -> String
+    private let _orientation: @Sendable () async throws -> String
+    private let _contents: @Sendable () async throws -> [AnyElement]
+    private let _sharedFocusElements: @Sendable () async throws -> [AnyElement]
+    private let _isExpanded: @Sendable () async throws -> Bool
+    private let _isEdited: @Sendable () async throws -> Bool
+    private let _isRequired: @Sendable () async throws -> Bool
+    private let _containsProtectedContent: @Sendable () async throws -> Bool
+    private let _activationPoint: @Sendable () async throws -> CGPoint
     // Web
-    private let _isLoaded: @Sendable () throws -> Bool
-    private let _loadingProgress: @Sendable () throws -> Double
-    private let _layoutCount: @Sendable () throws -> Int
-    private let _preventKeyboardDOMEventDispatch: @Sendable () throws -> Bool
+    private let _isLoaded: @Sendable () async throws -> Bool
+    private let _loadingProgress: @Sendable () async throws -> Double
+    private let _layoutCount: @Sendable () async throws -> Int
+    private let _preventKeyboardDOMEventDispatch: @Sendable () async throws -> Bool
     // MathML
-    private let _mathBase: @Sendable () throws -> AnyElement
-    private let _mathFencedOpen: @Sendable () throws -> String
-    private let _mathFencedClose: @Sendable () throws -> String
-    private let _mathFractionNumerator: @Sendable () throws -> AnyElement
-    private let _mathFractionDenominator: @Sendable () throws -> AnyElement
-    private let _mathLineThickness: @Sendable () throws -> Double
-    private let _mathOver: @Sendable () throws -> AnyElement
-    private let _mathUnder: @Sendable () throws -> AnyElement
-    private let _mathPostscripts: @Sendable () throws -> [AnyElement]
-    private let _mathPrescripts: @Sendable () throws -> [AnyElement]
-    private let _mathRootIndex: @Sendable () throws -> AnyElement
-    private let _mathRootRadicand: @Sendable () throws -> AnyElement
-    private let _mathSubscript: @Sendable () throws -> AnyElement
-    private let _mathSuperscript: @Sendable () throws -> AnyElement
+    private let _mathBase: @Sendable () async throws -> AnyElement
+    private let _mathFencedOpen: @Sendable () async throws -> String
+    private let _mathFencedClose: @Sendable () async throws -> String
+    private let _mathFractionNumerator: @Sendable () async throws -> AnyElement
+    private let _mathFractionDenominator: @Sendable () async throws -> AnyElement
+    private let _mathLineThickness: @Sendable () async throws -> Double
+    private let _mathOver: @Sendable () async throws -> AnyElement
+    private let _mathUnder: @Sendable () async throws -> AnyElement
+    private let _mathPostscripts: @Sendable () async throws -> [AnyElement]
+    private let _mathPrescripts: @Sendable () async throws -> [AnyElement]
+    private let _mathRootIndex: @Sendable () async throws -> AnyElement
+    private let _mathRootRadicand: @Sendable () async throws -> AnyElement
+    private let _mathSubscript: @Sendable () async throws -> AnyElement
+    private let _mathSuperscript: @Sendable () async throws -> AnyElement
 
     // MARK: - Initializer
 
@@ -243,7 +243,7 @@ public struct AnyElement: Element {
         if let alreadyAny = element as? AnyElement {
             self = alreadyAny
         } else {
-            _processIdentifier = { try element.processIdentifier }
+            _processIdentifier = { try await element.processIdentifier }
             // General
             _role = element.role
             _roleDescription = element.roleDescription
@@ -251,23 +251,23 @@ public struct AnyElement: Element {
             _value = element.value
             _valueDescription = element.valueDescription
             _title = element.title
-            _titleUIElement = { AnyElement(element: try element.titleUIElement()) }
+            _titleUIElement = { AnyElement(element: try await element.titleUIElement()) }
             _description = element.description
             _help = element.help
             _isEnabled = element.isEnabled
             _isFocused = element.isFocused
             _isSelected = element.isSelected
             // Application Attributes
-            _windows = { try element.windows().map(AnyElement.init) }
-            _mainWindow = { AnyElement(element: try element.mainWindow()) }
-            _focusedWindow = { AnyElement(element: try element.focusedWindow()) }
-            _focusedUIElement = { AnyElement(element: try element.focusedUIElement()) }
+            _windows = { try await element.windows().map(AnyElement.init) }
+            _mainWindow = { AnyElement(element: try await element.mainWindow()) }
+            _focusedWindow = { AnyElement(element: try await element.focusedWindow()) }
+            _focusedUIElement = { AnyElement(element: try await element.focusedUIElement()) }
             _enhancedUserInterface = element.enhancedUserInterface
             _setEnhancedUserInterface = element.setEnhancedUserInterface
             _isFrontmost = element.isFrontmost
             _isHidden = element.isHidden
-            _menuBar = { AnyElement(element: try element.menuBar()) }
-            _extrasMenuBar = { AnyElement(element: try element.extrasMenuBar()) }
+            _menuBar = { AnyElement(element: try await element.menuBar()) }
+            _extrasMenuBar = { AnyElement(element: try await element.extrasMenuBar()) }
             // Hierarchy
             @Sendable
             func view(attribute: NSAccessibility.Attribute) -> ArrayAttributeView<AnyElement> {
@@ -286,22 +286,22 @@ public struct AnyElement: Element {
                     }
                 )
             }
-            _parent = { AnyElement(element: try element.parent()) }
-            _children = { try element.children().map(AnyElement.init) }
+            _parent = { AnyElement(element: try await element.parent()) }
+            _children = { try await element.children().map(AnyElement.init) }
             _childrenView = { view(attribute: .children) }
-            _childrenInNavigationOrder = { try element.childrenInNavigationOrder().map(AnyElement.init) }
+            _childrenInNavigationOrder = { try await element.childrenInNavigationOrder().map(AnyElement.init) }
             _childrenInNavigationOrderView = { view(attribute: .childrenInNavigationOrderAttribute) }
-            _visibleChildren = { try element.visibleChildren().map(AnyElement.init) }
+            _visibleChildren = { try await element.visibleChildren().map(AnyElement.init) }
             _visibleChildrenView = { view(attribute: .visibleChildren) }
-            _selectedChildren = { try element.selectedChildren().map(AnyElement.init) }
+            _selectedChildren = { try await element.selectedChildren().map(AnyElement.init) }
             _selectedChildrenView = { view(attribute: .selectedChildren) }
-            _window = { AnyElement(element: try element.window()) }
-            _topLevelUIElement = { AnyElement(element: try element.topLevelUIElement()) }
+            _window = { AnyElement(element: try await element.window()) }
+            _topLevelUIElement = { AnyElement(element: try await element.topLevelUIElement()) }
             _index = element.index
             // Hierarchy (Web)
-            _focusableAncestor = { AnyElement(element: try element.focusableAncestor()) }
-            _editableAncestor = { AnyElement(element: try element.editableAncestor()) }
-            _highestEditableAncestor = { AnyElement(element: try element.highestEditableAncestor()) }
+            _focusableAncestor = { AnyElement(element: try await element.focusableAncestor()) }
+            _editableAncestor = { AnyElement(element: try await element.editableAncestor()) }
+            _highestEditableAncestor = { AnyElement(element: try await element.highestEditableAncestor()) }
             // Actions
             _actions = element.actions
             _descriptionAction = element.description(action:)
@@ -320,7 +320,7 @@ public struct AnyElement: Element {
             _styleRangeForIndex = element.styleRange(for:)
             _insertionPointLineNumber = element.insertionPointLineNumber
             _sharedCharacterRange = element.sharedCharacterRange
-            _sharedTextUIElements = { try element.sharedTextUIElements().map(AnyElement.init) }
+            _sharedTextUIElements = { try await element.sharedTextUIElements().map(AnyElement.init) }
             _visibleCharacterRange = element.visibleCharacterRange
             _setVisibleCharacterRange = element.setVisibleCharacterRange
             _numberOfCharacters = element.numberOfCharacters
@@ -352,7 +352,7 @@ public struct AnyElement: Element {
             _styleTextMarkerRange = element.styleTextMarkerRange(for:)
             _lineNumberForTextMarker = element.lineNumber(for:)
             _indexForTextMarker = element.index(for:)
-            _elementForTextMarker = { AnyElement(element: try element.element(for: $0)) }
+            _elementForTextMarker = { AnyElement(element: try await element.element(for: $0)) }
             _stringForTextMarkerRange = element.string(for:)
             _attributedStringForTextMarkerRange = element.attributedString(for:)
             _boundsForTextMarkerRange = element.bounds(for:)
@@ -368,28 +368,28 @@ public struct AnyElement: Element {
             _isNullTextMarker = element.isNullTextMarker(_:)
             _isValidTextMarker = element.isValidTextMarker(_:)
             // Table/Outline/Grid/List/Collection
-            _cellForColumnRow = { try AnyElement(element: element.cell(column: $0, row:$1)) }
-            _rows = { try element.rows().map(AnyElement.init) }
+            _cellForColumnRow = { try await AnyElement(element: element.cell(column: $0, row:$1)) }
+            _rows = { try await element.rows().map(AnyElement.init) }
             _rowsView = { view(attribute: .rows) }
-            _columns = { try element.columns().map(AnyElement.init) }
+            _columns = { try await element.columns().map(AnyElement.init) }
             _columnsView = { view(attribute: .columns) }
-            _selectedRows = { try element.selectedRows().map(AnyElement.init) }
+            _selectedRows = { try await element.selectedRows().map(AnyElement.init) }
             _selectedRowsView = { view(attribute: .selectedRows) }
-            _selectedColumns = { try element.selectedColumns().map(AnyElement.init) }
+            _selectedColumns = { try await element.selectedColumns().map(AnyElement.init) }
             _selectedColumnsView = { view(attribute: .selectedColumns) }
-            _selectedCells = { try element.selectedCells().map(AnyElement.init) }
+            _selectedCells = { try await element.selectedCells().map(AnyElement.init) }
             _selectedCellsView = { view(attribute: .selectedCells) }
-            _visibleRows = { try element.visibleRows().map(AnyElement.init) }
+            _visibleRows = { try await element.visibleRows().map(AnyElement.init) }
             _visibleRowsView = { view(attribute: .visibleRows) }
-            _visibleColumns = { try element.visibleColumns().map(AnyElement.init) }
+            _visibleColumns = { try await element.visibleColumns().map(AnyElement.init) }
             _visibleColumnsView = { view(attribute: .visibleColumns) }
-            _visibleCells = { try element.visibleCells().map(AnyElement.init) }
+            _visibleCells = { try await element.visibleCells().map(AnyElement.init) }
             _visibleCellsView = { view(attribute: .visibleCells) }
-            _rowHeaderUIElements = { try element.rowHeaderUIElements().map(AnyElement.init) }
+            _rowHeaderUIElements = { try await element.rowHeaderUIElements().map(AnyElement.init) }
             _rowHeaderUIElementsView = { view(attribute: .rowHeaderUIElements) }
-            _columnHeaderUIElements = { try element.columnHeaderUIElements().map(AnyElement.init) }
+            _columnHeaderUIElements = { try await element.columnHeaderUIElements().map(AnyElement.init) }
             _columnHeaderUIElementsView = { view(attribute: .columnHeaderUIElements) }
-            _columnTitles = { try element.columnTitles().map(AnyElement.init) }
+            _columnTitles = { try await element.columnTitles().map(AnyElement.init) }
             _columnTitlesView = { view(attribute: .columnTitles) }
             _sortDirection = element.sortDirection
             _rowCount = element.rowCount
@@ -401,48 +401,48 @@ public struct AnyElement: Element {
             _frame = element.frame
             _setPosition = element.setPosition
             // Linked Elements
-            _linkedUIElements = { try element.linkedUIElements().map(AnyElement.init) }
-            _servesAsTitleForUIElements = { try element.servesAsTitleForUIElements().map(AnyElement.init) }
+            _linkedUIElements = { try await element.linkedUIElements().map(AnyElement.init) }
+            _servesAsTitleForUIElements = { try await element.servesAsTitleForUIElements().map(AnyElement.init) }
             // Slider
             _minValue = element.minValue
             _maxValue = element.maxValue
             _warningValue = element.warningValue
             _criticalValue = element.criticalValue
             _allowedValues = element.allowedValues
-            _labelUIElements = { try element.labelUIElements().map(AnyElement.init) }
+            _labelUIElements = { try await element.labelUIElements().map(AnyElement.init) }
             _labelValue = element.labelValue
             // Window
             _isMain = element.isMain
             _isMinimized = element.isMinimized
             _isModal = element.isModal
-            _closeButton = { AnyElement(element: try element.closeButton()) }
-            _zoomButton = { AnyElement(element: try element.zoomButton()) }
-            _minimizeButton = { AnyElement(element: try element.minimizeButton()) }
-            _toolbarButton = { AnyElement(element: try element.toolbarButton()) }
-            _fullScreenButton = { AnyElement(element: try element.fullScreenButton()) }
-            _defaultButton = { AnyElement(element: try element.defaultButton()) }
-            _cancelButton = { AnyElement(element: try element.cancelButton()) }
-            _proxy = { AnyElement(element: try element.proxy()) }
-            _growArea = { AnyElement(element: try element.growArea()) }
+            _closeButton = { AnyElement(element: try await element.closeButton()) }
+            _zoomButton = { AnyElement(element: try await element.zoomButton()) }
+            _minimizeButton = { AnyElement(element: try await element.minimizeButton()) }
+            _toolbarButton = { AnyElement(element: try await element.toolbarButton()) }
+            _fullScreenButton = { AnyElement(element: try await element.fullScreenButton()) }
+            _defaultButton = { AnyElement(element: try await element.defaultButton()) }
+            _cancelButton = { AnyElement(element: try await element.cancelButton()) }
+            _proxy = { AnyElement(element: try await element.proxy()) }
+            _growArea = { AnyElement(element: try await element.growArea()) }
             // Container / scroll UI
-            _header = { AnyElement(element: try element.header()) }
-            _tabs = { try element.tabs().map(AnyElement.init) }
-            _splitters = { try element.splitters().map(AnyElement.init) }
-            _horizontalScrollBar = { AnyElement(element: try element.horizontalScrollBar()) }
-            _verticalScrollBar = { AnyElement(element: try element.verticalScrollBar()) }
-            _overflowButton = { AnyElement(element: try element.overflowButton()) }
-            _incrementButton = { AnyElement(element: try element.incrementButton()) }
-            _decrementButton = { AnyElement(element: try element.decrementButton()) }
-            _previousContents = { try element.previousContents().map(AnyElement.init) }
-            _nextContents = { try element.nextContents().map(AnyElement.init) }
-            _shownMenu = { AnyElement(element: try element.shownMenu()) }
-            _searchButton = { AnyElement(element: try element.searchButton()) }
-            _searchMenu = { AnyElement(element: try element.searchMenu()) }
-            _clearButton = { AnyElement(element: try element.clearButton()) }
+            _header = { AnyElement(element: try await element.header()) }
+            _tabs = { try await element.tabs().map(AnyElement.init) }
+            _splitters = { try await element.splitters().map(AnyElement.init) }
+            _horizontalScrollBar = { AnyElement(element: try await element.horizontalScrollBar()) }
+            _verticalScrollBar = { AnyElement(element: try await element.verticalScrollBar()) }
+            _overflowButton = { AnyElement(element: try await element.overflowButton()) }
+            _incrementButton = { AnyElement(element: try await element.incrementButton()) }
+            _decrementButton = { AnyElement(element: try await element.decrementButton()) }
+            _previousContents = { try await element.previousContents().map(AnyElement.init) }
+            _nextContents = { try await element.nextContents().map(AnyElement.init) }
+            _shownMenu = { AnyElement(element: try await element.shownMenu()) }
+            _searchButton = { AnyElement(element: try await element.searchButton()) }
+            _searchMenu = { AnyElement(element: try await element.searchMenu()) }
+            _clearButton = { AnyElement(element: try await element.clearButton()) }
             // Outline / tree
             _isDisclosing = element.isDisclosing
-            _disclosedRows = { try element.disclosedRows().map(AnyElement.init) }
-            _disclosedByRow = { AnyElement(element: try element.disclosedByRow()) }
+            _disclosedRows = { try await element.disclosedRows().map(AnyElement.init) }
+            _disclosedByRow = { AnyElement(element: try await element.disclosedByRow()) }
             _disclosureLevel = element.disclosureLevel
             // Misc
             _identifier = element.identifier
@@ -450,8 +450,8 @@ public struct AnyElement: Element {
             _document = element.document
             _filename = element.filename
             _orientation = element.orientation
-            _contents = { try element.contents().map(AnyElement.init) }
-            _sharedFocusElements = { try element.sharedFocusElements().map(AnyElement.init) }
+            _contents = { try await element.contents().map(AnyElement.init) }
+            _sharedFocusElements = { try await element.sharedFocusElements().map(AnyElement.init) }
             _isExpanded = element.isExpanded
             _isEdited = element.isEdited
             _isRequired = element.isRequired
@@ -463,20 +463,20 @@ public struct AnyElement: Element {
             _layoutCount = element.layoutCount
             _preventKeyboardDOMEventDispatch = element.preventKeyboardDOMEventDispatch
             // MathML
-            _mathBase = { AnyElement(element: try element.mathBase()) }
+            _mathBase = { AnyElement(element: try await element.mathBase()) }
             _mathFencedOpen = element.mathFencedOpen
             _mathFencedClose = element.mathFencedClose
-            _mathFractionNumerator = { AnyElement(element: try element.mathFractionNumerator()) }
-            _mathFractionDenominator = { AnyElement(element: try element.mathFractionDenominator()) }
+            _mathFractionNumerator = { AnyElement(element: try await element.mathFractionNumerator()) }
+            _mathFractionDenominator = { AnyElement(element: try await element.mathFractionDenominator()) }
             _mathLineThickness = element.mathLineThickness
-            _mathOver = { AnyElement(element: try element.mathOver()) }
-            _mathUnder = { AnyElement(element: try element.mathUnder()) }
-            _mathPostscripts = { try element.mathPostscripts().map(AnyElement.init) }
-            _mathPrescripts = { try element.mathPrescripts().map(AnyElement.init) }
-            _mathRootIndex = { AnyElement(element: try element.mathRootIndex()) }
-            _mathRootRadicand = { AnyElement(element: try element.mathRootRadicand()) }
-            _mathSubscript = { AnyElement(element: try element.mathSubscript()) }
-            _mathSuperscript = { AnyElement(element: try element.mathSuperscript()) }
+            _mathOver = { AnyElement(element: try await element.mathOver()) }
+            _mathUnder = { AnyElement(element: try await element.mathUnder()) }
+            _mathPostscripts = { try await element.mathPostscripts().map(AnyElement.init) }
+            _mathPrescripts = { try await element.mathPrescripts().map(AnyElement.init) }
+            _mathRootIndex = { AnyElement(element: try await element.mathRootIndex()) }
+            _mathRootRadicand = { AnyElement(element: try await element.mathRootRadicand()) }
+            _mathSubscript = { AnyElement(element: try await element.mathSubscript()) }
+            _mathSuperscript = { AnyElement(element: try await element.mathSuperscript()) }
         }
     }
 
@@ -484,7 +484,7 @@ public struct AnyElement: Element {
         if let alreadyAny = element as? AnyElement {
             self = alreadyAny
         } else {
-            _processIdentifier = { try element.processIdentifier }
+            _processIdentifier = { try await element.processIdentifier }
             // General
             _role = element.role
             _roleDescription = element.roleDescription
@@ -492,80 +492,80 @@ public struct AnyElement: Element {
             _value = element.value
             _valueDescription = element.valueDescription
             _title = element.title
-            _titleUIElement = { AnyElement(element: try element.titleUIElement()) }
+            _titleUIElement = { AnyElement(element: try await element.titleUIElement()) }
             _description = element.description
             _help = element.help
             _isEnabled = element.isEnabled
             _isFocused = element.isFocused
             _isSelected = element.isSelected
             // Application Attributes
-            _windows = { try element.windows().map(AnyElement.init) }
-            _mainWindow = { AnyElement(element: try element.mainWindow()) }
-            _focusedWindow = { AnyElement(element: try element.focusedWindow()) }
-            _focusedUIElement = { AnyElement(element: try element.focusedUIElement()) }
+            _windows = { try await element.windows().map(AnyElement.init) }
+            _mainWindow = { AnyElement(element: try await element.mainWindow()) }
+            _focusedWindow = { AnyElement(element: try await element.focusedWindow()) }
+            _focusedUIElement = { AnyElement(element: try await element.focusedUIElement()) }
             _enhancedUserInterface = element.enhancedUserInterface
             _setEnhancedUserInterface = element.setEnhancedUserInterface
             _isFrontmost = element.isFrontmost
             _isHidden = element.isHidden
-            _menuBar = { AnyElement(element: try element.menuBar()) }
-            _extrasMenuBar = { AnyElement(element: try element.extrasMenuBar()) }
+            _menuBar = { AnyElement(element: try await element.menuBar()) }
+            _extrasMenuBar = { AnyElement(element: try await element.extrasMenuBar()) }
             // Hierarchy
-            _parent = { AnyElement(element: try element.parent()) }
-            _children = { try element.children().map(AnyElement.init) }
+            _parent = { AnyElement(element: try await element.parent()) }
+            _children = { try await element.children().map(AnyElement.init) }
             _childrenView = {
                 let v = element.childrenView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _childrenInNavigationOrder = { try element.childrenInNavigationOrder().map(AnyElement.init) }
+            _childrenInNavigationOrder = { try await element.childrenInNavigationOrder().map(AnyElement.init) }
             _childrenInNavigationOrderView = {
                 let v = element.childrenInNavigationOrderView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _visibleChildren = { try element.visibleChildren().map(AnyElement.init) }
+            _visibleChildren = { try await element.visibleChildren().map(AnyElement.init) }
             _visibleChildrenView = {
                 let v = element.visibleChildrenView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _selectedChildren = { try element.selectedChildren().map(AnyElement.init) }
+            _selectedChildren = { try await element.selectedChildren().map(AnyElement.init) }
             _selectedChildrenView = {
                 let v = element.selectedChildrenView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _window = { AnyElement(element: try element.window()) }
-            _topLevelUIElement = { AnyElement(element: try element.topLevelUIElement()) }
+            _window = { AnyElement(element: try await element.window()) }
+            _topLevelUIElement = { AnyElement(element: try await element.topLevelUIElement()) }
             _index = element.index
             // Hierarchy (Web)
-            _focusableAncestor = { AnyElement(element: try element.focusableAncestor()) }
-            _editableAncestor = { AnyElement(element: try element.editableAncestor()) }
-            _highestEditableAncestor = { AnyElement(element: try element.highestEditableAncestor()) }
+            _focusableAncestor = { AnyElement(element: try await element.focusableAncestor()) }
+            _editableAncestor = { AnyElement(element: try await element.editableAncestor()) }
+            _highestEditableAncestor = { AnyElement(element: try await element.highestEditableAncestor()) }
             // Actions
             _actions = element.actions
             _descriptionAction = element.description(action:)
@@ -584,7 +584,7 @@ public struct AnyElement: Element {
             _styleRangeForIndex = element.styleRange(for:)
             _insertionPointLineNumber = element.insertionPointLineNumber
             _sharedCharacterRange = element.sharedCharacterRange
-            _sharedTextUIElements = { try element.sharedTextUIElements().map(AnyElement.init) }
+            _sharedTextUIElements = { try await element.sharedTextUIElements().map(AnyElement.init) }
             _visibleCharacterRange = element.visibleCharacterRange
             _setVisibleCharacterRange = element.setVisibleCharacterRange
             _numberOfCharacters = element.numberOfCharacters
@@ -616,7 +616,7 @@ public struct AnyElement: Element {
             _styleTextMarkerRange = element.styleTextMarkerRange(for:)
             _lineNumberForTextMarker = element.lineNumber(for:)
             _indexForTextMarker = element.index(for:)
-            _elementForTextMarker = { AnyElement(element: try element.element(for: $0)) }
+            _elementForTextMarker = { AnyElement(element: try await element.element(for: $0)) }
             _stringForTextMarkerRange = element.string(for:)
             _attributedStringForTextMarkerRange = element.attributedString(for:)
             _boundsForTextMarkerRange = element.bounds(for:)
@@ -632,120 +632,120 @@ public struct AnyElement: Element {
             _isNullTextMarker = element.isNullTextMarker(_:)
             _isValidTextMarker = element.isValidTextMarker(_:)
             // Table/Outline/Grid/List/Collection
-            _cellForColumnRow = { AnyElement(element: try element.cell(column: $0, row: $1)) }
-            _rows = { try element.rows().map(AnyElement.init) }
+            _cellForColumnRow = { try await AnyElement(element: element.cell(column: $0, row:$1)) }
+            _rows = { try await element.rows().map(AnyElement.init) }
             _rowsView = {
-                let v = try element.rowsView()
+                let v = try await element.rowsView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _columns = { try element.columns().map(AnyElement.init) }
+            _columns = { try await element.columns().map(AnyElement.init) }
             _columnsView = {
-                let v = try element.columnsView()
+                let v = try await element.columnsView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _selectedRows = { try element.selectedRows().map(AnyElement.init) }
+            _selectedRows = { try await element.selectedRows().map(AnyElement.init) }
             _selectedRowsView = {
-                let v = try element.selectedRowsView()
+                let v = try await element.selectedRowsView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _selectedColumns = { try element.selectedColumns().map(AnyElement.init) }
+            _selectedColumns = { try await element.selectedColumns().map(AnyElement.init) }
             _selectedColumnsView = {
-                let v = try element.selectedColumnsView()
+                let v = try await element.selectedColumnsView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _selectedCells = { try element.selectedCells().map(AnyElement.init) }
+            _selectedCells = { try await element.selectedCells().map(AnyElement.init) }
             _selectedCellsView = {
-                let v = try element.selectedCellsView()
-                return ArrayAttributeView(count: v.count, elements: { i, n in try v.elements(index: i, maxCount: n).map(AnyElement.init) })
+                let v = try await element.selectedCellsView()
+                return ArrayAttributeView(count: v.count, elements: { i, n in try await v.elements(index: i, maxCount: n).map(AnyElement.init) })
             }
-            _visibleRows = { try element.visibleRows().map(AnyElement.init) }
+            _visibleRows = { try await element.visibleRows().map(AnyElement.init) }
             _visibleRowsView = {
-                let v = try element.visibleRowsView()
-                return ArrayAttributeView(count: v.count, elements: { i, n in try v.elements(index: i, maxCount: n).map(AnyElement.init) })
+                let v = try await element.visibleRowsView()
+                return ArrayAttributeView(count: v.count, elements: { i, n in try await v.elements(index: i, maxCount: n).map(AnyElement.init) })
             }
-            _visibleColumns = { try element.visibleColumns().map(AnyElement.init) }
+            _visibleColumns = { try await element.visibleColumns().map(AnyElement.init) }
             _visibleColumnsView = {
-                let v = try element.visibleColumnsView()
+                let v = try await element.visibleColumnsView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _visibleCells = { try element.visibleCells().map(AnyElement.init) }
+            _visibleCells = { try await element.visibleCells().map(AnyElement.init) }
             _visibleCellsView = {
-                let v = try element.visibleCellsView()
+                let v = try await element.visibleCellsView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _rowHeaderUIElements = { try element.rowHeaderUIElements().map(AnyElement.init) }
+            _rowHeaderUIElements = { try await element.rowHeaderUIElements().map(AnyElement.init) }
             _rowHeaderUIElementsView = {
-                let v = try element.rowHeaderUIElementsView()
+                let v = try await element.rowHeaderUIElementsView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _columnHeaderUIElements = { try element.columnHeaderUIElements().map(AnyElement.init) }
+            _columnHeaderUIElements = { try await element.columnHeaderUIElements().map(AnyElement.init) }
             _columnHeaderUIElementsView = {
-                let v = try element.columnHeaderUIElementsView()
+                let v = try await element.columnHeaderUIElementsView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
                 )
             }
-            _columnTitles = { try element.columnTitles().map(AnyElement.init) }
+            _columnTitles = { try await element.columnTitles().map(AnyElement.init) }
             _columnTitlesView = {
-                let v = try element.columnTitlesView()
+                let v = try await element.columnTitlesView()
                 return ArrayAttributeView(
                     count: v.count,
                     elements: { i, n in
-                        try v.elements(index: i,
+                        try await v.elements(index: i,
                                        maxCount: n)
                             .map(AnyElement.init)
                     }
@@ -761,48 +761,48 @@ public struct AnyElement: Element {
             _frame = element.frame
             _setPosition = element.setPosition
             // Linked Elements
-            _linkedUIElements = { try element.linkedUIElements().map(AnyElement.init) }
-            _servesAsTitleForUIElements = { try element.servesAsTitleForUIElements().map(AnyElement.init) }
+            _linkedUIElements = { try await element.linkedUIElements().map(AnyElement.init) }
+            _servesAsTitleForUIElements = { try await element.servesAsTitleForUIElements().map(AnyElement.init) }
             // Slider
             _minValue = element.minValue
             _maxValue = element.maxValue
             _warningValue = element.warningValue
             _criticalValue = element.criticalValue
             _allowedValues = element.allowedValues
-            _labelUIElements = { try element.labelUIElements().map(AnyElement.init) }
+            _labelUIElements = { try await element.labelUIElements().map(AnyElement.init) }
             _labelValue = element.labelValue
             // Window
             _isMain = element.isMain
             _isMinimized = element.isMinimized
             _isModal = element.isModal
-            _closeButton = { AnyElement(element: try element.closeButton()) }
-            _zoomButton = { AnyElement(element: try element.zoomButton()) }
-            _minimizeButton = { AnyElement(element: try element.minimizeButton()) }
-            _toolbarButton = { AnyElement(element: try element.toolbarButton()) }
-            _fullScreenButton = { AnyElement(element: try element.fullScreenButton()) }
-            _defaultButton = { AnyElement(element: try element.defaultButton()) }
-            _cancelButton = { AnyElement(element: try element.cancelButton()) }
-            _proxy = { AnyElement(element: try element.proxy()) }
-            _growArea = { AnyElement(element: try element.growArea()) }
+            _closeButton = { AnyElement(element: try await element.closeButton()) }
+            _zoomButton = { AnyElement(element: try await element.zoomButton()) }
+            _minimizeButton = { AnyElement(element: try await element.minimizeButton()) }
+            _toolbarButton = { AnyElement(element: try await element.toolbarButton()) }
+            _fullScreenButton = { AnyElement(element: try await element.fullScreenButton()) }
+            _defaultButton = { AnyElement(element: try await element.defaultButton()) }
+            _cancelButton = { AnyElement(element: try await element.cancelButton()) }
+            _proxy = { AnyElement(element: try await element.proxy()) }
+            _growArea = { AnyElement(element: try await element.growArea()) }
             // Container / scroll UI
-            _header = { AnyElement(element: try element.header()) }
-            _tabs = { try element.tabs().map(AnyElement.init) }
-            _splitters = { try element.splitters().map(AnyElement.init) }
-            _horizontalScrollBar = { AnyElement(element: try element.horizontalScrollBar()) }
-            _verticalScrollBar = { AnyElement(element: try element.verticalScrollBar()) }
-            _overflowButton = { AnyElement(element: try element.overflowButton()) }
-            _incrementButton = { AnyElement(element: try element.incrementButton()) }
-            _decrementButton = { AnyElement(element: try element.decrementButton()) }
-            _previousContents = { try element.previousContents().map(AnyElement.init) }
-            _nextContents = { try element.nextContents().map(AnyElement.init) }
-            _shownMenu = { AnyElement(element: try element.shownMenu()) }
-            _searchButton = { AnyElement(element: try element.searchButton()) }
-            _searchMenu = { AnyElement(element: try element.searchMenu()) }
-            _clearButton = { AnyElement(element: try element.clearButton()) }
+            _header = { AnyElement(element: try await element.header()) }
+            _tabs = { try await element.tabs().map(AnyElement.init) }
+            _splitters = { try await element.splitters().map(AnyElement.init) }
+            _horizontalScrollBar = { AnyElement(element: try await element.horizontalScrollBar()) }
+            _verticalScrollBar = { AnyElement(element: try await element.verticalScrollBar()) }
+            _overflowButton = { AnyElement(element: try await element.overflowButton()) }
+            _incrementButton = { AnyElement(element: try await element.incrementButton()) }
+            _decrementButton = { AnyElement(element: try await element.decrementButton()) }
+            _previousContents = { try await element.previousContents().map(AnyElement.init) }
+            _nextContents = { try await element.nextContents().map(AnyElement.init) }
+            _shownMenu = { AnyElement(element: try await element.shownMenu()) }
+            _searchButton = { AnyElement(element: try await element.searchButton()) }
+            _searchMenu = { AnyElement(element: try await element.searchMenu()) }
+            _clearButton = { AnyElement(element: try await element.clearButton()) }
             // Outline / tree
             _isDisclosing = element.isDisclosing
-            _disclosedRows = { try element.disclosedRows().map(AnyElement.init) }
-            _disclosedByRow = { AnyElement(element: try element.disclosedByRow()) }
+            _disclosedRows = { try await element.disclosedRows().map(AnyElement.init) }
+            _disclosedByRow = { AnyElement(element: try await element.disclosedByRow()) }
             _disclosureLevel = element.disclosureLevel
             // Misc
             _identifier = element.identifier
@@ -810,8 +810,8 @@ public struct AnyElement: Element {
             _document = element.document
             _filename = element.filename
             _orientation = element.orientation
-            _contents = { try element.contents().map(AnyElement.init) }
-            _sharedFocusElements = { try element.sharedFocusElements().map(AnyElement.init) }
+            _contents = { try await element.contents().map(AnyElement.init) }
+            _sharedFocusElements = { try await element.sharedFocusElements().map(AnyElement.init) }
             _isExpanded = element.isExpanded
             _isEdited = element.isEdited
             _isRequired = element.isRequired
@@ -823,117 +823,117 @@ public struct AnyElement: Element {
             _layoutCount = element.layoutCount
             _preventKeyboardDOMEventDispatch = element.preventKeyboardDOMEventDispatch
             // MathML
-            _mathBase = { AnyElement(element: try element.mathBase()) }
+            _mathBase = { AnyElement(element: try await element.mathBase()) }
             _mathFencedOpen = element.mathFencedOpen
             _mathFencedClose = element.mathFencedClose
-            _mathFractionNumerator = { AnyElement(element: try element.mathFractionNumerator()) }
-            _mathFractionDenominator = { AnyElement(element: try element.mathFractionDenominator()) }
+            _mathFractionNumerator = { AnyElement(element: try await element.mathFractionNumerator()) }
+            _mathFractionDenominator = { AnyElement(element: try await element.mathFractionDenominator()) }
             _mathLineThickness = element.mathLineThickness
-            _mathOver = { AnyElement(element: try element.mathOver()) }
-            _mathUnder = { AnyElement(element: try element.mathUnder()) }
-            _mathPostscripts = { try element.mathPostscripts().map(AnyElement.init) }
-            _mathPrescripts = { try element.mathPrescripts().map(AnyElement.init) }
-            _mathRootIndex = { AnyElement(element: try element.mathRootIndex()) }
-            _mathRootRadicand = { AnyElement(element: try element.mathRootRadicand()) }
-            _mathSubscript = { AnyElement(element: try element.mathSubscript()) }
-            _mathSuperscript = { AnyElement(element: try element.mathSuperscript()) }
+            _mathOver = { AnyElement(element: try await element.mathOver()) }
+            _mathUnder = { AnyElement(element: try await element.mathUnder()) }
+            _mathPostscripts = { try await element.mathPostscripts().map(AnyElement.init) }
+            _mathPrescripts = { try await element.mathPrescripts().map(AnyElement.init) }
+            _mathRootIndex = { AnyElement(element: try await element.mathRootIndex()) }
+            _mathRootRadicand = { AnyElement(element: try await element.mathRootRadicand()) }
+            _mathSubscript = { AnyElement(element: try await element.mathSubscript()) }
+            _mathSuperscript = { AnyElement(element: try await element.mathSuperscript()) }
+        }
+    }
+
+    public var processIdentifier: pid_t {
+        get async throws {
+            try await _processIdentifier()
         }
     }
 
     // MARK: - General
 
-    public var processIdentifier: pid_t {
-        get throws {
-            try _processIdentifier()
-        }
+    public func role() async throws -> NSAccessibility.Role {
+        try await _role()
     }
-
-    public func role() throws -> NSAccessibility.Role {
-        try _role()
+    public func roleDescription() async throws -> String {
+        try await _roleDescription()
     }
-    public func roleDescription() throws -> String {
-        try _roleDescription()
+    public func subrole() async throws -> NSAccessibility.Subrole {
+        try await _subrole()
     }
-    public func subrole() throws -> NSAccessibility.Subrole {
-        try _subrole()
+    public func value() async throws -> Any {
+        try await _value()
     }
-    public func value() throws -> Any {
-        try _value()
+    public func valueDescription() async throws -> String {
+        try await _valueDescription()
     }
-    public func valueDescription() throws -> String {
-        try _valueDescription()
+    public func title() async throws -> String {
+        try await _title()
     }
-    public func title() throws -> String {
-        try _title()
+    public func titleUIElement() async throws -> AnyElement {
+        try await _titleUIElement()
     }
-    public func titleUIElement() throws -> AnyElement {
-        try _titleUIElement()
+    public func description() async throws -> String {
+        try await _description()
     }
-    public func description() throws -> String {
-        try _description()
+    public func help() async throws -> String {
+        try await _help()
     }
-    public func help() throws -> String {
-        try _help()
+    public func isEnabled() async throws -> Bool {
+        try await _isEnabled()
     }
-    public func isEnabled() throws -> Bool {
-        try _isEnabled()
+    public func isFocused() async throws -> Bool {
+        try await _isFocused()
     }
-    public func isFocused() throws -> Bool {
-        try _isFocused()
-    }
-    public func isSelected() throws -> Bool {
-        try _isSelected()
+    public func isSelected() async throws -> Bool {
+        try await _isSelected()
     }
 
     // MARK: - Application Attributes
 
-    public func windows() throws -> [AnyElement] {
-        try _windows()
+    public func windows() async throws -> [AnyElement] {
+        try await _windows()
     }
-    public func mainWindow() throws -> AnyElement {
-        try _mainWindow()
+    public func mainWindow() async throws -> AnyElement {
+        try await _mainWindow()
     }
-    public func focusedWindow() throws -> AnyElement {
-        try _focusedWindow()
+    public func focusedWindow() async throws -> AnyElement {
+        try await _focusedWindow()
     }
-    public func focusedUIElement() throws -> AnyElement {
-        try _focusedUIElement()
+    public func focusedUIElement() async throws -> AnyElement {
+        try await _focusedUIElement()
     }
-    public func enhancedUserInterface() throws -> Bool {
-        try _enhancedUserInterface()
+    public func enhancedUserInterface() async throws -> Bool {
+        try await _enhancedUserInterface()
     }
-    public func setEnhancedUserInterface(_ enhancedUserInterface: Bool) throws {
-        try _setEnhancedUserInterface(enhancedUserInterface)
+    public func setEnhancedUserInterface(_ enhancedUserInterface: Bool) async throws {
+        try await _setEnhancedUserInterface(enhancedUserInterface)
     }
-    public func isFrontmost() throws -> Bool {
-        try _isFrontmost()
+    public func isFrontmost() async throws -> Bool {
+        try await _isFrontmost()
     }
-    public func isHidden() throws -> Bool {
-        try _isHidden()
+    public func isHidden() async throws -> Bool {
+        try await _isHidden()
     }
-    public func menuBar() throws -> AnyElement {
-        try _menuBar()
+    public func menuBar() async throws -> AnyElement {
+        try await _menuBar()
     }
-    public func extrasMenuBar() throws -> AnyElement {
-        try _extrasMenuBar()
+    public func extrasMenuBar() async throws -> AnyElement {
+        try await _extrasMenuBar()
     }
 
     // MARK: - Hierarchy
 
-    public func parent() throws -> AnyElement {
-        try _parent()
+    public func parent() async throws -> AnyElement {
+        try await _parent()
     }
-    public func children() throws -> [AnyElement] {
-        try _children()
+    public func children() async throws -> [AnyElement] {
+        try await _children()
     }
-    public func childrenInNavigationOrder() throws -> [AnyElement] {
-        try _childrenInNavigationOrder()
+    public func childrenInNavigationOrder() async throws -> [AnyElement] {
+        try await _childrenInNavigationOrder()
     }
-    public func visibleChildren() throws -> [AnyElement] {
-        try _visibleChildren()
+    public func visibleChildren() async throws -> [AnyElement] {
+        try await _visibleChildren()
     }
-    public func selectedChildren() throws -> [AnyElement] {
-        try _selectedChildren()
+    public func selectedChildren() async throws -> [AnyElement] {
+        try await _selectedChildren()
     }
     public func childrenView() -> ArrayAttributeView<AnyElement> {
         _childrenView()
@@ -947,553 +947,556 @@ public struct AnyElement: Element {
     public func selectedChildrenView() -> ArrayAttributeView<AnyElement> {
         _selectedChildrenView()
     }
-    public func window() throws -> AnyElement {
-        try _window()
+    public func window() async throws -> AnyElement {
+        try await _window()
     }
-    public func topLevelUIElement() throws -> AnyElement {
-        try _topLevelUIElement()
+    public func topLevelUIElement() async throws -> AnyElement {
+        try await _topLevelUIElement()
     }
-    public func index() throws -> Int {
-        try _index()
+    public func index() async throws -> Int {
+        try await _index()
     }
 
     // MARK: - Hierarchy (Web)
 
-    public func focusableAncestor() throws -> AnyElement {
-        try _focusableAncestor()
+    public func focusableAncestor() async throws -> AnyElement {
+        try await _focusableAncestor()
     }
-    public func editableAncestor() throws -> AnyElement {
-        try _editableAncestor()
+    public func editableAncestor() async throws -> AnyElement {
+        try await _editableAncestor()
     }
-    public func highestEditableAncestor() throws -> AnyElement {
-        try _highestEditableAncestor()
+    public func highestEditableAncestor() async throws -> AnyElement {
+        try await _highestEditableAncestor()
     }
 
     // MARK: - Actions
 
-    public func actions() throws -> [NSAccessibility.Action] {
-        try _actions()
+    public func actions() async throws -> [NSAccessibility.Action] {
+        try await _actions()
     }
-    public func description(action: NSAccessibility.Action) throws -> String {
-        try _descriptionAction(action)
+    public func description(action: NSAccessibility.Action) async throws -> String {
+        try await _descriptionAction(action)
     }
-    public func perform(action: NSAccessibility.Action) throws {
-        try _performAction(action)
+    public func perform(action: NSAccessibility.Action) async throws {
+        try await _performAction(action)
     }
 
     // MARK: - Text
 
-    public func placeholderValue() throws -> String {
-        try _placeholderValue()
+    public func placeholderValue() async throws -> String {
+        try await _placeholderValue()
     }
 
     // MARK: - Text (Integer Indexed)
 
-    public func line(forIndex index: Int) throws -> Int {
-        try _lineForIndex(index)
+    public func line(forIndex index: Int) async throws -> Int {
+        try await _lineForIndex(index)
     }
-    public func range(forLine line: Int) throws -> Range<Int> {
-        try _rangeForLine(line)
+    public func range(forLine line: Int) async throws -> Range<Int> {
+        try await _rangeForLine(line)
     }
-    public func range(forIndex index: Int) throws -> Range<Int> {
-        try _rangeForIndex(index)
+    public func range(forIndex index: Int) async throws -> Range<Int> {
+        try await _rangeForIndex(index)
     }
-    public func range(forPosition position: Int) throws -> Range<Int> {
-        try _rangeForPosition(position)
+    public func range(forPosition position: Int) async throws -> Range<Int> {
+        try await _rangeForPosition(position)
     }
-    public func string(for range: Range<Int>) throws -> String {
-        try _stringForRange(range)
+    public func string(for range: Range<Int>) async throws -> String {
+        try await _stringForRange(range)
     }
-    public func bounds(for range: Range<Int>) throws -> NSRect {
-        try _boundsForRange(range)
+    public func bounds(for range: Range<Int>) async throws -> NSRect {
+        try await _boundsForRange(range)
     }
-    public func rtf(for range: Range<Int>) throws -> Data {
-        try _rtfForRange(range)
+    public func rtf(for range: Range<Int>) async throws -> Data {
+        try await _rtfForRange(range)
     }
-    public func attributedString(for range: Range<Int>) throws -> NSAttributedString {
-        try _attributedStringForRange(range)
+    public func attributedString(for range: Range<Int>) async throws -> NSAttributedString {
+        try await _attributedStringForRange(range)
     }
-    public func styleRange(for index: Int) throws -> Range<Int> {
-        try _styleRangeForIndex(index)
+    public func styleRange(for index: Int) async throws -> Range<Int> {
+        try await _styleRangeForIndex(index)
     }
-    public func insertionPointLineNumber() throws -> Int {
-        try _insertionPointLineNumber()
+    public func insertionPointLineNumber() async throws -> Int {
+        try await _insertionPointLineNumber()
     }
-    public func sharedCharacterRange() throws -> Range<Int> {
-        try _sharedCharacterRange()
+    public func sharedCharacterRange() async throws -> Range<Int> {
+        try await _sharedCharacterRange()
     }
-    public func sharedTextUIElements() throws -> [AnyElement] {
-        try _sharedTextUIElements()
+    public func sharedTextUIElements() async throws -> [AnyElement] {
+        try await _sharedTextUIElements()
     }
-    public func visibleCharacterRange() throws -> Range<Int> {
-        try _visibleCharacterRange()
+    public func visibleCharacterRange() async throws -> Range<Int> {
+        try await _visibleCharacterRange()
     }
-    public func setVisibleCharacterRange(_ range: Range<Int>) throws {
-        try _setVisibleCharacterRange(range)
+    public func setVisibleCharacterRange(_ range: Range<Int>) async throws {
+        try await _setVisibleCharacterRange(range)
     }
-    public func numberOfCharacters() throws -> Int {
-        try _numberOfCharacters()
+    public func numberOfCharacters() async throws -> Int {
+        try await _numberOfCharacters()
     }
-    public func selectedText() throws -> String {
-        try _selectedText()
+    public func selectedText() async throws -> String {
+        try await _selectedText()
     }
-    public func selectedTextRange() throws -> Range<Int> {
-        try _selectedTextRange()
+    public func selectedTextRange() async throws -> Range<Int> {
+        try await _selectedTextRange()
     }
-    public func selectedTextRanges() throws -> [Range<Int>] {
-        try _selectedTextRanges()
+    public func selectedTextRanges() async throws -> [Range<Int>] {
+        try await _selectedTextRanges()
     }
 
     // MARK: - Text (TextMarker Indexed)
 
-    public func line(forTextMarker textMarker: TextMarker) throws -> Int {
-        try _lineForTextMarker(textMarker)
+    public func line(forTextMarker textMarker: TextMarker) async throws -> Int {
+        try await _lineForTextMarker(textMarker)
     }
-    public func selectedTextMarkerRange() throws -> TextMarkerRange {
-        try _selectedTextMarkerRange()
+    public func selectedTextMarkerRange() async throws -> TextMarkerRange {
+        try await _selectedTextMarkerRange()
     }
-    public func startTextMarker() throws -> TextMarker {
-        try _startTextMarker()
+    public func startTextMarker() async throws -> TextMarker {
+        try await _startTextMarker()
     }
-    public func endTextMarker() throws -> TextMarker {
-        try _endTextMarker()
+    public func endTextMarker() async throws -> TextMarker {
+        try await _endTextMarker()
     }
-    public func nextTextMarker(for textMarker: TextMarker) throws -> TextMarker {
-        try _nextTextMarker(textMarker)
+    public func nextTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
+        try await _nextTextMarker(textMarker)
     }
-    public func previousTextMarker(for textMarker: TextMarker) throws -> TextMarker {
-        try _previousTextMarker(textMarker)
+    public func previousTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
+        try await _previousTextMarker(textMarker)
     }
-    public func nextWordEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
-        try _nextWordEndTextMarker(textMarker)
+    public func nextWordEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
+        try await _nextWordEndTextMarker(textMarker)
     }
-    public func previousWordStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
-        try _previousWordStartTextMarker(textMarker)
+    public func previousWordStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
+        try await _previousWordStartTextMarker(textMarker)
     }
-    public func nextLineEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
-        try _nextLineEndTextMarker(textMarker)
+    public func nextLineEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
+        try await _nextLineEndTextMarker(textMarker)
     }
-    public func previousLineStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
-        try _previousLineStartTextMarker(textMarker)
+    public func previousLineStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
+        try await _previousLineStartTextMarker(textMarker)
     }
-    public func nextSentenceEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
-        try _nextSentenceEndTextMarker(textMarker)
+    public func nextSentenceEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
+        try await _nextSentenceEndTextMarker(textMarker)
     }
-    public func previousSentenceStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
-        try _previousSentenceStartTextMarker(textMarker)
+    public func previousSentenceStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
+        try await _previousSentenceStartTextMarker(textMarker)
     }
-    public func nextParagraphEndTextMarker(for textMarker: TextMarker) throws -> TextMarker {
-        try _nextParagraphEndTextMarker(textMarker)
+    public func nextParagraphEndTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
+        try await _nextParagraphEndTextMarker(textMarker)
     }
-    public func previousParagraphStartTextMarker(for textMarker: TextMarker) throws -> TextMarker {
-        try _previousParagraphStartTextMarker(textMarker)
+    public func previousParagraphStartTextMarker(for textMarker: TextMarker) async throws -> TextMarker {
+        try await _previousParagraphStartTextMarker(textMarker)
     }
-    public func lineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
-        try _lineTextMarkerRange(textMarker)
+    public func lineTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
+        try await _lineTextMarkerRange(textMarker)
     }
-    public func leftWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
-        try _leftWordTextMarkerRange(textMarker)
+    public func leftWordTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
+        try await _leftWordTextMarkerRange(textMarker)
     }
-    public func rightWordTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
-        try _rightWordTextMarkerRange(textMarker)
+    public func rightWordTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
+        try await _rightWordTextMarkerRange(textMarker)
     }
-    public func leftLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
-        try _leftLineTextMarkerRange(textMarker)
+    public func leftLineTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
+        try await _leftLineTextMarkerRange(textMarker)
     }
-    public func rightLineTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
-        try _rightLineTextMarkerRange(textMarker)
+    public func rightLineTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
+        try await _rightLineTextMarkerRange(textMarker)
     }
-    public func sentenceTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
-        try _sentenceTextMarkerRange(textMarker)
+    public func sentenceTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
+        try await _sentenceTextMarkerRange(textMarker)
     }
-    public func paragraphTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
-        try _paragraphTextMarkerRange(textMarker)
+    public func paragraphTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
+        try await _paragraphTextMarkerRange(textMarker)
     }
-    public func styleTextMarkerRange(for textMarker: TextMarker) throws -> TextMarkerRange {
-        try _styleTextMarkerRange(textMarker)
+    public func styleTextMarkerRange(for textMarker: TextMarker) async throws -> TextMarkerRange {
+        try await _styleTextMarkerRange(textMarker)
     }
-    public func lineNumber(for textMarker: TextMarker) throws -> Int {
-        try _lineNumberForTextMarker(textMarker)
+    public func lineNumber(for textMarker: TextMarker) async throws -> Int {
+        try await _lineNumberForTextMarker(textMarker)
     }
-    public func index(for textMarker: TextMarker) throws -> Int {
-        try _indexForTextMarker(textMarker)
+    public func index(for textMarker: TextMarker) async throws -> Int {
+        try await _indexForTextMarker(textMarker)
     }
-    public func element(for textMarker: TextMarker) throws -> AnyElement {
-        try _elementForTextMarker(textMarker)
+    public func element(for textMarker: TextMarker) async throws -> AnyElement {
+        try await _elementForTextMarker(textMarker)
     }
-    public func string(for textMarkerRange: TextMarkerRange) throws -> String {
-        try _stringForTextMarkerRange(textMarkerRange)
+    public func string(for textMarkerRange: TextMarkerRange) async throws -> String {
+        try await _stringForTextMarkerRange(textMarkerRange)
     }
-    public func attributedString(for textMarkerRange: TextMarkerRange) throws -> NSAttributedString {
-        try _attributedStringForTextMarkerRange(textMarkerRange)
+    public func attributedString(for textMarkerRange: TextMarkerRange) async throws -> NSAttributedString {
+        try await _attributedStringForTextMarkerRange(textMarkerRange)
     }
-    public func bounds(for textMarkerRange: TextMarkerRange) throws -> NSRect {
-        try _boundsForTextMarkerRange(textMarkerRange)
+    public func bounds(for textMarkerRange: TextMarkerRange) async throws -> NSRect {
+        try await _boundsForTextMarkerRange(textMarkerRange)
     }
-    public func length(for textMarkerRange: TextMarkerRange) throws -> Int {
-        try _lengthForTextMarkerRange(textMarkerRange)
+    public func length(for textMarkerRange: TextMarkerRange) async throws -> Int {
+        try await _lengthForTextMarkerRange(textMarkerRange)
     }
-    public func textMarker(forIndex index: Int) throws -> TextMarker {
-        try _textMarkerForIndex(index)
+    public func textMarker(forIndex index: Int) async throws -> TextMarker {
+        try await _textMarkerForIndex(index)
     }
-    public func textMarkerRange(forLine line: Int) throws -> TextMarkerRange {
-        try _textMarkerRangeForLine(line)
+    public func textMarkerRange(forLine line: Int) async throws -> TextMarkerRange {
+        try await _textMarkerRangeForLine(line)
     }
-    public func textMarker(forPosition position: CGPoint) throws -> TextMarker {
-        try _textMarkerForPosition(position)
+    public func textMarker(forPosition position: CGPoint) async throws -> TextMarker {
+        try await _textMarkerForPosition(position)
     }
-    public func startTextMarker(forBounds bounds: NSRect) throws -> TextMarker {
-        try _startTextMarkerForBounds(bounds)
+    public func startTextMarker(forBounds bounds: NSRect) async throws -> TextMarker {
+        try await _startTextMarkerForBounds(bounds)
     }
-    public func endTextMarker(forBounds bounds: NSRect) throws -> TextMarker {
-        try _endTextMarkerForBounds(bounds)
+    public func endTextMarker(forBounds bounds: NSRect) async throws -> TextMarker {
+        try await _endTextMarkerForBounds(bounds)
     }
-    public func textMarkerRange(for element: AnyElement) throws -> TextMarkerRange {
+    public func textMarkerRange(for element: AnyElement) async throws -> TextMarkerRange {
         throw ElementError.noValue
     }
-    public func textMarkerRange(forUnordered textMarkers: [TextMarker]) throws -> TextMarkerRange {
-        try _textMarkerRangeForUnordered(textMarkers)
+    public func textMarkerRange(forUnordered textMarkers: [TextMarker]) async throws -> TextMarkerRange {
+        try await _textMarkerRangeForUnordered(textMarkers)
     }
-    public func textMarkerRange(forOrdered textMarkers: [TextMarker]) throws -> TextMarkerRange {
-        try _textMarkerRangeForOrdered(textMarkers)
+    public func textMarkerRange(forOrdered textMarkers: [TextMarker]) async throws -> TextMarkerRange {
+        try await _textMarkerRangeForOrdered(textMarkers)
     }
 
     // MARK: - Text marker validation
 
-    public func isNullTextMarker(_ textMarker: TextMarker) throws -> Bool {
-        try _isNullTextMarker(textMarker)
+    public func isNullTextMarker(_ textMarker: TextMarker) async throws -> Bool {
+        try await _isNullTextMarker(textMarker)
     }
-    public func isValidTextMarker(_ textMarker: TextMarker) throws -> Bool {
-        try _isValidTextMarker(textMarker)
+    public func isValidTextMarker(_ textMarker: TextMarker) async throws -> Bool {
+        try await _isValidTextMarker(textMarker)
     }
 
     // MARK: - Table/Outline/Grid/List/Collection
 
-    public func cell(column: Int, row: Int) throws -> AnyElement {
-        try _cellForColumnRow(column, row)
+    public func cell(
+        column: Int,
+        row: Int
+    ) async throws -> AnyElement {
+        try await _cellForColumnRow(column, row)
     }
-    public func rows() throws -> [AnyElement] {
-        try _rows()
+    public func rows() async throws -> [AnyElement] {
+        try await _rows()
     }
-    public func columns() throws -> [AnyElement] {
-        try _columns()
+    public func columns() async throws -> [AnyElement] {
+        try await _columns()
     }
-    public func selectedRows() throws -> [AnyElement] {
-        try _selectedRows()
+    public func selectedRows() async throws -> [AnyElement] {
+        try await _selectedRows()
     }
-    public func selectedColumns() throws -> [AnyElement] {
-        try _selectedColumns()
+    public func selectedColumns() async throws -> [AnyElement] {
+        try await _selectedColumns()
     }
-    public func selectedCells() throws -> [AnyElement] {
-        try _selectedCells()
+    public func selectedCells() async throws -> [AnyElement] {
+        try await _selectedCells()
     }
-    public func visibleRows() throws -> [AnyElement] {
-        try _visibleRows()
+    public func visibleRows() async throws -> [AnyElement] {
+        try await _visibleRows()
     }
-    public func visibleColumns() throws -> [AnyElement] {
-        try _visibleColumns()
+    public func visibleColumns() async throws -> [AnyElement] {
+        try await _visibleColumns()
     }
-    public func visibleCells() throws -> [AnyElement] {
-        try _visibleCells()
+    public func visibleCells() async throws -> [AnyElement] {
+        try await _visibleCells()
     }
-    public func rowHeaderUIElements() throws -> [AnyElement] {
-        try _rowHeaderUIElements()
+    public func rowHeaderUIElements() async throws -> [AnyElement] {
+        try await _rowHeaderUIElements()
     }
-    public func columnHeaderUIElements() throws -> [AnyElement] {
-        try _columnHeaderUIElements()
+    public func columnHeaderUIElements() async throws -> [AnyElement] {
+        try await _columnHeaderUIElements()
     }
-    public func columnTitles() throws -> [AnyElement] {
-        try _columnTitles()
+    public func columnTitles() async throws -> [AnyElement] {
+        try await _columnTitles()
     }
-    public func rowsView() throws -> ArrayAttributeView<AnyElement> {
-        try _rowsView()
+    public func rowsView() async throws -> ArrayAttributeView<AnyElement> {
+        try await _rowsView()
     }
-    public func columnsView() throws -> ArrayAttributeView<AnyElement> {
-        try _columnsView()
+    public func columnsView() async throws -> ArrayAttributeView<AnyElement> {
+        try await _columnsView()
     }
-    public func selectedRowsView() throws -> ArrayAttributeView<AnyElement> {
-        try _selectedRowsView()
+    public func selectedRowsView() async throws -> ArrayAttributeView<AnyElement> {
+        try await _selectedRowsView()
     }
-    public func selectedColumnsView() throws -> ArrayAttributeView<AnyElement> {
-        try _selectedColumnsView()
+    public func selectedColumnsView() async throws -> ArrayAttributeView<AnyElement> {
+        try await _selectedColumnsView()
     }
-    public func selectedCellsView() throws -> ArrayAttributeView<AnyElement> {
-        try _selectedCellsView()
+    public func selectedCellsView() async throws -> ArrayAttributeView<AnyElement> {
+        try await _selectedCellsView()
     }
-    public func visibleRowsView() throws -> ArrayAttributeView<AnyElement> {
-        try _visibleRowsView()
+    public func visibleRowsView() async throws -> ArrayAttributeView<AnyElement> {
+        try await _visibleRowsView()
     }
-    public func visibleColumnsView() throws -> ArrayAttributeView<AnyElement> {
-        try _visibleColumnsView()
+    public func visibleColumnsView() async throws -> ArrayAttributeView<AnyElement> {
+        try await _visibleColumnsView()
     }
-    public func visibleCellsView() throws -> ArrayAttributeView<AnyElement> {
-        try _visibleCellsView()
+    public func visibleCellsView() async throws -> ArrayAttributeView<AnyElement> {
+        try await _visibleCellsView()
     }
-    public func rowHeaderUIElementsView() throws -> ArrayAttributeView<AnyElement> {
-        try _rowHeaderUIElementsView()
+    public func rowHeaderUIElementsView() async throws -> ArrayAttributeView<AnyElement> {
+        try await _rowHeaderUIElementsView()
     }
-    public func columnHeaderUIElementsView() throws -> ArrayAttributeView<AnyElement> {
-        try _columnHeaderUIElementsView()
+    public func columnHeaderUIElementsView() async throws -> ArrayAttributeView<AnyElement> {
+        try await _columnHeaderUIElementsView()
     }
-    public func columnTitlesView() throws -> ArrayAttributeView<AnyElement> {
-        try _columnTitlesView()
+    public func columnTitlesView() async throws -> ArrayAttributeView<AnyElement> {
+        try await _columnTitlesView()
     }
-    public func sortDirection() throws -> String {
-        try _sortDirection()
+    public func sortDirection() async throws -> String {
+        try await _sortDirection()
     }
-    public func rowCount() throws -> Int {
-        try _rowCount()
+    public func rowCount() async throws -> Int {
+        try await _rowCount()
     }
-    public func columnCount() throws -> Int {
-        try _columnCount()
+    public func columnCount() async throws -> Int {
+        try await _columnCount()
     }
-    public func isOrderedByRow() throws -> Bool {
-        try _isOrderedByRow()
+    public func isOrderedByRow() async throws -> Bool {
+        try await _isOrderedByRow()
     }
-    public func rowIndexRange() throws -> Range<Int> {
-        try _rowIndexRange()
+    public func rowIndexRange() async throws -> Range<Int> {
+        try await _rowIndexRange()
     }
-    public func columnIndexRange() throws -> Range<Int> {
-        try _columnIndexRange()
+    public func columnIndexRange() async throws -> Range<Int> {
+        try await _columnIndexRange()
     }
 
     // MARK: - Layout
 
-    public func frame() throws -> NSRect {
-        try _frame()
+    public func frame() async throws -> NSRect {
+        try await _frame()
     }
-    public func setPosition(_ position: CGPoint) throws {
-        try _setPosition(position)
+    public func setPosition(_ position: CGPoint) async throws {
+        try await _setPosition(position)
     }
 
     // MARK: - Linked Elements
 
-    public func linkedUIElements() throws -> [AnyElement] {
-        try _linkedUIElements()
+    public func linkedUIElements() async throws -> [AnyElement] {
+        try await _linkedUIElements()
     }
-    public func servesAsTitleForUIElements() throws -> [AnyElement] {
-        try _servesAsTitleForUIElements()
+    public func servesAsTitleForUIElements() async throws -> [AnyElement] {
+        try await _servesAsTitleForUIElements()
     }
 
     // MARK: - Slider
 
-    public func minValue() throws -> Any {
-        try _minValue()
+    public func minValue() async throws -> Any {
+        try await _minValue()
     }
-    public func maxValue() throws -> Any {
-        try _maxValue()
+    public func maxValue() async throws -> Any {
+        try await _maxValue()
     }
-    public func warningValue() throws -> Any {
-        try _warningValue()
+    public func warningValue() async throws -> Any {
+        try await _warningValue()
     }
-    public func criticalValue() throws -> Any {
-        try _criticalValue()
+    public func criticalValue() async throws -> Any {
+        try await _criticalValue()
     }
-    public func allowedValues() throws -> [Double] {
-        try _allowedValues()
+    public func allowedValues() async throws -> [Double] {
+        try await _allowedValues()
     }
-    public func labelUIElements() throws -> [AnyElement] {
-        try _labelUIElements()
+    public func labelUIElements() async throws -> [AnyElement] {
+        try await _labelUIElements()
     }
-    public func labelValue() throws -> Double {
-        try _labelValue()
+    public func labelValue() async throws -> Double {
+        try await _labelValue()
     }
 
     // MARK: - Window
 
-    public func isMain() throws -> Bool {
-        try _isMain()
+    public func isMain() async throws -> Bool {
+        try await _isMain()
     }
-    public func isMinimized() throws -> Bool {
-        try _isMinimized()
+    public func isMinimized() async throws -> Bool {
+        try await _isMinimized()
     }
-    public func isModal() throws -> Bool {
-        try _isModal()
+    public func isModal() async throws -> Bool {
+        try await _isModal()
     }
-    public func closeButton() throws -> AnyElement {
-        try _closeButton()
+    public func closeButton() async throws -> AnyElement {
+        try await _closeButton()
     }
-    public func zoomButton() throws -> AnyElement {
-        try _zoomButton()
+    public func zoomButton() async throws -> AnyElement {
+        try await _zoomButton()
     }
-    public func minimizeButton() throws -> AnyElement {
-        try _minimizeButton()
+    public func minimizeButton() async throws -> AnyElement {
+        try await _minimizeButton()
     }
-    public func toolbarButton() throws -> AnyElement {
-        try _toolbarButton()
+    public func toolbarButton() async throws -> AnyElement {
+        try await _toolbarButton()
     }
-    public func fullScreenButton() throws -> AnyElement {
-        try _fullScreenButton()
+    public func fullScreenButton() async throws -> AnyElement {
+        try await _fullScreenButton()
     }
-    public func defaultButton() throws -> AnyElement {
-        try _defaultButton()
+    public func defaultButton() async throws -> AnyElement {
+        try await _defaultButton()
     }
-    public func cancelButton() throws -> AnyElement {
-        try _cancelButton()
+    public func cancelButton() async throws -> AnyElement {
+        try await _cancelButton()
     }
-    public func proxy() throws -> AnyElement {
-        try _proxy()
+    public func proxy() async throws -> AnyElement {
+        try await _proxy()
     }
-    public func growArea() throws -> AnyElement {
-        try _growArea()
+    public func growArea() async throws -> AnyElement {
+        try await _growArea()
     }
 
     // MARK: - Container / scroll UI
 
-    public func header() throws -> AnyElement {
-        try _header()
+    public func header() async throws -> AnyElement {
+        try await _header()
     }
-    public func tabs() throws -> [AnyElement] {
-        try _tabs()
+    public func tabs() async throws -> [AnyElement] {
+        try await _tabs()
     }
-    public func splitters() throws -> [AnyElement] {
-        try _splitters()
+    public func splitters() async throws -> [AnyElement] {
+        try await _splitters()
     }
-    public func horizontalScrollBar() throws -> AnyElement {
-        try _horizontalScrollBar()
+    public func horizontalScrollBar() async throws -> AnyElement {
+        try await _horizontalScrollBar()
     }
-    public func verticalScrollBar() throws -> AnyElement {
-        try _verticalScrollBar()
+    public func verticalScrollBar() async throws -> AnyElement {
+        try await _verticalScrollBar()
     }
-    public func overflowButton() throws -> AnyElement {
-        try _overflowButton()
+    public func overflowButton() async throws -> AnyElement {
+        try await _overflowButton()
     }
-    public func incrementButton() throws -> AnyElement {
-        try _incrementButton()
+    public func incrementButton() async throws -> AnyElement {
+        try await _incrementButton()
     }
-    public func decrementButton() throws -> AnyElement {
-        try _decrementButton()
+    public func decrementButton() async throws -> AnyElement {
+        try await _decrementButton()
     }
-    public func previousContents() throws -> [AnyElement] {
-        try _previousContents()
+    public func previousContents() async throws -> [AnyElement] {
+        try await _previousContents()
     }
-    public func nextContents() throws -> [AnyElement] {
-        try _nextContents()
+    public func nextContents() async throws -> [AnyElement] {
+        try await _nextContents()
     }
-    public func shownMenu() throws -> AnyElement {
-        try _shownMenu()
+    public func shownMenu() async throws -> AnyElement {
+        try await _shownMenu()
     }
-    public func searchButton() throws -> AnyElement {
-        try _searchButton()
+    public func searchButton() async throws -> AnyElement {
+        try await _searchButton()
     }
-    public func searchMenu() throws -> AnyElement {
-        try _searchMenu()
+    public func searchMenu() async throws -> AnyElement {
+        try await _searchMenu()
     }
-    public func clearButton() throws -> AnyElement {
-        try _clearButton()
+    public func clearButton() async throws -> AnyElement {
+        try await _clearButton()
     }
 
     // MARK: - Outline / tree
 
-    public func isDisclosing() throws -> Bool {
-        try _isDisclosing()
+    public func isDisclosing() async throws -> Bool {
+        try await _isDisclosing()
     }
-    public func disclosedRows() throws -> [AnyElement] {
-        try _disclosedRows()
+    public func disclosedRows() async throws -> [AnyElement] {
+        try await _disclosedRows()
     }
-    public func disclosedByRow() throws -> AnyElement {
-        try _disclosedByRow()
+    public func disclosedByRow() async throws -> AnyElement {
+        try await _disclosedByRow()
     }
-    public func disclosureLevel() throws -> Int {
-        try _disclosureLevel()
+    public func disclosureLevel() async throws -> Int {
+        try await _disclosureLevel()
     }
 
     // MARK: - Misc
 
-    public func identifier() throws -> String {
-        try _identifier()
+    public func identifier() async throws -> String {
+        try await _identifier()
     }
-    public func url() throws -> URL {
-        try _url()
+    public func url() async throws -> URL {
+        try await _url()
     }
-    public func document() throws -> String {
-        try _document()
+    public func document() async throws -> String {
+        try await _document()
     }
-    public func filename() throws -> String {
-        try _filename()
+    public func filename() async throws -> String {
+        try await _filename()
     }
-    public func orientation() throws -> String {
-        try _orientation()
+    public func orientation() async throws -> String {
+        try await _orientation()
     }
-    public func contents() throws -> [AnyElement] {
-        try _contents()
+    public func contents() async throws -> [AnyElement] {
+        try await _contents()
     }
-    public func sharedFocusElements() throws -> [AnyElement] {
-        try _sharedFocusElements()
+    public func sharedFocusElements() async throws -> [AnyElement] {
+        try await _sharedFocusElements()
     }
-    public func isExpanded() throws -> Bool {
-        try _isExpanded()
+    public func isExpanded() async throws -> Bool {
+        try await _isExpanded()
     }
-    public func isEdited() throws -> Bool {
-        try _isEdited()
+    public func isEdited() async throws -> Bool {
+        try await _isEdited()
     }
-    public func isRequired() throws -> Bool {
-        try _isRequired()
+    public func isRequired() async throws -> Bool {
+        try await _isRequired()
     }
-    public func containsProtectedContent() throws -> Bool {
-        try _containsProtectedContent()
+    public func containsProtectedContent() async throws -> Bool {
+        try await _containsProtectedContent()
     }
-    public func activationPoint() throws -> CGPoint {
-        try _activationPoint()
+    public func activationPoint() async throws -> CGPoint {
+        try await _activationPoint()
     }
 
     // MARK: - Web
 
-    public func isLoaded() throws -> Bool {
-        try _isLoaded()
+    public func isLoaded() async throws -> Bool {
+        try await _isLoaded()
     }
-    public func loadingProgress() throws -> Double {
-        try _loadingProgress()
+    public func loadingProgress() async throws -> Double {
+        try await _loadingProgress()
     }
-    public func layoutCount() throws -> Int {
-        try _layoutCount()
+    public func layoutCount() async throws -> Int {
+        try await _layoutCount()
     }
-    public func preventKeyboardDOMEventDispatch() throws -> Bool {
-        try _preventKeyboardDOMEventDispatch()
+    public func preventKeyboardDOMEventDispatch() async throws -> Bool {
+        try await _preventKeyboardDOMEventDispatch()
     }
 
     // MARK: - MathML
 
-    public func mathBase() throws -> AnyElement {
-        try _mathBase()
+    public func mathBase() async throws -> AnyElement {
+        try await _mathBase()
     }
-    public func mathFencedOpen() throws -> String {
-        try _mathFencedOpen()
+    public func mathFencedOpen() async throws -> String {
+        try await _mathFencedOpen()
     }
-    public func mathFencedClose() throws -> String {
-        try _mathFencedClose()
+    public func mathFencedClose() async throws -> String {
+        try await _mathFencedClose()
     }
-    public func mathFractionNumerator() throws -> AnyElement {
-        try _mathFractionNumerator()
+    public func mathFractionNumerator() async throws -> AnyElement {
+        try await _mathFractionNumerator()
     }
-    public func mathFractionDenominator() throws -> AnyElement {
-        try _mathFractionDenominator()
+    public func mathFractionDenominator() async throws -> AnyElement {
+        try await _mathFractionDenominator()
     }
-    public func mathLineThickness() throws -> Double {
-        try _mathLineThickness()
+    public func mathLineThickness() async throws -> Double {
+        try await _mathLineThickness()
     }
-    public func mathOver() throws -> AnyElement {
-        try _mathOver()
+    public func mathOver() async throws -> AnyElement {
+        try await _mathOver()
     }
-    public func mathUnder() throws -> AnyElement {
-        try _mathUnder()
+    public func mathUnder() async throws -> AnyElement {
+        try await _mathUnder()
     }
-    public func mathPostscripts() throws -> [AnyElement] {
-        try _mathPostscripts()
+    public func mathPostscripts() async throws -> [AnyElement] {
+        try await _mathPostscripts()
     }
-    public func mathPrescripts() throws -> [AnyElement] {
-        try _mathPrescripts()
+    public func mathPrescripts() async throws -> [AnyElement] {
+        try await _mathPrescripts()
     }
-    public func mathRootIndex() throws -> AnyElement {
-        try _mathRootIndex()
+    public func mathRootIndex() async throws -> AnyElement {
+        try await _mathRootIndex()
     }
-    public func mathRootRadicand() throws -> AnyElement {
-        try _mathRootRadicand()
+    public func mathRootRadicand() async throws -> AnyElement {
+        try await _mathRootRadicand()
     }
-    public func mathSubscript() throws -> AnyElement {
-        try _mathSubscript()
+    public func mathSubscript() async throws -> AnyElement {
+        try await _mathSubscript()
     }
-    public func mathSuperscript() throws -> AnyElement {
-        try _mathSuperscript()
+    public func mathSuperscript() async throws -> AnyElement {
+        try await _mathSuperscript()
     }
 }
