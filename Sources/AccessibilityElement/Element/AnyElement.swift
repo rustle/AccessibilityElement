@@ -127,7 +127,7 @@ public struct AnyElement: Element {
     private let _isNullTextMarker: @Sendable (TextMarker) throws -> Bool
     private let _isValidTextMarker: @Sendable (TextMarker) throws -> Bool
     // Table/Outline/Grid/List/Collection
-    private let _cellForColumnRow: @Sendable (Int, Int) throws -> SystemElement
+    private let _cellForColumnRow: @Sendable (Int, Int) throws -> AnyElement
     private let _rows: @Sendable () throws -> [AnyElement]
     private let _rowsView: @Sendable () throws -> ArrayAttributeView<AnyElement>
     private let _columns: @Sendable () throws -> [AnyElement]
@@ -391,7 +391,7 @@ public struct AnyElement: Element {
             _isNullTextMarker = element.isNullTextMarker(_:)
             _isValidTextMarker = element.isValidTextMarker(_:)
             // Table/Outline/Grid/List/Collection
-            _cellForColumnRow = element.cell(column:row:)
+            _cellForColumnRow = { AnyElement(element: try element.cell(column: $0, row: $1)) }
             _rows = { try element.rows().map(AnyElement.init) }
             _rowsView = {
                 let v = try element.rowsView()
@@ -928,7 +928,7 @@ public struct AnyElement: Element {
 
     // MARK: - Table/Outline/Grid/List/Collection
 
-    public func cell(column: Int, row: Int) throws -> SystemElement {
+    public func cell(column: Int, row: Int) throws -> AnyElement {
         try _cellForColumnRow(column, row)
     }
     public func rows() throws -> [AnyElement] {

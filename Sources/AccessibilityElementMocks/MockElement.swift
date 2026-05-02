@@ -364,7 +364,7 @@ public final class MockElement: Element, Hashable, Sendable {
     public func cell(
         column: Int,
         row: Int
-    ) throws -> SystemElement {
+    ) throws -> MockElement {
         throw ElementError.noValue
     }
     public func rows() throws -> [MockElement] {

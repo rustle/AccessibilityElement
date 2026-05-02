@@ -241,7 +241,7 @@ public protocol Element: Sendable, CustomDebugStringConvertible {
     func cell(
         column: Int,
         row: Int
-    ) throws -> SystemElement
+    ) throws -> Self
     /// The rows of a table or outline.
     func rows() throws -> [Self]
     /// Lazy view of the rows a table or outline
