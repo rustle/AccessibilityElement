@@ -1,24 +1,29 @@
 //
-//  ObserverElementInfoValue.swift
+//  SystemElementValueContainer.swift
 //
 //  Copyright © 2017-2026 Doug Russell. All rights reserved.
 //
 
 import AX
+import CoreGraphics
 
-public enum ObserverElementInfoValue: Sendable {
+public enum SystemElementValueContainer: Codable, Sendable {
     case int(Int)
     case double(Double)
     case bool(Bool)
     case string(String)
-    case attributedString(ObserverElementInfoAttributedString)
+    case attributedString(SystemElementAttributedStringContainer)
     case element(SystemElement)
-    case axValue(AX.Value)
     case textMarker(TextMarker)
     case textMarkerRange(TextMarkerRange)
-    case array([ObserverElementInfoValue])
-    case dictionary([String:ObserverElementInfoValue])
-    func value() -> Any {
+    case array([SystemElementValueContainer])
+    case dictionary([String:SystemElementValueContainer])
+    case point(CGPoint)
+    case size(CGSize)
+    case rect(CGRect)
+    case range(Range<Int>)
+    case error(AXError)
+    public func value() -> Any {
         switch self {
         case let .int(value):
             value
@@ -32,8 +37,6 @@ public enum ObserverElementInfoValue: Sendable {
             value
         case let .element(value):
             value
-        case let .axValue(value):
-            value
         case let .textMarker(value):
             value
         case let .textMarkerRange(value):
@@ -42,6 +45,20 @@ public enum ObserverElementInfoValue: Sendable {
             value
         case let .dictionary(value):
             value
+        case let .point(value):
+            value
+        case let .size(value):
+            value
+        case let .rect(value):
+            value
+        case let .range(value):
+            value
+        case let .error(value):
+            value
         }
+    }
+
+    public static func from(any value: Any) throws -> SystemElementValueContainer {
+        try SystemElementValueRepackager.repackage(value: value)
     }
 }

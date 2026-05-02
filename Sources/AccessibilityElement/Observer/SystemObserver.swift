@@ -49,7 +49,7 @@ public actor SystemObserver: Observer, Sendable {
         func yield(
             element: SystemElement,
             notification: NSAccessibility.Notification,
-            info: [String: ObserverElementInfoValue]
+            info: [String: SystemElementValueContainer]
         ) {
             continuation.yield(
                 .init(
@@ -204,7 +204,7 @@ func observer_callback(
     token.yield(
         element: SystemElement(element: uiElement as UIElement),
         notification: name as NSAccessibility.Notification,
-        info: SystemObserverUserInfoRepackager.repackage(dictionary: info)
+        info: SystemElementValueRepackager.repackage(dictionary: info)
     )
 }
 

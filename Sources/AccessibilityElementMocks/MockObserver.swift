@@ -25,7 +25,7 @@ public final class MockNotificationSource: @unchecked Sendable {
     public func emit(
         _ notification: NSAccessibility.Notification,
         element: MockElement,
-        info: [String: ObserverElementInfoValue] = [:]
+        info: [String: SystemElementValueContainer] = [:]
     ) {
         let continuation = state.withLock { $0[notification] }
         continuation?.yield(ObserverNotification(

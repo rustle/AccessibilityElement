@@ -1351,6 +1351,8 @@ extension SystemElement: Hashable {
     }
 }
 
+extension SystemElement: Codable {}
+
 extension SystemElement {
     public var debugInfo: [String:any Sendable] {
         element.debugInfo

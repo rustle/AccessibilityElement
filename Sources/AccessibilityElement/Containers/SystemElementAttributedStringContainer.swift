@@ -1,23 +1,22 @@
 //
-//  ObserverElementInfoAttributedString.swift
+//  SystemElementAttributedStringContainer.swift
 //
 //  Copyright © 2017-2026 Doug Russell. All rights reserved.
 //
 
 import Foundation
 
-public struct ObserverElementInfoAttributedString: Sendable {
-    public struct AttributeRange: Sendable {
-        let range: NSRange
-        let attributes: [NSAttributedString.Key:ObserverElementInfoValue]
+public struct SystemElementAttributedStringContainer: Codable, Sendable {
+    public struct AttributeRange: Codable, Sendable {
+        public let range: NSRange
+        public let attributes: [NSAttributedString.Key: SystemElementValueContainer]
     }
 
     public let string: String
     public let runs: [AttributeRange]
 
-    init(
-        attributedString: NSAttributedString,
-        map: (Any) -> ObserverElementInfoValue?
+    public init(
+        attributedString: NSAttributedString
     ) {
         self.string = attributedString.string
         var runs: [AttributeRange] = []
@@ -27,11 +26,11 @@ public struct ObserverElementInfoAttributedString: Sendable {
             length: attributedString.length
         )
         attributedString.enumerateAttributes(in: fullRange) { attributes, range, _ in
-            var convertedAttributes: [NSAttributedString.Key: ObserverElementInfoValue] = [:]
+            var convertedAttributes: [NSAttributedString.Key: SystemElementValueContainer] = [:]
             convertedAttributes.reserveCapacity(attributes.count)
 
             for (key, value) in attributes {
-                if let converted = map(value) {
+                if let converted = try? SystemElementValueRepackager.repackage(value: value) {
                     convertedAttributes[key] = converted
                 }
             }
