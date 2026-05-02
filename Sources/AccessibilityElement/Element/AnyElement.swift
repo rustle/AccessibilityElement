@@ -19,6 +19,7 @@ public struct AnyElement: Element {
     // MARK: - Private Closures
 
     private let _processIdentifier: @Sendable () async throws -> pid_t
+    private let _transportRepresentation: @Sendable () throws -> Data
 
     // General
     private let _role: @Sendable () async throws -> NSAccessibility.Role
@@ -244,6 +245,7 @@ public struct AnyElement: Element {
             self = alreadyAny
         } else {
             _processIdentifier = { try await element.processIdentifier }
+            _transportRepresentation = { try element.transportRepresentation() }
             // General
             _role = element.role
             _roleDescription = element.roleDescription
@@ -485,6 +487,7 @@ public struct AnyElement: Element {
             self = alreadyAny
         } else {
             _processIdentifier = { try await element.processIdentifier }
+            _transportRepresentation = { try element.transportRepresentation() }
             // General
             _role = element.role
             _roleDescription = element.roleDescription
@@ -844,6 +847,16 @@ public struct AnyElement: Element {
         get async throws {
             try await _processIdentifier()
         }
+    }
+
+    // MARK: - Serialization
+
+    public func transportRepresentation() throws -> Data {
+        try _transportRepresentation()
+    }
+
+    public init(transportRepresentation: Data) throws {
+        fatalError()
     }
 
     // MARK: - General

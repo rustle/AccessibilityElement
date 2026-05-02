@@ -24,6 +24,14 @@ public final class MockElement: Element, Hashable, Sendable {
         get async throws { _pid }
     }
 
+    public func transportRepresentation() throws -> Data {
+        throw ElementError.transportRepresentationNotAvailable
+    }
+
+    public init(transportRepresentation: Data) throws {
+        throw ElementError.transportRepresentationNotAvailable
+    }
+
     // MARK: - General
 
     public func role() async throws -> NSAccessibility.Role {

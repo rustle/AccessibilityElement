@@ -11,6 +11,13 @@ public protocol Element: Sendable, CustomDebugStringConvertible {
     /// The process identifier of the application that owns this element.
     var processIdentifier: pid_t { get async throws }
 
+    // MARK: - Serialization
+
+    ///
+    func transportRepresentation() throws -> Data
+    ///
+    init(transportRepresentation: Data) throws
+
     // MARK: - General
 
     /// The element's role. Non-localized string that identifies the type of element. (e.g. radioButton)

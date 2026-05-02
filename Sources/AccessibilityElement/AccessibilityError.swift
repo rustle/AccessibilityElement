@@ -40,6 +40,8 @@ public enum ElementError: Error {
     /// The requested value or UIElement does not exist.
     case noValue
     ///
+    case transportRepresentationNotAvailable
+    ///
     init(error: AX.AXError) {
         switch error {
         case .actionUnsupported:
@@ -62,14 +64,18 @@ public enum ElementError: Error {
             self = .cannotComplete
         case .notImplemented:
             self = .notImplemented
-        case .notificationNotRegistered:
-            fatalError()
         case .noValue:
             self = .noValue
         case .parameterizedAttributeUnsupported:
             self = .parameterizedAttributeUnsupported
-        default:
-            fatalError()
+        case .transportRepresentationNotAvailable:
+            self = .transportRepresentationNotAvailable
+        case .invalidUIElementObserver:
+            fallthrough
+        case .notificationUnsupported:
+            fallthrough
+        case .notificationNotRegistered:
+            self = .illegalArgument
         }
     }
     public var localizedDescription: String {
@@ -96,6 +102,8 @@ public enum ElementError: Error {
             return "ElementError.notImplemented - Indicates that the function or method is not implemented (this can be returned if a process does not support the accessibility API)."
         case .noValue:
             return "ElementError.noValue - The requested value or UIElement does not exist."
+        case .transportRepresentationNotAvailable:
+            return "ElementError.transportRepresentationNotAvailable - Opaque byte representation not available."
         }
     }
 }
@@ -149,8 +157,16 @@ public enum ObserverError: Error {
             self = .notificationNotRegistered
         case .noValue:
             self = .noValue
-        default:
-            fatalError()
+        case .actionUnsupported:
+            fallthrough
+        case .attributeUnsupported:
+            fallthrough
+        case .parameterizedAttributeUnsupported:
+            fallthrough
+        case .notEnoughPrecision:
+            fallthrough
+        case .transportRepresentationNotAvailable:
+            self = .illegalArgument
         }
     }
     public var localizedDescription: String {

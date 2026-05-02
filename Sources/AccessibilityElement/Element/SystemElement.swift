@@ -22,6 +22,22 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
         }
     }
 
+    // MARK: - Serialization
+
+    ///
+    public func transportRepresentation() throws -> Data {
+        try throwsAXError {
+            try element.transportRepresentation()
+        }
+    }
+
+    ///
+    public init(transportRepresentation: Data) throws {
+        element = try throwsAXError {
+            try UIElement(transportRepresentation: transportRepresentation)
+        }
+    }
+
     // MARK: - General
 
     public func role() async throws -> NSAccessibility.Role {
