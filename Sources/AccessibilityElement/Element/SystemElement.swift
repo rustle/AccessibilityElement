@@ -7,7 +7,7 @@
 import AppKit
 import AX
 
-public struct SystemElement: Element, Sendable {
+public struct SystemElement: Element, ArrayAttributeElement, Sendable {
     public static func systemWide() throws -> SystemElement {
         .init(element: UIElement.systemWide())
     }
@@ -1262,6 +1262,29 @@ public struct SystemElement: Element, Sendable {
         .init(element: try throwsAXError {
             try element.value(attribute: .mathSuperscript)
         })
+    }
+
+    // Array Attribute Accessors
+
+    public func count(attribute: NSAccessibility.Attribute) throws -> Int {
+        try throwsAXError {
+            try element.count(attribute: attribute)
+        }
+    }
+
+    public func elements(
+        attribute: NSAccessibility.Attribute,
+        index: Int,
+        maxCount: Int
+    ) throws -> [Self] {
+        try throwsAXError {
+            let values = try element.values(
+                attribute: attribute,
+                index: index,
+                maxCount: maxCount
+            ) as [UIElement]
+            return values.map(SystemElement.init(element:))
+        }
     }
 
     // MARK: - Private

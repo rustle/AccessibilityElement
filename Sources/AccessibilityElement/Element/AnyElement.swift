@@ -239,6 +239,247 @@ public struct AnyElement: Element {
 
     // MARK: - Initializer
 
+    public init<E: Element>(element: E) where E: ArrayAttributeElement {
+        if let alreadyAny = element as? AnyElement {
+            self = alreadyAny
+        } else {
+            _processIdentifier = { try element.processIdentifier }
+            // General
+            _role = element.role
+            _roleDescription = element.roleDescription
+            _subrole = element.subrole
+            _value = element.value
+            _valueDescription = element.valueDescription
+            _title = element.title
+            _titleUIElement = { AnyElement(element: try element.titleUIElement()) }
+            _description = element.description
+            _help = element.help
+            _isEnabled = element.isEnabled
+            _isFocused = element.isFocused
+            _isSelected = element.isSelected
+            // Application Attributes
+            _windows = { try element.windows().map(AnyElement.init) }
+            _mainWindow = { AnyElement(element: try element.mainWindow()) }
+            _focusedWindow = { AnyElement(element: try element.focusedWindow()) }
+            _focusedUIElement = { AnyElement(element: try element.focusedUIElement()) }
+            _enhancedUserInterface = element.enhancedUserInterface
+            _setEnhancedUserInterface = element.setEnhancedUserInterface
+            _isFrontmost = element.isFrontmost
+            _isHidden = element.isHidden
+            _menuBar = { AnyElement(element: try element.menuBar()) }
+            _extrasMenuBar = { AnyElement(element: try element.extrasMenuBar()) }
+            // Hierarchy
+            @Sendable
+            func view(attribute: NSAccessibility.Attribute) -> ArrayAttributeView<AnyElement> {
+                ArrayAttributeView(
+                    count: {
+                        try element.count(attribute: attribute)
+                    },
+                    elements: { i, n in
+                        try element
+                            .elements(
+                                attribute: attribute,
+                                index: i,
+                                maxCount: n
+                            )
+                            .map(AnyElement.init)
+                    }
+                )
+            }
+            _parent = { AnyElement(element: try element.parent()) }
+            _children = { try element.children().map(AnyElement.init) }
+            _childrenView = { view(attribute: .children) }
+            _childrenInNavigationOrder = { try element.childrenInNavigationOrder().map(AnyElement.init) }
+            _childrenInNavigationOrderView = { view(attribute: .childrenInNavigationOrderAttribute) }
+            _visibleChildren = { try element.visibleChildren().map(AnyElement.init) }
+            _visibleChildrenView = { view(attribute: .visibleChildren) }
+            _selectedChildren = { try element.selectedChildren().map(AnyElement.init) }
+            _selectedChildrenView = { view(attribute: .selectedChildren) }
+            _window = { AnyElement(element: try element.window()) }
+            _topLevelUIElement = { AnyElement(element: try element.topLevelUIElement()) }
+            _index = element.index
+            // Hierarchy (Web)
+            _focusableAncestor = { AnyElement(element: try element.focusableAncestor()) }
+            _editableAncestor = { AnyElement(element: try element.editableAncestor()) }
+            _highestEditableAncestor = { AnyElement(element: try element.highestEditableAncestor()) }
+            // Actions
+            _actions = element.actions
+            _descriptionAction = element.description(action:)
+            _performAction = element.perform(action:)
+            // Text
+            _placeholderValue = element.placeholderValue
+            // Text (Integer Indexed)
+            _lineForIndex = element.line(forIndex:)
+            _rangeForLine = element.range(forLine:)
+            _rangeForIndex = element.range(forIndex:)
+            _rangeForPosition = element.range(forPosition:)
+            _stringForRange = element.string(for:)
+            _boundsForRange = element.bounds(for:)
+            _rtfForRange = element.rtf(for:)
+            _attributedStringForRange = element.attributedString(for:)
+            _styleRangeForIndex = element.styleRange(for:)
+            _insertionPointLineNumber = element.insertionPointLineNumber
+            _sharedCharacterRange = element.sharedCharacterRange
+            _sharedTextUIElements = { try element.sharedTextUIElements().map(AnyElement.init) }
+            _visibleCharacterRange = element.visibleCharacterRange
+            _setVisibleCharacterRange = element.setVisibleCharacterRange
+            _numberOfCharacters = element.numberOfCharacters
+            _selectedText = element.selectedText
+            _selectedTextRange = element.selectedTextRange
+            _selectedTextRanges = element.selectedTextRanges
+            // Text (TextMarker Indexed)
+            _lineForTextMarker = element.line(forTextMarker:)
+            _selectedTextMarkerRange = element.selectedTextMarkerRange
+            _startTextMarker = element.startTextMarker
+            _endTextMarker = element.endTextMarker
+            _nextTextMarker = element.nextTextMarker(for:)
+            _previousTextMarker = element.previousTextMarker(for:)
+            _nextWordEndTextMarker = element.nextWordEndTextMarker(for:)
+            _previousWordStartTextMarker = element.previousWordStartTextMarker(for:)
+            _nextLineEndTextMarker = element.nextLineEndTextMarker(for:)
+            _previousLineStartTextMarker = element.previousLineStartTextMarker(for:)
+            _nextSentenceEndTextMarker = element.nextSentenceEndTextMarker(for:)
+            _previousSentenceStartTextMarker = element.previousSentenceStartTextMarker(for:)
+            _nextParagraphEndTextMarker = element.nextParagraphEndTextMarker(for:)
+            _previousParagraphStartTextMarker = element.previousParagraphStartTextMarker(for:)
+            _lineTextMarkerRange = element.lineTextMarkerRange(for:)
+            _leftWordTextMarkerRange = element.leftWordTextMarkerRange(for:)
+            _rightWordTextMarkerRange = element.rightWordTextMarkerRange(for:)
+            _leftLineTextMarkerRange = element.leftLineTextMarkerRange(for:)
+            _rightLineTextMarkerRange = element.rightLineTextMarkerRange(for:)
+            _sentenceTextMarkerRange = element.sentenceTextMarkerRange(for:)
+            _paragraphTextMarkerRange = element.paragraphTextMarkerRange(for:)
+            _styleTextMarkerRange = element.styleTextMarkerRange(for:)
+            _lineNumberForTextMarker = element.lineNumber(for:)
+            _indexForTextMarker = element.index(for:)
+            _elementForTextMarker = { AnyElement(element: try element.element(for: $0)) }
+            _stringForTextMarkerRange = element.string(for:)
+            _attributedStringForTextMarkerRange = element.attributedString(for:)
+            _boundsForTextMarkerRange = element.bounds(for:)
+            _lengthForTextMarkerRange = element.length(for:)
+            _textMarkerForIndex = element.textMarker(forIndex:)
+            _textMarkerRangeForLine = element.textMarkerRange(forLine:)
+            _textMarkerForPosition = element.textMarker(forPosition:)
+            _startTextMarkerForBounds = element.startTextMarker(forBounds:)
+            _endTextMarkerForBounds = element.endTextMarker(forBounds:)
+            _textMarkerRangeForUnordered = element.textMarkerRange(forUnordered:)
+            _textMarkerRangeForOrdered = element.textMarkerRange(forOrdered:)
+            // Text marker validation
+            _isNullTextMarker = element.isNullTextMarker(_:)
+            _isValidTextMarker = element.isValidTextMarker(_:)
+            // Table/Outline/Grid/List/Collection
+            _cellForColumnRow = { try AnyElement(element: element.cell(column: $0, row:$1)) }
+            _rows = { try element.rows().map(AnyElement.init) }
+            _rowsView = { view(attribute: .rows) }
+            _columns = { try element.columns().map(AnyElement.init) }
+            _columnsView = { view(attribute: .columns) }
+            _selectedRows = { try element.selectedRows().map(AnyElement.init) }
+            _selectedRowsView = { view(attribute: .selectedRows) }
+            _selectedColumns = { try element.selectedColumns().map(AnyElement.init) }
+            _selectedColumnsView = { view(attribute: .selectedColumns) }
+            _selectedCells = { try element.selectedCells().map(AnyElement.init) }
+            _selectedCellsView = { view(attribute: .selectedCells) }
+            _visibleRows = { try element.visibleRows().map(AnyElement.init) }
+            _visibleRowsView = { view(attribute: .visibleRows) }
+            _visibleColumns = { try element.visibleColumns().map(AnyElement.init) }
+            _visibleColumnsView = { view(attribute: .visibleColumns) }
+            _visibleCells = { try element.visibleCells().map(AnyElement.init) }
+            _visibleCellsView = { view(attribute: .visibleCells) }
+            _rowHeaderUIElements = { try element.rowHeaderUIElements().map(AnyElement.init) }
+            _rowHeaderUIElementsView = { view(attribute: .rowHeaderUIElements) }
+            _columnHeaderUIElements = { try element.columnHeaderUIElements().map(AnyElement.init) }
+            _columnHeaderUIElementsView = { view(attribute: .columnHeaderUIElements) }
+            _columnTitles = { try element.columnTitles().map(AnyElement.init) }
+            _columnTitlesView = { view(attribute: .columnTitles) }
+            _sortDirection = element.sortDirection
+            _rowCount = element.rowCount
+            _columnCount = element.columnCount
+            _isOrderedByRow = element.isOrderedByRow
+            _rowIndexRange = element.rowIndexRange
+            _columnIndexRange = element.columnIndexRange
+            // Layout
+            _frame = element.frame
+            _setPosition = element.setPosition
+            // Linked Elements
+            _linkedUIElements = { try element.linkedUIElements().map(AnyElement.init) }
+            _servesAsTitleForUIElements = { try element.servesAsTitleForUIElements().map(AnyElement.init) }
+            // Slider
+            _minValue = element.minValue
+            _maxValue = element.maxValue
+            _warningValue = element.warningValue
+            _criticalValue = element.criticalValue
+            _allowedValues = element.allowedValues
+            _labelUIElements = { try element.labelUIElements().map(AnyElement.init) }
+            _labelValue = element.labelValue
+            // Window
+            _isMain = element.isMain
+            _isMinimized = element.isMinimized
+            _isModal = element.isModal
+            _closeButton = { AnyElement(element: try element.closeButton()) }
+            _zoomButton = { AnyElement(element: try element.zoomButton()) }
+            _minimizeButton = { AnyElement(element: try element.minimizeButton()) }
+            _toolbarButton = { AnyElement(element: try element.toolbarButton()) }
+            _fullScreenButton = { AnyElement(element: try element.fullScreenButton()) }
+            _defaultButton = { AnyElement(element: try element.defaultButton()) }
+            _cancelButton = { AnyElement(element: try element.cancelButton()) }
+            _proxy = { AnyElement(element: try element.proxy()) }
+            _growArea = { AnyElement(element: try element.growArea()) }
+            // Container / scroll UI
+            _header = { AnyElement(element: try element.header()) }
+            _tabs = { try element.tabs().map(AnyElement.init) }
+            _splitters = { try element.splitters().map(AnyElement.init) }
+            _horizontalScrollBar = { AnyElement(element: try element.horizontalScrollBar()) }
+            _verticalScrollBar = { AnyElement(element: try element.verticalScrollBar()) }
+            _overflowButton = { AnyElement(element: try element.overflowButton()) }
+            _incrementButton = { AnyElement(element: try element.incrementButton()) }
+            _decrementButton = { AnyElement(element: try element.decrementButton()) }
+            _previousContents = { try element.previousContents().map(AnyElement.init) }
+            _nextContents = { try element.nextContents().map(AnyElement.init) }
+            _shownMenu = { AnyElement(element: try element.shownMenu()) }
+            _searchButton = { AnyElement(element: try element.searchButton()) }
+            _searchMenu = { AnyElement(element: try element.searchMenu()) }
+            _clearButton = { AnyElement(element: try element.clearButton()) }
+            // Outline / tree
+            _isDisclosing = element.isDisclosing
+            _disclosedRows = { try element.disclosedRows().map(AnyElement.init) }
+            _disclosedByRow = { AnyElement(element: try element.disclosedByRow()) }
+            _disclosureLevel = element.disclosureLevel
+            // Misc
+            _identifier = element.identifier
+            _url = element.url
+            _document = element.document
+            _filename = element.filename
+            _orientation = element.orientation
+            _contents = { try element.contents().map(AnyElement.init) }
+            _sharedFocusElements = { try element.sharedFocusElements().map(AnyElement.init) }
+            _isExpanded = element.isExpanded
+            _isEdited = element.isEdited
+            _isRequired = element.isRequired
+            _containsProtectedContent = element.containsProtectedContent
+            _activationPoint = element.activationPoint
+            // Web
+            _isLoaded = element.isLoaded
+            _loadingProgress = element.loadingProgress
+            _layoutCount = element.layoutCount
+            _preventKeyboardDOMEventDispatch = element.preventKeyboardDOMEventDispatch
+            // MathML
+            _mathBase = { AnyElement(element: try element.mathBase()) }
+            _mathFencedOpen = element.mathFencedOpen
+            _mathFencedClose = element.mathFencedClose
+            _mathFractionNumerator = { AnyElement(element: try element.mathFractionNumerator()) }
+            _mathFractionDenominator = { AnyElement(element: try element.mathFractionDenominator()) }
+            _mathLineThickness = element.mathLineThickness
+            _mathOver = { AnyElement(element: try element.mathOver()) }
+            _mathUnder = { AnyElement(element: try element.mathUnder()) }
+            _mathPostscripts = { try element.mathPostscripts().map(AnyElement.init) }
+            _mathPrescripts = { try element.mathPrescripts().map(AnyElement.init) }
+            _mathRootIndex = { AnyElement(element: try element.mathRootIndex()) }
+            _mathRootRadicand = { AnyElement(element: try element.mathRootRadicand()) }
+            _mathSubscript = { AnyElement(element: try element.mathSubscript()) }
+            _mathSuperscript = { AnyElement(element: try element.mathSuperscript()) }
+        }
+    }
+
     public init<E: Element>(element: E) {
         if let alreadyAny = element as? AnyElement {
             self = alreadyAny

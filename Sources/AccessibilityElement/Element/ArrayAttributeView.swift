@@ -11,13 +11,13 @@ import AppKit
 /// Backed by `UIElement.count(attribute:)` and `UIElement.values(attribute:index:maxCount:)`,
 /// allowing efficient subrange access for attributes with large numbers of values
 /// (e.g. a table with thousands of rows).
-public struct ArrayAttributeView<E: Element>: Sendable {
+public struct ArrayAttributeView<ElementType: Element>: Sendable {
     private let _count: @Sendable () throws -> Int
-    private let _elements: @Sendable (Int, Int) throws -> [E]
+    private let _elements: @Sendable (Int, Int) throws -> [ElementType]
 
     public init(
         count: @escaping @Sendable () throws -> Int,
-        elements: @escaping @Sendable (Int, Int) throws -> [E]
+        elements: @escaping @Sendable (Int, Int) throws -> [ElementType]
     ) {
         self._count = count
         self._elements = elements
@@ -32,7 +32,7 @@ public struct ArrayAttributeView<E: Element>: Sendable {
     public func elements(
         index: Int,
         maxCount: Int
-    ) throws -> [E] {
+    ) throws -> [ElementType] {
         try _elements(index, maxCount)
     }
 }
