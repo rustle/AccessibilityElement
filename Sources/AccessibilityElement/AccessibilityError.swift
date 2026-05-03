@@ -8,7 +8,7 @@ import AX
 import Cocoa
 
 ///
-public enum AccessibilityError: Error {
+public enum AccessibilityError: Error, Equatable {
     ///
     case typeMismatch
     ///

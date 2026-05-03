@@ -51,6 +51,11 @@ struct SystemElementValueRepackager {
             return .textMarker(TextMarker(textMarker: value as! AXTextMarker))
         case AXTextMarkerRangeGetTypeID():
             return .textMarkerRange(TextMarkerRange(textMarkerRange: (value as! AXTextMarkerRange)))
+        case CGColor.typeID:
+            guard let codable = CodableCGColor(color: value as! CGColor) else {
+                return nil
+            }
+            return .color(codable)
         default:
             return nil
         }
@@ -68,6 +73,16 @@ struct SystemElementValueRepackager {
             return .string(string)
         case let attrString as NSAttributedString:
             return .attributedString(.init(attributedString: attrString))
+        case let url as URL:
+            return .url(url)
+        case let point as CGPoint:
+            return .point(point)
+        case let size as CGSize:
+            return .size(size)
+        case let rect as CGRect:
+            return .rect(rect)
+        case let range as Range<Int>:
+            return .range(range)
         default:
             if let container = try _repackageByTypeID(value: value) {
                 return container

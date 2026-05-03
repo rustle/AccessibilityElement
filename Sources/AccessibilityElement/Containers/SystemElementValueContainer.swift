@@ -6,6 +6,7 @@
 
 import AX
 import CoreGraphics
+import Foundation
 
 public enum SystemElementValueContainer: Codable, Sendable {
     case int(Int)
@@ -23,6 +24,8 @@ public enum SystemElementValueContainer: Codable, Sendable {
     case rect(CGRect)
     case range(Range<Int>)
     case error(AXError)
+    case color(CodableCGColor)
+    case url(URL)
     public func value() -> Any {
         switch self {
         case let .int(value):
@@ -34,7 +37,7 @@ public enum SystemElementValueContainer: Codable, Sendable {
         case let .string(value):
             value
         case let .attributedString(value):
-            value
+            value.attributedString
         case let .element(value):
             value
         case let .textMarker(value):
@@ -54,6 +57,10 @@ public enum SystemElementValueContainer: Codable, Sendable {
         case let .range(value):
             value
         case let .error(value):
+            value
+        case let .color(value):
+            value
+        case let .url(value):
             value
         }
     }

@@ -60,7 +60,7 @@ let package = Package(
         ),
         .testTarget(
             name: "AccessibilityElementTests",
-            dependencies: ["AccessibilityElement"]
+            dependencies: ["AccessibilityElement", "AX"]
         ),
     ],
     swiftLanguageModes: [.v6]
