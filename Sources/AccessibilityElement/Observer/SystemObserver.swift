@@ -5,9 +5,9 @@
 //
 
 import AppKit
-import Atomics
 import AX
 import os
+import Synchronization
 import RunLoopExecutor
 
 // MARK: - SystemObserver
@@ -88,7 +88,7 @@ public actor SystemObserver: Observer, Sendable {
     ) throws {
         unownedExecutor = executor.asUnownedSerialExecutor()
         self.processIdentifier = processIdentifier
-        self.observerId = systemObserverIdCounter.loadThenWrappingIncrement(ordering: .relaxed)
+        observerId = systemObserverIdCounter.wrappingAdd(1, ordering: .relaxed).newValue
     }
 
     // MARK: State
@@ -213,7 +213,7 @@ func observer_callback(
 /// Monotonic counter that makes up half of a given Observer ID.
 ///
 /// Called only at `SystemObserver` init time — never by observer_callback.
-private let systemObserverIdCounter = ManagedAtomic<UInt32>(0)
+private let systemObserverIdCounter = Atomic<UInt32>(0)
 
 // MARK: - Thread-local observer routing
 

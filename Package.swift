@@ -27,10 +27,6 @@ let package = Package(
             .upToNextMajor(from: "0.2.1")
         ),
         .package(
-            url: "https://github.com/apple/swift-atomics.git",
-            .upToNextMajor(from: "1.2.0")
-        ),
-        .package(
             url: "https://github.com/rustle/RunLoopExecutor.git",
             .upToNextMajor(from: "1.0.0")
         ),
@@ -40,10 +36,6 @@ let package = Package(
             name: "AccessibilityElement",
             dependencies: [
                 "AX",
-                .product(
-                    name: "Atomics",
-                    package: "swift-atomics"
-                ),
                 "RunLoopExecutor",
             ]
         ),
@@ -51,8 +43,6 @@ let package = Package(
             name: "AccessibilityElementMocks",
             dependencies: [
                 "AccessibilityElement",
-                .product(name: "Atomics",
-                         package: "swift-atomics"),
             ]),
         .executableTarget(
             name: "SystemObserverExample",
