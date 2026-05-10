@@ -6,7 +6,9 @@
 
 import AppKit
 
-public extension NSAccessibility.Action {}
+public extension NSAccessibility.Action {
+    static let scrollToVisible: NSAccessibility.Action = "AXScrollToVisible"
+}
 
 extension NSAccessibility.Action: @retroactive Codable {}
 

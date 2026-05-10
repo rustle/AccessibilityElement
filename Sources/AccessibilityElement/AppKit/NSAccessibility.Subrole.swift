@@ -6,7 +6,12 @@
 
 import AppKit
 
-public extension NSAccessibility.Subrole {}
+public extension NSAccessibility.Subrole {
+    /// Subrole applied to `NSCollectionView`.
+    static let collectionList: NSAccessibility.Subrole = "AXCollectionList"
+    /// Subrole applied to NSCollectionView` sections.
+    static let sectionList: NSAccessibility.Subrole = "AXSectionList"
+}
 
 extension NSAccessibility.Subrole: @retroactive Codable {}
 

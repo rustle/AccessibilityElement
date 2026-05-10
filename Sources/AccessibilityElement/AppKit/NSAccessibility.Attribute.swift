@@ -35,6 +35,13 @@ public extension NSAccessibility.Attribute {
     static let focusableAncestor: NSAccessibility.Attribute = "AXFocusableAncestor"
     static let editableAncestor: NSAccessibility.Attribute = "AXEditableAncestor"
     static let highestEditableAncestor: NSAccessibility.Attribute = "AXHighestEditableAncestor"
+    // MARK: Content siblings (collection views)
+    static let previousContentSibling: NSAccessibility.Attribute = "AXPreviousContentSibling"
+    static let nextContentSibling: NSAccessibility.Attribute = "AXNextContentSibling"
+    static let contentSiblingAbove: NSAccessibility.Attribute = "AXContentSiblingAbove"
+    static let contentSiblingBelow: NSAccessibility.Attribute = "AXContentSiblingBelow"
+    static let firstContentSibling: NSAccessibility.Attribute = "AXFirstContentSibling"
+    static let lastContentSibling: NSAccessibility.Attribute = "AXLastContentSibling"
     // MARK: MathML
     static let mathBase: NSAccessibility.Attribute = "AXMathBase"
     static let mathFencedOpen: NSAccessibility.Attribute = "AXMathFencedOpen"
