@@ -195,6 +195,12 @@ public struct AnyElement: Element {
     private let _decrementButton: @Sendable () async throws -> AnyElement
     private let _previousContents: @Sendable () async throws -> [AnyElement]
     private let _nextContents: @Sendable () async throws -> [AnyElement]
+    private let _previousContentSibling: @Sendable () async throws -> AnyElement
+    private let _nextContentSibling: @Sendable () async throws -> AnyElement
+    private let _contentSiblingAbove: @Sendable () async throws -> AnyElement
+    private let _contentSiblingBelow: @Sendable () async throws -> AnyElement
+    private let _firstContentSibling: @Sendable () async throws -> AnyElement
+    private let _lastContentSibling: @Sendable () async throws -> AnyElement
     private let _shownMenu: @Sendable () async throws -> AnyElement
     private let _searchButton: @Sendable () async throws -> AnyElement
     private let _searchMenu: @Sendable () async throws -> AnyElement
@@ -437,6 +443,12 @@ public struct AnyElement: Element {
             _decrementButton = { AnyElement(element: try await element.decrementButton()) }
             _previousContents = { try await element.previousContents().map(AnyElement.init) }
             _nextContents = { try await element.nextContents().map(AnyElement.init) }
+            _previousContentSibling = { AnyElement(element: try await element.previousContentSibling()) }
+            _nextContentSibling = { AnyElement(element: try await element.nextContentSibling()) }
+            _contentSiblingAbove = { AnyElement(element: try await element.contentSiblingAbove()) }
+            _contentSiblingBelow = { AnyElement(element: try await element.contentSiblingBelow()) }
+            _firstContentSibling = { AnyElement(element: try await element.firstContentSibling()) }
+            _lastContentSibling = { AnyElement(element: try await element.lastContentSibling()) }
             _shownMenu = { AnyElement(element: try await element.shownMenu()) }
             _searchButton = { AnyElement(element: try await element.searchButton()) }
             _searchMenu = { AnyElement(element: try await element.searchMenu()) }
@@ -798,6 +810,12 @@ public struct AnyElement: Element {
             _decrementButton = { AnyElement(element: try await element.decrementButton()) }
             _previousContents = { try await element.previousContents().map(AnyElement.init) }
             _nextContents = { try await element.nextContents().map(AnyElement.init) }
+            _previousContentSibling = { AnyElement(element: try await element.previousContentSibling()) }
+            _nextContentSibling = { AnyElement(element: try await element.nextContentSibling()) }
+            _contentSiblingAbove = { AnyElement(element: try await element.contentSiblingAbove()) }
+            _contentSiblingBelow = { AnyElement(element: try await element.contentSiblingBelow()) }
+            _firstContentSibling = { AnyElement(element: try await element.firstContentSibling()) }
+            _lastContentSibling = { AnyElement(element: try await element.lastContentSibling()) }
             _shownMenu = { AnyElement(element: try await element.shownMenu()) }
             _searchButton = { AnyElement(element: try await element.searchButton()) }
             _searchMenu = { AnyElement(element: try await element.searchMenu()) }
@@ -1385,6 +1403,24 @@ public struct AnyElement: Element {
     }
     public func nextContents() async throws -> [AnyElement] {
         try await _nextContents()
+    }
+    public func previousContentSibling() async throws -> AnyElement {
+        try await _previousContentSibling()
+    }
+    public func nextContentSibling() async throws -> AnyElement {
+        try await _nextContentSibling()
+    }
+    public func contentSiblingAbove() async throws -> AnyElement {
+        try await _contentSiblingAbove()
+    }
+    public func contentSiblingBelow() async throws -> AnyElement {
+        try await _contentSiblingBelow()
+    }
+    public func firstContentSibling() async throws -> AnyElement {
+        try await _firstContentSibling()
+    }
+    public func lastContentSibling() async throws -> AnyElement {
+        try await _lastContentSibling()
     }
     public func shownMenu() async throws -> AnyElement {
         try await _shownMenu()

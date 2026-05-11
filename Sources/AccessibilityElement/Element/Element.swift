@@ -386,6 +386,14 @@ public protocol Element: Sendable, CustomDebugStringConvertible {
     func previousContents() async throws -> [Self]
     /// The following sibling content elements.
     func nextContents() async throws -> [Self]
+    /// The single preceding content sibling
+    func previousContentSibling() async throws -> Self
+    /// The single following content sibling
+    func nextContentSibling() async throws -> Self
+    func contentSiblingAbove() async throws -> Self
+    func contentSiblingBelow() async throws -> Self
+    func firstContentSibling() async throws -> Self
+    func lastContentSibling() async throws -> Self
     /// The menu currently shown by this element.
     func shownMenu() async throws -> Self
     /// The search button of a search field.
@@ -752,6 +760,24 @@ extension Element {
         throw ElementError.noValue
     }
     public func nextContents() async throws -> [Self] {
+        throw ElementError.noValue
+    }
+    public func previousContentSibling() async throws -> Self {
+        throw ElementError.noValue
+    }
+    public func nextContentSibling() async throws -> Self {
+        throw ElementError.noValue
+    }
+    public func contentSiblingAbove() async throws -> Self {
+        throw ElementError.noValue
+    }
+    public func contentSiblingBelow() async throws -> Self {
+        throw ElementError.noValue
+    }
+    public func firstContentSibling() async throws -> Self {
+        throw ElementError.noValue
+    }
+    public func lastContentSibling() async throws -> Self {
         throw ElementError.noValue
     }
     public func shownMenu() async throws -> Self {

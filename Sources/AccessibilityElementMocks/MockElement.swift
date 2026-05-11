@@ -656,6 +656,24 @@ public final class MockElement: Element, Hashable, Sendable {
     public func nextContents() async throws -> [MockElement] {
         try getAttribute(.nextContents)
     }
+    public func previousContentSibling() async throws -> MockElement {
+        try getAttribute(.previousContentSibling)
+    }
+    public func nextContentSibling() async throws -> MockElement {
+        try getAttribute(.nextContentSibling)
+    }
+    public func contentSiblingAbove() async throws -> MockElement {
+        try getAttribute(.contentSiblingAbove)
+    }
+    public func contentSiblingBelow() async throws -> MockElement {
+        try getAttribute(.contentSiblingBelow)
+    }
+    public func firstContentSibling() async throws -> MockElement {
+        try getAttribute(.firstContentSibling)
+    }
+    public func lastContentSibling() async throws -> MockElement {
+        try getAttribute(.lastContentSibling)
+    }
     public func shownMenu() async throws -> MockElement {
         try getAttribute(.shownMenu)
     }

@@ -1070,6 +1070,36 @@ public struct SystemElement: Element, ArrayAttributeElement, Sendable {
                 .map(SystemElement.init(element:))
         }
     }
+    public func previousContentSibling() async throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .previousContentSibling)
+        })
+    }
+    public func nextContentSibling() async throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .nextContentSibling)
+        })
+    }
+    public func contentSiblingAbove() async throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .contentSiblingAbove)
+        })
+    }
+    public func contentSiblingBelow() async throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .contentSiblingBelow)
+        })
+    }
+    public func firstContentSibling() async throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .firstContentSibling)
+        })
+    }
+    public func lastContentSibling() async throws -> SystemElement {
+        .init(element: try throwsAXError {
+            try element.value(attribute: .lastContentSibling)
+        })
+    }
     public func shownMenu() async throws -> SystemElement {
         .init(element: try throwsAXError {
             try element.value(attribute: .shownMenu)
